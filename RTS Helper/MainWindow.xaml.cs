@@ -49,7 +49,7 @@ namespace RTSHelper {
             InitializeComponent();
             TimerFocus.Interval = TimeSpan.FromMilliseconds(20);
             TimerFocus.Tick += new EventHandler(TimerFocus_Tick);
-            LeerPasos();
+            // LeerPasos(); No es necesario. Se ejecuta al iniciar el ComboBox.
             LeerPreferencias();
             LeerBuildOrders();
 
@@ -57,7 +57,12 @@ namespace RTSHelper {
 
 
         private void LeerPasos() {
-            Pasos = System.IO.File.ReadAllLines(System.IO.Path.Combine(DirectorioBuildOrders, $"{NombreBuildOrder}.txt"));
+
+            var rutaBuildOrder = System.IO.Path.Combine(DirectorioBuildOrders, $"{NombreBuildOrder}.txt");
+            if (!System.IO.Directory.Exists(DirectorioBuildOrders)) System.IO.Directory.CreateDirectory(DirectorioBuildOrders);
+            if (!System.IO.File.Exists(rutaBuildOrder)) System.IO.File.WriteAllText(rutaBuildOrder, $@"Edit '\RTS Helper\Build Orders\{NombreBuildOrder}.txt'\nfor adding your build order.");
+            Pasos = System.IO.File.ReadAllLines(rutaBuildOrder);
+
         } // LeerPasos>
 
 
