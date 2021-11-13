@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31727.386
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTS Helper", "RTS Helper\RTS Helper.csproj", "{51E1CE4A-BCD5-48AE-8264-91B83C197C36}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E99345C8-5029-472D-A1B0-8D88FB20D962}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51E1CE4A-BCD5-48AE-8264-91B83C197C36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51E1CE4A-BCD5-48AE-8264-91B83C197C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51E1CE4A-BCD5-48AE-8264-91B83C197C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51E1CE4A-BCD5-48AE-8264-91B83C197C36}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {81AD7D9A-8AB7-439D-A1A1-923E0C47E727}
+	EndGlobalSection
+EndGlobal

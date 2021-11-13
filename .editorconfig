@@ -1,0 +1,10 @@
+﻿[*.cs]
+
+# IDE0011: Agregar llaves
+csharp_prefer_braces = false
+
+# IDE0022: Usar cuerpo del bloque para los métodos
+csharp_style_expression_bodied_methods = false
+
+# Default severity for all analyzer diagnostics
+dotnet_analyzer_diagnostic.severity = none
