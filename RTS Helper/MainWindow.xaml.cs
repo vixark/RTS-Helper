@@ -131,6 +131,7 @@ namespace RTSHelper {
 
         private void ActualizarTexto() {
 
+            if (Timer is null || !Timer.IsEnabled) return;
             if (NúmeroPaso < 0) NúmeroPaso = 0;
             TxtPaso.Text = NúmeroPaso.ToString();
             TxbPaso.Text = Pasos.Length <= NúmeroPaso ? "End" : ProcesarTextoPaso(Pasos[NúmeroPaso]);
