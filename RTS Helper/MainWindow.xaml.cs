@@ -48,6 +48,8 @@ namespace RTSHelper {
 
         private DispatcherTimer TimerFocus = new DispatcherTimer();
 
+        private DispatcherTimer TimerFlash = new DispatcherTimer();
+
         private Stopwatch MedidorTimer = new Stopwatch();
 
         private bool Inició = false;
@@ -60,12 +62,16 @@ namespace RTSHelper {
 
         private bool EditandoComboBoxEnCódigo = false;
 
+        private Color TemporalBackgroundColor;
+
 
         public MainWindow() {
 
             InitializeComponent();
             TimerFocus.Interval = TimeSpan.FromMilliseconds(20);
             TimerFocus.Tick += new EventHandler(TimerFocus_Tick);
+            TimerFlash.Interval = TimeSpan.FromMilliseconds(500);
+            TimerFlash.Tick += new EventHandler(TimerFlash_Tick);
             LeerPreferencias();
             LeerPasos();
             LeerBuildOrders();
@@ -266,13 +272,19 @@ namespace RTSHelper {
 
 
         private string ProcesarTextoPaso(string textoPaso) 
-            => textoPaso.Replace(" \\n\\n ", "\n\n").Replace(" \\n ", "\n").Replace("\\n", "\n").Replace("     ", "\n").Replace(", ", "\n");
+            => textoPaso.Replace(" \\n\\n ", "\n\n").Replace(" \\n ", "\n").Replace("\\n", "\n").Replace("     ", "\n");
 
 
         private void Timer_Tick(object sender, EventArgs e) {
 
             NúmeroPaso++;
             ActualizarTexto();
+
+            TimerFlash.Start();
+            TemporalBackgroundColor = ((SolidColorBrush)this.Background).Color;
+            Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.CurrentStepFontColor);
+
+            if (Preferencias.PlaySoundEachStep) Console.Beep(400, 200);
             if (ActualizarDuraciónPasoEnTimerEnPróximoTick) {
                 ActualizarIntervaloTimer(ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed));
                 ActualizarDuraciónPasoEnTimerEnPróximoTick = false;
@@ -308,6 +320,12 @@ namespace RTSHelper {
             TimerFocus.Stop();
             TxtPaso.SelectAll();
         } // TimerFocus_Tick>
+
+
+        private void TimerFlash_Tick(object sender, EventArgs e) {
+            TimerFlash.Stop();
+            Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.BackColor);
+        } // TimerFlash_Tick>
 
 
         private void CmbBuildOrders_SelectionChanged(object sender, SelectionChangedEventArgs e) {

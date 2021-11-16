@@ -60,6 +60,7 @@ namespace RTSHelper {
             TxtStepFontSize.Text = preferencias.CurrentStepFontSize.ToString();
             TxtNextStepFontSize.Text = preferencias.NextStepFontSize.ToString();
             ChkShowNextStep.IsChecked = preferencias.ShowNextStep;
+            ChkPlaySoundEachStep.IsChecked = preferencias.PlaySoundEachStep;
             VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en los botones.
 
         } // CargarValores>
@@ -215,6 +216,15 @@ namespace RTSHelper {
             VentanaPrincipal.AplicarPreferencias();
 
         } // ChkShowNextStep_CheckedChanged>
+
+
+        private void ChkPlaySoundEachStep_CheckedChanged(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            VentanaPrincipal.Preferencias.PlaySoundEachStep = (bool)ChkPlaySoundEachStep.IsChecked;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkPlaySoundEachStep_CheckedChanged>
 
 
         private void TxtBuildOrderPath_TextChanged(object sender, TextChangedEventArgs e) {

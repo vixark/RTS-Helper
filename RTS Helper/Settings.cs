@@ -72,6 +72,8 @@ namespace RTSHelper {
 
         public double TopMarginNextStep { get; set; } = 4; // 1920x1080.
 
+        public bool PlaySoundEachStep { get; set; } = false;
+
 
         public string ObtenerGameSpeedText(string game) {
 
