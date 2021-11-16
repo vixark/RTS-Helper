@@ -1,5 +1,5 @@
 # RTS-Helper
-Dynamic build order reader for RTS video games. It shows you a set of instructions of your build order for each minute.
+Dynamic build order reader for RTS video games. It allows you to read a set of instructions of your build order for the current minute. It makes easier to follow and learn build orders.
 
 # Games Supported
 * Age of Empires II
