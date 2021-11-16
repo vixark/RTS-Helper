@@ -1,9 +1,30 @@
 ﻿<Application x:Class="RTSHelper.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:RTSHelper"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:RTSHelper" xmlns:System="clr-namespace:System;assembly=System.Runtime" StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <System:Double x:Key="FuenteNormal">9</System:Double>
+            <System:Double x:Key="FuentePequeña">8</System:Double>
+            <System:Double x:Key="FuenteGrande">11</System:Double>
+            <System:Double x:Key="FuentePaso">13</System:Double>
+            <System:Double x:Key="FuenteSiguientePaso">8.5</System:Double>
+            <Thickness x:Key="MárgenBotones">1</Thickness>
+            <Thickness x:Key="PaddingBotones">2</Thickness>
+            <SolidColorBrush x:Key="BrushFuente" Color="#FFF" />
+            <SolidColorBrush x:Key="BrushFondoControles" Color="Transparent" />
+            <SolidColorBrush x:Key="BrushFondo" Color="Black" />
+            <Color x:Key="ColorFondo" R="0" G="0" B="0" A="255" />
+            <SolidColorBrush x:Key="BrushPaso" Color="#FFF" />
+            <SolidColorBrush x:Key="BrushPasoSiguiente" Color="#999" />
+            <System:Double x:Key="Opacidad">0.6</System:Double>
+            <Thickness x:Key="MargenPaso">11, 4, 0, 0</Thickness>
+            <Thickness x:Key="MargenPasoSiguiente">0, 3, 50, 0</Thickness>
+            <System:Double x:Key="Alto">105</System:Double>
+            <System:Double x:Key="Ancho">341</System:Double>
+            <System:Double x:Key="PosiciónY">510</System:Double>
+            <System:Double x:Key="PosiciónX">513</System:Double>
+            <Visibility x:Key="VisibilidadPasoSiguiente">Visible</Visibility>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

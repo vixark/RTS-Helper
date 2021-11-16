@@ -1,22 +1,22 @@
-﻿<Window x:Class="RTSHelper.MainWindow" 
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+﻿<Window x:Class="RTSHelper.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-        xmlns:local="clr-namespace:RTSHelper" mc:Ignorable="d" 
-        Title="MainWindow" Height="200" Width="620" AllowsTransparency="True" WindowStyle="None" 
-        MouseDown="Window_MouseDown" Topmost="True" WindowStartupLocation="Manual" Top="958" Left="945">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RTSHelper" SizeChanged="Window_SizeChanged"
+        mc:Ignorable="d" Title="MainWindow" Height="{DynamicResource Alto}" Width="{DynamicResource Ancho}" AllowsTransparency="True" 
+        WindowStyle="None" ResizeMode="CanResizeWithGrip" MouseDown="Window_MouseDown" Closed="Window_Closed" MouseUp="Window_MouseUp"
+        Topmost="True" WindowStartupLocation="Manual" Top="{DynamicResource PosiciónY}" Left="{DynamicResource PosiciónX}">
     <Window.Background>
-        <SolidColorBrush Opacity="2" Color="Black" />
+        <SolidColorBrush Opacity="{DynamicResource Opacidad}" Color="{DynamicResource ColorFondo}" />
     </Window.Background>
-    
+
     <Window.Resources>
         <Style x:Key="ComboBoxColor" TargetType="{x:Type ComboBox}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-                            <ToggleButton Grid.Column="2" Focusable="false" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
+                            <ToggleButton Grid.Column="2" Focusable="false" 
+                                          IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
                                 <ToggleButton.Template>
                                     <ControlTemplate>
                                         <Grid>
@@ -24,26 +24,33 @@
                                                 <ColumnDefinition Width="5*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2" Background="#F111" BorderBrush="White" BorderThickness="1" />
-                                            <Border Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" Background="#F111" BorderBrush="White" BorderThickness="0,0,1,0" />
-                                            <Path x:Name="Arrow" Grid.Column="1" Fill="White" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" />
+                                            <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2" Background="{DynamicResource BrushFondo}" 
+                                                    BorderBrush="{DynamicResource BrushFuente}" BorderThickness="1" />
+                                            <Border Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" Background="{DynamicResource BrushFondo}" 
+                                                    BorderBrush="{DynamicResource BrushFuente}" BorderThickness="0,0,1,0" />
+                                            <Path x:Name="Arrow" Grid.Column="1" Fill="{DynamicResource BrushFuente}" HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" />
                                         </Grid>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="ToggleButton.IsMouseOver" Value="true">
-                                                <Setter TargetName="Border" Property="Background" Value="Green" />
+                                                <Setter TargetName="Border" Property="Background" Value="Gray" />
                                             </Trigger>
                                             <Trigger Property="ToggleButton.IsChecked" Value="true">
-                                                <Setter TargetName="Border" Property="Background" Value="Green" />
+                                                <Setter TargetName="Border" Property="Background" Value="Gray" />
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
                                 </ToggleButton.Template>
                             </ToggleButton>
-                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="3" />
+                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" 
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="4" />
                             <TextBox x:Name="PART_EditableTextBox" Visibility="Hidden" IsReadOnly="{TemplateBinding IsReadOnly}" />
-                            <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
-                                <Grid Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Border x:Name="DropDownBorder" Background="Black" />
+                            <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" 
+                                   Focusable="False" PopupAnimation="Slide">
+                                <Grid Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" 
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border x:Name="DropDownBorder" Background="{DynamicResource BrushFondo}" />
                                     <ScrollViewer SnapsToDevicePixels="True">
                                         <StackPanel IsItemsHost="True" />
                                     </ScrollViewer>
@@ -57,17 +64,84 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    
+
     <Grid>
-        <TextBlock x:Name="TxbPaso" Foreground="White" FontFamily="Calibri" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40 15 0 0"></TextBlock>
-        <TextBlock x:Name="TxbPasoSiguiente" Foreground="#999" FontFamily="Calibri" FontSize="16" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 15 70 0" TextAlignment="Right"></TextBlock>
-        <Button Click="BtnStart_Click" x:Name="BtnStart" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="Transparent" Foreground="White" FontWeight="Bold" Margin="0 0 5 90" Padding="0 7 0 7" Width="45">Start</Button>
-        <Button Click="BtnPrev_Click" x:Name="BtnPrev" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="Transparent" Foreground="White" FontWeight="Bold" Margin="0 0 5 50" Padding="0 7 0 7" Width="45">Prev.</Button>
-        <Button Click="BtnNext_Click" x:Name="BtnNext" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="Transparent" Foreground="White" FontWeight="Bold" Margin="0 0 5 10" Padding="0 7 0 7" Width="45">Next</Button>
-        <Button Click="BtnClose_Click" x:Name="BtnClose" VerticalAlignment="Top" HorizontalAlignment="Right" Background="Transparent" Foreground="White" FontWeight="Bold"  Width="20" Height="20" FontSize="12">X</Button>
-        <TextBox PreviewMouseDown="TxtPaso_PreviewMouseDown" TextChanged="TxtPaso_TextChanged" GotFocus="TxtPaso_GotFocus" FontSize="20" x:Name="TxtPaso" Margin="0 0 5 130" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="45" Background="Transparent" Foreground="White" TextAlignment="Center"></TextBox>
-        <ComboBox SelectionChanged="CmbBuildOrders_SelectionChanged" SelectedIndex="0" x:Name="CmbBuildOrders" Foreground="White" Width="140" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 5 60 10" FontSize="16" Style="{StaticResource ComboBoxColor}">
-            <ComboBoxItem>Default</ComboBoxItem>
-        </ComboBox>
+
+        <StackPanel Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0 0 5 2">
+
+            <Label Foreground="{DynamicResource BrushFuente}" FontSize="{DynamicResource FuenteNormal}" Margin="{DynamicResource MárgenBotones}">Speed:</Label>
+
+            <ComboBox SelectionChanged="CmbVelocidadEjecución_SelectionChanged" Margin="{DynamicResource MárgenBotones}" SelectedIndex="0" 
+                      x:Name="CmbVelocidadEjecución" Foreground="{DynamicResource BrushFuente}" 
+                      Width="70" FontSize="{DynamicResource FuenteNormal}" 
+                      Style="{StaticResource ComboBoxColor}">
+                <ComboBoxItem Tag="100">100%</ComboBoxItem>
+                <ComboBoxItem Tag="98">98%</ComboBoxItem>
+                <ComboBoxItem Tag="96">96%</ComboBoxItem>
+                <ComboBoxItem Tag="94">94%</ComboBoxItem>
+                <ComboBoxItem Tag="92">92%</ComboBoxItem>
+                <ComboBoxItem Tag="90">90%</ComboBoxItem>
+                <ComboBoxItem Tag="85">85%</ComboBoxItem>
+                <ComboBoxItem Tag="80">80%</ComboBoxItem>
+                <ComboBoxItem Tag="75">75%</ComboBoxItem>
+                <ComboBoxItem Tag="70">70%</ComboBoxItem>
+                <ComboBoxItem Tag="60">60%</ComboBoxItem>
+            </ComboBox>
+
+            <ComboBox SelectionChanged="CmbBuildOrders_SelectionChanged" SelectedIndex="0" x:Name="CmbBuildOrders" 
+                      Foreground="{DynamicResource BrushFuente}" Width="130" Margin="{DynamicResource MárgenBotones}"
+                      FontSize="{DynamicResource FuenteNormal}" Style="{StaticResource ComboBoxColor}">
+                <ComboBoxItem>Default</ComboBoxItem>
+            </ComboBox>
+            
+        </StackPanel>
+
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 0 5 0">
+
+            <StackPanel Orientation="Horizontal">
+
+                <Button HorizontalAlignment="Stretch" Click="BtnSettings_Click" x:Name="BtnSettings" Background="{DynamicResource BrushFondoControles}" 
+                        Foreground="{DynamicResource BrushFuente}" FontWeight="Bold" BorderBrush="{DynamicResource BrushFuente}"  
+                        FontSize="{DynamicResource FuentePequeña}" Padding="{DynamicResource PaddingBotones}" Margin="{DynamicResource MárgenBotones}">⚙️</Button>
+
+                <Button HorizontalAlignment="Stretch" Click="BtnClose_Click" x:Name="BtnClose" Background="{DynamicResource BrushFondoControles}" 
+                        Foreground="{DynamicResource BrushFuente}" FontWeight="Bold" BorderBrush="{DynamicResource BrushFuente}"  
+                        FontSize="{DynamicResource FuentePequeña}" Padding="{DynamicResource PaddingBotones}" Margin="{DynamicResource MárgenBotones}" 
+                        Width="{Binding ActualHeight, ElementName=BtnClose, Mode=OneWay}">X</Button>
+                
+            </StackPanel>
+
+            <Button Click="BtnStart_Click" x:Name="BtnStart" HorizontalAlignment="Stretch" Background="{DynamicResource BrushFondoControles}" 
+                    FontSize="{DynamicResource FuenteNormal}" Foreground="{DynamicResource BrushFuente}" FontWeight="Bold" 
+                    BorderBrush="{DynamicResource BrushFuente}"  
+                    Padding="{DynamicResource PaddingBotones}" Margin="{DynamicResource MárgenBotones}">Start</Button>
+
+            <TextBox PreviewMouseDown="TxtPaso_PreviewMouseDown" TextChanged="TxtPaso_TextChanged" GotFocus="TxtPaso_GotFocus" 
+                     BorderBrush="{DynamicResource BrushFuente}"  
+                     FontSize="{DynamicResource FuenteGrande}" TextAlignment="Center" x:Name="TxtPaso" Background="{DynamicResource BrushFondoControles}" 
+                     Foreground="{DynamicResource BrushFuente}" HorizontalAlignment="Stretch" Margin="{DynamicResource MárgenBotones}"></TextBox>
+            
+            <StackPanel Orientation="Horizontal">
+
+                <Button Click="BtnPrev_Click" x:Name="BtnPrev" Background="{DynamicResource BrushFondoControles}" Margin="{DynamicResource MárgenBotones}"
+                        Width="{Binding ActualHeight, ElementName=BtnPrev, Mode=OneWay}" BorderBrush="{DynamicResource BrushFuente}"  
+                        Foreground="{DynamicResource BrushFuente}" FontWeight="Bold" FontSize="{DynamicResource FuentePequeña}" Padding="{DynamicResource PaddingBotones}">◁</Button>
+
+                <Button Click="BtnNext_Click" x:Name="BtnNext" Background="{DynamicResource BrushFondoControles}" Margin="{DynamicResource MárgenBotones}"
+                        Width="{Binding ActualHeight, ElementName=BtnNext, Mode=OneWay}" BorderBrush="{DynamicResource BrushFuente}"      
+                        Foreground="{DynamicResource BrushFuente}" FontWeight="Bold" FontSize="{DynamicResource FuentePequeña}" Padding="{DynamicResource PaddingBotones}">▷</Button>
+
+            </StackPanel>
+
+        </StackPanel>
+
+        <TextBlock Panel.ZIndex="1" x:Name="TxbPaso" Background="{DynamicResource BrushFondoControles}" Foreground="{DynamicResource BrushPaso}"
+                   FontFamily="Calibri" FontSize="{DynamicResource FuentePaso}" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top"
+                   Margin="{DynamicResource MargenPaso}"></TextBlock>
+
+        <TextBlock Panel.ZIndex="0" x:Name="TxbPasoSiguiente" Background="{DynamicResource BrushFondoControles}" Visibility="{DynamicResource VisibilidadPasoSiguiente}"
+                   Foreground="{DynamicResource BrushPasoSiguiente}" FontFamily="Calibri" FontSize="{DynamicResource FuenteSiguientePaso}"
+                   FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="{DynamicResource MargenPasoSiguiente}" TextAlignment="Right"></TextBlock>
+
     </Grid>
 </Window>

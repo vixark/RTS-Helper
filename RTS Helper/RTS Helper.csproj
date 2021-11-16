@@ -3,8 +3,10 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>RTS_Helper</RootNamespace>
+    <RootNamespace>RTSHelper</RootNamespace>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
