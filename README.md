@@ -7,5 +7,5 @@ Dynamic build order reader for RTS video games. It allows you to read a set of i
 
 # How to use
 * Download the latest release https://github.com/vixark/RTS-Helper/releases
-* Unzip, run RTS Helper.exe, select your game and press start.
+* Unzip, run 'RTS Helper.exe', select your game and press start.
 * To edit the build orders open the txt files in 'Build Orders' directory. Every new line is a set of instructions for a minute. Separate instructions with 5 spaces or with \n to see them in diferent lines in the reader.
