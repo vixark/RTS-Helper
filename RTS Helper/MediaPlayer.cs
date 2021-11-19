@@ -21,7 +21,7 @@ namespace RTSHelper {
                 Player.MediaError += new WMPLib._WMPOCXEvents_MediaErrorEventHandler(Player_MediaError);
             }
             Player.settings.volume = volume;
-            Player.URL = url;
+            Player.URL = url; 
             Player.controls.play();
 
         } // PlayFile>
@@ -32,6 +32,20 @@ namespace RTSHelper {
 
         private static void Player_MediaError(object pMediaObject) 
             => MessageBox.Show("Error playing sound.");
+
+
+        public static double GetDuration(string MediaFile) {
+
+            try {
+                var w = new WMPLib.WindowsMediaPlayer();
+                var m = w.newMedia(MediaFile);
+                w.close();
+                return m.duration;
+            } catch (Exception) {
+                return 0;
+            }
+
+        } // GetDuration>
 
 
     } // MediaPlayer>

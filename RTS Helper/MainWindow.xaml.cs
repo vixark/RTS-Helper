@@ -83,7 +83,7 @@ namespace RTSHelper {
             CargarVelocidadEjecución();
             Inició = true;
             CambiandoTxtPasoAutomáticamente = false;
-             
+
         } // MainWindow>
 
 
@@ -410,9 +410,8 @@ namespace RTSHelper {
             CambiandoTxtPasoAutomáticamente = true;
             TxtPaso.Text = NúmeroPaso.ToString();
             CambiandoTxtPasoAutomáticamente = false;
-            TxbPaso.Text = Pasos.Length <= NúmeroPaso ? "End" : ProcesarTextoPaso(Pasos[NúmeroPaso]);
-            TxbPasoSiguiente.Text = Pasos.Length <= NúmeroPaso + 1 ? (Pasos.Length <= NúmeroPaso ? "" : "End")
-                : $"{ProcesarTextoPaso(Pasos[NúmeroPaso + 1])}";
+            TxbPaso.Text = Pasos.Length <= NúmeroPaso ? ProcesarTextoPaso(Pasos[Pasos.Length - 1]) : ProcesarTextoPaso(Pasos[NúmeroPaso]);
+            TxbPasoSiguiente.Text = Pasos.Length <= NúmeroPaso + 1 ? "" : $"{ProcesarTextoPaso(Pasos[NúmeroPaso + 1])}";
 
         } // ActualizarTexto>
 
