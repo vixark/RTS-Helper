@@ -12,6 +12,8 @@ using System.Windows.Shapes;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
+using static RTSHelper.Global;
+
 
 
 namespace RTSHelper {
@@ -22,14 +24,15 @@ namespace RTSHelper {
 
         public bool Activado { get; set; } = false;
 
-        public MainWindow VentanaPrincipal { get; set; } = null;
+        private MainWindow VentanaPrincipal { get; set; }
 
 
-        public SettingsWindow(MainWindow ventanaPrincipal, bool primerInicio) {
+        public SettingsWindow(bool primerInicio, MainWindow ventanaPrincipal) {
 
             InitializeComponent();
             VentanaPrincipal = ventanaPrincipal;
-            CargarValores(ventanaPrincipal.Preferencias, primerInicio);
+
+            CargarValores(Preferencias, primerInicio);
             if (primerInicio) {
               
                 SpnLabels2.Visibility = Visibility.Collapsed;
@@ -41,7 +44,11 @@ namespace RTSHelper {
                 LblFontColor.Visibility = Visibility.Collapsed;
                 LblOpacity.Visibility = Visibility.Collapsed;
                 SpnBuildOrderPath.Visibility = Visibility.Collapsed;
+                TbiBehavior.Visibility = Visibility.Collapsed;
+                TbiCustomStyles.Visibility = Visibility.Collapsed;
+                TbiStyle.Visibility = Visibility.Collapsed;
                 Height = 250;
+                TbcPreferencias.Height = 150;
                 Width = 350;
 
             }
@@ -59,10 +66,43 @@ namespace RTSHelper {
             TxtStepFontSize.Text = preferencias.CurrentStepFontSize.ToString();
             TxtNextStepFontSize.Text = preferencias.NextStepFontSize.ToString();
             ChkShowNextStep.IsChecked = preferencias.ShowNextStep;
-            ChkPlaySoundEachStep.IsChecked = preferencias.PlaySoundEachStep;
+            LeerSonidos();
+            CmbStartSound.Text = preferencias.StepStartSound;
+            CmbEndSound.Text = preferencias.StepEndSound;
+            if (CmbStartSound.SelectedIndex == -1) CmbStartSound.Text = NoneSoundString;
+            if (CmbEndSound.SelectedIndex == -1) CmbEndSound.Text = NoneSoundString;
+            ChkUnmuteAtStartup.IsChecked = preferencias.UnmuteAtStartup;
+            SldEndSoundVolume.Value = preferencias.StepEndSoundVolume;
+            SldStartSoundVolume.Value = preferencias.StepStartSoundVolume;
             if (!primerInicio) VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en los botones.
 
         } // CargarValores>
+
+
+        public void LeerSonidos() {
+
+            CmbStartSound.Items.Clear();
+            CmbEndSound.Items.Clear();
+            CmbStartSound.Items.Add(NoneSoundString);
+            CmbEndSound.Items.Add(NoneSoundString);
+            CmbStartSound.Text = NoneSoundString;
+            CmbEndSound.Text = NoneSoundString;
+            var extensionesAudio = new List<string> { ".mp3", ".wav", ".wma", ".ogg", ".acc", ".flac" };
+
+            var rutasSonidosCortos = System.IO.Directory.GetFiles(DirectorioSonidosCortos);
+            foreach (var rutaSonidoCorto in rutasSonidosCortos) {
+                var extensión = System.IO.Path.GetExtension(rutaSonidoCorto).ToLower();
+                if (extensionesAudio.Contains(extensión) || string.IsNullOrEmpty(extensión)) 
+                    CmbStartSound.Items.Add(System.IO.Path.GetFileName(rutaSonidoCorto));
+            }
+
+            var rutasSonidosLargos = System.IO.Directory.GetFiles(DirectorioSonidosLargos);
+            foreach (var rutaSonidoLargo in rutasSonidosLargos) {
+                if (extensionesAudio.Contains(System.IO.Path.GetExtension(rutaSonidoLargo).ToLower())) 
+                    CmbEndSound.Items.Add(System.IO.Path.GetFileName(rutaSonidoLargo));
+            }
+
+        } // LeerSonidos>
 
 
         public static string ToHexString(System.Drawing.Color c) 
@@ -80,7 +120,7 @@ namespace RTSHelper {
             var colorDialog = new ColorDialog();
             colorDialog.Color = ObtenerDrawingColor(BtnBackcolor.Background);
             if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                VentanaPrincipal.Preferencias.BackColor = ToHexString(colorDialog.Color);
+                Preferencias.BackColor = ToHexString(colorDialog.Color);
                 VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en el botón.
             }
 
@@ -92,7 +132,7 @@ namespace RTSHelper {
             var colorDialog = new ColorDialog();
             colorDialog.Color = ObtenerDrawingColor(BtnFontcolor.Foreground);
             if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                VentanaPrincipal.Preferencias.FontColor = ToHexString(colorDialog.Color);
+                Preferencias.FontColor = ToHexString(colorDialog.Color);
                 VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en el botón.
             }
 
@@ -104,7 +144,7 @@ namespace RTSHelper {
             var colorDialog = new ColorDialog();
             colorDialog.Color = ObtenerDrawingColor(BtnStepFontColor.Foreground);
             if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                VentanaPrincipal.Preferencias.CurrentStepFontColor = ToHexString(colorDialog.Color);
+                Preferencias.CurrentStepFontColor = ToHexString(colorDialog.Color);
                 VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en el botón.
             }
 
@@ -116,7 +156,7 @@ namespace RTSHelper {
             var colorDialog = new ColorDialog();
             colorDialog.Color = ObtenerDrawingColor(BtnNextStepFontColor.Foreground);
             if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                VentanaPrincipal.Preferencias.NextStepFontColor = ToHexString(colorDialog.Color);
+                Preferencias.NextStepFontColor = ToHexString(colorDialog.Color);
                 VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en el botón.
             }
 
@@ -134,7 +174,7 @@ namespace RTSHelper {
         private void Window_Closed(object sender, EventArgs e) {
 
             VentanaPrincipal.AplicarPreferencias();
-            Settings.Guardar(VentanaPrincipal.Preferencias, MainWindow.RutaPreferencias);
+            Settings.Guardar(Preferencias, RutaPreferencias);
 
         } // Window_Closed>
 
@@ -142,9 +182,8 @@ namespace RTSHelper {
         private void CmbGame_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             if (!Activado) return;
-            var cbi = e.AddedItems[0] as ComboBoxItem;
-            VentanaPrincipal.Preferencias.Game = cbi.Content.ToString(); 
-            VentanaPrincipal.Preferencias.EstablecerValoresRecomendados(VentanaPrincipal.Preferencias.ScreenResolution, VentanaPrincipal.Preferencias.Game);
+            Preferencias.Game = ObtenerSeleccionadoEnCombobox(e); 
+            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game);
             VentanaPrincipal.AplicarPreferencias();
 
         } // CmbGame_SelectionChanged>
@@ -157,8 +196,7 @@ namespace RTSHelper {
         private void CmbGameSpeed_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             if (!Activado) return;
-            var cbi = e.AddedItems[0] as ComboBoxItem;
-            VentanaPrincipal.Preferencias.EstablecerGameSpeed(cbi.Content.ToString(), VentanaPrincipal.Preferencias.Game);
+            Preferencias.EstablecerGameSpeed(ObtenerSeleccionadoEnCombobox(e), Preferencias.Game);
             VentanaPrincipal.ActualizarDuraciónPaso();
 
         } // CmbGameSpeed_SelectionChanged>
@@ -167,9 +205,8 @@ namespace RTSHelper {
         private void CmbResolution_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             if (!Activado) return;
-            var cbi = e.AddedItems[0] as ComboBoxItem;
-            VentanaPrincipal.Preferencias.ScreenResolution = cbi.Content.ToString();
-            VentanaPrincipal.Preferencias.EstablecerValoresRecomendados(VentanaPrincipal.Preferencias.ScreenResolution, VentanaPrincipal.Preferencias.Game);
+            Preferencias.ScreenResolution = ObtenerSeleccionadoEnCombobox(e);
+            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game);
             VentanaPrincipal.AplicarPreferencias();
 
         } //CmbResolution_SelectionChanged>
@@ -179,7 +216,7 @@ namespace RTSHelper {
 
             if (!Activado) return;
             if (double.TryParse(TxtOpacity.Text, out double opacidad)) {
-                VentanaPrincipal.Preferencias.Opacity = opacidad;
+                Preferencias.Opacity = opacidad;
                 VentanaPrincipal.AplicarPreferencias();
             }
 
@@ -190,7 +227,7 @@ namespace RTSHelper {
 
             if (!Activado) return;
             if (double.TryParse(TxtStepFontSize.Text, out double stepFontSize)) {
-                VentanaPrincipal.Preferencias.CurrentStepFontSize = stepFontSize;
+                Preferencias.CurrentStepFontSize = stepFontSize;
                 VentanaPrincipal.AplicarPreferencias();
             }
 
@@ -201,7 +238,7 @@ namespace RTSHelper {
 
             if (!Activado) return;
             if (double.TryParse(TxtNextStepFontSize.Text, out double nextStepFontSize)) {
-                VentanaPrincipal.Preferencias.NextStepFontSize = nextStepFontSize;
+                Preferencias.NextStepFontSize = nextStepFontSize;
                 VentanaPrincipal.AplicarPreferencias();
             }
 
@@ -211,35 +248,34 @@ namespace RTSHelper {
         private void ChkShowNextStep_CheckedChanged(object sender, RoutedEventArgs e) {
 
             if (!Activado) return;
-            VentanaPrincipal.Preferencias.ShowNextStep = (bool)ChkShowNextStep.IsChecked;
+            Preferencias.ShowNextStep = (bool)ChkShowNextStep.IsChecked;
             VentanaPrincipal.AplicarPreferencias();
 
         } // ChkShowNextStep_CheckedChanged>
-
-
-        private void ChkPlaySoundEachStep_CheckedChanged(object sender, RoutedEventArgs e) {
-
-            if (!Activado) return;
-            VentanaPrincipal.Preferencias.PlaySoundEachStep = (bool)ChkPlaySoundEachStep.IsChecked;
-            VentanaPrincipal.AplicarPreferencias();
-
-        } // ChkPlaySoundEachStep_CheckedChanged>
 
 
         private void TxtBuildOrderPath_TextChanged(object sender, TextChangedEventArgs e) {
 
             if (!Activado) return;
             if (System.IO.Directory.Exists(TxtBuildOrderPath.Text)) {
-                VentanaPrincipal.Preferencias.BuildOrderDirectory = TxtBuildOrderPath.Text;
+                Preferencias.BuildOrderDirectory = TxtBuildOrderPath.Text;
                 VentanaPrincipal.LeerBuildOrders();
                 VentanaPrincipal.CargarBuildOrder();
             } else if (string.IsNullOrEmpty(TxtBuildOrderPath.Text)) { 
-                VentanaPrincipal.Preferencias.BuildOrderDirectory = null;
+                Preferencias.BuildOrderDirectory = null;
                 VentanaPrincipal.LeerBuildOrders();
                 VentanaPrincipal.CargarBuildOrder();
             } 
 
         } // TxtBuildOrderPath_TextChanged>
+
+
+        private void CmbEndSound_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.StepEndSound = ObtenerSeleccionadoEnCombobox(e);
+
+        } // CmbEndSound_SelectionChanged>
 
 
     } // SettingsWindow>

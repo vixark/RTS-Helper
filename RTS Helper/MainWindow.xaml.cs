@@ -19,6 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Microsoft.VisualBasic;
+using static RTSHelper.Global;
 
 
 
@@ -26,25 +27,12 @@ namespace RTSHelper {
 
 
 
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window {
 
 
-        public Settings Preferencias;
+        public string[] Pasos = new string[] { };
 
-        private static int NúmeroPaso = 0;
-
-        private static string DirectorioAplicación = AppDomain.CurrentDomain.BaseDirectory;
-
-        public static string RutaPreferencias = System.IO.Path.Combine(DirectorioAplicación, "Settings.json");
-
-        private static string DirectorioBuildOrdersPredeterminado = System.IO.Path.Combine(DirectorioAplicación, "Build Orders");
-
-        private string DirectorioBuildOrdersEfectivo => Preferencias.BuildOrderDirectory ?? DirectorioBuildOrdersPredeterminado;
-
-        private static string[] Pasos = new string[] { };
+        public int NúmeroPaso = 0;
 
         private DispatcherTimer Timer;
 
@@ -110,7 +98,7 @@ namespace RTSHelper {
             Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.CurrentStepFontColor);
             Application.Current.Resources["Opacidad"] = (double)1;
 
-            if (Preferencias.PlaySoundEachStep) Console.Beep(400, 200);
+            if (!Preferencias.Muted) Console.Beep(400, 200);
             if (ActualizarDuraciónPasoEnTimerEnPróximoTick) {
                 ActualizarIntervaloTimer(ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed));
                 ActualizarDuraciónPasoEnTimerEnPróximoTick = false;
@@ -193,7 +181,7 @@ namespace RTSHelper {
 
 
         private void BtnSettings_Click(object sender, RoutedEventArgs e) {
-            var winSettings = new SettingsWindow(this, primerInicio: false);
+            var winSettings = new SettingsWindow(primerInicio: false, this);
             winSettings.Topmost = true;
             winSettings.ShowDialog();
         } // BtnSettings_Click>
@@ -227,7 +215,10 @@ namespace RTSHelper {
 
         private void BtnMute_Click(object sender, RoutedEventArgs e) {
 
-        }
+            Preferencias.Muted = !Preferencias.Muted;
+            AplicarPreferencias();
+
+        } // BtnMute_Click>
 
 
         private void BtnRestart_Click(object sender, RoutedEventArgs e) {
@@ -241,6 +232,7 @@ namespace RTSHelper {
         #region Procedimientos y Funciones
 
 
+
         private void LeerPasos() {
 
             var rutaBuildOrder = System.IO.Path.Combine(DirectorioBuildOrdersEfectivo, $"{Preferencias.CurrentBuildOrder}.txt");
@@ -250,6 +242,7 @@ namespace RTSHelper {
             Pasos = System.IO.File.ReadAllLines(rutaBuildOrder);
 
         } // LeerPasos>
+
 
 
         public void LeerBuildOrders() {
@@ -268,30 +261,6 @@ namespace RTSHelper {
 
         } // LeerBuildOrders>
 
-
-        public static string ObtenerResoluciónRecomendada() {
-
-            var interopHelper = new WindowInteropHelper(System.Windows.Application.Current.MainWindow);
-            var pantallaActual = WForms.Screen.FromHandle(interopHelper.Handle);
-            var anchoPantalla = pantallaActual.Bounds.Width;
-            var altoPantalla = pantallaActual.Bounds.Height;
-            var resolución = "1920x1080";
-            if (anchoPantalla == 1920 && altoPantalla == 1080) {
-                resolución = "1920x1080";
-            } else if (anchoPantalla == 2560 && altoPantalla == 1440) {
-                resolución = "2560x1440";
-            } else if (anchoPantalla == 1366 && altoPantalla == 768) {
-                resolución = "1366x768";
-            } else if (altoPantalla >= 1440) {
-                resolución = "2560x1440";
-            } else if (altoPantalla >= 1080) {
-                resolución = "1920x1080";
-            } else {
-                resolución = "1366x768";
-            }
-            return resolución;
-
-        } // ObtenerResoluciónRecomendada>
 
 
         public void AplicarPreferencias() {
@@ -319,6 +288,8 @@ namespace RTSHelper {
             Application.Current.Resources["VisibilidadPasoSiguiente"] = Preferencias.ShowNextStep ? Visibility.Visible : Visibility.Collapsed;
             Application.Current.Resources["AnchoSelectorBuildOrder"] = Preferencias.BuildOrderSelectorWidth;
             Application.Current.Resources["AnchoSelectorVelocidadEjecución"] = Preferencias.ExecutionSpeedSelectorWidth;
+            BtnMute.Content = Preferencias.Muted ? "🔇" : "🔈";
+            BtnMute.ToolTip = Preferencias.Muted ? "Unmute" : "Mute";
 
             this.Width = Preferencias.Width; // Se deben establecer manualmente porque no funciona el DynamicResource.
             this.Left = Preferencias.Left;
@@ -339,7 +310,7 @@ namespace RTSHelper {
                 var resoluciónRecomendada = ObtenerResoluciónRecomendada();
                 var juegoRecomendado = Settings.AOE2Name;
                 Preferencias.EstablecerValoresRecomendados(resoluciónRecomendada, juegoRecomendado);
-                var winSettings = new SettingsWindow(this, primerInicio: true);
+                var winSettings = new SettingsWindow(primerInicio: true, this);
                 winSettings.ShowDialog();
 
             }

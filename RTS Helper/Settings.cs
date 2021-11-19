@@ -44,7 +44,19 @@ namespace RTSHelper {
 
         #region "Sonidos"
 
-        public bool PlaySoundEachStep { get; set; } = false;
+        public string StepStartSound { get; set; } = "Ticket Machine 2.mp3";
+
+        public string StepEndSound { get; set; } = "Stopwatch Shorter.mp3";
+
+        public int StepStartSoundVolume { get; set; } = 50;
+
+        public int StepEndSoundVolume { get; set; } = 20;
+
+        public int StepEndSoundDuration { get; set; } = 1; // Se establece automáticamente al cambiar el sonido.
+
+        public bool UnmuteAtStartup { get; set; } = true; // Permite que no se mantenga muted si la última vez que se usó la aplicación se cerró muted.
+
+        public bool Muted { get; set; } = false; // Se establece desde la interface principal.
 
         #endregion
 

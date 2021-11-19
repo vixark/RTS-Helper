@@ -7,8 +7,8 @@
 
     <StackPanel>
         
-        <TabControl Height="280">
-            <TabItem Header="General">
+        <TabControl x:Name="TbcPreferencias" Height="280">
+            <TabItem Header="General" x:Name="TbiGeneral">
 
                 <StackPanel Margin="20 20 0 0">
 
@@ -65,7 +65,7 @@
                 </StackPanel>
          
             </TabItem>
-            <TabItem Header="Style">
+            <TabItem Header="Style" x:Name="TbiStyle">
 
                 <StackPanel Margin="20 20 0 0">
                     <StackPanel Orientation="Horizontal">
@@ -101,32 +101,29 @@
         
             </TabItem>
 
-            <TabItem Header="Behavior">
+            <TabItem Header="Behavior" x:Name="TbiBehavior">
 
-                <StackPanel Margin="20 20 0 0">
+                <StackPanel Margin="15 20 0 0">
                     <StackPanel Orientation="Vertical">
 
                         <StackPanel Orientation="Horizontal" Margin="5">
-                            <CheckBox VerticalAlignment="Center" Checked="ChkPlaySoundEachStep_CheckedChanged" Unchecked="ChkPlaySoundEachStep_CheckedChanged" 
-                                      x:Name="ChkPlaySoundEachStep">Play sound </CheckBox>
-                            <ComboBox Width="100" Margin="5 0 0 0">
-                                <ComboBoxItem>Sound 1</ComboBoxItem>
-                            </ComboBox>
-                            <Label>when step starts. Volume</Label>
-                            <Slider VerticalAlignment="Center" Value="50" Maximum="100" Minimum="0" Width="130" />
+                            <Label>Play</Label>
+                            <ComboBox x:Name="CmbStartSound" Width="160" Margin="5 0 0 0" />
+                            <Label>when step starts at volume</Label>
+                            <Slider x:Name="SldStartSoundVolume" VerticalAlignment="Center" Value="50" Maximum="100" Minimum="0" Width="100" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="5">
-                            <CheckBox x:Name="ChkPlaySoundEndingStep" VerticalAlignment="Center">Play sound</CheckBox>
-                            <ComboBox Width="100" Margin="5 0 0 0">
-                                <ComboBoxItem>Sound 1</ComboBoxItem>
-                            </ComboBox>
-                            <Label>before step ends. Volume</Label>
-                            <Slider VerticalAlignment="Center" Value="50" Maximum="100" Minimum="0" Width="130" />
+                            <Label>Play</Label>
+                            <ComboBox SelectionChanged="CmbEndSound_SelectionChanged" x:Name="CmbEndSound" Width="160" Margin="5 0 0 0" />
+                            <Label>before step ends at volume</Label>
+                            <Slider x:Name="SldEndSoundVolume"  VerticalAlignment="Center" Value="50" Maximum="100" Minimum="0" Width="100" />
                         </StackPanel>
-                       
-                        <CheckBox x:Name="ChkMinimizeOnComplete" Margin="5" >Minimize when final step ends</CheckBox>
 
+                        <CheckBox x:Name="ChkUnmuteAtStartup" Margin="5" >Unmute at startup</CheckBox>
+
+                        <CheckBox x:Name="ChkMinimizeOnComplete" Margin="5" >Minimize when final step ends</CheckBox>
+      
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <CheckBox VerticalAlignment="Center">Flash in color </CheckBox>
                             <Button Margin="4" Height="26" Padding="4">Change</Button>
@@ -142,7 +139,7 @@
                 </StackPanel>
 
             </TabItem>
-            <TabItem Header="Custom Styles">
+            <TabItem Header="Custom Styles" x:Name="TbiCustomStyles">
 
             </TabItem>
             
