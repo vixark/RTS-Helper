@@ -20,6 +20,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using Microsoft.VisualBasic;
 
+
+
 namespace RTSHelper {
 
 
@@ -140,12 +142,12 @@ namespace RTSHelper {
 
             EstableciendoTamaño = true;
             Application.Current.Resources["FuenteNormal"] = Preferencias.MediumFontSize;
-            Application.Current.Resources["FuentePequeña"] = Preferencias.SmallFontSize;
             Application.Current.Resources["FuenteGrande"] = Preferencias.LargeFontSize;
             Application.Current.Resources["FuentePaso"] = Preferencias.CurrentStepFontSize;
             Application.Current.Resources["FuenteSiguientePaso"] = Preferencias.NextStepFontSize;
-            Application.Current.Resources["MárgenBotones"] = new Thickness(Preferencias.ButtonsMargin);
+            Application.Current.Resources["MargenBotones"] = new Thickness(Preferencias.ButtonsMargin);
             Application.Current.Resources["PaddingBotones"] = new Thickness(Preferencias.ButtonsPadding);
+            Application.Current.Resources["TamañoBotones"] = Preferencias.ButtonsSize;
             Application.Current.Resources["BrushFuente"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.FontColor);
             Application.Current.Resources["BrushFondo"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.BackColor);
             Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.BackColor);
@@ -158,13 +160,14 @@ namespace RTSHelper {
             Application.Current.Resources["Ancho"] = Preferencias.Width;
             Application.Current.Resources["PosiciónY"] = Preferencias.Top;
             Application.Current.Resources["PosiciónX"] = Preferencias.Left;
-            Application.Current.Resources["VisibilidadPasoSiguiente"] = Preferencias.ShowNextStep ? Visibility.Visible : Visibility.Collapsed;  
+            Application.Current.Resources["VisibilidadPasoSiguiente"] = Preferencias.ShowNextStep ? Visibility.Visible : Visibility.Collapsed;
+            Application.Current.Resources["AnchoSelectorBuildOrder"] = Preferencias.BuildOrderSelectorWidth;
+            Application.Current.Resources["AnchoSelectorVelocidadEjecución"] = Preferencias.ExecutionSpeedSelectorWidth;
+
             this.Width = Preferencias.Width; // Se deben establecer manualmente porque no funciona el DynamicResource.
             this.Left = Preferencias.Left;
             this.Height = Preferencias.Height;
             this.Top = Preferencias.Top;
-            CmbBuildOrders.Width = 120 * Preferencias.MediumFontSize / 16 + 10;
-            CmbVelocidadEjecución.Width = 60 * Preferencias.MediumFontSize / 16 + 10;
             EstableciendoTamaño = false;
 
         } // AplicarPreferencias>
@@ -266,7 +269,7 @@ namespace RTSHelper {
             CambiandoTxtPasoAutomáticamente = false;
             TxbPaso.Text = Pasos.Length <= NúmeroPaso ? "End" : ProcesarTextoPaso(Pasos[NúmeroPaso]);
             TxbPasoSiguiente.Text = Pasos.Length <= NúmeroPaso + 1 ? (Pasos.Length <= NúmeroPaso ? "" : "End") 
-                : $"Next:\n{ProcesarTextoPaso(Pasos[NúmeroPaso + 1])}";
+                : $"{ProcesarTextoPaso(Pasos[NúmeroPaso + 1])}";
 
         } // ActualizarTexto>
 
@@ -283,6 +286,7 @@ namespace RTSHelper {
             TimerFlash.Start();
             TemporalBackgroundColor = ((SolidColorBrush)this.Background).Color;
             Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.CurrentStepFontColor);
+            Application.Current.Resources["Opacidad"] = (double)1;
 
             if (Preferencias.PlaySoundEachStep) Console.Beep(400, 200);
             if (ActualizarDuraciónPasoEnTimerEnPróximoTick) {
@@ -325,6 +329,7 @@ namespace RTSHelper {
         private void TimerFlash_Tick(object sender, EventArgs e) {
             TimerFlash.Stop();
             Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.BackColor);
+            Application.Current.Resources["Opacidad"] = Preferencias.Opacity;
         } // TimerFlash_Tick>
 
 
@@ -392,6 +397,7 @@ namespace RTSHelper {
 
         private void BtnSettings_Click(object sender, RoutedEventArgs e) {
             var winSettings = new SettingsWindow(this, primerInicio: false);
+            winSettings.Topmost = true;
             winSettings.ShowDialog();
         } // BtnSettings_Click>
 
@@ -417,6 +423,18 @@ namespace RTSHelper {
 
         } // Window_SizeChanged>
 
+
+        private void BtnMinize_Click(object sender, RoutedEventArgs e) 
+            => this.WindowState = WindowState.Minimized;
+
+
+        private void BtnMute_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void BtnRestart_Click(object sender, RoutedEventArgs e) {
+
+        }
 
     } // MainWindow>
 

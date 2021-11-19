@@ -1,11 +1,9 @@
-﻿<Window x:Class="RTSHelper.SettingsWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RTSHelper"
-        mc:Ignorable="d" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" ResizeMode="NoResize"
+﻿<Window x:Class="RTSHelper.SettingsWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:RTSHelper"
+        mc:Ignorable="d" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" ResizeMode="CanResizeWithGrip"
         Title="RTS Helper" Height="370" Width="510" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
+    <!--Se debe establecer CanResizeWithGrip porque algunos usuarios les aparece la ventana de settings cortada. No se porqué... Si se quiere quitar el botón de maximizar usar esto https://stackoverflow.com/questions/18707782/disable-maximize-button-of-wpf-window-keeping-resizing-feature-intact -->
     
     <StackPanel Margin="10">
 
@@ -83,7 +81,7 @@
                     Change
                 </Button>
 
-                <CheckBox Checked="ChkPlaySoundEachStep_CheckedChanged" Unchecked="ChkPlaySoundEachStep_CheckedChanged" x:Name="ChkPlaySoundEachStep" Margin="4 11 0 11" />
+                <CheckBox Checked="ChkPlaySoundEachStep_CheckedChanged" Unchecked="ChkPlaySoundEachStep_CheckedChanged" x:Name="ChkPlaySoundEachStep" Margin="4 10 0 11" />
                 
             </StackPanel>
 

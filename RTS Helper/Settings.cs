@@ -14,23 +14,42 @@ namespace RTSHelper {
     public class Settings {
 
 
+        #region "Constantes"
+
         public static string AOE2Name = "Age of Empires II";
 
         public static string AOE4Name = "Age of Empires IV";
+
+        #endregion
+
+
+        #region "Generales"
 
         public string Game { get; set; } = AOE2Name; // Es una pseudopreferencia porque no se usa por si sola si no para establecer otros valores.
 
         public string ScreenResolution { get; set; } = "1920x1080"; // Es una pseudopreferencia porque no se usa por si sola si no para establecer otros valores.
 
-        public double GameSpeed { get; set; } = 1.7;
+        public double GameSpeed { get; set; } = 1;
 
-        public double ExecutionSpeed { get; set; } = 1; // 1 es la máxima velocidad. En esta velocidad cada set de instrucciones corresponde a un minuto en el juego.
+        public double ExecutionSpeed { get; set; } = 1; // 1 es la máxima velocidad. En esta velocidad cada conjunto de comandos corresponde a un minuto en el juego.
 
         public string CurrentBuildOrder { get; set; } = "Default";
 
-        public double CurrentStepFontSize { get; set; } = 19; // 1920x1080.
+        public bool ShowNextStep { get; set; }
 
-        public double NextStepFontSize { get; set; } = 12.5; // 1920x1080.
+        public string BuildOrderDirectory { get; set; }
+
+        #endregion 
+
+
+        #region "Sonidos"
+
+        public bool PlaySoundEachStep { get; set; } = false;
+
+        #endregion
+
+
+        #region "Colores"
 
         public string BackColor { get; set; } = Color.FromRgb(0, 0, 0).ToString();
 
@@ -42,37 +61,47 @@ namespace RTSHelper {
 
         public string NextStepFontColor { get; set; } = Color.FromRgb(150, 150, 150).ToString();
 
-        public double Width { get; set; } = 472; // 1920x1080.
+        #endregion
 
-        public double Height { get; set; } = 146; // 1920x1080.
 
-        public double Top { get; set; } = 718; // 1920x1080.
+        #region "Tamaños" 
+        // Son establecidos automáticamente al cambiar el juego y la resolución.
 
-        public double Left { get; set; } = 722; // 1920x1080.
+        public double Width { get; set; }
 
-        public bool ShowNextStep { get; set; } = true; // AOE2.
+        public double Height { get; set; }
 
-        public string BuildOrderDirectory { get; set; } = null;
+        public double Top { get; set; }
 
-        public int ButtonsMargin { get; set; } = 2; // 1920x1080.
+        public double Left { get; set; }
 
-        public int ButtonsPadding { get; set; } = 2; // 1920x1080.
+        public double CurrentStepFontSize { get; set; }
 
-        public double LargeFontSize { get; set; } = 17; // 1920x1080.
+        public double NextStepFontSize { get; set; }
 
-        public double MediumFontSize { get; set; } = 15; // 1920x1080.
+        public double ButtonsSize { get; set; }
 
-        public double SmallFontSize { get; set; } = 11; // 1920x1080.
+        public double ButtonsMargin { get; set; }
 
-        public double LeftMarginCurrentStep { get; set; } = 14; // 1920x1080.
+        public double ButtonsPadding { get; set; }
 
-        public double TopMarginCurrentStep { get; set; } = 6; // 1920x1080.
+        public double LargeFontSize { get; set; }
 
-        public double RightMarginNextStep { get; set; } = 65; // 1920x1080.
+        public double MediumFontSize { get; set; }
 
-        public double TopMarginNextStep { get; set; } = 4; // 1920x1080.
+        public double LeftMarginCurrentStep { get; set; }
 
-        public bool PlaySoundEachStep { get; set; } = false;
+        public double TopMarginCurrentStep { get; set; }
+
+        public double RightMarginNextStep { get; set; }
+
+        public double TopMarginNextStep { get; set; }
+
+        public double BuildOrderSelectorWidth { get; set; }
+
+        public double ExecutionSpeedSelectorWidth { get; set; }
+
+        #endregion
 
 
         public string ObtenerGameSpeedText(string game) {
@@ -97,6 +126,82 @@ namespace RTSHelper {
         } // EstablecerGameSpeed>
 
 
+        public void EstablecerValoresRecomendadosAOE2(string resolución) {
+
+            ShowNextStep = true;
+            GameSpeed = 1.7;
+
+            switch (resolución) {
+                case "1920x1080":
+
+                    Height = 146;
+                    Width = 495;
+                    Top = 718;
+                    Left = 722;
+                    CurrentStepFontSize = 19;
+                    NextStepFontSize = 11.5;
+                    ButtonsSize = 24;
+                    ButtonsMargin = 2;
+                    ButtonsPadding = 2;
+                    LargeFontSize = 16;
+                    MediumFontSize = 14;
+                    LeftMarginCurrentStep = 15;
+                    TopMarginCurrentStep = 3;
+                    TopMarginNextStep = 27;
+                    RightMarginNextStep = 67;
+                    BuildOrderSelectorWidth = 145;
+                    ExecutionSpeedSelectorWidth = 55;
+                    break;
+
+                case "2560x1440":
+
+                    Height = 195;
+                    Width = 662; // No cambiar, normalmente uso el minimapa 25% más grande y el valor mi valor sería 635.
+                    Top = 957;
+                    Left = 962;
+                    CurrentStepFontSize = 25;
+                    NextStepFontSize = 16;
+                    ButtonsSize = 33;
+                    ButtonsMargin = 3;
+                    ButtonsPadding = 2;
+                    LargeFontSize = 24;
+                    MediumFontSize = 18;
+                    LeftMarginCurrentStep = 17;
+                    TopMarginCurrentStep = 5;
+                    TopMarginNextStep = 31;
+                    RightMarginNextStep = 90;
+                    BuildOrderSelectorWidth = 200;
+                    ExecutionSpeedSelectorWidth = 75;
+                    break;
+
+                case "1366x768":
+
+                    Height = 105;
+                    Width = 354;
+                    Top = 510;
+                    Left = 513;
+                    CurrentStepFontSize = 13.5;
+                    NextStepFontSize = 8.3;
+                    ButtonsSize = 17;
+                    ButtonsMargin = 1;
+                    ButtonsPadding = 1;
+                    LargeFontSize = 12;
+                    MediumFontSize = 10;
+                    LeftMarginCurrentStep = 8;
+                    TopMarginCurrentStep = 2;
+                    TopMarginNextStep = 15;
+                    RightMarginNextStep = 45;
+                    BuildOrderSelectorWidth = 110;
+                    ExecutionSpeedSelectorWidth = 40;
+                    break;
+
+                default:
+                    break;
+            }
+
+        } // EstablecerValoresRecomendadosAOE2>
+
+
         public void EstablecerValoresRecomendados(string resolución, string juego) {
 
             Game = juego;
@@ -104,73 +209,11 @@ namespace RTSHelper {
 
             if (juego == AOE2Name) {
 
-                ShowNextStep = true;
-                GameSpeed = 1.7;
-
-                switch (resolución) {
-                    case "1920x1080":
-
-                        Height = 146;
-                        Width = 495;
-                        Top = 718;
-                        Left = 722;
-                        SmallFontSize = 11;
-                        MediumFontSize = 15;
-                        LargeFontSize = 17;
-                        CurrentStepFontSize = 19;
-                        NextStepFontSize = 12.5;
-                        ButtonsMargin = 2;
-                        ButtonsPadding = 2;
-                        LeftMarginCurrentStep = 14;
-                        TopMarginCurrentStep = 6;
-                        TopMarginNextStep = 4;
-                        RightMarginNextStep = 65;
-                        break;
-
-                    case "2560x1440":
-
-                        Height = 195;
-                        Width = 662; // No cambiar, normalmente uso el minimapa 25% más grande y el valor mi valor sería 635.
-                        Top = 957;
-                        Left = 962;
-                        SmallFontSize = 13;
-                        MediumFontSize = 16;
-                        LargeFontSize = 22;
-                        CurrentStepFontSize = 24;
-                        NextStepFontSize = 16;
-                        ButtonsMargin = 4;
-                        ButtonsPadding = 5;
-                        LeftMarginCurrentStep = 20;
-                        TopMarginCurrentStep = 10;
-                        TopMarginNextStep = 8;
-                        RightMarginNextStep = 90;
-                        break;
-
-                    case "1366x768":
-
-                        Height = 105;
-                        Width = 354;
-                        Top = 510;
-                        Left = 513;
-                        SmallFontSize = 8;
-                        MediumFontSize = 9;
-                        LargeFontSize = 11;
-                        CurrentStepFontSize = 13;
-                        NextStepFontSize = 8.5;
-                        ButtonsMargin = 1;
-                        ButtonsPadding = 2;
-                        LeftMarginCurrentStep = 11;
-                        TopMarginCurrentStep = 4;
-                        TopMarginNextStep = 3;
-                        RightMarginNextStep = 50;
-                        break;
-
-                    default:
-                        break;
-                }
+                EstablecerValoresRecomendadosAOE2(resolución);
 
             } else if (juego == AOE4Name) {
 
+                EstablecerValoresRecomendadosAOE2(resolución);
                 GameSpeed = 1;
                 ShowNextStep = false;
 
@@ -181,17 +224,8 @@ namespace RTSHelper {
                         Width = 263;
                         Top = 718;
                         Left = 1044;
-                        SmallFontSize = 11;
-                        MediumFontSize = 13;
-                        LargeFontSize = 16;
-                        CurrentStepFontSize = 15;
-                        NextStepFontSize = 9;
-                        ButtonsMargin = 3;
-                        ButtonsPadding = 2;
-                        LeftMarginCurrentStep = 15;
-                        TopMarginCurrentStep = 6;
-                        TopMarginNextStep = 3;
-                        RightMarginNextStep = 50;
+                        CurrentStepFontSize = 14.5;
+                        BuildOrderSelectorWidth = 140;
                         break;
 
                     case "2560x1440":
@@ -200,36 +234,18 @@ namespace RTSHelper {
                         Left = 1389;
                         Height = 195;
                         Top = 957;
-                        SmallFontSize = 12;
-                        MediumFontSize = 12;
-                        LargeFontSize = 16;
-                        CurrentStepFontSize = 20;
-                        NextStepFontSize = 16;
-                        ButtonsMargin = 3;
-                        ButtonsPadding = 3;
-                        LeftMarginCurrentStep = 20;
-                        TopMarginCurrentStep = 10;
-                        TopMarginNextStep = 8;
-                        RightMarginNextStep = 90;
+                        CurrentStepFontSize = 19.5;
+                        BuildOrderSelectorWidth = 185;
                         break;
 
                     case "1366x768":
 
-                        SmallFontSize = 8;
-                        MediumFontSize = 9;
-                        LargeFontSize = 11;
-                        CurrentStepFontSize = 10;
-                        NextStepFontSize = 8.5;
-                        ButtonsMargin = 1;
-                        ButtonsPadding = 2;
-                        LeftMarginCurrentStep = 11;
-                        TopMarginCurrentStep = 4;
-                        TopMarginNextStep = 3;
-                        RightMarginNextStep = 50;
                         Height = 105;
                         Width = 188;
                         Top = 510;
                         Left = 743;
+                        CurrentStepFontSize = 10;
+                        BuildOrderSelectorWidth = 97;
                         break;
 
                     default:

@@ -14,7 +14,6 @@ using System.Drawing;
 using System.Diagnostics;
 
 
-
 namespace RTSHelper {
 
 
@@ -30,7 +29,7 @@ namespace RTSHelper {
 
             InitializeComponent();
             VentanaPrincipal = ventanaPrincipal;
-            CargarValores(ventanaPrincipal.Preferencias);
+            CargarValores(ventanaPrincipal.Preferencias, primerInicio);
             if (primerInicio) {
               
                 SpnLabels2.Visibility = Visibility.Collapsed;
@@ -50,7 +49,7 @@ namespace RTSHelper {
         } // SettingsWindow>
 
 
-        public void CargarValores(Settings preferencias) {
+        public void CargarValores(Settings preferencias, bool primerInicio) {
 
             CmbResolution.Text = preferencias.ScreenResolution;
             CmbGame.Text = preferencias.Game;
@@ -61,7 +60,7 @@ namespace RTSHelper {
             TxtNextStepFontSize.Text = preferencias.NextStepFontSize.ToString();
             ChkShowNextStep.IsChecked = preferencias.ShowNextStep;
             ChkPlaySoundEachStep.IsChecked = preferencias.PlaySoundEachStep;
-            VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en los botones.
+            if (!primerInicio) VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en los botones.
 
         } // CargarValores>
 
