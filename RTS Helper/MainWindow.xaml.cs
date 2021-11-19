@@ -67,6 +67,8 @@ namespace RTSHelper {
         private Color TemporalBackgroundColor;
 
 
+        #region Eventos
+
         public MainWindow() {
 
             InitializeComponent();
@@ -78,11 +80,165 @@ namespace RTSHelper {
             LeerPasos();
             LeerBuildOrders();
             CargarBuildOrder();
-            CargarVelocidadJugador();
+            CargarVelocidadEjecución();
             Inició = true;
             CambiandoTxtPasoAutomáticamente = false;
              
         } // MainWindow>
+
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e) {
+            if (e.LeftButton == MouseButtonState.Pressed) DragMove();
+        } // Window_MouseDown>
+
+
+        private void BtnStart_Click(object sender, RoutedEventArgs e) {
+
+            NúmeroPaso = 0;
+            ReiniciarTimer();
+
+        } // BtnStart_Click>
+
+
+        private void Timer_Tick(object sender, EventArgs e) {
+
+            NúmeroPaso++;
+            ActualizarTexto();
+
+            TimerFlash.Start();
+            TemporalBackgroundColor = ((SolidColorBrush)this.Background).Color;
+            Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.CurrentStepFontColor);
+            Application.Current.Resources["Opacidad"] = (double)1;
+
+            if (Preferencias.PlaySoundEachStep) Console.Beep(400, 200);
+            if (ActualizarDuraciónPasoEnTimerEnPróximoTick) {
+                ActualizarIntervaloTimer(ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed));
+                ActualizarDuraciónPasoEnTimerEnPróximoTick = false;
+            }
+
+        } // Timer_Tick>
+
+
+        private void BtnNext_Click(object sender, RoutedEventArgs e) {
+            NúmeroPaso++;
+            ActualizarTexto();
+        } // BtnNext_Click>
+
+
+        private void BtnPrev_Click(object sender, RoutedEventArgs e) {
+            NúmeroPaso--;
+            ActualizarTexto();
+        } // BtnPrev_Click>
+
+
+        private void TxtPaso_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (int.TryParse(TxtPaso.Text, out int intPaso)) {
+                NúmeroPaso = intPaso;
+                if (CambiandoTxtPasoAutomáticamente) return;
+                ReiniciarTimer();
+            }
+
+        } // TxtPaso_TextChanged>
+
+
+        private void TimerFocus_Tick(object sender, EventArgs e) {
+            TimerFocus.Stop();
+            TxtPaso.SelectAll();
+        } // TimerFocus_Tick>
+
+
+        private void TimerFlash_Tick(object sender, EventArgs e) {
+            TimerFlash.Stop();
+            Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.BackColor);
+            Application.Current.Resources["Opacidad"] = Preferencias.Opacity;
+        } // TimerFlash_Tick>
+
+
+        private void CmbBuildOrders_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            if (!Inició || EditandoComboBoxEnCódigo) return;
+            var cbi = e.AddedItems[0] as ComboBoxItem;
+            if (cbi != null) {
+                Preferencias.CurrentBuildOrder = cbi.Content.ToString(); ;
+            } else {
+                var str = e.AddedItems[0] as string;
+                Preferencias.CurrentBuildOrder = str.ToString();
+            }
+            CargarBuildOrder();
+
+        } // CmbBuildOrders_SelectionChanged>
+
+
+        private void CmbVelocidadEjecución_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            if (!Inició) return;
+            var cbi = e.AddedItems[0] as ComboBoxItem;
+            Preferencias.ExecutionSpeed = Convert.ToDouble(cbi.Tag) / 100;
+            ActualizarDuraciónPaso();
+
+        } // CmbVelocidadJugador_SelectionChanged>
+
+
+        private void TxtPaso_GotFocus(object sender, RoutedEventArgs e)
+            => TimerFocus.Start();
+
+
+        private void TxtPaso_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+            => TimerFocus.Start();
+
+
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+            => this.Close();
+
+
+        private void BtnSettings_Click(object sender, RoutedEventArgs e) {
+            var winSettings = new SettingsWindow(this, primerInicio: false);
+            winSettings.Topmost = true;
+            winSettings.ShowDialog();
+        } // BtnSettings_Click>
+
+
+        private void Window_Closed(object sender, EventArgs e)
+            => Settings.Guardar(Preferencias, RutaPreferencias);
+
+
+        private void Window_MouseUp(object sender, MouseButtonEventArgs e) {
+
+            if (!Inició) return;
+            Preferencias.Top = this.Top;
+            Preferencias.Left = this.Left;
+
+        } // Window_MouseUp>
+
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e) {
+
+            if (!Inició || EstableciendoTamaño) return;
+            Preferencias.Width = this.Width;
+            Preferencias.Height = this.Height;
+
+        } // Window_SizeChanged>
+
+
+        private void BtnMinize_Click(object sender, RoutedEventArgs e)
+            => this.WindowState = WindowState.Minimized;
+
+
+        private void BtnMute_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+
+        private void BtnRestart_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+
+        #endregion Eventos>
+
+
+        #region Procedimientos y Funciones
 
 
         private void LeerPasos() {
@@ -193,22 +349,9 @@ namespace RTSHelper {
         } // LeerPreferencias>
 
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e) {
-            if (e.LeftButton == MouseButtonState.Pressed) DragMove();
-        } // Window_MouseDown>
-
-
-        private void BtnStart_Click(object sender, RoutedEventArgs e) {
-
-            NúmeroPaso = 0;
-            ReiniciarTimer();
-
-        } // BtnStart_Click>
-
-
         private void ReiniciarTimer() {
 
-            if (!(Timer is null)) Timer.Stop();       
+            if (!(Timer is null)) Timer.Stop();
             Timer = new DispatcherTimer();
             Timer.Tick += new EventHandler(Timer_Tick);
             ActualizarIntervaloTimer(ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed));
@@ -217,7 +360,7 @@ namespace RTSHelper {
         } // ReiniciarTimer>
 
 
-        private TimeSpan ObtenerDuraciónPaso(double velocidadJuego, double velocidadEjecución) 
+        private TimeSpan ObtenerDuraciónPaso(double velocidadJuego, double velocidadEjecución)
             => new TimeSpan(0, 0, 0, 0, (int)Math.Round((velocidadJuego == 1.7 ? 1.02 : 1) * 60 * 1000 / (velocidadJuego * velocidadEjecución), 0)); // En realidad la velocidad 1.7 de AOE2 corresponde aproximadamente a 36 s reales. Lo cual es alrededor de 2% más lento de lo esperado (60/1.7 = 35.29 s).
 
 
@@ -238,14 +381,14 @@ namespace RTSHelper {
             // Primero establece un intervalo parcial del tiempo que falta para finalizar el paso actual modificado y después establece la nueva duración del paso completa.
             var nuevaDuraciónPasoCompleto = ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed);
             var elapsedTotal = MedidorTimer.Elapsed;
-            var elapsedPasoActual = new  TimeSpan(0, 0, 0, 0, (int)(Math.Round(elapsedTotal.TotalMilliseconds % Timer.Interval.TotalMilliseconds, 0)));
+            var elapsedPasoActual = new TimeSpan(0, 0, 0, 0, (int)(Math.Round(elapsedTotal.TotalMilliseconds % Timer.Interval.TotalMilliseconds, 0)));
             TimeSpan duraciónPasoParcial;
 
             if (nuevaDuraciónPasoCompleto < elapsedPasoActual) { // Con la nueva velocidad el paso actual ya se habría terminado. Se debe incrementar el número de paso y hacer un paso parcial más pequeño.
 
                 var pasosSaltados = elapsedPasoActual.TotalMilliseconds / nuevaDuraciónPasoCompleto.TotalMilliseconds; // Resta uno porque es el actual.
                 var pasosSaltadosEnteros = (int)Math.Floor(pasosSaltados);
-                var fracciónPasoSaltado = pasosSaltados - pasosSaltadosEnteros; 
+                var fracciónPasoSaltado = pasosSaltados - pasosSaltadosEnteros;
                 NúmeroPaso = NúmeroPaso + pasosSaltadosEnteros;
                 ActualizarTexto();
                 duraciónPasoParcial = elapsedPasoActual.Add(-pasosSaltadosEnteros * nuevaDuraciónPasoCompleto);
@@ -268,84 +411,14 @@ namespace RTSHelper {
             TxtPaso.Text = NúmeroPaso.ToString();
             CambiandoTxtPasoAutomáticamente = false;
             TxbPaso.Text = Pasos.Length <= NúmeroPaso ? "End" : ProcesarTextoPaso(Pasos[NúmeroPaso]);
-            TxbPasoSiguiente.Text = Pasos.Length <= NúmeroPaso + 1 ? (Pasos.Length <= NúmeroPaso ? "" : "End") 
+            TxbPasoSiguiente.Text = Pasos.Length <= NúmeroPaso + 1 ? (Pasos.Length <= NúmeroPaso ? "" : "End")
                 : $"{ProcesarTextoPaso(Pasos[NúmeroPaso + 1])}";
 
         } // ActualizarTexto>
 
 
-        private string ProcesarTextoPaso(string textoPaso) 
+        private string ProcesarTextoPaso(string textoPaso)
             => textoPaso.Replace(" \\n\\n ", "\n\n").Replace(" \\n ", "\n").Replace("\\n", "\n").Replace("     ", "\n");
-
-
-        private void Timer_Tick(object sender, EventArgs e) {
-
-            NúmeroPaso++;
-            ActualizarTexto();
-
-            TimerFlash.Start();
-            TemporalBackgroundColor = ((SolidColorBrush)this.Background).Color;
-            Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.CurrentStepFontColor);
-            Application.Current.Resources["Opacidad"] = (double)1;
-
-            if (Preferencias.PlaySoundEachStep) Console.Beep(400, 200);
-            if (ActualizarDuraciónPasoEnTimerEnPróximoTick) {
-                ActualizarIntervaloTimer(ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed));
-                ActualizarDuraciónPasoEnTimerEnPróximoTick = false;
-            }
-
-        } // Timer_Tick>
-
-
-        private void BtnNext_Click(object sender, RoutedEventArgs e) {
-            NúmeroPaso++;
-            ActualizarTexto();
-        } // BtnNext_Click>
-
-
-        private void BtnPrev_Click(object sender, RoutedEventArgs e) {     
-            NúmeroPaso--;
-            ActualizarTexto();
-        } // BtnPrev_Click>
-
-
-        private void TxtPaso_TextChanged(object sender, TextChangedEventArgs e) {
-
-            if (int.TryParse(TxtPaso.Text, out int intPaso)) {
-                NúmeroPaso = intPaso;
-                if (CambiandoTxtPasoAutomáticamente) return;
-                ReiniciarTimer();
-            }
-
-        } // TxtPaso_TextChanged>
-
-
-        private void TimerFocus_Tick(object sender, EventArgs e) {
-            TimerFocus.Stop();
-            TxtPaso.SelectAll();
-        } // TimerFocus_Tick>
-
-
-        private void TimerFlash_Tick(object sender, EventArgs e) {
-            TimerFlash.Stop();
-            Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.BackColor);
-            Application.Current.Resources["Opacidad"] = Preferencias.Opacity;
-        } // TimerFlash_Tick>
-
-
-        private void CmbBuildOrders_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-
-            if (!Inició || EditandoComboBoxEnCódigo) return;
-            var cbi = e.AddedItems[0] as ComboBoxItem;
-            if (cbi != null) {
-                Preferencias.CurrentBuildOrder = cbi.Content.ToString(); ; 
-            } else {
-                var str = e.AddedItems[0] as string;
-                Preferencias.CurrentBuildOrder = str.ToString();
-            }
-            CargarBuildOrder();
-
-        } // CmbBuildOrders_SelectionChanged>
 
 
         public void CargarBuildOrder() {
@@ -361,7 +434,7 @@ namespace RTSHelper {
         } // CargarBuildOrder>
 
 
-        private void CargarVelocidadJugador() {
+        private void CargarVelocidadEjecución() {
 
             var textoVelocidadEjecución = (Preferencias.ExecutionSpeed * 100).ToString() + "%";
             if (CmbVelocidadEjecución.Text != textoVelocidadEjecución) {
@@ -370,71 +443,11 @@ namespace RTSHelper {
                 EditandoComboBoxEnCódigo = false;
             }
 
-        } // CargarVelocidadJugador>
+        } // CargarVelocidadEjecución>
 
 
-        private void CmbVelocidadEjecución_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        #endregion Procedimientos y Funciones>
 
-            if (!Inició) return;
-            var cbi = e.AddedItems[0] as ComboBoxItem;
-            Preferencias.ExecutionSpeed = Convert.ToDouble(cbi.Tag) / 100; 
-            ActualizarDuraciónPaso();
-
-        } // CmbVelocidadJugador_SelectionChanged>
-
-
-        private void TxtPaso_GotFocus(object sender, RoutedEventArgs e) 
-            => TimerFocus.Start();
-
-
-        private void TxtPaso_PreviewMouseDown(object sender, MouseButtonEventArgs e) 
-            => TimerFocus.Start();
-
-
-        private void BtnClose_Click(object sender, RoutedEventArgs e) 
-            => this.Close();
-
-
-        private void BtnSettings_Click(object sender, RoutedEventArgs e) {
-            var winSettings = new SettingsWindow(this, primerInicio: false);
-            winSettings.Topmost = true;
-            winSettings.ShowDialog();
-        } // BtnSettings_Click>
-
-
-        private void Window_Closed(object sender, EventArgs e) 
-            => Settings.Guardar(Preferencias, RutaPreferencias);
-
-
-        private void Window_MouseUp(object sender, MouseButtonEventArgs e) {
-
-            if (!Inició) return;
-            Preferencias.Top = this.Top;
-            Preferencias.Left = this.Left;
-
-        } // Window_MouseUp>
-
-
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e) {
-
-            if (!Inició || EstableciendoTamaño) return;
-            Preferencias.Width = this.Width;
-            Preferencias.Height = this.Height;
-
-        } // Window_SizeChanged>
-
-
-        private void BtnMinize_Click(object sender, RoutedEventArgs e) 
-            => this.WindowState = WindowState.Minimized;
-
-
-        private void BtnMute_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void BtnRestart_Click(object sender, RoutedEventArgs e) {
-
-        }
 
     } // MainWindow>
 
