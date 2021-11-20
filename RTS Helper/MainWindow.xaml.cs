@@ -16,10 +16,10 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Microsoft.VisualBasic;
 using static RTSHelper.Global;
+using System.IO;
 
 
 
@@ -34,7 +34,9 @@ namespace RTSHelper {
 
         public int NúmeroPaso = 0;
 
-        private DispatcherTimer Timer;
+        private DispatcherTimer? Timer;
+
+        private DispatcherTimer? TimerStepEndSound;
 
         private DispatcherTimer TimerFocus = new DispatcherTimer();
 
@@ -88,7 +90,7 @@ namespace RTSHelper {
         } // BtnStart_Click>
 
 
-        private void Timer_Tick(object sender, EventArgs e) {
+        private void Timer_Tick(object? sender, EventArgs e) {
 
             NúmeroPaso++;
             ActualizarTexto();
@@ -98,13 +100,24 @@ namespace RTSHelper {
             Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.CurrentStepFontColor);
             Application.Current.Resources["Opacidad"] = (double)1;
 
-            if (!Preferencias.Muted) Console.Beep(400, 200);
+            if (!Preferencias.Muted)
+                MediaPlayer.PlayFile(Path.Combine(DirectorioSonidosCortos, Preferencias.StepStartSound), Preferencias.StepStartSoundVolume);
             if (ActualizarDuraciónPasoEnTimerEnPróximoTick) {
                 ActualizarIntervaloTimer(ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed));
                 ActualizarDuraciónPasoEnTimerEnPróximoTick = false;
             }
+            if (!(Timer is null)) ReiniciarTimerStepEndSound(Timer.Interval);
 
         } // Timer_Tick>
+
+
+        private void TimerStepEndSound_Tick(object? sender, EventArgs e) {
+
+            TimerStepEndSound?.Stop();
+            if (!Preferencias.Muted)
+                MediaPlayer.PlayFile(Path.Combine(DirectorioSonidosLargos, Preferencias.StepEndSound), Preferencias.StepEndSoundVolume);
+
+        } // TimerStepEndSound_Tick>
 
 
         private void BtnNext_Click(object sender, RoutedEventArgs e) {
@@ -130,13 +143,13 @@ namespace RTSHelper {
         } // TxtPaso_TextChanged>
 
 
-        private void TimerFocus_Tick(object sender, EventArgs e) {
+        private void TimerFocus_Tick(object? sender, EventArgs e) {
             TimerFocus.Stop();
             TxtPaso.SelectAll();
         } // TimerFocus_Tick>
 
 
-        private void TimerFlash_Tick(object sender, EventArgs e) {
+        private void TimerFlash_Tick(object? sender, EventArgs e) {
             TimerFlash.Stop();
             Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.BackColor);
             Application.Current.Resources["Opacidad"] = Preferencias.Opacity;
@@ -146,13 +159,7 @@ namespace RTSHelper {
         private void CmbBuildOrders_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             if (!Inició || EditandoComboBoxEnCódigo) return;
-            var cbi = e.AddedItems[0] as ComboBoxItem;
-            if (cbi != null) {
-                Preferencias.CurrentBuildOrder = cbi.Content.ToString(); ;
-            } else {
-                var str = e.AddedItems[0] as string;
-                Preferencias.CurrentBuildOrder = str.ToString();
-            }
+            Preferencias.CurrentBuildOrder = ObtenerSeleccionadoEnCombobox(e);
             CargarBuildOrder();
 
         } // CmbBuildOrders_SelectionChanged>
@@ -162,6 +169,7 @@ namespace RTSHelper {
 
             if (!Inició) return;
             var cbi = e.AddedItems[0] as ComboBoxItem;
+            if (cbi is null) return;
             Preferencias.ExecutionSpeed = Convert.ToDouble(cbi.Tag) / 100;
             ActualizarDuraciónPaso();
 
@@ -225,24 +233,21 @@ namespace RTSHelper {
 
         }
 
-
         #endregion Eventos>
 
 
         #region Procedimientos y Funciones
 
 
-
         private void LeerPasos() {
 
-            var rutaBuildOrder = System.IO.Path.Combine(DirectorioBuildOrdersEfectivo, $"{Preferencias.CurrentBuildOrder}.txt");
-            if (!System.IO.Directory.Exists(DirectorioBuildOrdersEfectivo)) System.IO.Directory.CreateDirectory(DirectorioBuildOrdersEfectivo);
-            if (!System.IO.File.Exists(rutaBuildOrder))
-                System.IO.File.WriteAllText(rutaBuildOrder, $@"Edit '\RTS Helper\Build Orders\{Preferencias.CurrentBuildOrder}.txt' \n to add your build order.");
-            Pasos = System.IO.File.ReadAllLines(rutaBuildOrder);
+            var rutaBuildOrder = Path.Combine(DirectorioBuildOrdersEfectivo, $"{Preferencias.CurrentBuildOrder}.txt");
+            if (!Directory.Exists(DirectorioBuildOrdersEfectivo)) Directory.CreateDirectory(DirectorioBuildOrdersEfectivo);
+            if (!File.Exists(rutaBuildOrder))
+                File.WriteAllText(rutaBuildOrder, $@"Edit '\RTS Helper\Build Orders\{Preferencias.CurrentBuildOrder}.txt' \n to add your build order.");
+            Pasos = File.ReadAllLines(rutaBuildOrder);
 
         } // LeerPasos>
-
 
 
         public void LeerBuildOrders() {
@@ -253,9 +258,9 @@ namespace RTSHelper {
             CmbBuildOrders.SelectedIndex = 0;
             EditandoComboBoxEnCódigo = false;
 
-            var archivosBuildOrders = System.IO.Directory.GetFiles(DirectorioBuildOrdersEfectivo, "*.txt");
+            var archivosBuildOrders = Directory.GetFiles(DirectorioBuildOrdersEfectivo, "*.txt");
             foreach (var archivoBuildOrder in archivosBuildOrders) {
-                var nombreBuildOrder = System.IO.Path.GetFileNameWithoutExtension(archivoBuildOrder);
+                var nombreBuildOrder = Path.GetFileNameWithoutExtension(archivoBuildOrder);
                 if (nombreBuildOrder.ToLower() != "default") CmbBuildOrders.Items.Add(nombreBuildOrder);
             }
 
@@ -263,7 +268,7 @@ namespace RTSHelper {
 
 
 
-        public void AplicarPreferencias() {
+        public void AplicarPreferencias(bool iniciando = false) {
 
             EstableciendoTamaño = true;
             Application.Current.Resources["FuenteNormal"] = Preferencias.MediumFontSize;
@@ -288,8 +293,8 @@ namespace RTSHelper {
             Application.Current.Resources["VisibilidadPasoSiguiente"] = Preferencias.ShowNextStep ? Visibility.Visible : Visibility.Collapsed;
             Application.Current.Resources["AnchoSelectorBuildOrder"] = Preferencias.BuildOrderSelectorWidth;
             Application.Current.Resources["AnchoSelectorVelocidadEjecución"] = Preferencias.ExecutionSpeedSelectorWidth;
-            BtnMute.Content = Preferencias.Muted ? "🔇" : "🔈";
-            BtnMute.ToolTip = Preferencias.Muted ? "Unmute" : "Mute";
+            BtnMute.Content = !Preferencias.Muted || (iniciando && Preferencias.UnmuteAtStartup) ? "🔈" : "🔇";
+            BtnMute.ToolTip = !Preferencias.Muted || (iniciando && Preferencias.UnmuteAtStartup) ? "Mute" : "Unmute";
 
             this.Width = Preferencias.Width; // Se deben establecer manualmente porque no funciona el DynamicResource.
             this.Left = Preferencias.Left;
@@ -302,9 +307,21 @@ namespace RTSHelper {
 
         private void LeerPreferencias() {
 
-            if (System.IO.File.Exists(RutaPreferencias)) {
-                Preferencias = Settings.Deserializar(System.IO.File.ReadAllText(RutaPreferencias));
+            var crearNuevas = false;
+            if (File.Exists(RutaPreferencias)) {
+
+                var preferencias = Settings.Deserializar(File.ReadAllText(RutaPreferencias));     
+                if (preferencias == null) {
+                    MessageBox.Show($"The settings couldn't be read from {RutaPreferencias}. Default settings will be loaded.");
+                    File.Copy(RutaPreferencias, Path.Combine(Path.GetDirectoryName(RutaPreferencias)!, $"Settings.json.bak.{DateTime.Now.ToString("yymmdd-hh")}"));
+                    crearNuevas = true;
+                }
+
             } else {
+                crearNuevas = true;
+            }
+
+            if (crearNuevas) {
 
                 Preferencias = new Settings();
                 var resoluciónRecomendada = ObtenerResoluciónRecomendada();
@@ -314,8 +331,9 @@ namespace RTSHelper {
                 winSettings.ShowDialog();
 
             }
+            if (Preferencias.StepEndSoundDuration == 0) Preferencias.StepEndSoundDuration = ObtenerDuraciónEndStepSound();
 
-            AplicarPreferencias();
+            AplicarPreferencias(iniciando: true);
 
         } // LeerPreferencias>
 
@@ -325,10 +343,16 @@ namespace RTSHelper {
             if (!(Timer is null)) Timer.Stop();
             Timer = new DispatcherTimer();
             Timer.Tick += new EventHandler(Timer_Tick);
+
+            if (!(TimerStepEndSound is null)) TimerStepEndSound.Stop();
+            TimerStepEndSound = new DispatcherTimer();
+            TimerStepEndSound.Tick += new EventHandler(TimerStepEndSound_Tick);
+
             ActualizarIntervaloTimer(ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed));
             ActualizarTexto();
 
         } // ReiniciarTimer>
+
 
 
         private TimeSpan ObtenerDuraciónPaso(double velocidadJuego, double velocidadEjecución)
@@ -337,11 +361,22 @@ namespace RTSHelper {
 
         private void ActualizarIntervaloTimer(TimeSpan duración) {
 
+            if (Timer is null) return; // No debería pasar.
             Timer.Interval = duración;
             Timer.Start(); // Se reinicia aquí porque de todas maneras al cambiar el invervalo el timer se reinicia siempre.
+            ReiniciarTimerStepEndSound(duración);
             MedidorTimer.Restart();
 
         } // ActualizarIntervaloTimer>
+
+
+        private void ReiniciarTimerStepEndSound(TimeSpan duraciónTimerPaso) {
+
+            if (TimerStepEndSound is null) return; // No debería pasar.
+            TimerStepEndSound.Interval = duraciónTimerPaso.Add(new TimeSpan(0, 0, 0, 0, -Preferencias.StepEndSoundDuration));
+            TimerStepEndSound.Start();
+
+        } // ReiniciarTimerStepEndSound>
 
 
         public void ActualizarDuraciónPaso() {
@@ -381,7 +416,7 @@ namespace RTSHelper {
             CambiandoTxtPasoAutomáticamente = true;
             TxtPaso.Text = NúmeroPaso.ToString();
             CambiandoTxtPasoAutomáticamente = false;
-            TxbPaso.Text = Pasos.Length <= NúmeroPaso ? ProcesarTextoPaso(Pasos[Pasos.Length - 1]) : ProcesarTextoPaso(Pasos[NúmeroPaso]);
+            TxbPaso.Text = Pasos.Length <= NúmeroPaso ? (Pasos.Length > 0 ? ProcesarTextoPaso(Pasos[Pasos.Length - 1]) : "") : ProcesarTextoPaso(Pasos[NúmeroPaso]);
             TxbPasoSiguiente.Text = Pasos.Length <= NúmeroPaso + 1 ? "" : $"{ProcesarTextoPaso(Pasos[NúmeroPaso + 1])}";
 
         } // ActualizarTexto>

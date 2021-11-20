@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using WForms = System.Windows.Forms;
+using System.IO;
 
 
 
@@ -14,19 +15,19 @@ namespace RTSHelper {
     static class Global {
 
 
-        public static Settings Preferencias;
+        public static Settings Preferencias = new Settings();
 
-        public static string DirectorioAplicación = AppDomain.CurrentDomain.BaseDirectory;
+        public static string DirectorioAplicación = AppDomain.CurrentDomain.BaseDirectory ?? @"C:\"; // En realidad no veo en que situaciuón podría ser null BaseDirectory.
 
-        public static string RutaPreferencias = System.IO.Path.Combine(DirectorioAplicación, "Settings.json");
+        public static string RutaPreferencias = Path.Combine(DirectorioAplicación, "Settings.json");
 
         public static string NoneSoundString = "None";
 
-        public static string DirectorioBuildOrdersPredeterminado = System.IO.Path.Combine(DirectorioAplicación, "Build Orders");
+        public static string DirectorioBuildOrdersPredeterminado = Path.Combine(DirectorioAplicación, "Build Orders");
 
-        public static string DirectorioSonidosCortos = System.IO.Path.Combine(System.IO.Path.Combine(DirectorioAplicación, "Sounds"), "Short");
+        public static string DirectorioSonidosCortos = Path.Combine(Path.Combine(DirectorioAplicación, "Sounds"), "Short");
 
-        public static string DirectorioSonidosLargos = System.IO.Path.Combine(System.IO.Path.Combine(DirectorioAplicación, "Sounds"), "Long");
+        public static string DirectorioSonidosLargos = Path.Combine(Path.Combine(DirectorioAplicación, "Sounds"), "Long");
 
         public static string DirectorioBuildOrdersEfectivo => Preferencias.BuildOrderDirectory ?? DirectorioBuildOrdersPredeterminado;
 
@@ -35,7 +36,16 @@ namespace RTSHelper {
         public static string ObtenerSeleccionadoEnCombobox(SelectionChangedEventArgs e) {
 
             var cbi = e.AddedItems[0] as ComboBoxItem;
-            return cbi.Content.ToString();
+            if (cbi != null) {
+                if (cbi.Content is null) {
+                    throw new Exception("No se encontró el elemento seleccionado en cbi.Content."); // Nunca debería pasar.
+                } else {
+                    return cbi.Content?.ToString() ?? throw new Exception("No se encontró el elemento seleccionado en cbi.Content?.ToString().");
+                }              
+            } else {
+                var str = e.AddedItems[0] as string;
+                return str ?? throw new Exception("No se encontró el elemento seleccionado en str.");
+            }
 
         } // ObtenerSeleccionadoEnCombobox>
 
@@ -64,6 +74,10 @@ namespace RTSHelper {
 
         } // ObtenerResoluciónRecomendada>
 
+
+        public static int ObtenerDuraciónEndStepSound() 
+            => (int)Math.Round(1000 * MediaPlayer.GetDuration(Path.Combine(DirectorioSonidosLargos, Preferencias.StepEndSound)), 0);
+       
 
     } // Global>
 

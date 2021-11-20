@@ -36,7 +36,7 @@
 
             <!-- Valores no en Preferencias !-->
             <SolidColorBrush x:Key="BrushFondoControles" Color="Transparent" />
-            
+
             <!-- Bloque necesario para botones con color en hover personalizado. https://stackoverflow.com/questions/20073294/change-color-of-button-when-mouse-is-over -->
             <Style TargetType="{x:Type local:HoverButton}" x:Key="customButton">
                 <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Self}, Path = bgColor}" />

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.IO;
+using System.Text.RegularExpressions;
 
 
 
@@ -10,19 +12,36 @@ namespace RTSHelper {
     class MediaPlayer {
 
 
-        public static WMPLib.WindowsMediaPlayer Player;
+        public static WMPLib.WindowsMediaPlayer? Player;
 
 
-        public static void PlayFile(String url, int volume) {
+        public static void PlayFile(String path, int volume) {
 
-            if (Player is null) {
-                Player = new WMPLib.WindowsMediaPlayer();
-                Player.PlayStateChange += new WMPLib._WMPOCXEvents_PlayStateChangeEventHandler(Player_PlayStateChange);
-                Player.MediaError += new WMPLib._WMPOCXEvents_MediaErrorEventHandler(Player_MediaError);
+            var file = Path.GetFileName(path);
+            var extension = Path.GetExtension(path);
+            if (file == Global.NoneSoundString) {
+                return;
+            } if (string.IsNullOrEmpty(extension)) {
+
+                var m = Regex.Match(path, "Windows Beep +([0-9]+)Hz +([0-9]+)ms");
+                if (m.Success) {
+                    var frequency = m.Groups[1].Value;
+                    var duration = m.Groups[2].Value;
+                    Console.Beep(int.Parse(frequency), int.Parse(duration));
+                }
+          
+            } else {
+
+                if (Player is null) {
+                    Player = new WMPLib.WindowsMediaPlayer();
+                    Player.PlayStateChange += new WMPLib._WMPOCXEvents_PlayStateChangeEventHandler(Player_PlayStateChange);
+                    Player.MediaError += new WMPLib._WMPOCXEvents_MediaErrorEventHandler(Player_MediaError);
+                }
+                Player.settings.volume = volume;
+                Player.URL = path;
+                Player.controls.play();
+
             }
-            Player.settings.volume = volume;
-            Player.URL = url; 
-            Player.controls.play();
 
         } // PlayFile>
 

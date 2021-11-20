@@ -108,21 +108,21 @@
 
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <Label>Play</Label>
-                            <ComboBox x:Name="CmbStartSound" Width="160" Margin="5 0 0 0" />
+                            <ComboBox SelectionChanged="CmbStartSound_SelectionChanged" x:Name="CmbStartSound" Width="160" Margin="5 0 0 0" />
                             <Label>when step starts at volume</Label>
-                            <Slider x:Name="SldStartSoundVolume" VerticalAlignment="Center" Value="50" Maximum="100" Minimum="0" Width="100" />
+                            <Slider ValueChanged="SldStartSoundVolume_ValueChanged" x:Name="SldStartSoundVolume" VerticalAlignment="Center" Value="50" Maximum="100" Minimum="0" Width="100" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <Label>Play</Label>
                             <ComboBox SelectionChanged="CmbEndSound_SelectionChanged" x:Name="CmbEndSound" Width="160" Margin="5 0 0 0" />
                             <Label>before step ends at volume</Label>
-                            <Slider x:Name="SldEndSoundVolume"  VerticalAlignment="Center" Value="50" Maximum="100" Minimum="0" Width="100" />
+                            <Slider ValueChanged="SldEndSoundVolume_ValueChanged" x:Name="SldEndSoundVolume"  VerticalAlignment="Center" Value="50" Maximum="100" Minimum="0" Width="100" />
                         </StackPanel>
 
-                        <CheckBox x:Name="ChkUnmuteAtStartup" Margin="5" >Unmute at startup</CheckBox>
+                        <CheckBox Checked="ChkUnmuteAtStartup_Checked" Unchecked="ChkUnmuteAtStartup_Checked" x:Name="ChkUnmuteAtStartup" Margin="5" >Unmute at startup</CheckBox>
 
-                        <CheckBox x:Name="ChkMinimizeOnComplete" Margin="5" >Minimize when final step ends</CheckBox>
+                        <CheckBox Checked="ChkMinimizeOnComplete_Checked" Unchecked="ChkMinimizeOnComplete_Checked" x:Name="ChkMinimizeOnComplete" Margin="5" >Minimize when last step ends</CheckBox>
       
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <CheckBox VerticalAlignment="Center">Flash in color </CheckBox>

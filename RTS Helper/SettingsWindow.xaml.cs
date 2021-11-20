@@ -8,11 +8,11 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
 using static RTSHelper.Global;
+using System.IO;
 
 
 
@@ -89,17 +89,17 @@ namespace RTSHelper {
             CmbEndSound.Text = NoneSoundString;
             var extensionesAudio = new List<string> { ".mp3", ".wav", ".wma", ".ogg", ".acc", ".flac" };
 
-            var rutasSonidosCortos = System.IO.Directory.GetFiles(DirectorioSonidosCortos);
+            var rutasSonidosCortos = Directory.GetFiles(DirectorioSonidosCortos);
             foreach (var rutaSonidoCorto in rutasSonidosCortos) {
-                var extensión = System.IO.Path.GetExtension(rutaSonidoCorto).ToLower();
+                var extensión = Path.GetExtension(rutaSonidoCorto).ToLower();
                 if (extensionesAudio.Contains(extensión) || string.IsNullOrEmpty(extensión)) 
-                    CmbStartSound.Items.Add(System.IO.Path.GetFileName(rutaSonidoCorto));
+                    CmbStartSound.Items.Add(Path.GetFileName(rutaSonidoCorto));
             }
 
-            var rutasSonidosLargos = System.IO.Directory.GetFiles(DirectorioSonidosLargos);
+            var rutasSonidosLargos = Directory.GetFiles(DirectorioSonidosLargos);
             foreach (var rutaSonidoLargo in rutasSonidosLargos) {
-                if (extensionesAudio.Contains(System.IO.Path.GetExtension(rutaSonidoLargo).ToLower())) 
-                    CmbEndSound.Items.Add(System.IO.Path.GetFileName(rutaSonidoLargo));
+                if (extensionesAudio.Contains(Path.GetExtension(rutaSonidoLargo).ToLower())) 
+                    CmbEndSound.Items.Add(Path.GetFileName(rutaSonidoLargo));
             }
 
         } // LeerSonidos>
@@ -248,7 +248,7 @@ namespace RTSHelper {
         private void ChkShowNextStep_CheckedChanged(object sender, RoutedEventArgs e) {
 
             if (!Activado) return;
-            Preferencias.ShowNextStep = (bool)ChkShowNextStep.IsChecked;
+            Preferencias.ShowNextStep = (bool)ChkShowNextStep.IsChecked!;
             VentanaPrincipal.AplicarPreferencias();
 
         } // ChkShowNextStep_CheckedChanged>
@@ -257,7 +257,7 @@ namespace RTSHelper {
         private void TxtBuildOrderPath_TextChanged(object sender, TextChangedEventArgs e) {
 
             if (!Activado) return;
-            if (System.IO.Directory.Exists(TxtBuildOrderPath.Text)) {
+            if (Directory.Exists(TxtBuildOrderPath.Text)) {
                 Preferencias.BuildOrderDirectory = TxtBuildOrderPath.Text;
                 VentanaPrincipal.LeerBuildOrders();
                 VentanaPrincipal.CargarBuildOrder();
@@ -274,8 +274,51 @@ namespace RTSHelper {
 
             if (!Activado) return;
             Preferencias.StepEndSound = ObtenerSeleccionadoEnCombobox(e);
+            Preferencias.StepEndSoundDuration = ObtenerDuraciónEndStepSound();
 
         } // CmbEndSound_SelectionChanged>
+
+
+        
+
+        private void CmbStartSound_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.StepStartSound = ObtenerSeleccionadoEnCombobox(e);
+
+        } // CmbStartSound_SelectionChanged>
+
+
+        private void SldStartSoundVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+
+            if (!Activado) return;
+            Preferencias.StepStartSoundVolume = (int)SldStartSoundVolume.Value;
+
+        } // SldStartSoundVolume_ValueChanged>
+
+
+        private void SldEndSoundVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+
+            if (!Activado) return;
+            Preferencias.StepEndSoundVolume = (int)SldEndSoundVolume.Value;
+
+        } // SldEndSoundVolume_ValueChanged>
+
+
+        private void ChkUnmuteAtStartup_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.UnmuteAtStartup = (bool)ChkUnmuteAtStartup.IsChecked!;
+
+        } // ChkUnmuteAtStartup_Checked>
+
+
+        private void ChkMinimizeOnComplete_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.MinimizeOnComplete = (bool)ChkMinimizeOnComplete.IsChecked!;
+
+        } // ChkMinimizeOnComplete_Checked>
 
 
     } // SettingsWindow>

@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Media;
+using System.IO;
 
 
 
@@ -37,7 +38,9 @@ namespace RTSHelper {
 
         public bool ShowNextStep { get; set; }
 
-        public string BuildOrderDirectory { get; set; }
+        public string? BuildOrderDirectory { get; set; }
+
+        public bool MinimizeOnComplete { get; set; } = true;
 
         #endregion 
 
@@ -52,7 +55,7 @@ namespace RTSHelper {
 
         public int StepEndSoundVolume { get; set; } = 20;
 
-        public int StepEndSoundDuration { get; set; } = 1; // Se establece automáticamente al cambiar el sonido.
+        public int StepEndSoundDuration { get; set; } = 0; // Se establece automáticamente al cambiar el sonido. El valor
 
         public bool UnmuteAtStartup { get; set; } = true; // Permite que no se mantenga muted si la última vez que se usó la aplicación se cerró muted.
 
@@ -269,7 +272,7 @@ namespace RTSHelper {
         } // EstablecerValoresRecomendados>
 
 
-        public static Settings Deserializar(string json) 
+        public static Settings? Deserializar(string json) 
             => (string.IsNullOrEmpty(json)) ? default : JsonSerializer.Deserialize<Settings>(json);
 
 
@@ -278,7 +281,7 @@ namespace RTSHelper {
 
 
         public static void Guardar(Settings settings, string ruta) 
-            => System.IO.File.WriteAllText(ruta, Settings.Serializar(settings));
+            => File.WriteAllText(ruta, Settings.Serializar(settings));
 
 
     } // Settings>
