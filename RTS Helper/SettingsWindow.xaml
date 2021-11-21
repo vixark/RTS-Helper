@@ -59,7 +59,8 @@
 
                     <StackPanel x:Name="SpnBuildOrderPath" Orientation="Horizontal" Margin="2 5 20 0">
                         <Label>Build Order Folder:</Label>
-                        <TextBox TextChanged="TxtBuildOrderPath_TextChanged" Width="300" Height="20" x:Name="TxtBuildOrderPath" Margin="3.5 0 0 0"></TextBox>
+                        <TextBox TextChanged="TxtBuildOrderPath_TextChanged" Width="300" Height="20" 
+                                 x:Name="TxtBuildOrderPath" Margin="3.5 0 0 0"></TextBox>
                     </StackPanel>
                     
                 </StackPanel>
@@ -110,30 +111,41 @@
                             <Label>Play</Label>
                             <ComboBox SelectionChanged="CmbStartSound_SelectionChanged" x:Name="CmbStartSound" Width="160" Margin="5 0 0 0" />
                             <Label>when step starts at volume</Label>
-                            <Slider ValueChanged="SldStartSoundVolume_ValueChanged" x:Name="SldStartSoundVolume" VerticalAlignment="Center" Value="50" Maximum="100" Minimum="0" Width="100" />
+                            <Slider ValueChanged="SldStartSoundVolume_ValueChanged" x:Name="SldStartSoundVolume" VerticalAlignment="Center" Value="50" 
+                                    Maximum="100" Minimum="0" Width="100" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <Label>Play</Label>
                             <ComboBox SelectionChanged="CmbEndSound_SelectionChanged" x:Name="CmbEndSound" Width="160" Margin="5 0 0 0" />
                             <Label>before step ends at volume</Label>
-                            <Slider ValueChanged="SldEndSoundVolume_ValueChanged" x:Name="SldEndSoundVolume"  VerticalAlignment="Center" Value="50" Maximum="100" Minimum="0" Width="100" />
+                            <Slider ValueChanged="SldEndSoundVolume_ValueChanged" x:Name="SldEndSoundVolume"  
+                                    VerticalAlignment="Center" Value="50" Maximum="100" Minimum="0" Width="100" />
                         </StackPanel>
 
-                        <CheckBox Checked="ChkUnmuteAtStartup_Checked" Unchecked="ChkUnmuteAtStartup_Checked" x:Name="ChkUnmuteAtStartup" Margin="5" >Unmute at startup</CheckBox>
+                        <CheckBox Checked="ChkUnmuteAtStartup_Checked" Unchecked="ChkUnmuteAtStartup_Checked" 
+                                  x:Name="ChkUnmuteAtStartup" Margin="5" >Unmute at startup</CheckBox>
 
-                        <CheckBox Checked="ChkMinimizeOnComplete_Checked" Unchecked="ChkMinimizeOnComplete_Checked" x:Name="ChkMinimizeOnComplete" Margin="5" >Minimize when last step ends</CheckBox>
-      
+                        <CheckBox Checked="ChkMinimizeOnComplete_Checked" Unchecked="ChkMinimizeOnComplete_Checked" 
+                                  x:Name="ChkMinimizeOnComplete" Margin="5" >Minimize when last step ends</CheckBox>
+
+                        <CheckBox Checked="ChkMuteOnComplete_Checked" Unchecked="ChkMuteOnComplete_Checked" 
+                                  x:Name="ChkMuteOnComplete" Margin="5" >Mute when last step ends</CheckBox>
+
                         <StackPanel Orientation="Horizontal" Margin="5">
-                            <CheckBox VerticalAlignment="Center">Flash in color </CheckBox>
-                            <Button Margin="4" Height="26" Padding="4">Change</Button>
+                            <CheckBox Checked="ChkFlashOnStepChange_Checked" Unchecked="ChkFlashOnStepChange_Checked" VerticalAlignment="Center" 
+                                      x:Name="ChkFlashOnStepChange">Flash in color </CheckBox>
+                            <Button Click="BtnFlashingColor_Click" Margin="4" Height="26" Padding="4" x:Name="BtnFlashingColor" 
+                                    Background="{DynamicResource BrushFlashingColor}">Change</Button>
                             <Label VerticalContentAlignment="Center">with</Label>
-                            <TextBox Margin="5 0 0 0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="30">0.5</TextBox>
-                            <Label VerticalContentAlignment="Center">opacity</Label>
-                            <TextBox Margin="5 0 0 0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="30">2</TextBox>
-                            <Label VerticalContentAlignment="Center">times when step starts</Label>
+                            <TextBox TextChanged="TxtFlashingOpacity_TextChanged" x:Name="TxtFlashingOpacity" Margin="5 0 0 0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
+                                     Width="30">0.5</TextBox>
+                            <Label VerticalContentAlignment="Center">opacity when step starts</Label>
                         </StackPanel>
-                        
+
+                        <CheckBox Checked="ChkStopFlashingOnComplete_Checked" Unchecked="ChkStopFlashingOnComplete_Checked" 
+                                  x:Name="ChkStopFlashingOnComplete" Margin="5" >Stop flashing when last step ends</CheckBox>
+
                     </StackPanel>
 
                 </StackPanel>

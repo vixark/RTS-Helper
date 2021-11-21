@@ -15,6 +15,7 @@
             <Color x:Key="ColorFondo" R="0" G="0" B="0" A="255" />
             <SolidColorBrush x:Key="BrushPaso" Color="#FFF" />
             <SolidColorBrush x:Key="BrushPasoSiguiente" Color="#999" />
+            <SolidColorBrush x:Key="BrushFlashingColor" Color="#FFF" />
             <System:Double x:Key="Opacidad">0.6</System:Double>
             <Visibility x:Key="VisibilidadPasoSiguiente">Visible</Visibility>
 

@@ -34,6 +34,10 @@ namespace RTSHelper {
 
         public int NúmeroPaso = 0;
 
+        public bool EsÚltimoPaso => NúmeroPaso == Pasos.Length - 1;
+
+        public bool EsDespuésÚltimoPaso => NúmeroPaso > Pasos.Length - 1;
+
         private DispatcherTimer? Timer;
 
         private DispatcherTimer? TimerStepEndSound;
@@ -53,8 +57,6 @@ namespace RTSHelper {
         private bool EstableciendoTamaño = false;
 
         private bool EditandoComboBoxEnCódigo = false;
-
-        private Color TemporalBackgroundColor;
 
 
         #region Eventos
@@ -96,9 +98,10 @@ namespace RTSHelper {
             ActualizarTexto();
 
             TimerFlash.Start();
-            TemporalBackgroundColor = ((SolidColorBrush)this.Background).Color;
-            Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.CurrentStepFontColor);
-            Application.Current.Resources["Opacidad"] = (double)1;
+            if (!(Preferencias.StopFlashingOnComplete && EsDespuésÚltimoPaso) && Preferencias.FlashOnStepChange) {
+                Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.FlashingColor);
+                Application.Current.Resources["Opacidad"] = Preferencias.FlashingOpacity;
+            }
 
             if (!Preferencias.Muted)
                 MediaPlayer.PlayFile(Path.Combine(DirectorioSonidosCortos, Preferencias.StepStartSound), Preferencias.StepStartSoundVolume);
@@ -106,6 +109,13 @@ namespace RTSHelper {
                 ActualizarIntervaloTimer(ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed));
                 ActualizarDuraciónPasoEnTimerEnPróximoTick = false;
             }
+
+            if (Preferencias.MinimizeOnComplete && EsÚltimoPaso) this.WindowState = WindowState.Minimized;
+            if (Preferencias.MuteOnComplete && EsÚltimoPaso) { // Se hace después de reproducir el último sonido por consistencia.
+                Preferencias.Muted = true;
+                AplicarPreferenciasMuted(iniciando: false);
+            }
+
             if (!(Timer is null)) ReiniciarTimerStepEndSound(Timer.Interval);
 
         } // Timer_Tick>
@@ -150,9 +160,13 @@ namespace RTSHelper {
 
 
         private void TimerFlash_Tick(object? sender, EventArgs e) {
+
             TimerFlash.Stop();
-            Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.BackColor);
-            Application.Current.Resources["Opacidad"] = Preferencias.Opacity;
+            if (!(Preferencias.StopFlashingOnComplete && EsDespuésÚltimoPaso) && Preferencias.FlashOnStepChange) {
+                Application.Current.Resources["ColorFondo"] = (Color)System.Windows.Media.ColorConverter.ConvertFromString(Preferencias.BackColor);
+                Application.Current.Resources["Opacidad"] = Preferencias.Opacity;
+            }
+
         } // TimerFlash_Tick>
 
 
@@ -293,8 +307,8 @@ namespace RTSHelper {
             Application.Current.Resources["VisibilidadPasoSiguiente"] = Preferencias.ShowNextStep ? Visibility.Visible : Visibility.Collapsed;
             Application.Current.Resources["AnchoSelectorBuildOrder"] = Preferencias.BuildOrderSelectorWidth;
             Application.Current.Resources["AnchoSelectorVelocidadEjecución"] = Preferencias.ExecutionSpeedSelectorWidth;
-            BtnMute.Content = !Preferencias.Muted || (iniciando && Preferencias.UnmuteAtStartup) ? "🔈" : "🔇";
-            BtnMute.ToolTip = !Preferencias.Muted || (iniciando && Preferencias.UnmuteAtStartup) ? "Mute" : "Unmute";
+            Application.Current.Resources["BrushFlashingColor"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.FlashingColor);
+            AplicarPreferenciasMuted(iniciando);
 
             this.Width = Preferencias.Width; // Se deben establecer manualmente porque no funciona el DynamicResource.
             this.Left = Preferencias.Left;
@@ -303,6 +317,12 @@ namespace RTSHelper {
             EstableciendoTamaño = false;
 
         } // AplicarPreferencias>
+     
+        
+        public void AplicarPreferenciasMuted(bool iniciando) {
+            BtnMute.Content = !Preferencias.Muted || (iniciando && Preferencias.UnmuteAtStartup) ? "🔈" : "🔇";
+            BtnMute.ToolTip = !Preferencias.Muted || (iniciando && Preferencias.UnmuteAtStartup) ? "Mute" : "Unmute";
+        } // AplicarPreferenciasMuted>
 
 
         private void LeerPreferencias() {
@@ -313,10 +333,13 @@ namespace RTSHelper {
                 var preferencias = Settings.Deserializar(File.ReadAllText(RutaPreferencias));     
                 if (preferencias == null) {
                     MessageBox.Show($"The settings couldn't be read from {RutaPreferencias}. Default settings will be loaded.");
-                    File.Copy(RutaPreferencias, Path.Combine(Path.GetDirectoryName(RutaPreferencias)!, $"Settings.json.bak.{DateTime.Now.ToString("yymmdd-hh")}"));
+                    File.Copy(RutaPreferencias, Path.Combine(Path.GetDirectoryName(RutaPreferencias)!, 
+                        $"Settings.json.bak.{DateTime.Now.ToString("yyyy-MM-dd-hh-mm")}"));
                     crearNuevas = true;
+                } else {
+                    Preferencias = preferencias;
                 }
-
+               
             } else {
                 crearNuevas = true;
             }
@@ -416,7 +439,8 @@ namespace RTSHelper {
             CambiandoTxtPasoAutomáticamente = true;
             TxtPaso.Text = NúmeroPaso.ToString();
             CambiandoTxtPasoAutomáticamente = false;
-            TxbPaso.Text = Pasos.Length <= NúmeroPaso ? (Pasos.Length > 0 ? ProcesarTextoPaso(Pasos[Pasos.Length - 1]) : "") : ProcesarTextoPaso(Pasos[NúmeroPaso]);
+            TxbPaso.Text = Pasos.Length <= NúmeroPaso ? (Pasos.Length > 0 ? ProcesarTextoPaso(Pasos[Pasos.Length - 1]) : "") 
+                : ProcesarTextoPaso(Pasos[NúmeroPaso]);
             TxbPasoSiguiente.Text = Pasos.Length <= NúmeroPaso + 1 ? "" : $"{ProcesarTextoPaso(Pasos[NúmeroPaso + 1])}";
 
         } // ActualizarTexto>

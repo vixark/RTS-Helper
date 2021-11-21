@@ -74,6 +74,12 @@ namespace RTSHelper {
             ChkUnmuteAtStartup.IsChecked = preferencias.UnmuteAtStartup;
             SldEndSoundVolume.Value = preferencias.StepEndSoundVolume;
             SldStartSoundVolume.Value = preferencias.StepStartSoundVolume;
+            
+            ChkMinimizeOnComplete.IsChecked = preferencias.MinimizeOnComplete;
+            ChkMuteOnComplete.IsChecked = preferencias.MuteOnComplete;
+            ChkStopFlashingOnComplete.IsChecked = preferencias.StopFlashingOnComplete;
+            ChkFlashOnStepChange.IsChecked = preferencias.FlashOnStepChange;
+            TxtFlashingOpacity.Text = preferencias.FlashingOpacity.ToString();
             if (!primerInicio) VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en los botones.
 
         } // CargarValores>
@@ -319,6 +325,53 @@ namespace RTSHelper {
             Preferencias.MinimizeOnComplete = (bool)ChkMinimizeOnComplete.IsChecked!;
 
         } // ChkMinimizeOnComplete_Checked>
+
+
+        private void ChkMuteOnComplete_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.MuteOnComplete = (bool)ChkMuteOnComplete.IsChecked!;
+
+        } // ChkMuteOnComplete_Checked>
+
+
+        private void ChkStopFlashingOnComplete_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.StopFlashingOnComplete = (bool)ChkStopFlashingOnComplete.IsChecked!;
+
+        } // ChkStopFlashingOnComplete_Checked>
+
+
+        private void ChkFlashOnStepChange_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.FlashOnStepChange = (bool)ChkFlashOnStepChange.IsChecked!;
+
+        } // ChkFlashOnStepChange_Checked>
+
+
+        private void BtnFlashingColor_Click(object sender, RoutedEventArgs e) {
+
+            var colorDialog = new ColorDialog();
+            colorDialog.Color = ObtenerDrawingColor(BtnFlashingColor.Background);
+            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                Preferencias.FlashingColor = ToHexString(colorDialog.Color);
+                VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en el botón.
+            }
+
+        } // BtnFlashingColor_Click>
+
+
+        private void TxtFlashingOpacity_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (double.TryParse(TxtFlashingOpacity.Text, out double opacidad)) {
+                Preferencias.FlashingOpacity = opacidad;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtFlashingOpacity_TextChanged>
 
 
     } // SettingsWindow>

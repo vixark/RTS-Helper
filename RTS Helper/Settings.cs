@@ -61,6 +61,8 @@ namespace RTSHelper {
 
         public bool Muted { get; set; } = false; // Se establece desde la interface principal.
 
+        public bool MuteOnComplete { get; set; } = true;
+
         #endregion
 
 
@@ -75,6 +77,14 @@ namespace RTSHelper {
         public string CurrentStepFontColor { get; set; } = Color.FromRgb(220, 220, 220).ToString();
 
         public string NextStepFontColor { get; set; } = Color.FromRgb(150, 150, 150).ToString();
+
+        public bool FlashOnStepChange { get; set; } = true;
+
+        public string FlashingColor { get; set; } = Color.FromRgb(255, 255, 255).ToString();
+
+        public double FlashingOpacity { get; set; } = 1;
+
+        public bool StopFlashingOnComplete { get; set; } = true;
 
         #endregion
 
