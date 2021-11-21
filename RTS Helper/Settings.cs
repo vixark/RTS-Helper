@@ -34,6 +34,8 @@ namespace RTSHelper {
 
         public double ExecutionSpeed { get; set; } = 1; // 1 es la máxima velocidad. En esta velocidad cada conjunto de comandos corresponde a un minuto en el juego.
 
+        public double StepDuration { get; set; } = 60; // 25 podría ser otra duración que es el tiempo de creación de aldeanos.
+
         public string CurrentBuildOrder { get; set; } = "Default";
 
         public bool ShowNextStep { get; set; }

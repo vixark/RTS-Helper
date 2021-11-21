@@ -55,6 +55,17 @@
 
                         </StackPanel>
 
+                        <StackPanel Orientation="Vertical" Margin="20 0 0 0">
+                            <Label  x:Name="LblStepDuration" Margin="2">Step Duration:</Label>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" Width="130">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox TextChanged="TxtStepDuration_TextChanged"  Width="40" x:Name="TxtStepDuration" Margin="5"></TextBox>
+                                <Label x:Name="LblStepDurationSeconds">seconds</Label>
+                            </StackPanel>
+                        </StackPanel>
+                        
                     </StackPanel>
 
                     <StackPanel x:Name="SpnBuildOrderPath" Orientation="Horizontal" Margin="2 5 20 0">

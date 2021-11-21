@@ -143,18 +143,18 @@
                         Style="{StaticResource customButton}" bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
                         Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Start">▷</local:HoverButton>
 
-                    <local:HoverButton x:Name="Restart" Click="BtnRestart_Click" Foreground="{DynamicResource BrushFuente}"         
+                    <local:HoverButton x:Name="BtnRestart" Click="BtnRestart_Click" Foreground="{DynamicResource BrushFuente}"         
                         FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}"                
                         BorderBrush="{DynamicResource BrushFuente}" BorderThickness="1" Margin="{DynamicResource MargenBotones}" 
                         Style="{StaticResource customButton}" bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205"
-                        Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Restart">⟳</local:HoverButton>
+                        Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Stop">■</local:HoverButton>
 
                 </StackPanel>
 
                 <TextBox x:Name="TxtPaso" PreviewMouseDown="TxtPaso_PreviewMouseDown" TextChanged="TxtPaso_TextChanged" GotFocus="TxtPaso_GotFocus" 
                     BorderBrush="{DynamicResource BrushFuente}" Padding="1" Margin="{DynamicResource MargenBotones}"
                     FontSize="{DynamicResource FuenteGrande}" TextAlignment="Center" Background="{DynamicResource BrushFondoControles}" 
-                    Foreground="{DynamicResource BrushFuente}" ToolTip="Current Step">
+                    Foreground="{DynamicResource BrushFuente}" ToolTip="Current Step" IsEnabled="False">
 
                     <TextBox.ContextMenu >
                         <ContextMenu >
@@ -168,13 +168,13 @@
 
                 <StackPanel Orientation="Horizontal">
 
-                    <local:HoverButton x:Name="BtnPrev" Click="BtnPrev_Click" Foreground="{DynamicResource BrushFuente}"         
+                    <local:HoverButton x:Name="BtnPrevious" Click="BtnPrevious_Click" Foreground="{DynamicResource BrushFuente}" IsEnabled="False"        
                         FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}"                
                         BorderBrush="{DynamicResource BrushFuente}" BorderThickness="1" Margin="{DynamicResource MargenBotones}" 
                         Style="{StaticResource customButton}" bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
                         Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Previous Step">|◁</local:HoverButton>
 
-                    <local:HoverButton x:Name="BtnNext" Click="BtnNext_Click" Foreground="{DynamicResource BrushFuente}"         
+                    <local:HoverButton x:Name="BtnNext" Click="BtnNext_Click" Foreground="{DynamicResource BrushFuente}" IsEnabled="False"  
                         FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}"                
                         BorderBrush="{DynamicResource BrushFuente}" BorderThickness="1" Margin="{DynamicResource MargenBotones}" 
                         Style="{StaticResource customButton}" bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
@@ -188,7 +188,7 @@
             <StackPanel x:Name="SpnInferior" Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
 
                 <Label x:Name="LblTiempoEnJuego" ToolTip="Game Time" Foreground="{DynamicResource BrushFuente}" 
-                       FontSize="{DynamicResource FuenteGrande}">99:59</Label>
+                       FontSize="{DynamicResource FuenteGrande}"></Label>
 
                 <ComboBox x:Name="CmbVelocidadEjecución" ToolTip="Execution Speed" SelectionChanged="CmbVelocidadEjecución_SelectionChanged" SelectedIndex="0" 
                       Style="{StaticResource ComboBoxColor}" Margin="{DynamicResource MargenBotones}" Foreground="{DynamicResource BrushFuente}" 

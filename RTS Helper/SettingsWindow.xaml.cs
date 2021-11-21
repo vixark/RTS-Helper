@@ -26,6 +26,8 @@ namespace RTSHelper {
 
         private MainWindow VentanaPrincipal { get; set; }
 
+        public bool ActualizarDuraciónPasoAlSalir { get; set; } = false;
+
 
         public SettingsWindow(bool primerInicio, MainWindow ventanaPrincipal) {
 
@@ -50,6 +52,9 @@ namespace RTSHelper {
                 Height = 250;
                 TbcPreferencias.Height = 150;
                 Width = 350;
+                LblStepDuration.Visibility = Visibility.Collapsed;
+                TxtStepDuration.Visibility = Visibility.Collapsed;
+                LblStepDurationSeconds.Visibility = Visibility.Collapsed;
 
             }
 
@@ -80,6 +85,7 @@ namespace RTSHelper {
             ChkStopFlashingOnComplete.IsChecked = preferencias.StopFlashingOnComplete;
             ChkFlashOnStepChange.IsChecked = preferencias.FlashOnStepChange;
             TxtFlashingOpacity.Text = preferencias.FlashingOpacity.ToString();
+            TxtStepDuration.Text = preferencias.StepDuration.ToString();
             if (!primerInicio) VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en los botones.
 
         } // CargarValores>
@@ -181,6 +187,7 @@ namespace RTSHelper {
 
             VentanaPrincipal.AplicarPreferencias();
             Settings.Guardar(Preferencias, RutaPreferencias);
+            if (ActualizarDuraciónPasoAlSalir) VentanaPrincipal.ActualizarDuraciónPaso(); // Se aplica solo al salir para no reiniciar el timer cada vez que se haga un cambio en los controles.
 
         } // Window_Closed>
 
@@ -191,6 +198,7 @@ namespace RTSHelper {
             Preferencias.Game = ObtenerSeleccionadoEnCombobox(e); 
             Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game);
             VentanaPrincipal.AplicarPreferencias();
+            ActualizarDuraciónPasoAlSalir = true;
 
         } // CmbGame_SelectionChanged>
 
@@ -203,7 +211,7 @@ namespace RTSHelper {
 
             if (!Activado) return;
             Preferencias.EstablecerGameSpeed(ObtenerSeleccionadoEnCombobox(e), Preferencias.Game);
-            VentanaPrincipal.ActualizarDuraciónPaso();
+            ActualizarDuraciónPasoAlSalir = true;
 
         } // CmbGameSpeed_SelectionChanged>
 
@@ -372,6 +380,15 @@ namespace RTSHelper {
             }
 
         } // TxtFlashingOpacity_TextChanged>
+
+
+        private void TxtStepDuration_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (double.TryParse(TxtStepDuration.Text, out double duración)) Preferencias.StepDuration = duración;
+            ActualizarDuraciónPasoAlSalir = true;
+
+        } // TxtStepDuration_TextChanged>
 
 
     } // SettingsWindow>
