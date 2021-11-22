@@ -158,8 +158,8 @@
 
                     <TextBox.ContextMenu >
                         <ContextMenu >
-                            <MenuItem Header="Last Step" />
-                            <MenuItem Header="First Step" />
+                            <MenuItem  x:Name="MniLastStep" Click="MniLastStep_Click"  Header="Go to last step" />
+                            <MenuItem x:Name="MniRestartStep" Click="MniRestartStep_Click" Header="Restart current step" />
                         </ContextMenu>
                     </TextBox.ContextMenu>
 
@@ -188,7 +188,7 @@
             <StackPanel x:Name="SpnInferior" Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
 
                 <Label x:Name="LblTiempoEnJuego" ToolTip="Game Time" Foreground="{DynamicResource BrushFuente}" 
-                       FontSize="{DynamicResource FuenteGrande}"></Label>
+                       FontSize="{DynamicResource FuenteGrande}">0:00</Label> <!--Siempre inicia en ceros para tener algún contenido y no tener movimientos extraños en la interface cuando se le da start.-->
 
                 <ComboBox x:Name="CmbVelocidadEjecución" ToolTip="Execution Speed" SelectionChanged="CmbVelocidadEjecución_SelectionChanged" SelectedIndex="0" 
                       Style="{StaticResource ComboBoxColor}" Margin="{DynamicResource MargenBotones}" Foreground="{DynamicResource BrushFuente}" 

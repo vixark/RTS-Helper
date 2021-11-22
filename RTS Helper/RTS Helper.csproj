@@ -6,9 +6,11 @@
     <RootNamespace>RTSHelper</RootNamespace>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>nullable</WarningsAsErrors>
+    <Authors>David</Authors>
+    <Description>vixark.com</Description>
   </PropertyGroup>
 
   <ItemGroup>

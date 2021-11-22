@@ -21,6 +21,8 @@ namespace RTSHelper {
 
         public static string AOE4Name = "Age of Empires IV";
 
+        public static string OtherName = "Other";
+
         #endregion
 
 
@@ -147,6 +149,8 @@ namespace RTSHelper {
             if (game == AOE2Name) {
                 GameSpeed = (gameSpeedText == "Normal" ? 1.7 : (gameSpeedText == "Slow" ? 1 : (gameSpeedText == "Casual" ? 1.5 : (gameSpeedText == "Fast" ? 2 : 1))));
             } else {
+                if (gameSpeedText != "Normal") 
+                    MessageBox.Show($"The game {game} doesn't have speed options other than normal, normal speed will be used.", "RTS Helper");
                 GameSpeed = 1;
             }
 
@@ -278,6 +282,11 @@ namespace RTSHelper {
                     default:
                         break;
                 }
+
+            } else if (juego == OtherName) {
+
+                EstablecerValoresRecomendadosAOE2(resolución);
+                GameSpeed = 1;
 
             }
 

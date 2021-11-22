@@ -2,6 +2,8 @@
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
+using static RTSHelper.Global;
 
 
 
@@ -19,6 +21,7 @@ namespace RTSHelper {
 
             var file = Path.GetFileName(path);
             var extension = Path.GetExtension(path);
+
             if (file == Global.NoneSoundString) {
                 return;
             } if (string.IsNullOrEmpty(extension)) {
@@ -44,6 +47,14 @@ namespace RTSHelper {
             }
 
         } // PlayFile>
+
+
+        public static void PlaySonidoInicio() 
+            => PlayFile(Path.Combine(DirectorioSonidosCortos, Preferencias.StepStartSound), Preferencias.StepStartSoundVolume);
+
+
+        public static void PlaySonidoFinal() 
+            => PlayFile(Path.Combine(DirectorioSonidosLargos, Preferencias.StepEndSound), Preferencias.StepEndSoundVolume);
 
 
         private static void Player_PlayStateChange(int NewState) { }

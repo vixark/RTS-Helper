@@ -49,7 +49,7 @@ namespace RTSHelper {
                 TbiBehavior.Visibility = Visibility.Collapsed;
                 TbiCustomStyles.Visibility = Visibility.Collapsed;
                 TbiStyle.Visibility = Visibility.Collapsed;
-                Height = 250;
+                Height = 260;
                 TbcPreferencias.Height = 150;
                 Width = 350;
                 LblStepDuration.Visibility = Visibility.Collapsed;
@@ -289,16 +289,30 @@ namespace RTSHelper {
             if (!Activado) return;
             Preferencias.StepEndSound = ObtenerSeleccionadoEnCombobox(e);
             Preferencias.StepEndSoundDuration = ObtenerDuraciónEndStepSound();
+            MediaPlayer.PlaySonidoFinal();
+            if (Preferencias.StepEndSound.ToLower().StartsWith("windows beep")) {
+                SldEndSoundVolume.Visibility = Visibility.Collapsed;
+                LblEndSoundVolume.Visibility = Visibility.Collapsed;
+            } else {
+                SldEndSoundVolume.Visibility = Visibility.Visible;
+                LblEndSoundVolume.Visibility = Visibility.Visible;
+            }
 
         } // CmbEndSound_SelectionChanged>
 
-
-        
 
         private void CmbStartSound_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             if (!Activado) return;
             Preferencias.StepStartSound = ObtenerSeleccionadoEnCombobox(e);
+            MediaPlayer.PlaySonidoInicio();
+            if (Preferencias.StepStartSound.ToLower().StartsWith("windows beep")) {
+                SldStartSoundVolume.Visibility = Visibility.Collapsed;
+                LblStartSoundVolume.Visibility = Visibility.Collapsed;
+            } else {
+                SldStartSoundVolume.Visibility = Visibility.Visible;
+                LblStartSoundVolume.Visibility = Visibility.Visible;
+            }
 
         } // CmbStartSound_SelectionChanged>
 
@@ -307,6 +321,7 @@ namespace RTSHelper {
 
             if (!Activado) return;
             Preferencias.StepStartSoundVolume = (int)SldStartSoundVolume.Value;
+            MediaPlayer.PlaySonidoInicio();
 
         } // SldStartSoundVolume_ValueChanged>
 
@@ -315,6 +330,7 @@ namespace RTSHelper {
 
             if (!Activado) return;
             Preferencias.StepEndSoundVolume = (int)SldEndSoundVolume.Value;
+            MediaPlayer.PlaySonidoFinal();
 
         } // SldEndSoundVolume_ValueChanged>
 
@@ -366,6 +382,7 @@ namespace RTSHelper {
             if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 Preferencias.FlashingColor = ToHexString(colorDialog.Color);
                 VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en el botón.
+                VentanaPrincipal.Flash();
             }
 
         } // BtnFlashingColor_Click>
@@ -377,6 +394,7 @@ namespace RTSHelper {
             if (double.TryParse(TxtFlashingOpacity.Text, out double opacidad)) {
                 Preferencias.FlashingOpacity = opacidad;
                 VentanaPrincipal.AplicarPreferencias();
+                VentanaPrincipal.Flash();
             }
 
         } // TxtFlashingOpacity_TextChanged>
@@ -390,6 +408,21 @@ namespace RTSHelper {
 
         } // TxtStepDuration_TextChanged>
 
+
+        private void BtnBuildOrderPath_Click(object sender, RoutedEventArgs e) {
+
+            var folderDialog = new FolderBrowserDialog();
+            folderDialog.SelectedPath = TxtBuildOrderPath.Text;
+            if (string.IsNullOrEmpty(folderDialog.SelectedPath)) folderDialog.SelectedPath = Global.DirectorioBuildOrdersPredeterminado;
+            var respuesta = folderDialog.ShowDialog();
+            if (respuesta != System.Windows.Forms.DialogResult.Cancel) TxtBuildOrderPath.Text = folderDialog.SelectedPath;
+
+        } // BtnBuildOrderPath_Click>
+
+
+        private void LnkDonate_Click(object sender, RoutedEventArgs e) 
+            => Process.Start(new ProcessStartInfo(((Hyperlink)sender).NavigateUri.ToString()) { UseShellExecute = true });
+ 
 
     } // SettingsWindow>
 

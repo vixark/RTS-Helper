@@ -46,6 +46,8 @@ namespace RTSHelper {
 
         private DispatcherTimer TimerFlash = new DispatcherTimer();
 
+        private DispatcherTimer TimerBlinkerGameTime = new DispatcherTimer();
+
         private DispatcherTimer TimerActualizadorUI = new DispatcherTimer();
 
         private Stopwatch MedidorTimer = new Stopwatch();
@@ -83,6 +85,8 @@ namespace RTSHelper {
             TimerActualizadorUI.Interval = TimeSpan.FromMilliseconds(200);
             TimerActualizadorUI.Tick += new EventHandler(TimerActualizadorUI_Tick);
             TimerActualizadorUI.Start();
+            TimerBlinkerGameTime.Interval = TimeSpan.FromMilliseconds(300);
+            TimerBlinkerGameTime.Tick += new EventHandler(TimerBlinkerGameTime_Tick);
 
             LeerPreferencias();
             Pasos = Paso.LeerPasos(DirectorioBuildOrdersEfectivo, Preferencias.CurrentBuildOrder);
@@ -120,6 +124,7 @@ namespace RTSHelper {
                     NúmeroPaso = 0;
                     ReiniciarPasoActual();
                     Estado = EEstado.Running;
+                    SuspenderBlinkingTiempoJuego();
                     break;
 
                 case EEstado.Running: // Pause.
@@ -137,6 +142,7 @@ namespace RTSHelper {
                     TimerFlash.Stop(); // Lo suspende completamente.
                     TimerStepEndSound?.Stop(); // Lo suspende completamente.
                     Estado = EEstado.Paused;
+                    TimerBlinkerGameTime.Start();
                     break;
 
                 case EEstado.Paused: // Restart.
@@ -151,6 +157,7 @@ namespace RTSHelper {
 
                     }
                     Estado = EEstado.Running;
+                    SuspenderBlinkingTiempoJuego();
                     break;
 
                 default:
@@ -176,11 +183,12 @@ namespace RTSHelper {
                         AplicarPreferenciasMuted(iniciando: false);
                     }
                     Estado = EEstado.Running;
+                    SuspenderBlinkingTiempoJuego();
                     break;
 
                 case EEstado.Paused: // Stop.
 
-                    LblTiempoEnJuego.Content = "";
+                    LblTiempoEnJuego.Content = "0:00";
                     NúmeroPaso = 0;
                     TxbPaso.Text = "";
                     TxbPasoSiguiente.Text = "";
@@ -191,6 +199,7 @@ namespace RTSHelper {
                     TimerStepEndSound?.Stop();
                     ActualizarUI();
                     Estado = EEstado.Stoped;
+                    SuspenderBlinkingTiempoJuego();
                     break;
 
                 default:
@@ -200,14 +209,11 @@ namespace RTSHelper {
         } // BtnRestart_Click>
 
 
-        private void Timer_Tick(object? sender, EventArgs e) {
+        private void MniRestartStep_Click(object sender, RoutedEventArgs e) 
+            => ReiniciarPasoActual();
 
-            MedidorTimer.Reset();
-            NúmeroPaso++;
-            ActualizarTexto();
-            DuraciónPasoParcialAnterior = 0;
-            GuardarDuraciónPaso();
-            ActualizarUI();
+
+        public void Flash() {
 
             TimerFlash.Start();
             if (!(Preferencias.StopFlashingOnComplete && EsDespuésDeÚltimoPaso) && Preferencias.FlashOnStepChange) {
@@ -215,8 +221,21 @@ namespace RTSHelper {
                 Application.Current.Resources["Opacidad"] = Preferencias.FlashingOpacity;
             }
 
+        } // Flash>
+
+
+        private void Timer_Tick(object? sender, EventArgs e) {
+
+            MedidorTimer.Reset();
+            NúmeroPaso++;
+            ActualizarTexto();
+            DuraciónPasoParcialAnterior = 0;
+            GuardarDuraciónPaso(NúmeroPaso - 1);
+            ActualizarUI();
+            Flash();
+
             if (!Preferencias.Muted)
-                MediaPlayer.PlayFile(Path.Combine(DirectorioSonidosCortos, Preferencias.StepStartSound), Preferencias.StepStartSoundVolume);
+                MediaPlayer.PlaySonidoInicio();
             if (ActualizarDuraciónPasoEnTimerEnPróximoTick) {
                 ActualizarIntervaloTimer(ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed));
                 ActualizarDuraciónPasoEnTimerEnPróximoTick = false;
@@ -238,8 +257,7 @@ namespace RTSHelper {
         private void TimerStepEndSound_Tick(object? sender, EventArgs e) {
 
             TimerStepEndSound?.Stop();
-            if (!Preferencias.Muted)
-                MediaPlayer.PlayFile(Path.Combine(DirectorioSonidosLargos, Preferencias.StepEndSound), Preferencias.StepEndSoundVolume);
+            if (!Preferencias.Muted) MediaPlayer.PlaySonidoFinal();
 
         } // TimerStepEndSound_Tick>
 
@@ -247,7 +265,7 @@ namespace RTSHelper {
         private void BtnNext_Click(object sender, RoutedEventArgs e) {
 
             NúmeroPaso++;
-            GuardarDuraciónPaso();
+            GuardarDuraciónPaso(NúmeroPaso - 1);
             ActualizarTexto();
             ActualizarUI();
 
@@ -293,6 +311,21 @@ namespace RTSHelper {
             }
 
         } // TimerFlash_Tick>
+
+
+        private void TimerBlinkerGameTime_Tick(object? sender, EventArgs e) {
+
+            if (Estado == EEstado.Paused) {
+
+                if (LblTiempoEnJuego.Visibility == Visibility.Visible) {
+                    LblTiempoEnJuego.Visibility = Visibility.Hidden;
+                } else {
+                    LblTiempoEnJuego.Visibility = Visibility.Visible;
+                }
+
+            }
+
+        } // TimerBlinkerGameTime_Tick>
 
 
         private void TimerActualizadorUI_Tick(object? sender, EventArgs e) => ActualizarUI();
@@ -372,6 +405,21 @@ namespace RTSHelper {
 
         } // BtnMute_Click>
 
+
+        private void MniLastStep_Click(object sender, RoutedEventArgs e) {
+
+            var pasoInicial = NúmeroPaso;
+            GuardarDuraciónPaso(pasoInicial);
+            NúmeroPaso = Pasos.Count - 1;
+            for (int i = pasoInicial; i < NúmeroPaso; i++) {
+                Pasos[i].DuraciónEnJuego = Pasos[pasoInicial].DuraciónEnJuego;
+            }
+            ActualizarTexto();
+            ActualizarUI();
+
+        } // MniLastStep_Click>
+
+
         #endregion Eventos>
 
 
@@ -421,9 +469,9 @@ namespace RTSHelper {
         } // ActualizarUI>
 
 
-        private void GuardarDuraciónPaso() {
-            if (NúmeroPaso - 1 <= Pasos.Count - 1) Pasos[NúmeroPaso - 1].DuraciónEnJuego = Preferencias.StepDuration / Preferencias.ExecutionSpeed;
-        } // GuardarDuraciónPaso>
+        private void GuardarDuraciónPaso(int númeroPaso) {
+            if (númeroPaso <= Pasos.Count - 1) Pasos[númeroPaso].DuraciónEnJuego = Preferencias.StepDuration / Preferencias.ExecutionSpeed;
+        } // GuardarDuraciónPasoAnterior>
 
 
         public void AplicarPreferencias(bool iniciando = false) {
@@ -464,8 +512,13 @@ namespace RTSHelper {
      
         
         public void AplicarPreferenciasMuted(bool iniciando) {
+
             BtnMute.Content = !Preferencias.Muted || (iniciando && Preferencias.UnmuteAtStartup) ? "🔈" : "🔇";
             BtnMute.ToolTip = !Preferencias.Muted || (iniciando && Preferencias.UnmuteAtStartup) ? "Mute" : "Unmute";
+            BtnMute.Visibility = Preferencias.StepStartSound == NoneSoundString && Preferencias.StepEndSound == NoneSoundString 
+                ? Visibility.Collapsed : Visibility.Visible;
+            if (Preferencias.Muted) MediaPlayer.Player?.controls.stop();
+
         } // AplicarPreferenciasMuted>
 
 
@@ -622,7 +675,7 @@ namespace RTSHelper {
             var nuevosPasos = Paso.LeerPasos(DirectorioBuildOrdersEfectivo, Preferencias.CurrentBuildOrder);
             if (NúmeroPaso > 0) { // Si se carga una build order en la mitad de la ejecución, debe copiar las duraciones de los pasos de la ejecución actual.
                 for (int i = 0; i < NúmeroPaso; i++) {
-                    if (i <= nuevosPasos.Count - 1) nuevosPasos[i].DuraciónEnJuego = Pasos[i].DuraciónEnJuego;
+                    if (i <= nuevosPasos.Count - 1 && i <= Pasos.Count - 1) nuevosPasos[i].DuraciónEnJuego = Pasos[i].DuraciónEnJuego;
                 }
             }
             Pasos = nuevosPasos;
@@ -641,6 +694,14 @@ namespace RTSHelper {
             }
 
         } // CargarVelocidadEjecución>
+
+
+        private void SuspenderBlinkingTiempoJuego() {
+
+            LblTiempoEnJuego.Visibility = Visibility.Visible;
+            TimerBlinkerGameTime.Stop();
+
+        } // SuspenderBlinkingTiempoJuego>
 
 
         #endregion Procedimientos y Funciones>
