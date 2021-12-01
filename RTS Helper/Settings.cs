@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Media;
 using System.IO;
+using static RTSHelper.Global;
 
 
 
@@ -13,17 +14,6 @@ namespace RTSHelper {
 
 
     public class Settings {
-
-
-        #region "Constantes"
-
-        public static string AOE2Name = "Age of Empires II";
-
-        public static string AOE4Name = "Age of Empires IV";
-
-        public static string OtherName = "Other";
-
-        #endregion
 
 
         #region "Generales"
@@ -36,7 +26,7 @@ namespace RTSHelper {
 
         public double ExecutionSpeed { get; set; } = 1; // 1 es la máxima velocidad. En esta velocidad cada conjunto de comandos corresponde a un minuto en el juego.
 
-        public double StepDuration { get; set; } = 60; // 25 podría ser otra duración que es el tiempo de creación de aldeanos.
+        public double StepDuration { get; set; } = 50; // 50 es la duración de la creación de 2 aldeanos en Age of Empires II, es un valor adeucado para generar instrucciones de a dos aldeanos, en feudal se desfasaría por 5 s y después de castillos si se desfazaría por completo. 25 podría ser otra duración que es el tiempo de creación de aldeanos.
 
         public string CurrentBuildOrder { get; set; } = "Default";
 
@@ -53,7 +43,7 @@ namespace RTSHelper {
 
         public string StepStartSound { get; set; } = "Ticket Machine 2.mp3";
 
-        public string StepEndSound { get; set; } = "Stopwatch Shorter.mp3";
+        public string StepEndSound { get; set; } = "Stopwatch.mp3";
 
         public int StepStartSoundVolume { get; set; } = 50;
 
@@ -133,6 +123,37 @@ namespace RTSHelper {
         #endregion
 
 
+        #region Propiedades Autocalculadas
+
+        public string NamesDirectory {
+            get {
+
+                var directorioNombresJuego = Path.Combine(DirectorioNombres, Game);
+                if (!Directory.Exists(directorioNombresJuego)) Directory.CreateDirectory(directorioNombresJuego);
+                return directorioNombresJuego;
+
+            }
+        }
+
+        public string ImagesDirectory {
+            get {
+
+                var directorioImágenesJuego = Path.Combine(DirectorioImágenes, Game);
+                if (!Directory.Exists(directorioImágenesJuego)) Directory.CreateDirectory(directorioImágenesJuego);
+                return directorioImágenesJuego;
+
+            }
+        }
+
+        public string NamesPath => Path.Combine(NamesDirectory, "Names.json");
+
+        public string CustomNamesPath => Path.Combine(NamesDirectory, "Names.Custom.json");
+
+        public string EnglishNamesPath => Path.Combine(NamesDirectory, "Names.English.json"); // Este es temporal, se escribe usando información de la hoja de excel para crear el Names.json que contiene los otros idiomas.
+
+        #endregion Propiedades Autocalculadas>
+
+
         public string ObtenerGameSpeedText(string game) {
 
             if (game == AOE2Name) {
@@ -161,6 +182,7 @@ namespace RTSHelper {
 
             ShowNextStep = true;
             GameSpeed = 1.7;
+            StepDuration = 50; // El tiempo de creación de 2 aldeanos.
 
             switch (resolución) {
                 case "1920x1080":
@@ -247,6 +269,7 @@ namespace RTSHelper {
                 EstablecerValoresRecomendadosAOE2(resolución);
                 GameSpeed = 1;
                 ShowNextStep = false;
+                StepDuration = 60; // 60 es el tiempo de creación de 3 aldeanos.
 
                 switch (resolución) {
                     case "1920x1080":
@@ -287,6 +310,7 @@ namespace RTSHelper {
 
                 EstablecerValoresRecomendadosAOE2(resolución);
                 GameSpeed = 1;
+                StepDuration = 60;
 
             }
 
@@ -298,7 +322,7 @@ namespace RTSHelper {
 
 
         public static string Serializar(Settings settings) 
-            => JsonSerializer.Serialize(settings);
+            => JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
 
 
         public static void Guardar(Settings settings, string ruta) 

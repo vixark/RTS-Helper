@@ -93,9 +93,11 @@ namespace RTSHelper {
             LeerBuildOrders();
             CargarBuildOrder();
             CargarVelocidadEjecución();
+            CrearArchivosNombres();
+
             Inició = true;
             CambiandoTxtPasoAutomáticamente = false;
-
+            
         } // MainWindow>
 
 
@@ -545,7 +547,7 @@ namespace RTSHelper {
 
                 Preferencias = new Settings();
                 var resoluciónRecomendada = ObtenerResoluciónRecomendada();
-                var juegoRecomendado = Settings.AOE2Name;
+                var juegoRecomendado = AOE2Name;
                 Preferencias.EstablecerValoresRecomendados(resoluciónRecomendada, juegoRecomendado);
                 var winSettings = new SettingsWindow(primerInicio: true, this);
                 winSettings.ShowDialog();

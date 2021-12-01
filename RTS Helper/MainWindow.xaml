@@ -2,7 +2,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:RTSHelper"
         SizeChanged="Window_SizeChanged" MouseDown="Window_MouseDown" Closed="Window_Closed" MouseUp="Window_MouseUp" mc:Ignorable="d" 
-        Title="MainWindow" AllowsTransparency="True" WindowStyle="None" ResizeMode="CanResizeWithGrip" Topmost="True" WindowStartupLocation="Manual" 
+        Title="RTS Helper" AllowsTransparency="True" WindowStyle="None" ResizeMode="CanResizeWithGrip" Topmost="True" WindowStartupLocation="Manual" 
         Height="{DynamicResource Alto}" Width="{DynamicResource Ancho}" Top="{DynamicResource PosiciónY}" Left="{DynamicResource PosiciónX}">
     
     <Window.Background>
