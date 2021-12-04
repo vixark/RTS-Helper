@@ -19,8 +19,8 @@ namespace RTSHelper {
         public Paso(string? texto) => Texto = texto;
 
 
-        public string? TextoProcesado =>
-            Texto?.Replace(" \\n\\n ", "\n\n").Replace(" \\n ", "\n").Replace("\\n", "\n").Replace("     ", "\n");
+        public string? TextoProcesado => Texto?.Replace("   ", "\n").Replace("/n", "\n").Replace("\\n", "\n").Replace("\n  ", "\n")
+            .Replace("  \n", "\n").Replace(" \n", "\n").Replace("\n ", "\n"); // No se usa 2 espacios como salto de línea porque considero dos se pueden poner por error o ser necesarios en algunos casos. 3 espacios permiten un distanciamiento más cómodo y visualmente es claramente distinto de un espacios a la hora de revisar el texto.
 
 
         public static List<Paso> LeerPasos(string directorioBuildOrders, string nombreBuildOrder) {

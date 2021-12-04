@@ -147,9 +147,19 @@ namespace RTSHelper {
 
         public string NamesPath => Path.Combine(NamesDirectory, "Names.json");
 
-        public string CustomNamesPath => Path.Combine(NamesDirectory, "Names.Custom.json");
+        public string CustomNamesDefaultPath => Path.Combine(NamesDirectory, "Custom Names.Default.json"); // Este archivo es el que se lee si no se encuentra CustomNamesPath. Se manejan por separado para que cualquier personalización realizada por el usuario a Names.Custom.json no se pierda al copiar una nueva versión de CustomNamesDefaultPath.
 
-        public string EnglishNamesPath => Path.Combine(NamesDirectory, "Names.English.json"); // Este es temporal, se escribe usando información de la hoja de excel para crear el Names.json que contiene los otros idiomas.
+        public string CustomNamesPath => Path.Combine(NamesDirectory, "Custom Names.json");
+
+        public string CustomImagesDefaultPath => Path.Combine(NamesDirectory, "Custom Images.Default.json");
+
+        public string CustomImagesPath => Path.Combine(NamesDirectory, "Custom Images.json");
+
+        public string TypesDefaultPath => Path.Combine(NamesDirectory, "Types.Default.json");
+
+        public string TypesPath => Path.Combine(NamesDirectory, "Types.json");
+
+        public string EnglishNamesPath => Path.Combine(NamesDirectory, "English Names.json"); // Es temporal, se escribe usando información de la hoja de excel para crear el Names.json que contiene los otros idiomas.
 
         #endregion Propiedades Autocalculadas>
 

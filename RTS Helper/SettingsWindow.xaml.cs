@@ -199,7 +199,7 @@ namespace RTSHelper {
             Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game);
             TxtStepDuration.Text = Preferencias.StepDuration.ToString(); // Es el único valor que se actualiza en la interface de preferencias después de haber cambiado el juego. No es lo más óptimo, pero de todas maneras lo ideal es que cada archivo de txt de build orders traiga su propio StepDuration.
             VentanaPrincipal.AplicarPreferencias();
-            CrearArchivosNombres();
+            CrearEntidadesYNombres();
             ActualizarDuraciónPasoAlSalir = true;
 
         } // CmbGame_SelectionChanged>

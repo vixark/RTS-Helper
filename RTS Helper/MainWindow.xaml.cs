@@ -93,7 +93,7 @@ namespace RTSHelper {
             LeerBuildOrders();
             CargarBuildOrder();
             CargarVelocidadEjecución();
-            CrearArchivosNombres();
+            CrearEntidadesYNombres();
 
             Inició = true;
             CambiandoTxtPasoAutomáticamente = false;
