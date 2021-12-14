@@ -16,6 +16,7 @@
             <SolidColorBrush x:Key="BrushPaso" Color="#FFF" />
             <SolidColorBrush x:Key="BrushPasoSiguiente" Color="#999" />
             <SolidColorBrush x:Key="BrushFlashingColor" Color="#FFF" />
+            <SolidColorBrush x:Key="BrushImageBackgroundColor" Color="#000" />
             <System:Double x:Key="Opacidad">0.6</System:Double>
             <Visibility x:Key="VisibilidadPasoSiguiente">Visible</Visibility>
 
@@ -34,7 +35,8 @@
             <Thickness x:Key="MargenPasoSiguiente">0, 31, 90, 0</Thickness>
             <System:Double x:Key="AnchoSelectorBuildOrder">140</System:Double>
             <System:Double x:Key="AnchoSelectorVelocidadEjecución">75</System:Double>
-
+            <System:String x:Key="AlertContentMoreHeightThanWindow">Content is taller than window. Resize window or edit the build order.</System:String>
+            
             <!-- Valores no en Preferencias !-->
             <SolidColorBrush x:Key="BrushFondoControles" Color="Transparent" />
 

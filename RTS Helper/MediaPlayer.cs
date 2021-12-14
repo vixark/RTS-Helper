@@ -26,7 +26,7 @@ namespace RTSHelper {
                 return;
             } if (string.IsNullOrEmpty(extension)) {
 
-                var m = Regex.Match(path, "Windows Beep +([0-9]+)Hz +([0-9]+)ms");
+                var m = Regex.Match(path, "Windows Beep +([0-9]+)Hz +([0-9]+)ms", RegexOptions.IgnoreCase);
                 if (m.Success) {
                     var frequency = m.Groups[1].Value;
                     var duration = m.Groups[2].Value;
@@ -49,11 +49,11 @@ namespace RTSHelper {
         } // PlayFile>
 
 
-        public static void PlaySonidoInicio() 
+        public static void PlaySonidoInicio()
             => PlayFile(Path.Combine(DirectorioSonidosCortos, Preferencias.StepStartSound), Preferencias.StepStartSoundVolume);
 
 
-        public static void PlaySonidoFinal() 
+        public static void PlaySonidoFinal()
             => PlayFile(Path.Combine(DirectorioSonidosLargos, Preferencias.StepEndSound), Preferencias.StepEndSoundVolume);
 
 

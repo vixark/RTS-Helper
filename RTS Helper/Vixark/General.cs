@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -74,6 +75,29 @@ namespace Vixark {
         /// para informarle al compilador que se asegura que el resultado no será nulo.
         /// </summary>
         public static string? AMinúscula(this string? texto) => texto?.ToLowerInvariant();
+
+
+
+        public static System.Windows.Media.Color? ObtenerMediaColor(string textoColor) {
+
+            try {
+                return (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(textoColor);
+            } catch {
+                return null;
+            }
+
+        } // ObtenerMediaColor>
+
+
+        public static Color? ObtenerColor(string textoColor) {
+
+            var mediaColor = ObtenerMediaColor(textoColor);
+            if (mediaColor == null) return null;
+            var notNullMediaColor = (System.Windows.Media.Color)mediaColor;
+            return Color.FromArgb(notNullMediaColor.A, notNullMediaColor.R, notNullMediaColor.G, notNullMediaColor.B);
+
+        } // ObtenerColor>
+
 
     } // General>
 

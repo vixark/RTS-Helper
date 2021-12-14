@@ -2,12 +2,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:RTSHelper"
         mc:Ignorable="d" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" ResizeMode="CanResizeWithGrip"
-        Title="Settings - RTS Helper" Height="385" Width="510" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
+        Title="Settings - RTS Helper" Height="450" Width="520" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
     <!--Se debe establecer CanResizeWithGrip porque algunos usuarios les aparece la ventana de settings cortada. No se porqué... Si se quiere quitar el botón de maximizar usar esto https://stackoverflow.com/questions/18707782/disable-maximize-button-of-wpf-window-keeping-resizing-feature-intact -->
 
-    <StackPanel>
+    <Grid>
         
-        <TabControl x:Name="TbcPreferencias" Height="280">
+        <TabControl x:Name="TbcPreferencias" Margin="0 0 0 60">
             <TabItem Header="General" x:Name="TbiGeneral">
 
                 <StackPanel Margin="20 20 0 0">
@@ -85,28 +85,90 @@
                     <StackPanel Orientation="Horizontal">
 
                         <StackPanel x:Name="SpnLabels2" Orientation="Vertical">
-                            <Label Margin="2">Step Font Size:</Label>
-                            <Label Margin="2">Step Font Color:</Label>
+                            <Label Margin="2">Font Name:</Label>
+                            <Label Margin="2">Current Step Font Size:</Label>
+                            <Label Margin="2">Current Step Font Color:</Label>
+                            <Label Margin="2">Current Step Font Bold:</Label>
                             <Label Margin="2">Show Next Step:</Label>
                             <Label Margin="2">Next Step Font Size:</Label>
                             <Label Margin="2">Next Step Font Color:</Label>
+                            <Label Margin="2">Next Step Font Bold:</Label>
+                            <Label Margin="2">Line Spacing:</Label>
                         </StackPanel>
 
-                        <StackPanel x:Name="SpnSettings2" Orientation="Vertical" Width="70">
+                        <StackPanel x:Name="SpnSettings2" Orientation="Vertical" Width="140">
+
+                            <ComboBox SelectionChanged="CmbFontName_SelectionChanged" HorizontalAlignment="Stretch" Margin="4 4 4 7" x:Name="CmbFontName">
+                                <ComboBoxItem>Arial</ComboBoxItem>
+                                <ComboBoxItem>Arial Black</ComboBoxItem>
+                                <ComboBoxItem>Calibri</ComboBoxItem>
+                                <ComboBoxItem>Cambria</ComboBoxItem>
+                                <ComboBoxItem>Cambria Math</ComboBoxItem>
+                                <ComboBoxItem>Candara</ComboBoxItem>
+                                <ComboBoxItem>Comic Sans MS</ComboBoxItem>
+                                <ComboBoxItem>Consolas</ComboBoxItem>
+                                <ComboBoxItem>Constantia</ComboBoxItem>
+                                <ComboBoxItem>Corbel</ComboBoxItem>
+                                <ComboBoxItem>Courier New</ComboBoxItem>
+                                <ComboBoxItem>Ebrima</ComboBoxItem>
+                                <ComboBoxItem>Franklin Gothic Medium</ComboBoxItem>
+                                <ComboBoxItem>Gabriola</ComboBoxItem>
+                                <ComboBoxItem>Georgia</ComboBoxItem>
+                                <ComboBoxItem>Impact</ComboBoxItem>
+                                <ComboBoxItem>Lucida Console</ComboBoxItem>
+                                <ComboBoxItem>Lucida Sans Unicode</ComboBoxItem>
+                                <ComboBoxItem>Malgun Gothic</ComboBoxItem>
+                                <ComboBoxItem>Microsoft Himalaya</ComboBoxItem>
+                                <ComboBoxItem>Microsoft JhengHei</ComboBoxItem>
+                                <ComboBoxItem>Microsoft New Tai Lue</ComboBoxItem>
+                                <ComboBoxItem>Microsoft PhagsPa</ComboBoxItem>
+                                <ComboBoxItem>Microsoft Sans Serif</ComboBoxItem>
+                                <ComboBoxItem>Microsoft Tai Le</ComboBoxItem>
+                                <ComboBoxItem>Microsoft YaHei</ComboBoxItem>
+                                <ComboBoxItem>Microsoft Yi Baiti</ComboBoxItem>
+                                <ComboBoxItem>Mongolian Baiti</ComboBoxItem>
+                                <ComboBoxItem>MS Gothic</ComboBoxItem>
+                                <ComboBoxItem>MV Boli</ComboBoxItem>
+                                <ComboBoxItem>Palatino Linotype</ComboBoxItem>
+                                <ComboBoxItem>Segoe Print</ComboBoxItem>
+                                <ComboBoxItem>Segoe Script</ComboBoxItem>
+                                <ComboBoxItem>Segoe UI</ComboBoxItem>
+                                <ComboBoxItem>Segoe UI Symbol</ComboBoxItem>
+                                <ComboBoxItem>SimSun</ComboBoxItem>
+                                <ComboBoxItem>Sylfaen</ComboBoxItem>
+                                <ComboBoxItem>Symbol</ComboBoxItem>
+                                <ComboBoxItem>Tahoma</ComboBoxItem>
+                                <ComboBoxItem>Times New Roman</ComboBoxItem>
+                                <ComboBoxItem>Trebuchet MS</ComboBoxItem>
+                                <ComboBoxItem>Verdana</ComboBoxItem>
+                                <ComboBoxItem>Webdings</ComboBoxItem>
+                                <ComboBoxItem>Wingdings</ComboBoxItem>
+                            </ComboBox>
 
                             <TextBox TextChanged="TxtStepFontSize_TextChanged" x:Name="TxtStepFontSize" Margin="4" />
 
                             <Button Click="BtnStepFontColor_Click" x:Name="BtnStepFontColor" Margin="4" Height="22" 
                                 Foreground="{DynamicResource BrushPaso}" Background="{DynamicResource BrushFondo}">Change</Button>
 
+                            <CheckBox Checked="ChkCurrentStepFontBold_Checked" Unchecked="ChkCurrentStepFontBold_Checked" x:Name="ChkCurrentStepFontBold" 
+                                      Margin="4 9 0 9" />
+
                             <CheckBox Checked="ChkShowNextStep_CheckedChanged" Unchecked="ChkShowNextStep_CheckedChanged" x:Name="ChkShowNextStep" 
-                                      Margin="4 11 0 11" />
+                                      Margin="4 4 0 11" />
 
                             <TextBox TextChanged="TxtNextStepFontSize_TextChanged" x:Name="TxtNextStepFontSize" Margin="4" />
 
                             <Button Click="BtnNextStepFontColor_Click" x:Name="BtnNextStepFontColor" Margin="4" Height="22" 
                                 Foreground="{DynamicResource BrushPasoSiguiente}" Background="{DynamicResource BrushFondo}">Change</Button>
 
+                            <CheckBox Checked="ChkNextStepFontBold_Checked" Unchecked="ChkNextStepFontBold_Checked" x:Name="ChkNextStepFontBold" 
+                                      Margin="4 9 0 9" />
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox TextChanged="TxtLineSpacing_TextChanged" x:Name="TxtLineSpacing" Margin="4" Width="40" />
+                                <Label>% of line height.</Label>
+                            </StackPanel>
+                            
                         </StackPanel>
 
                     </StackPanel>
@@ -165,13 +227,63 @@
                 </StackPanel>
 
             </TabItem>
-            <TabItem Header="Custom Styles" x:Name="TbiCustomStyles">
+            
+            <TabItem Header="Images" x:Name="TbiImages">
+
+                <StackPanel Margin="20 20 0 0" Orientation="Horizontal">
+
+                    <StackPanel Orientation="Vertical">
+                        <Label Margin="2">Size:</Label>
+                        <Label Margin="2">Background Color:</Label>
+                        <Label Margin="2">Background Opacity:</Label>
+                        <Label Margin="2">Horizontal Margin:</Label>
+                        <Label Margin="2">Corner Radius:</Label>
+                        <Label Margin="2">Sub. and Superscript Size:</Label>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical">
+
+                        <StackPanel Orientation="Horizontal" Margin="3">
+                            <TextBox TextChanged="TxtImageSize_TextChanged" x:Name="TxtImageSize" Width="40" VerticalContentAlignment="Center" />
+                            <Label>% of line height.</Label>
+                        </StackPanel>
+
+                        <Button Click="BtnImageBackgroundColor_Click" Margin="3" Height="26" Padding="4" x:Name="BtnImageBackgroundColor" 
+                                Foreground="White" Background="{DynamicResource BrushImageBackgroundColor}">Change</Button>
+
+                        <TextBox TextChanged="TxtImageBackgroundOpacity_TextChanged" x:Name="TxtImageBackgroundOpacity" Margin="3"></TextBox>
+
+                        <StackPanel Orientation="Horizontal" Margin="3" >
+                            <TextBox TextChanged="TxtImageHorizontalMargin_TextChanged" x:Name="TxtImageHorizontalMargin" Width="40" 
+                                     VerticalContentAlignment="Center" />
+                            <Label>% of image height.</Label>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="3" >
+                            <TextBox TextChanged="TxtImageBackgroundRoundedCornersRadius_TextChanged" x:Name="TxtImageBackgroundRoundedCornersRadius" 
+                                     Width="40" VerticalContentAlignment="Center" />
+                            <Label>% of image height.</Label>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="3" >
+                            <TextBox TextChanged="TxtSubscriptAndSuperscriptImagesSize_TextChanged" x:Name="TxtSubscriptAndSuperscriptImagesSize" 
+                                     Width="40" VerticalContentAlignment="Center" />
+                            <Label>% of image height.</Label>
+                        </StackPanel>
+                        
+                    </StackPanel>
+                    
+                </StackPanel>
+                
+            </TabItem>
+
+            <TabItem Header="Display" x:Name="TbiDisplay">
 
             </TabItem>
-            
+
         </TabControl>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 10" VerticalAlignment="Bottom">
 
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical">
@@ -181,10 +293,8 @@
                 <Button Click="BtnSave_Click" x:Name="BtnSave" Width="60" Margin="5 0 10 0">Save</Button>
             </StackPanel>
 
-            
-
         </StackPanel>
         
-    </StackPanel>
+    </Grid>
 
 </Window>

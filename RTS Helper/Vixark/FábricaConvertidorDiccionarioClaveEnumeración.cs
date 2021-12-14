@@ -74,11 +74,9 @@ namespace Vixark {
 
             private readonly JsonConverter<TValue> _valueConverter;
 
-#pragma warning disable IDE0044 // Agregar modificador de solo lectura. Se omite esta advertencia porque si necesita ser escrito en el constructor.
             private Type _keyType;
 
             private Type _valueType;
-#pragma warning restore IDE0044
 
             #endregion Propiedades y Campos>
 

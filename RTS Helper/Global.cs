@@ -12,6 +12,8 @@ using System.Linq;
 using System.Windows;
 using static Vixark.General;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 
 
@@ -21,6 +23,8 @@ namespace RTSHelper {
 
     public static class Global {
 
+
+        #region Variables
 
         public static Settings Preferencias = new Settings();
 
@@ -42,6 +46,10 @@ namespace RTSHelper {
 
         public static string NoneSoundString = "None";
 
+        public static string NombreFuentePredeterminada = "Tahoma";
+
+        public static double FactorTamañoTextoAPixeles = 136D / 113; // Es un factor experimental para la fuente actual predeterminada (Tahoma) que permite convertir el tamaño de la fuente al tamaño de la imagen para que ambos sean del mismo alto. Se hace para la fuente predeterminada aunque no debería ser muy diferente con otras fuentes.
+
         public static string DirectorioBuildOrdersPredeterminado = Path.Combine(DirectorioAplicación, "Build Orders");
 
         public static string DirectorioSonidosCortos = Path.Combine(DirectorioAplicación, "Sounds", "Short");
@@ -54,17 +62,143 @@ namespace RTSHelper {
 
         public static string DirectorioBuildOrdersEfectivo => Preferencias.BuildOrderDirectory ?? DirectorioBuildOrdersPredeterminado;
 
-        public enum NameType {
+        public static string AlinearInferiormenteId = "\f";
+
+        public static string NuevaLíneaId = "\n";
+
+        public static string SeparadorDecimales = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
+
+        public enum NameType { // Al agregar un valor aquí, se debe agregar a Settings.NamesTypesPriority.
             Complete, Common, Abbreviation, Acronym, CommonPlural, AbbreviationPlural, AcronymPlural, // Todos estos son normalmente en inglés.
             Custom, Image, BR, DE, ES, FR, HI, IT, JP, KO, MS, MX, PL, RU, TR, TW, VI, ZH // TW es equivalente Chino tradicional según las pruebas que he hecho. ZH es Chino Simplificado
         }
 
-        public static Dictionary<string, Nombre> Nombres = new Dictionary<string, Nombre>(); // La clave son todos los nombres posibles y el valor es el ID de la entidad.
+        public enum TipoSegmento { Entidad, Texto, Imagen } // Entidad puede convertirse en Texto o Imagen según las preferencias del usuario.
+
+        public enum PosiciónTexto { Indeterminado, Normal, Subíndice, Superíndice }
+
+        public enum TamañosFuente { Indeterminado, XXXS, XXS, XS, S, M, L, XL, XXL, XXXL }
+
+        public enum TipoFuente { Sans, SansNegrita, Serif, SerifCuadrada, Caligráfica, Símbolos }
+
+        public static Dictionary<string, Nombre> Nombres = new Dictionary<string, Nombre>(); // La clave son todos los nombres posibles.
 
         public static Dictionary<string, Entidad> Entidades = new Dictionary<string, Entidad>(); // La clave es el ID de la entidad.
 
         public static Dictionary<string, string> Imágenes = new Dictionary<string, string>(); // La clave es el nombre único de la imagen (nombre del archivo) y el valor es la ruta. No se deben repetir nombres de imágenes, incluso si están en diferentes carpetas.
 
+        public static List<string> Estilos { get; set; } = new List<string> { "b", "i", "u", "nb" };
+
+        public static List<string> Tamaños { get; set; } = new List<string> { "xxxs", "xxs", "xs", "s", "m", "l", "xl", "xxl", "xxxl" }; // xxxl x3, xxl x2, xl x1.5, l x1.3, m x1, s x1/1,3, xs x1/1,5, xxs x1/2, xxxs x1/3. 
+
+        public static List<string> Posiciones { get; set; } = new List<string> { "sup", "sub", "normalpos" };
+
+        public static List<string> Colores { get; set; } = new List<string> { "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", 
+            "bisque", "black", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", 
+            "cornflowerblue", "cornsilk", "crimson", "cyan", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkkhaki", 
+            "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", 
+            "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", 
+            "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "green", "greenyellow", "honeydew", "hotpink", "indianred", "indigo", "ivory", 
+            "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", 
+            "lightgray", "lightgreen", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightsteelblue", "lightyellow", 
+            "lime", "limegreen", "linen", "magenta", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", 
+            "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", 
+            "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orange", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", 
+            "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", 
+            "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "snow", "springgreen", "steelblue", 
+            "tan", "teal", "thistle", "tomato", "transparent", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen" };
+
+        public static Dictionary<string, Fuente> Fuentes = new Dictionary<string, Fuente> {
+            {"arial", new Fuente("Arial", TipoFuente.Sans, false, false, false, false)},
+            {"arialblack", new Fuente("Arial Black", TipoFuente.SansNegrita, false, false, false, false)},
+            {"calibri", new Fuente("Calibri", TipoFuente.Sans, true, true, true, false)},
+            {"cambria", new Fuente("Cambria", TipoFuente.Serif, true, true, true, false)},
+            {"cambria math", new Fuente("Cambria Math", TipoFuente.Serif, true, true, true, false)},
+            {"candara", new Fuente("Candara", TipoFuente.Sans, true, true, false, false)},
+            {"comicsansms", new Fuente("Comic Sans MS", TipoFuente.Sans, false, false, false, false)},
+            {"consolas", new Fuente("Consolas", TipoFuente.Sans, false, false, false, false)},
+            {"constantia", new Fuente("Constantia", TipoFuente.Serif, true, false, false, false)},
+            {"corbel", new Fuente("Corbel", TipoFuente.Sans, true, true, false, false)},
+            {"couriernew", new Fuente("Courier New", TipoFuente.SerifCuadrada, false, false, false, false)},
+            {"ebrima", new Fuente("Ebrima", TipoFuente.Sans, true, false, false, false)},
+            {"franklingothicmedium", new Fuente("Franklin Gothic Medium", TipoFuente.SansNegrita, false, false, false, false)},
+            {"gabriola", new Fuente("Gabriola", TipoFuente.Caligráfica, true, true, false, false)},
+            {"georgia", new Fuente("Georgia", TipoFuente.Serif, true, false, false, false)},
+            {"impact", new Fuente("Impact", TipoFuente.SansNegrita, true, false, false, false)},
+            {"lucidaconsole", new Fuente("Lucida Console", TipoFuente.Sans, false, false, false, false)},
+            {"lucidasansunicode", new Fuente("Lucida Sans Unicode", TipoFuente.Sans, false, false, false, false)},
+            {"malgungothic", new Fuente("Malgun Gothic", TipoFuente.Sans, false, false, false, false)},
+            {"microsofthimalaya", new Fuente("Microsoft Himalaya", TipoFuente.Serif, false, false, false, false)},
+            {"microsoftjhenghei", new Fuente("Microsoft JhengHei", TipoFuente.Sans, false, false, false, false)},
+            {"microsoftnewtai lue", new Fuente("Microsoft New Tai Lue", TipoFuente.Sans, false, false, false, false)},
+            {"microsoftphagspa", new Fuente("Microsoft PhagsPa", TipoFuente.Sans, false, false, false, false)},
+            {"microsoftsansserif", new Fuente("Microsoft Sans Serif", TipoFuente.Sans, false, false, false, false)},
+            {"microsofttaile", new Fuente("Microsoft Tai Le", TipoFuente.Sans, false, false, false, false)},
+            {"microsoftyahei", new Fuente("Microsoft YaHei", TipoFuente.Sans, false, false, false, false)},
+            {"microsoftyibaiti", new Fuente("Microsoft Yi Baiti", TipoFuente.Sans, false, false, false, false)},
+            {"mongolianbaiti", new Fuente("Mongolian Baiti", TipoFuente.Serif, false, false, false, false)},
+            {"msgothic", new Fuente("MS Gothic", TipoFuente.SansNegrita, false, false, false, false)},
+            {"mvboli", new Fuente("MV Boli", TipoFuente.Caligráfica, false, false, false, false)},
+            {"palatinolinotype", new Fuente("Palatino Linotype", TipoFuente.Serif, true, true, true, true)},
+            {"segoeprint", new Fuente("Segoe Print", TipoFuente.Caligráfica, false, false, false, false)},
+            {"segoescript", new Fuente("Segoe Script", TipoFuente.Caligráfica, false, false, false, false)},
+            {"segoeui", new Fuente("Segoe UI", TipoFuente.Sans, true, true, false, false)},
+            {"segoeuisymbol", new Fuente("Segoe UI Symbol", TipoFuente.Sans, false, false, false, false)},
+            {"simsun", new Fuente("SimSun", TipoFuente.Serif, false, false, false, false)},
+            {"sylfaen", new Fuente("Sylfaen", TipoFuente.Serif, false, false, false, false)},
+            {"symbol", new Fuente("Symbol", TipoFuente.Serif, false, false, false, false)},
+            {"tahoma", new Fuente("Tahoma", TipoFuente.Sans, false, false, false, false)},
+            {"timesnewroman", new Fuente("Times New Roman", TipoFuente.Serif, false, false, false, false)},
+            {"trebuchetms", new Fuente("Trebuchet MS", TipoFuente.Sans, true, false, false, false)},
+            {"verdana", new Fuente("Verdana", TipoFuente.Sans, true, false, false, false)},
+            {"webdings", new Fuente("Webdings", TipoFuente.Símbolos, false, false, false, false)},
+            {"wingdings", new Fuente("Wingdings", TipoFuente.Símbolos, false, false, false, false)},
+        };
+
+        public static Dictionary<string, SolidColorBrush> BrochasDeColorSólido = new Dictionary<string, SolidColorBrush>();
+
+        public static Dictionary<string, BitmapImage> Bitmaps = new Dictionary<string, BitmapImage>();
+
+        public static string BackColorPredeterminado = Color.FromRgb(0, 0, 0).ToString();
+
+        public static string FontColorPredeterminado = Color.FromRgb(150, 150, 150).ToString();
+
+        public static double OpacityPredeterminado = 0.6;
+
+        public static string CurrentStepFontColorPredeterminado = Color.FromRgb(220, 220, 220).ToString();
+
+        public static string NextStepFontColorPredeterminado = Color.FromRgb(150, 150, 150).ToString();
+
+        public static bool FlashOnStepChangePredeterminado = true;
+
+        public static string FlashingColorPredeterminado = Color.FromRgb(255, 255, 255).ToString();
+
+        public static double FlashingOpacityPredeterminado = 1;
+
+        public static bool StopFlashingOnCompletePredeterminado = true;
+
+        public static string StepStartSoundPredeterminado = "Ticket Machine 2.mp3";
+
+        public static string StepEndSoundPredeterminado = "Stopwatch.mp3";
+
+        public static int StepStartSoundVolumePredeterminado = 50;
+
+        public static int StepEndSoundVolumePredeterminado = 20;
+
+        public static double StepDurationPredeterminado = 25; // 50 es la duración de la creación de 2 aldeanos en Age of Empires II, es un valor adeucado para generar instrucciones de a dos aldeanos. También se puede usar 25 que es el tiempo de creación de aldeanos.
+
+        public static double ImageSizePredeterminado = 138; // 138 permite tener 4 líneas de imágenes.
+
+        public static double SubscriptAndSuperscriptImagesSizePredeterminado = 50;
+
+        public static bool CurrentStepFontBoldPredeterminado = false;
+
+        public static bool ShowNextStepPredeterminado = false;
+
+        #endregion Variables>
+
+
+        #region Funciones y Procedimientos
 
         public static string ObtenerSeleccionadoEnCombobox(SelectionChangedEventArgs e) {
 
@@ -108,8 +242,8 @@ namespace RTSHelper {
         } // ObtenerResoluciónRecomendada>
 
 
-        public static int ObtenerDuraciónEndStepSound() 
-            => (int)Math.Round(1000 * MediaPlayer.GetDuration(Path.Combine(DirectorioSonidosLargos, Preferencias.StepEndSound)), 0);
+        public static int ObtenerDuraciónEndStepSound(string soundName) 
+            => (int)Math.Round(1000 * MediaPlayer.GetDuration(Path.Combine(DirectorioSonidosLargos, soundName)), 0);
 
 
         public static Dictionary<NameType, Dictionary<string, string>> DeserializarNombres(string ruta)
@@ -142,8 +276,16 @@ namespace RTSHelper {
             CrearNombres();
             AgregarNombresAEntidades();
             CrearImágenes();
+            CrearPrioridadesNombres();
 
         } // CrearEntidadesYNombres>
+
+
+        public static void CrearPrioridadesNombres() {
+
+
+
+        } // CrearPrioridadesNombres>
 
 
         public static void CrearImágenes() {
@@ -162,16 +304,15 @@ namespace RTSHelper {
                     if (ExtensionesImágenes.Contains(ObtenerExtensión(imagen))) {
 
                         if (Imágenes.ContainsKey(nombreImagen)) {
-                            MessageBox.Show($"A new image with the same name '{nombreImagen}' was found in {imagen}. Only the first image will be used. " + 
-                                "You can't use images with the same, not even in different directories.", "Warning");
-
+                            MostrarInformación($"A new image with the same name '{nombreImagen}' was found in {imagen}. Only the first image will be used. " + 
+                                "You can't use images with the same, not even in different directories.");
                         } else {
                             Imágenes.Add(nombreImagen, imagen);
                         }
 
                     }
                         
-                    if (Entidades.FirstOrDefault(e => e.Value.ImagenEfectiva == nombreImagen).Value == null)
+                    if (Entidades.FirstOrDefault(e => e.Value.ObtenerImagenEfectiva() == nombreImagen).Value == null) // Solo verifica por imágenes húerfanas usando la primera imágen efectiva.
                         imágenesHuérfanas += nombreImagen + Environment.NewLine;
 
                 }
@@ -256,8 +397,7 @@ namespace RTSHelper {
                                 if (idAnterior == id) {
 
                                     if (!EsIdioma(tipoNombre) && tipoNombre != NameType.Custom) 
-                                        MessageBox.Show($"The name type {tipoNombre} of {nombre} ID = {id} is already used by other name type.", 
-                                            "Warning"); // Se permite que se repita el mismo nombre entre diferentes idiomas para la misma clave o para los personalizados (custom). Se alerta para los tipos de nombre que no son idiomas porque posiblemente se trate de un error en el ingreso de los datos.
+                                        MostrarInformación($"The name type {tipoNombre} of {nombre} ID = {id} is already used by other name type."); // Se permite que se repita el mismo nombre entre diferentes idiomas para la misma clave o para los personalizados (custom). Se alerta para los tipos de nombre que no son idiomas porque posiblemente se trate de un error en el ingreso de los datos.
 
                                 } else { // Ya está el nombre para otro ID distinto. Se debe solucionar el conflicto.
 
@@ -936,6 +1076,17 @@ namespace RTSHelper {
                 types["Type"].Add("Tracking", "Other");
                 types["Type"].Add("Cursor", "Other");
                 types["Type"].Add("Arrow Up", "Other");
+                types["Type"].Add("->", "Other");
+                types["Type"].Add("1", "Other");
+                types["Type"].Add("2", "Other");
+                types["Type"].Add("3", "Other");
+                types["Type"].Add("4", "Other");
+                types["Type"].Add("5", "Other");
+                types["Type"].Add("6", "Other");
+                types["Type"].Add("7", "Other");
+                types["Type"].Add("8", "Other");
+                types["Type"].Add("9", "Other");
+                types["Type"].Add("0", "Other");
 
             }
 
@@ -1278,7 +1429,7 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("5337", "Fish (Tuna)"); names[NameType.Common].Add("5337", "Fish");
                 names[NameType.Complete].Add("5350", "Relic"); names[NameType.Abbreviation].Add("5350", "Rel"); names[NameType.CommonPlural].Add("5350", "Relics"); names[NameType.AbbreviationPlural].Add("5350", "Rels");
                 names[NameType.Complete].Add("5397", "Tree (Oak)"); names[NameType.Common].Add("5397", "Tree"); names[NameType.CommonPlural].Add("5397", "Trees");
-                names[NameType.Complete].Add("5401", "Forage Bush"); names[NameType.CommonPlural].Add("5401", "Forage Bushes");
+                names[NameType.Complete].Add("5401", "Forage Bush"); names[NameType.Common].Add("5401", "Berry Bush"); names[NameType.Abbreviation].Add("5401", "Berry"); names[NameType.CommonPlural].Add("5401", "Forage Bushes|Berry Bushes"); names[NameType.AbbreviationPlural].Add("5401", "Berries");
                 names[NameType.Complete].Add("5406", "Wild Boar"); names[NameType.Common].Add("5406", "Boar"); names[NameType.CommonPlural].Add("5406", "Boars");
                 names[NameType.Complete].Add("5498", "Sheep"); names[NameType.CommonPlural].Add("5498", "Sheeps");
                 names[NameType.Complete].Add("5502", "Cow"); names[NameType.CommonPlural].Add("5502", "Cows");
@@ -1387,7 +1538,7 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("5660", "Petard"); names[NameType.Abbreviation].Add("5660", "Pet"); names[NameType.CommonPlural].Add("5660", "Petards"); names[NameType.AbbreviationPlural].Add("5660", "Pets");
                 names[NameType.Complete].Add("5097", "Trebuchet"); names[NameType.Abbreviation].Add("5097", "Treb"); names[NameType.CommonPlural].Add("5097", "Trebuchets"); names[NameType.AbbreviationPlural].Add("5097", "Trebs");
                 names[NameType.Complete].Add("5099", "Monk"); names[NameType.CommonPlural].Add("5099", "Monks");
-                names[NameType.Complete].Add("5691", "Missionary"); names[NameType.CommonPlural].Add("5691", "Missionaries");
+                names[NameType.Complete].Add("5691", "Missionary"); names[NameType.Abbreviation].Add("5691", "Donk"); names[NameType.CommonPlural].Add("5691", "Missionaries"); names[NameType.AcronymPlural].Add("5691", "Donks");
                 names[NameType.Complete].Add("14121", "Villager"); names[NameType.Abbreviation].Add("14121", "Vil|Vill"); names[NameType.Acronym].Add("14121", "V"); names[NameType.CommonPlural].Add("14121", "Villagers"); names[NameType.AbbreviationPlural].Add("14121", "Vils|Vills");
                 names[NameType.Complete].Add("13319", "Trade Cart"); names[NameType.CommonPlural].Add("13319", "Trade Carts");
                 names[NameType.Complete].Add("19141", "Flemish Militia"); names[NameType.CommonPlural].Add("19141", "Flemish Militias");
@@ -1844,6 +1995,17 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("7090", "Tracking");
                 names[NameType.Complete].Add("400041", "Cursor");
                 names[NameType.Complete].Add("400042", "Arrow Up");
+                names[NameType.Complete].Add("400043", "->"); names[NameType.Common].Add("400043", "→");
+                names[NameType.Complete].Add("98", "1");
+                names[NameType.Complete].Add("22121", "2");
+                names[NameType.Complete].Add("400044", "3");
+                names[NameType.Complete].Add("400045", "4");
+                names[NameType.Complete].Add("400046", "5");
+                names[NameType.Complete].Add("400047", "6");
+                names[NameType.Complete].Add("22126", "7");
+                names[NameType.Complete].Add("22127", "8");
+                names[NameType.Complete].Add("22128", "9");
+                names[NameType.Complete].Add("99", "0");
 
                 string elite(string original) => "Elite " + original.Replace("|", $"|Elite ");
 
@@ -1881,8 +2043,9 @@ namespace RTSHelper {
                                 if (nombreSinTC != null) {
 
                                     if (names[tipo].ContainsKey(códigoTC)) {
-                                        MessageBox.Show($"{nombreCompletoSinTextoClave} already has an {textoClave} value in {tipo}. " + 
-                                            $"Don't add {textoClave} values manually", "Warning");
+                                        MostrarInformación($"{nombreCompletoSinTextoClave} already has an {textoClave} value in {tipo}. " + 
+                                            $"Don't add {textoClave} values manually");
+
                                     } else {
 
                                         if (tipo == NameType.Acronym || tipo == NameType.AcronymPlural) {
@@ -1906,7 +2069,7 @@ namespace RTSHelper {
 
                             var excepciones = new List<string> { "War Galley, Fire Ships and Demolition Ships" };
                             if (!excepciones.Contains(nombreCompletoSinTextoClave)) 
-                                MessageBox.Show($"{nombreCompletoSinTextoClave} doesn't have it's non {textoClave} counterpart.", "Warning");
+                                MostrarInformación($"{nombreCompletoSinTextoClave} doesn't have it's non {textoClave} counterpart.");
 
                         }
 
@@ -1927,7 +2090,64 @@ namespace RTSHelper {
 
         } // CrearArchivoNombresInglés>
 
-        
+
+        public static Entidad? ObtenerEntidad(string nombre) {
+
+            if (!Nombres.ContainsKey(nombre)) return null;
+            return Entidades[Nombres[nombre].ID];
+
+        } // ObtenerEntidad>
+
+
+        public static string? ObtenerRutaImagen(Entidad entidad, out string imagen) {
+
+            imagen = entidad.ObtenerImagenEfectiva(aletatoria: true);
+            if (Imágenes.ContainsKey(imagen)) {
+                return Imágenes[imagen];
+            } else {
+                return null;
+            }
+                
+        } // ObtenerRutaImagen>
+
+
+        /// <summary>
+        /// Obtiene el texto o imagen que se mostrará para esta entidad. Usa las prioridades establecidas en DisplayPriority.
+        /// </summary>
+        /// <param name="entidad"></param>
+        /// <returns></returns>
+        public static Segmento ObtenerSegmentoEfectivo(Entidad entidad) {
+
+            var prioridades = Preferencias.DisplayPriority.OrderBy(kv => kv.Value).ToDictionary(g => g.Key, g => g.Value);
+            foreach (var prioridad in prioridades) {
+
+                if (prioridad.Key == NameType.Image) {
+                    var rutaImagen = ObtenerRutaImagen(entidad, out string imagen);
+                    if (rutaImagen != null) return new Segmento(imagen, null, TipoSegmento.Imagen);
+                } else {
+                    if (entidad.Nombres.ContainsKey(prioridad.Key)) 
+                        return new Segmento(entidad.Nombres[prioridad.Key], null, TipoSegmento.Texto);
+                }
+
+            }
+
+            MostrarError($"To Developer: ObtenerSegmentoEfectivo() didn't found any match for {entidad.NombreCompleto}.");
+            return new Segmento("", null, TipoSegmento.Texto);
+
+        } //  ObtenerSegmentoEfectivo>
+
+
+        public static string ObtenerTextoNúmeroLocal(string textoNúmero) 
+            => textoNúmero.Replace(".", SeparadorDecimales).Replace(",", SeparadorDecimales);
+
+
+        public static MessageBoxResult MostrarError(string mensaje) => MessageBox.Show(mensaje, "Error");
+
+        public static MessageBoxResult MostrarInformación(string mensaje) => MessageBox.Show(mensaje, "Info");
+
+
+        #endregion Procedimientos y Funciones>
+
 
     } // Global>
 

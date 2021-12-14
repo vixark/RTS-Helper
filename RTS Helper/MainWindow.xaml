@@ -108,6 +108,12 @@
 
         <StackPanel x:Name="SpnSuperior" Panel.ZIndex="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
 
+            <local:HoverButton Click="BtnAlert_Click" x:Name="BtnAlert" BorderThickness="0" Foreground="Red" Visibility="Hidden"
+                               FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}" 
+                               Width="{Binding ActualHeight, ElementName=BtnSettings, Mode=OneWay}" Style="{StaticResource customButton}" 
+                               bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
+                               ToolTip="{DynamicResource AlertContentMoreHeightThanWindow}">⚠</local:HoverButton>
+            
             <local:HoverButton x:Name="BtnSettings" Click="BtnSettings_Click" BorderThickness="0" Foreground="{DynamicResource BrushFuente}" 
                                FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}" 
                                Width="{Binding ActualHeight, ElementName=BtnSettings, Mode=OneWay}" Style="{StaticResource customButton}" 
@@ -156,8 +162,8 @@
                     FontSize="{DynamicResource FuenteGrande}" TextAlignment="Center" Background="{DynamicResource BrushFondoControles}" 
                     Foreground="{DynamicResource BrushFuente}" ToolTip="Current Step" IsEnabled="False">
 
-                    <TextBox.ContextMenu >
-                        <ContextMenu >
+                    <TextBox.ContextMenu>
+                        <ContextMenu>
                             <MenuItem  x:Name="MniLastStep" Click="MniLastStep_Click"  Header="Go to last step" />
                             <MenuItem x:Name="MniRestartStep" Click="MniRestartStep_Click" Header="Restart current step" />
                         </ContextMenu>
@@ -192,7 +198,7 @@
 
                 <ComboBox x:Name="CmbVelocidadEjecución" ToolTip="Execution Speed" SelectionChanged="CmbVelocidadEjecución_SelectionChanged" SelectedIndex="0" 
                       Style="{StaticResource ComboBoxColor}" Margin="{DynamicResource MargenBotones}" Foreground="{DynamicResource BrushFuente}" 
-                      Width="{DynamicResource AnchoSelectorVelocidadEjecución}" FontSize="{DynamicResource FuenteNormal}">
+                      Width="{DynamicResource AnchoSelectorVelocidadEjecución}" FontSize="{DynamicResource FuenteNormal}" VerticalAlignment="Center">
                     <ComboBoxItem Tag="100">100%</ComboBoxItem>
                     <ComboBoxItem Tag="98">98%</ComboBoxItem>
                     <ComboBoxItem Tag="96">96%</ComboBoxItem>
@@ -208,21 +214,29 @@
 
                 <ComboBox x:Name="CmbBuildOrders" ToolTip="Build Order" SelectionChanged="CmbBuildOrders_SelectionChanged" SelectedIndex="0" 
                       Style="{StaticResource ComboBoxColor}" Margin="{DynamicResource MargenBotones}" Foreground="{DynamicResource BrushFuente}" 
-                      Width="{DynamicResource AnchoSelectorBuildOrder}" FontSize="{DynamicResource FuenteNormal}">
+                      Width="{DynamicResource AnchoSelectorBuildOrder}" FontSize="{DynamicResource FuenteNormal}" VerticalAlignment="Center">
                     <ComboBoxItem>Default</ComboBoxItem>
+                    <ComboBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem x:Name="MniReloadBuildOrder" Click="MniReloadBuildOrder_Click"  Header="Reload" />
+                        </ContextMenu>
+                    </ComboBox.ContextMenu>
                 </ComboBox>
 
             </StackPanel>
 
         </StackPanel>
 
-        <TextBlock Panel.ZIndex="1" x:Name="TxbPaso" Background="{DynamicResource BrushFondoControles}" Foreground="{DynamicResource BrushPaso}"
-                   FontFamily="Calibri" FontSize="{DynamicResource FuentePaso}" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top"
-                   Margin="{DynamicResource MargenPaso}"></TextBlock>
+        <StackPanel x:Name="SpnPaso" Orientation="Vertical" Panel.ZIndex="1" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    Background="{DynamicResource BrushFondoControles}" Margin="{DynamicResource MargenPaso}" >
 
-        <TextBlock Panel.ZIndex="0" x:Name="TxbPasoSiguiente" Background="{DynamicResource BrushFondoControles}" Visibility="{DynamicResource VisibilidadPasoSiguiente}"
-                   Foreground="{DynamicResource BrushPasoSiguiente}" FontFamily="Calibri" FontSize="{DynamicResource FuenteSiguientePaso}"
-                   FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="{DynamicResource MargenPasoSiguiente}" TextAlignment="Right"></TextBlock>
+  
+        </StackPanel>
 
+        <StackPanel x:Name="SpnPasoSiguiente" Orientation="Vertical" Panel.ZIndex="0" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                    Background="{DynamicResource BrushFondoControles}" Margin="{DynamicResource MargenPasoSiguiente}"
+                    Visibility="{DynamicResource VisibilidadPasoSiguiente}" >
+        </StackPanel>
+       
     </Grid>
 </Window>

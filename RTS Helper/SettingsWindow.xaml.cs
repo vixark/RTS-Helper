@@ -47,7 +47,8 @@ namespace RTSHelper {
                 LblOpacity.Visibility = Visibility.Collapsed;
                 SpnBuildOrderPath.Visibility = Visibility.Collapsed;
                 TbiBehavior.Visibility = Visibility.Collapsed;
-                TbiCustomStyles.Visibility = Visibility.Collapsed;
+                TbiImages.Visibility = Visibility.Collapsed;
+                TbiDisplay.Visibility = Visibility.Collapsed;
                 TbiStyle.Visibility = Visibility.Collapsed;
                 Height = 260;
                 TbcPreferencias.Height = 150;
@@ -86,6 +87,18 @@ namespace RTSHelper {
             ChkFlashOnStepChange.IsChecked = preferencias.FlashOnStepChange;
             TxtFlashingOpacity.Text = preferencias.FlashingOpacity.ToString();
             TxtStepDuration.Text = preferencias.StepDuration.ToString();
+
+            CmbFontName.Text = preferencias.FontName;
+            ChkCurrentStepFontBold.IsChecked = preferencias.CurrentStepFontBold;
+            ChkNextStepFontBold.IsChecked = preferencias.NextStepFontBold;
+
+            TxtLineSpacing.Text = preferencias.LineSpacing.ToString();
+            TxtImageSize.Text = preferencias.ImageSize.ToString();
+            TxtImageBackgroundOpacity.Text = preferencias.ImageBackgroundOpacity.ToString();
+            TxtImageHorizontalMargin.Text = preferencias.ImageHorizontalMargin.ToString();
+            TxtImageBackgroundRoundedCornersRadius.Text = preferencias.ImageBackgroundRoundedCornersRadius.ToString();
+            TxtSubscriptAndSuperscriptImagesSize.Text = preferencias.SubscriptAndSuperscriptImagesSize.ToString();
+
             if (!primerInicio) VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en los botones.
 
         } // CargarValores>
@@ -231,7 +244,7 @@ namespace RTSHelper {
         private void TxtOpacity_TextChanged(object sender, TextChangedEventArgs e) {
 
             if (!Activado) return;
-            if (double.TryParse(TxtOpacity.Text, out double opacidad)) {
+            if (double.TryParse(ObtenerTextoNúmeroLocal(TxtOpacity.Text), out double opacidad)) {
                 Preferencias.Opacity = opacidad;
                 VentanaPrincipal.AplicarPreferencias();
             }
@@ -290,7 +303,7 @@ namespace RTSHelper {
 
             if (!Activado) return;
             Preferencias.StepEndSound = ObtenerSeleccionadoEnCombobox(e);
-            Preferencias.StepEndSoundDuration = ObtenerDuraciónEndStepSound();
+            Preferencias.StepEndSoundDuration = ObtenerDuraciónEndStepSound(Preferencias.StepEndSound);
             MediaPlayer.PlaySonidoFinal();
             if (Preferencias.StepEndSound.ToLower().StartsWith("windows beep")) {
                 SldEndSoundVolume.Visibility = Visibility.Collapsed;
@@ -393,7 +406,7 @@ namespace RTSHelper {
         private void TxtFlashingOpacity_TextChanged(object sender, TextChangedEventArgs e) {
 
             if (!Activado) return;
-            if (double.TryParse(TxtFlashingOpacity.Text, out double opacidad)) {
+            if (double.TryParse(ObtenerTextoNúmeroLocal(TxtFlashingOpacity.Text), out double opacidad)) {
                 Preferencias.FlashingOpacity = opacidad;
                 VentanaPrincipal.AplicarPreferencias();
                 VentanaPrincipal.Flash();
@@ -424,7 +437,112 @@ namespace RTSHelper {
 
         private void LnkDonate_Click(object sender, RoutedEventArgs e) 
             => Process.Start(new ProcessStartInfo(((Hyperlink)sender).NavigateUri.ToString()) { UseShellExecute = true });
- 
+
+
+        private void ChkCurrentStepFontBold_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.CurrentStepFontBold = ChkCurrentStepFontBold.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkCurrentStepFontBold_Checked>
+
+
+        private void ChkNextStepFontBold_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.NextStepFontBold = ChkNextStepFontBold.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkNextStepFontBold_Checked>
+
+
+        private void CmbFontName_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.FontName = ObtenerSeleccionadoEnCombobox(e);
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // CmbFontName_SelectionChanged>
+
+
+        private void TxtLineSpacing_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (double.TryParse(TxtLineSpacing.Text, out double espaciadoLíneas)) {
+                Preferencias.LineSpacing = espaciadoLíneas;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtLineSpacing_TextChanged>
+
+
+        private void TxtImageSize_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (double.TryParse(TxtImageSize.Text, out double espaciadoLíneas)) {
+                Preferencias.ImageSize = espaciadoLíneas;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtImageSize_TextChanged>
+
+
+        private void BtnImageBackgroundColor_Click(object sender, RoutedEventArgs e) {
+
+            var colorDialog = new ColorDialog();
+            colorDialog.Color = ObtenerDrawingColor(BtnImageBackgroundColor.Background);
+            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                Preferencias.ImageBackgroundColor = ToHexString(colorDialog.Color);
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // BtnImageBackgroundColor_Click>
+
+
+        private void TxtImageBackgroundOpacity_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (double.TryParse(ObtenerTextoNúmeroLocal(TxtImageBackgroundOpacity.Text), out double opacidad)) {
+                Preferencias.ImageBackgroundOpacity = opacidad;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtImageBackgroundOpacity_TextChanged>
+
+
+        private void TxtImageHorizontalMargin_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (double.TryParse(TxtImageHorizontalMargin.Text, out double margenHorizontal)) {
+                Preferencias.ImageHorizontalMargin = margenHorizontal;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtImageHorizontalMargin_TextChanged>
+
+
+        private void TxtImageBackgroundRoundedCornersRadius_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (double.TryParse(TxtImageBackgroundRoundedCornersRadius.Text, out double radioEsquinas)) {
+                Preferencias.ImageBackgroundRoundedCornersRadius = radioEsquinas;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtImageBackgroundRoundedCornersRadius_TextChanged>
+
+
+        private void TxtSubscriptAndSuperscriptImagesSize_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (double.TryParse(TxtSubscriptAndSuperscriptImagesSize.Text, out double subSuperSize)) {
+                Preferencias.SubscriptAndSuperscriptImagesSize = subSuperSize;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtSubscriptAndSuperscriptImagesSize_TextChanged>
+
 
     } // SettingsWindow>
 

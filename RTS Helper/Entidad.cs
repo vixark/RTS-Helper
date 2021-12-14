@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using static RTSHelper.Global;
 
@@ -22,7 +23,7 @@ namespace RTSHelper {
 
         public Dictionary<NameType, string> Nombres { get; set; } = new Dictionary<NameType, string>();
 
-        public string? ImagenPersonalizada { get; set; }
+        public string? ImágenesPersonalizadas { get; set; } // Es plural porque pueden ser varias unidas con |.
 
         public NameType TipoNombre { get; set; }
 
@@ -31,13 +32,7 @@ namespace RTSHelper {
 
         #region Propiedades Autocalculadas
 
-        public string NombreEfectivo {
-            get {
-                return "";
-            }
-        }
-
-        public string ImagenEfectiva => $"{(ImagenPersonalizada ?? NombreCompleto).ToLowerInvariant()}";
+        public List<string> ImágenesEfectivas => ($"{(ImágenesPersonalizadas ?? NombreCompleto).ToLowerInvariant()}").Split("|").ToList(); // Es plural porque pueden ser varias unidas con |.
 
         #endregion Propiedades Autocalculadas>
 
@@ -45,9 +40,31 @@ namespace RTSHelper {
         #region Constructores
 
         public Entidad(string id, string nombreCompleto, string tipo, string? imagenPersonalizada = null) 
-            => (ID, NombreCompleto, Tipo, ImagenPersonalizada) = (id, nombreCompleto, tipo, imagenPersonalizada);
+            => (ID, NombreCompleto, Tipo, ImágenesPersonalizadas) = (id, nombreCompleto, tipo, imagenPersonalizada);
 
         #endregion Constructores>
+
+
+        #region Funciones y Procedimientos
+
+
+        public string ObtenerImagenEfectiva(bool aletatoria = false) {
+
+            var imágenesEfectivas = ImágenesEfectivas;
+            if (aletatoria) {
+
+                var random = new Random(DateTime.Now.Second);
+                var índice = random.Next(0, imágenesEfectivas.Count);
+                return imágenesEfectivas[índice];
+
+            } else {
+                return imágenesEfectivas.First();
+            }
+
+        } // ObtenerImágenEfectiva>
+
+
+        #endregion Funciones y Procedimientos>
 
 
     } // Entidad>
