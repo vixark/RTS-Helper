@@ -187,14 +187,15 @@
                         Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Next Step">▷|</local:HoverButton>
 
                 </StackPanel>
-                
+
             </StackPanel>
-           
+
 
             <StackPanel x:Name="SpnInferior" Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
 
                 <Label x:Name="LblTiempoEnJuego" ToolTip="Game Time" Foreground="{DynamicResource BrushFuente}" 
-                       FontSize="{DynamicResource FuenteGrande}">0:00</Label> <!--Siempre inicia en ceros para tener algún contenido y no tener movimientos extraños en la interface cuando se le da start.-->
+                       FontSize="{DynamicResource FuenteGrande}">0:00</Label>
+                <!--Siempre inicia en ceros para tener algún contenido y no tener movimientos extraños en la interface cuando se le da start.-->
 
                 <ComboBox x:Name="CmbVelocidadEjecución" ToolTip="Execution Speed" SelectionChanged="CmbVelocidadEjecución_SelectionChanged" SelectedIndex="0" 
                       Style="{StaticResource ComboBoxColor}" Margin="{DynamicResource MargenBotones}" Foreground="{DynamicResource BrushFuente}" 
@@ -230,7 +231,6 @@
         <StackPanel x:Name="SpnPaso" Orientation="Vertical" Panel.ZIndex="1" HorizontalAlignment="Left" VerticalAlignment="Top" 
                     Background="{DynamicResource BrushFondoControles}" Margin="{DynamicResource MargenPaso}" >
 
-  
         </StackPanel>
 
         <StackPanel x:Name="SpnPasoSiguiente" Orientation="Vertical" Panel.ZIndex="0" HorizontalAlignment="Right" VerticalAlignment="Top" 

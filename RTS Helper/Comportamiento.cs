@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -15,10 +16,11 @@ namespace RTSHelper {
 
 
     public class Comportamiento {
-        
+
 
 
         #region Propiedades
+        // Al agregar una nueva se debe agregar en ObtenerComportamientoEfectivo() y en CopiarPropiedadesEnNulas().
 
         public double? Duración { get; set; }
 
@@ -57,32 +59,70 @@ namespace RTSHelper {
         public Comportamiento() { }
 
 
-        public Comportamiento(string textoComportamientos) {
+        public Comportamiento(string texto, out Dictionary<string, Comportamiento> clasesLeídas, Dictionary<string, Comportamiento>? clases) {
 
-            var coincidenciasTextos = Regex.Matches(textoComportamientos, @"(s|es|fc|sns)=""(.+?)""", RegexOptions.IgnoreCase);
+            clasesLeídas = new Dictionary<string, Comportamiento>();
+            if (string.IsNullOrEmpty(texto)) return; // Si el texto es vacío, no contiene ni comportamientos ni clases.
+
+            var palabrasClaveTextos = "s|es|fc|sns";
+            var palabrasClaveNúmeros = "t|fco|sv|esv";
+            var palabrasClave = $"{palabrasClaveTextos}|{palabrasClaveNúmeros}".Split("|").ToList();
+            var textoMinúscula = texto.ToLowerInvariant();
+
+            var coincidenciasClases = Regex.Matches(textoMinúscula, @"([áéíóúüa-z0-9_-]+)={(.+?)}"); // Primero extrae las coincidencias de clases de formato y las elimina del texto.
+            if (coincidenciasClases.Count > 0) {
+                foreach (Match? coincidenciasClase in coincidenciasClases) {
+                    if (coincidenciasClase != null && coincidenciasClase.Success) {
+
+                        var nombreClase = coincidenciasClase.Groups[1].Value;
+                        var textoComportamientosClase = coincidenciasClase.Groups[2].Value;
+                        if (palabrasClave.Contains(nombreClase)) {
+                            MostrarError($"The behavior class name {nombreClase} is not allowed because it can't have the same name as a keyword.");
+                        } else {
+
+                            if (clasesLeídas.ContainsKey(nombreClase)) {
+                                MostrarError($"The behavior class name {nombreClase} is not allowed because it was already added.");
+                            } else {
+                                clasesLeídas.Add(nombreClase, new Comportamiento(textoComportamientosClase, out _, null));
+                                textoMinúscula = textoMinúscula.Replace(coincidenciasClase.Groups[0].Value, "");
+                            }
+
+                        }
+
+                    }
+                }
+            }
+
+            var coincidenciasTextos = Regex.Matches(textoMinúscula, $@"({palabrasClaveTextos})=""(.+?)""");
             if (coincidenciasTextos.Count > 0) {
 
                 foreach (Match? coincidenciaTexto in coincidenciasTextos) {
 
                     if (coincidenciaTexto != null && coincidenciaTexto.Success) {
 
-                        var comportamientoId = coincidenciaTexto.Groups[1].Value.ToLowerInvariant();
-                        var valor = coincidenciaTexto.Groups[2].Value.ToLowerInvariant();
+                        var comportamientoId = coincidenciaTexto.Groups[1].Value;
+                        var valor = coincidenciaTexto.Groups[2].Value;
                         switch (comportamientoId) {
                             case "s":
+
                                 Sonido = valor;
-                                if (valor != "none" && !File.Exists(Path.Combine(DirectorioSonidosCortos, valor))) {
-                                    MostrarError($"{valor} sound file doesn't exists in {DirectorioSonidosCortos}.");
+                                if (Sonido == "default") Sonido = Preferencias.StepStartSound;
+                                if (Sonido != "none" && !File.Exists(Path.Combine(DirectorioSonidosCortos, Sonido))) {
+                                    MostrarError($"{Sonido} sound file doesn't exists in {DirectorioSonidosCortos}.");
                                     Sonido = null;
                                 }
                                 break;
+
                             case "es":
+
                                 Presonido = valor;
-                                if (valor != "none" && !File.Exists(Path.Combine(DirectorioSonidosLargos, valor))) {
-                                    MostrarError($"{valor} sound file doesn't exists in {DirectorioSonidosLargos}.");
+                                if (Presonido == "default") Presonido = Preferencias.StepEndSound;
+                                if (Presonido != "none" && !File.Exists(Path.Combine(DirectorioSonidosLargos, Presonido))) {
+                                    MostrarError($"{Presonido} sound file doesn't exists in {DirectorioSonidosLargos}.");
                                     Presonido = null;
                                 }
                                 break;
+
                             case "fc":
 
                                 if (valor == "none") {
@@ -122,15 +162,15 @@ namespace RTSHelper {
 
             } // coincidenciasTextos.Count > 0>
 
-            var coincidenciasNúmeros = Regex.Matches(textoComportamientos, @"(t|fco|sv|esv)=([0-9,.]+)", RegexOptions.IgnoreCase);
+            var coincidenciasNúmeros = Regex.Matches(textoMinúscula, $@"({palabrasClaveNúmeros})=([0-9,.]+)");
             if (coincidenciasNúmeros.Count > 0) {
 
                 foreach (Match? coincidenciaNúmero in coincidenciasNúmeros) {
 
                     if (coincidenciaNúmero != null && coincidenciaNúmero.Success) {
 
-                        var comportamientoId = coincidenciaNúmero.Groups[1].Value.ToLowerInvariant();
-                        var valor = coincidenciaNúmero.Groups[2].Value.ToLowerInvariant();
+                        var comportamientoId = coincidenciaNúmero.Groups[1].Value;
+                        var valor = coincidenciaNúmero.Groups[2].Value;
                         switch (comportamientoId) {
                             case "t":
 
@@ -200,6 +240,17 @@ namespace RTSHelper {
 
             } // coincidenciasNúmeros.Count > 0>
 
+            var valores = textoMinúscula.Split(" ").ToList() ?? new List<string>();
+            var comportamientosDeClases = new List<Comportamiento>();
+            foreach (var valor in valores) {
+                if (string.IsNullOrEmpty(valor)) continue;
+                if (clases != null && clases.ContainsKey(valor)) comportamientosDeClases.Add(clases[valor]);
+            }
+
+            foreach (var comportamientoDeClase in comportamientosDeClases) {
+                CopiarPropiedadesEnNulas(comportamientoDeClase, this);
+            }
+
         } // Comportamiento>
 
 
@@ -208,6 +259,21 @@ namespace RTSHelper {
 
 
         #region Procedimientos y Funciones
+
+
+        public static void CopiarPropiedadesEnNulas(Comportamiento origen, Comportamiento destino) { // Copia las propiedades en formatoDestino están nulas.
+
+            destino.ColorFlash ??= origen.ColorFlash;
+            destino.Duración ??= origen.Duración;
+            destino.Flash ??= origen.Flash;
+            destino.OpacidadFlash ??= origen.OpacidadFlash;
+            destino.Presonido ??= origen.Presonido;
+            destino.Sonido ??= origen.Sonido;
+            destino.VolumenPresonido ??= origen.VolumenPresonido;
+            destino.VolumenSonido ??= origen.VolumenSonido;
+            destino.MostrarSiguientePaso ??= origen.MostrarSiguientePaso;
+
+        } // CopiarPropiedadesEnNulas>
 
 
         public static int? ObtenerDuraciónPresonido(string? presonido) {
@@ -224,17 +290,16 @@ namespace RTSHelper {
 
         public static Comportamiento ObtenerComportamientoEfectivo(Comportamiento? comportamientoHijo, Comportamiento comportamientoPadre) {
 
-            var comportamiento = new Comportamiento();
-            comportamiento.ColorFlash = (comportamientoHijo?.ColorFlash ?? comportamientoPadre.ColorFlash) ?? FlashingColorPredeterminado;
-            comportamiento.Duración = (comportamientoHijo?.Duración ?? comportamientoPadre.Duración) ?? StepDurationPredeterminado;
-            comportamiento.Flash = (comportamientoHijo?.Flash ?? comportamientoPadre.Flash) ?? FlashOnStepChangePredeterminado;
-            comportamiento.OpacidadFlash = (comportamientoHijo?.OpacidadFlash ?? comportamientoPadre.OpacidadFlash) ?? FlashingOpacityPredeterminado;
-            comportamiento.Presonido = (comportamientoHijo?.Presonido ?? comportamientoPadre.Presonido) ?? StepEndSoundPredeterminado;
-            comportamiento.Sonido = (comportamientoHijo?.Sonido ?? comportamientoPadre.Sonido) ?? StepStartSoundPredeterminado;
-            comportamiento.VolumenPresonido = (comportamientoHijo?.VolumenPresonido ?? comportamientoPadre.VolumenPresonido)
-                ?? StepEndSoundVolumePredeterminado;
-            comportamiento.VolumenSonido = (comportamientoHijo?.VolumenSonido ?? comportamientoPadre.VolumenSonido) ?? StepStartSoundVolumePredeterminado;
-            comportamiento.MostrarSiguientePaso = (comportamientoHijo?.MostrarSiguientePaso ?? comportamientoPadre.MostrarSiguientePaso) ?? ShowNextStepPredeterminado;
+            var comportamiento = new Comportamiento(); // Se permiten valores nulos del comportamiento efectivo porque al ser usados se reemplazan por el valor de preferencias.
+            comportamiento.ColorFlash = comportamientoHijo?.ColorFlash ?? comportamientoPadre.ColorFlash;
+            comportamiento.Duración = comportamientoHijo?.Duración ?? comportamientoPadre.Duración;
+            comportamiento.Flash = comportamientoHijo?.Flash ?? comportamientoPadre.Flash;
+            comportamiento.OpacidadFlash = comportamientoHijo?.OpacidadFlash ?? comportamientoPadre.OpacidadFlash;
+            comportamiento.Presonido = comportamientoHijo?.Presonido ?? comportamientoPadre.Presonido;
+            comportamiento.Sonido = comportamientoHijo?.Sonido ?? comportamientoPadre.Sonido;
+            comportamiento.VolumenPresonido = comportamientoHijo?.VolumenPresonido ?? comportamientoPadre.VolumenPresonido;
+            comportamiento.VolumenSonido = comportamientoHijo?.VolumenSonido ?? comportamientoPadre.VolumenSonido;
+            comportamiento.MostrarSiguientePaso = comportamientoHijo?.MostrarSiguientePaso ?? comportamientoPadre.MostrarSiguientePaso;
             return comportamiento;
 
         } // ObtenerComportamientoEfectivo>

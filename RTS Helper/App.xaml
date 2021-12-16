@@ -35,7 +35,7 @@
             <Thickness x:Key="MargenPasoSiguiente">0, 31, 90, 0</Thickness>
             <System:Double x:Key="AnchoSelectorBuildOrder">140</System:Double>
             <System:Double x:Key="AnchoSelectorVelocidadEjecución">75</System:Double>
-            <System:String x:Key="AlertContentMoreHeightThanWindow">Content is taller than window. Resize window or edit the build order.</System:String>
+            <System:String x:Key="AlertContentMoreHeightThanWindow">Content is longer than window height. Resize window or edit the build order.</System:String>
             
             <!-- Valores no en Preferencias !-->
             <SolidColorBrush x:Key="BrushFondoControles" Color="Transparent" />

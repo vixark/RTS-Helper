@@ -17,7 +17,9 @@ namespace RTSHelper {
     public class Formato {
 
 
-        #region Propiedades
+
+        #region Propiedades 
+        // Al agregar una nueva se debe agregar en ObtenerFormatoEfectivo() y en CopiarPropiedadesEnNulas().
 
         public TamañosFuente TamañoFuente { get; set; } = TamañosFuente.Indeterminado;
 
@@ -37,14 +39,58 @@ namespace RTSHelper {
 
         public double? ImageSize { get; set; }
 
+
         #endregion Propiedades>
+
 
 
         #region Constructores
 
-        public Formato(string? textoFormato) {
 
-            var valores = textoFormato?.ToLowerInvariant()?.Split(" ").ToList() ?? new List<string>();
+        public Formato() { }
+
+
+        public Formato(string? texto, out Dictionary<string, Formato> clasesLeídas, Dictionary<string, Formato>? clases) {
+
+            clasesLeídas = new Dictionary<string, Formato>();
+            if (texto == null) return; // Si el texto es vacío, no contiene ni formatos ni clases.
+
+            var textoMinúscula = texto.ToLowerInvariant();
+            var palabrasClave = new List<string>();
+            palabrasClave.AddRange(Estilos);
+            palabrasClave.AddRange(Posiciones);
+            palabrasClave.AddRange(Colores);
+            palabrasClave.AddRange(Tamaños);
+            palabrasClave.AddRange(Fuentes.Keys);
+            var iniciosPalabrasClave = new List<string> { "#", "is" };
+       
+            var coincidenciasClases = Regex.Matches(textoMinúscula, @"([áéíóúüa-z0-9_-]+)=<(.+?)>"); // Primero extrae las coincidencias de clases de formato y las elimina del texto.
+            if (coincidenciasClases.Count > 0) {
+                foreach (Match? coincidenciasClase in coincidenciasClases) {
+                    if (coincidenciasClase != null && coincidenciasClase.Success) {
+
+                        var nombreClase = coincidenciasClase.Groups[1].Value;
+                        var textoFormatosClase = coincidenciasClase.Groups[2].Value;
+                        if (palabrasClave.Contains(nombreClase) || iniciosPalabrasClave.Any(i => nombreClase.StartsWith(i))) {
+                            MostrarError($"The format class name {nombreClase} is not allowed because it can't have the same name as a keyword.");
+                        } else {
+
+                            if (clasesLeídas.ContainsKey(nombreClase)) {
+                                MostrarError($"The format class name {nombreClase} is not allowed because it was already added.");
+                            } else {
+                                clasesLeídas.Add(nombreClase, new Formato(textoFormatosClase, out _, null));
+                                textoMinúscula = textoMinúscula.Replace(coincidenciasClase.Groups[0].Value, "");
+                            }
+
+                        }
+
+                    }
+                }
+            }
+           
+            var valores = textoMinúscula.Split(" ").ToList() ?? new List<string>();
+            var formatosDeClases = new List<Formato>();
+
             foreach (var valor in valores) {
 
                 if (string.IsNullOrEmpty(valor)) continue;
@@ -122,21 +168,47 @@ namespace RTSHelper {
 
                 }
 
+                if (clases != null && clases.ContainsKey(valor)) {
+                    formatosDeClases.Add(clases[valor]);
+                    valorIdentificado = true;
+                }  
+
                 if (!valorIdentificado) MostrarError($"The format keyword '{valor}' isn't supported.");             
 
             }
 
+            foreach (var formatoDeClase in formatosDeClases) {
+                CopiarPropiedadesEnNulas(formatoDeClase, this);
+            }
+
         } // Formato>
 
+
         #endregion Constructores>
+
 
 
         #region Funciones y Procedimientos
 
 
+        public static void CopiarPropiedadesEnNulas(Formato origen, Formato destino) { // Copia las propiedades en formatoDestino están nulas.
+
+            destino.Negrita ??= origen.Negrita;
+            destino.Subrayado ??= origen.Subrayado;
+            destino.Cursiva ??= origen.Cursiva;
+            destino.NombreFuente ??= origen.NombreFuente;
+            destino.Color ??= origen.Color;
+            if (destino.TamañoFuente == TamañosFuente.Indeterminado) destino.TamañoFuente = origen.TamañoFuente;
+            if (destino.Posición == PosiciónTexto.Indeterminado) destino.Posición = origen.Posición;
+            destino.ImageSize ??= origen.ImageSize;
+            destino.TamañoBaseFuente ??= origen.TamañoBaseFuente;
+
+        } // CopiarPropiedadesEnNulas>
+
+
         public static Formato ObtenerFormatoEfectivo(Formato? formatoHijo, Formato formatoPadre) {
 
-            var formato = new Formato("");
+            var formato = new Formato();
             formato.Negrita = (formatoHijo?.Negrita ?? formatoPadre.Negrita) ?? CurrentStepFontBoldPredeterminado;
             formato.Subrayado = (formatoHijo?.Subrayado ?? formatoPadre.Subrayado) ?? false;
             formato.Cursiva = (formatoHijo?.Cursiva ?? formatoPadre.Cursiva) ?? false;
@@ -152,8 +224,8 @@ namespace RTSHelper {
                 && formatoHijo.TamañoBaseFuente != formatoPadre.TamañoBaseFuente)
                 MostrarError("To Developer: TamañoBaseFuente can't be different in formatoHijo and formatoPadre.");
 
-            formato.TamañoBaseFuente = formatoPadre.TamañoBaseFuente ?? formatoHijo?.TamañoBaseFuente ?? 16; // El TamañoBaseFuente es la única propiedad en la que se le da prioridad al formatoPadre porque es donde usualmente se asigna y el que dicta el tamaño general de todo el texto. Tener varios segmentos con diferentes tamaño fuente base no tiene mucho sentido porque se pierde la funcionalidad de los tamaños relativos.
-
+            formato.TamañoBaseFuente = formatoPadre.TamañoBaseFuente ?? formatoHijo?.TamañoBaseFuente ?? null; // El TamañoBaseFuente es la única propiedad en la que se le da prioridad al formatoPadre porque es donde usualmente se asigna y el que dicta el tamaño general de todo el texto. Tener varios segmentos con diferentes tamaño fuente base no tiene mucho sentido porque se pierde la funcionalidad de los tamaños relativos.
+   
             return formato;
 
         } // ObtenerFormatoEfectivo>
@@ -161,12 +233,12 @@ namespace RTSHelper {
 
         public double? TamañoFuenteEfectiva
             => TamañoBaseFuente == null ? null : TamañoFuente switch {
-                TamañosFuente.XXXL => 3D * TamañoBaseFuente,
-                TamañosFuente.XXL => 2D * TamañoBaseFuente,
-                TamañosFuente.XL => 1.5D * TamañoBaseFuente,
-                TamañosFuente.L => 1.3D * TamañoBaseFuente,
+                TamañosFuente.XXXL => 2D * TamañoBaseFuente,
+                TamañosFuente.XXL => 1.5D * TamañoBaseFuente,
+                TamañosFuente.XL => 1.3D * TamañoBaseFuente,
+                TamañosFuente.L => 1.15D * TamañoBaseFuente,
                 TamañosFuente.M => 1 * TamañoBaseFuente, 
-                TamañosFuente.S => (1D / 1.3) * TamañoBaseFuente,
+                TamañosFuente.S => (1D / 1.2) * TamañoBaseFuente,
                 TamañosFuente.XS => (1D / 1.5) * TamañoBaseFuente,
                 TamañosFuente.XXS => (1D / 2) * TamañoBaseFuente,
                 TamañosFuente.XXXS => (1D / 3) * TamañoBaseFuente,

@@ -41,7 +41,7 @@ namespace RTSHelper {
                     Player.MediaError += new WMPLib._WMPOCXEvents_MediaErrorEventHandler(Player_MediaError);
                 }
                 Player.settings.volume = volume;
-                Player.URL = path;
+                Player.URL = path; // A veces puede paralizarse la aplicación aquí. Una solución simple sería que el usuario cambie a beeps de Windows, pero sería preferible investigar por qué sucede y resolverlo.
                 Player.controls.play();
 
             }

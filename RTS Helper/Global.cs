@@ -2123,16 +2123,16 @@ namespace RTSHelper {
 
                 if (prioridad.Key == NameType.Image) {
                     var rutaImagen = ObtenerRutaImagen(entidad, out string imagen);
-                    if (rutaImagen != null) return new Segmento(imagen, null, TipoSegmento.Imagen);
+                    if (rutaImagen != null) return new Segmento(imagen, null, TipoSegmento.Imagen, null);
                 } else {
                     if (entidad.Nombres.ContainsKey(prioridad.Key)) 
-                        return new Segmento(entidad.Nombres[prioridad.Key], null, TipoSegmento.Texto);
+                        return new Segmento(entidad.Nombres[prioridad.Key], null, TipoSegmento.Texto, null);
                 }
 
             }
 
             MostrarError($"To Developer: ObtenerSegmentoEfectivo() didn't found any match for {entidad.NombreCompleto}.");
-            return new Segmento("", null, TipoSegmento.Texto);
+            return new Segmento("", null, TipoSegmento.Texto, null);
 
         } //  ObtenerSegmentoEfectivo>
 

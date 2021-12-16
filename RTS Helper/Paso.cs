@@ -37,7 +37,10 @@ namespace RTSHelper {
 
         #region Constructores
 
-        public Paso(string? texto) => ProcesarPaso(texto);
+        public Paso(string? texto, Comportamiento? comportamientoPadre, Formato? formatoPadre, Dictionary<string, Formato>? clasesDeFormatos, 
+            Dictionary<string, Comportamiento>? clasesDeComportamientos) 
+                => ProcesarPaso(texto, comportamientoPadre ?? new Comportamiento(), formatoPadre ?? new Formato(), clasesDeFormatos, 
+                    clasesDeComportamientos);
 
         #endregion Constructores>
 
@@ -45,24 +48,8 @@ namespace RTSHelper {
         #region Procedimientos y Funciones
 
 
-        public static List<Paso> LeerPasos(string directorioBuildOrders, string nombreBuildOrder) {
-
-            var pasos = new List<Paso>();
-            var rutaBuildOrder = Path.Combine(directorioBuildOrders, $"{nombreBuildOrder}.txt");
-            if (!Directory.Exists(directorioBuildOrders)) Directory.CreateDirectory(directorioBuildOrders);
-            if (!File.Exists(rutaBuildOrder))
-                File.WriteAllText(rutaBuildOrder, $@"Edit '\RTS Helper\Build Orders\{nombreBuildOrder}.txt' \\n to add your build order.");
-            var textosPasos = File.ReadAllLines(rutaBuildOrder);
-            foreach (var textoPaso in textosPasos) {
-                if (!string.IsNullOrWhiteSpace(textoPaso)) pasos.Add(new Paso(textoPaso)); // No se agrega el paso si es un espacio en la build order. Estos espacios son útiles para tener más orden de edición.
-            }
-            if (pasos.Count == 0) pasos.Add(new Paso("")); // Para poder almacenar la duración de los pasos, debe haber como mínimo un paso.
-            return pasos;
-
-        } // LeerPasos>
-
-
-        public void ProcesarPaso(string? texto) {
+        public void ProcesarPaso(string? texto, Comportamiento comportamientoPadre, Formato formatoPadre, Dictionary<string, Formato>? clasesDeFormatos, 
+            Dictionary<string, Comportamiento>? clasesDeComportamientos) {
 
             var textoProcesado = texto?.TrimEnd().TrimStart() ?? "";
             if (textoProcesado.StartsWith("{")) { // Contiene comportamientos propios para el paso.
@@ -72,10 +59,13 @@ namespace RTSHelper {
 
                     textoProcesado = textoProcesado.Replace(coincidenciasComportamientos.Groups[0].Value, "").TrimStart();
                     var textoComportamientos = coincidenciasComportamientos.Groups[1].Value;
-                    Comportamiento = new Comportamiento(textoComportamientos);
+                    Comportamiento = Comportamiento.ObtenerComportamientoEfectivo(new Comportamiento(textoComportamientos, out _, 
+                        clasesDeComportamientos), comportamientoPadre);
 
                 } 
 
+            } else {
+                Comportamiento = Comportamiento.ObtenerComportamientoEfectivo(new Comportamiento(), comportamientoPadre); // Se asigna de esta manera para que cree un nuevo objeto de comportamientosPadre.
             }
 
             textoProcesado = textoProcesado.Replace("   ", NuevaLíneaId).Replace("/n", NuevaLíneaId).Replace("\\n", NuevaLíneaId)
@@ -93,9 +83,9 @@ namespace RTSHelper {
                 instruccionesTexto.RemoveAt(instruccionesTexto.Count - 3);            
             }
 
-            var formatoActual = new Formato(null);
+            var formatoActual = new Formato();
             foreach (var instrucciónTexto in instruccionesTexto) {
-                Instrucciones.Add(new Instrucción(instrucciónTexto, formatoActual, out formatoActual));
+                Instrucciones.Add(new Instrucción(instrucciónTexto, formatoActual, formatoPadre, clasesDeFormatos, out formatoActual));
             }
             Instrucciones.Last().AlinearInferiormente = alinearÚltimaInstrucciónInferiormente;
 

@@ -8,8 +8,10 @@ using System.Windows.Media;
 using static Vixark.General;
 using System.Windows.Media.Imaging;
 using System.Linq;
-
-
+using System.Text.RegularExpressions;
+using System.Windows.Documents;
+using System.Diagnostics;
+using System.IO;
 
 namespace RTSHelper {
 
@@ -18,22 +20,75 @@ namespace RTSHelper {
     public class OrdenDeEjecución {
 
 
+
         #region Propiedades
 
-        public List<Paso> Pasos = new List<Paso>();
+        public List<Paso> Pasos { get; set; } = new List<Paso>();
 
-        public int NúmeroPaso = 0;
+        public int NúmeroPaso { get; set; } = 0;
+
+        public Dictionary<string, Comportamiento> ClasesDeComportamientos { get; set; } = new Dictionary<string, Comportamiento>();
+
+        public Dictionary<string, Formato> ClasesDeFormatos { get; set; } = new Dictionary<string, Formato>();
+
+        #endregion Propiedades>
+
+
+
+        #region Propiedades Autocalculadas
 
         public bool EsÚltimoPaso => NúmeroPaso == Pasos.Count - 1;
 
         public bool EsDespuésDeÚltimoPaso => NúmeroPaso > Pasos.Count - 1;
 
-        public Comportamiento Comportamiento { get; set; } = new Comportamiento();
+        #endregion Propiedades Autocalculadas>
 
-        #endregion Propiedades>
 
 
         #region Funciones y Procedimientos
+
+
+        public void CargarPasos(string directorioBuildOrders, string nombreBuildOrder) {
+
+            var pasos = new List<Paso>();
+            var rutaBuildOrder = Path.Combine(directorioBuildOrders, $"{nombreBuildOrder}.txt");
+            if (!Directory.Exists(directorioBuildOrders)) Directory.CreateDirectory(directorioBuildOrders);
+            if (!File.Exists(rutaBuildOrder))
+                File.WriteAllText(rutaBuildOrder, $@"Edit '\RTS Helper\Build Orders\{nombreBuildOrder}.txt' \\n to add your build order.");
+
+            var textosPasos = File.ReadAllLines(rutaBuildOrder);
+            Formato? formatoGlobal = null;
+            Comportamiento? comportamientoGlobal = null;
+
+            foreach (var textoPaso in textosPasos) {
+
+                var textoPasoTrimmed = textoPaso.Trim();
+
+                if (textoPasoTrimmed.StartsWith("<<") && textoPasoTrimmed.EndsWith(">>")) { // Es necesario hacerlo así y no con Regex por facilidad y para que no entre en conflicto con las clases de comportamientos que van entre <>.
+
+                    formatoGlobal = new Formato(textoPasoTrimmed[2..^2], out Dictionary<string, Formato> clasesLeídas, null);
+                    ClasesDeFormatos = clasesLeídas;
+
+                } else if (textoPasoTrimmed.StartsWith("{{") && textoPasoTrimmed.EndsWith("}}")) { // Es necesario hacerlo así y no con Regex por facilidad y para que no entre en conflicto con las clases de comportamientos que van entre {}.
+
+                    comportamientoGlobal = new Comportamiento(textoPasoTrimmed[2..^2], out Dictionary<string, Comportamiento> clasesLeídas, null);
+                    ClasesDeComportamientos = clasesLeídas;
+ 
+                } else if (!string.IsNullOrWhiteSpace(textoPaso)) { // No se agrega el paso si es un espacio en la build order. Estos espacios son útiles para tener más orden de edición.
+                    pasos.Add(new Paso(textoPaso, comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos));
+                }
+
+            }
+            if (pasos.Count == 0) pasos.Add(new Paso("", null, null, null, null)); // Para poder almacenar la duración de los pasos, debe haber como mínimo un paso.
+
+            if (NúmeroPaso > 0) { // Si se carga una build order en la mitad de la ejecución, debe copiar las duraciones de los pasos de la ejecución actual.
+                for (int i = 0; i < NúmeroPaso; i++) {
+                    if (i <= pasos.Count - 1 && i <= Pasos.Count - 1) pasos[i].DuraciónEnJuego = Pasos[i].DuraciónEnJuego;
+                }
+            }
+            Pasos = pasos;
+
+        } // CargarPasos>
 
 
         public void MostrarPaso(int? númeroPaso, Formato formatoPredeterminado, StackPanel contenedor, bool mostrarSiempreÚltimoPaso, double altoMáximo,
@@ -52,12 +107,17 @@ namespace RTSHelper {
 
             }
 
-            if (númeroPasoAMostrar == null) {
+            if (númeroPaso == null || númeroPaso < 0) {
 
-                var textBlock = new TextBlock { Text = "Pendiente implementar para mostrar información general de la build order." };
+                var textBlock = new TextBlock {
+                    Text = "Pendiente implementar para mostrar información general de la build order.",
+                    Foreground = ObtenerBrocha("white")
+                };
                 contenedor.Children.Add(textBlock);
 
-            } else {
+            } else if (númeroPasoAMostrar == null) {
+                // No muestra nada. Es el el siguiente paso después del último.                
+            } else { 
 
                 var paso = Pasos[(int)númeroPasoAMostrar];
                 var sumaAlto = 0D;
@@ -106,15 +166,12 @@ namespace RTSHelper {
 
                             if (segmentoEfectivo.Tipo == TipoSegmento.Texto) {
 
-                                var textBlock = new TextBlock {
-                                    Text = segmentoEfectivo.Texto,
-                                    FontStyle = (bool)formato.Cursiva ? FontStyles.Italic : FontStyles.Normal,
-                                    FontWeight = (bool)formato.Negrita ? FontWeights.Bold : FontWeights.Normal,
-                                    FontFamily = new FontFamily((string)formato.NombreFuente),
-                                    FontSize = (double)formato.TamañoFuenteEfectiva,
-                                    VerticalAlignment = VerticalAlignment.Center, // Es preferible el alineamiento central para facilitar el posicionamiento de las imágenes. Además, el alineamiento inferior no coincide exactamente con la línea base de los textos cuando se usan diferentes tamaños de fuente, entonces tampoco es muy útil. 
-                                };
-
+                                var textBlock = ObtenerTextBlock(segmentoEfectivo.Texto);
+                                textBlock.FontStyle = (bool)formato.Cursiva ? FontStyles.Italic : FontStyles.Normal;
+                                textBlock.FontWeight = (bool)formato.Negrita ? FontWeights.Bold : FontWeights.Normal;
+                                textBlock.FontFamily = new FontFamily((string)formato.NombreFuente);
+                                textBlock.FontSize = (double)formato.TamañoFuenteEfectiva;
+                                textBlock.VerticalAlignment = VerticalAlignment.Center; // Es preferible el alineamiento central para facilitar el posicionamiento de las imágenes. Además, el alineamiento inferior no coincide exactamente con la línea base de los textos cuando se usan diferentes tamaños de fuente, entonces tampoco es muy útil. 
                                 textBlock.Foreground = ObtenerBrocha(formato.ColorHexadecimal);
                               
                                 if ((bool)formato.Subrayado) textBlock.TextDecorations = TextDecorations.Underline;
@@ -272,6 +329,52 @@ namespace RTSHelper {
             return Bitmaps[nombreImagen];
 
         } // ObtenerImagen>
+
+
+        public TextBlock ObtenerTextBlock(string texto) {
+
+            if (texto.Contains("http", StringComparison.InvariantCultureIgnoreCase)) {
+
+                var textBlock = new TextBlock();
+                var matches = Regex.Matches(texto, @"https?:\/\/[^ ]+");
+                var índiceActual = 0;
+                foreach (Match? match in matches) {
+                    if (match != null) {
+
+                        var índiceMatch = match.Index;
+                        var enlace = new Hyperlink();
+                        var url = match.Value;
+                        if (Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute)) {
+
+                            enlace.NavigateUri = new Uri(url);
+                            enlace.Inlines.Add(url);
+                            enlace.RequestNavigate += Enlace_RequestNavigate;
+                            var textoPlano = texto.Substring(índiceActual, índiceMatch - índiceActual);
+                            textBlock.Inlines.Add(new Run(textoPlano));
+                            textBlock.Inlines.Add(enlace);
+                            índiceActual = índiceMatch + url.Length;
+
+                        }
+
+                    }
+                }
+                if (índiceActual <= texto.Length) textBlock.Inlines.Add(new Run(texto.Substring(índiceActual)));
+                return textBlock;
+
+            } else {
+                return new TextBlock { Text = texto };
+            }
+
+        } // ObtenerTextBlock>
+
+
+        static void Enlace_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e) {
+
+            try {
+                Process.Start(new ProcessStartInfo(e.Uri.ToString()) { UseShellExecute = true });
+            } catch { }
+
+        } // Enlace_RequestNavigate>
 
 
         #endregion Funciones y Procedimientos>

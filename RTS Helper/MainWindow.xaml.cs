@@ -97,7 +97,7 @@ namespace RTSHelper {
             TimerBlinkerGameTime.Tick += new EventHandler(TimerBlinkerGameTime_Tick);
 
             LeerPreferencias(); 
-            OrdenDeEjecución.Pasos = Paso.LeerPasos(DirectorioBuildOrdersEfectivo, Preferencias.CurrentBuildOrder);
+            OrdenDeEjecución.CargarPasos(DirectorioBuildOrdersEfectivo, Preferencias.CurrentBuildOrder);
             LeerBuildOrders();
             CargarBuildOrder();
             CargarVelocidadEjecución();
@@ -756,13 +756,13 @@ namespace RTSHelper {
         } // ActualizarDuraciónPaso>
 
 
-        private void ActualizarPaso(bool stop = false, bool aplicandoPreferencias = false) {
+        private void ActualizarPaso(bool stop = false, bool aplicandoPreferencias = false, bool cargandoBuildOrder = false) {
 
             if (stop) {
                 ActualizarContenidoPaso(númeroPaso: null);
             } else {
 
-                if ((Timer is null || !Timer.IsEnabled) && !aplicandoPreferencias) return; // Evita que se actualice el texto si no se ha dado clic en Start.
+                if ((Timer is null || !Timer.IsEnabled) && !aplicandoPreferencias && !cargandoBuildOrder) return; // Evita que se actualice el texto si no se ha dado clic en Start.
                 if (!aplicandoPreferencias) {
 
                     if (OrdenDeEjecución.NúmeroPaso < 0) OrdenDeEjecución.NúmeroPaso = 0;
@@ -786,10 +786,10 @@ namespace RTSHelper {
             SpnPasoSiguiente.Children.Clear();
 
             var formatoPaso = new Formato($"{Preferencias.CurrentStepFontColor} {(Preferencias.CurrentStepFontBold ? "b" : "")} " +
-                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M") { TamañoBaseFuente = Preferencias.CurrentStepFontSize,
+                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null) { TamañoBaseFuente = Preferencias.CurrentStepFontSize,
                 ImageSize = Preferencias.ImageSize };
             var formatoSiguientePaso = new Formato($"{Preferencias.NextStepFontColor} {(Preferencias.NextStepFontBold ? "b" : "")} " +
-                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M") { TamañoBaseFuente = Preferencias.NextStepFontSize,
+                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null) { TamañoBaseFuente = Preferencias.NextStepFontSize,
                 ImageSize = Preferencias.ImageSize
             };
     
@@ -821,15 +821,8 @@ namespace RTSHelper {
                 CmbBuildOrders.Text = Preferencias.CurrentBuildOrder;
                 EditandoComboBoxEnCódigo = false;
             }
-            var nuevosPasos = Paso.LeerPasos(DirectorioBuildOrdersEfectivo, Preferencias.CurrentBuildOrder);
-            if (OrdenDeEjecución.NúmeroPaso > 0) { // Si se carga una build order en la mitad de la ejecución, debe copiar las duraciones de los pasos de la ejecución actual.
-                for (int i = 0; i < OrdenDeEjecución.NúmeroPaso; i++) {
-                    if (i <= nuevosPasos.Count - 1 && i <= OrdenDeEjecución.Pasos.Count - 1) 
-                        nuevosPasos[i].DuraciónEnJuego = OrdenDeEjecución.Pasos[i].DuraciónEnJuego;
-                }
-            }
-            OrdenDeEjecución.Pasos = nuevosPasos;
-            ActualizarPaso();
+            OrdenDeEjecución.CargarPasos(DirectorioBuildOrdersEfectivo, Preferencias.CurrentBuildOrder);
+            ActualizarPaso(cargandoBuildOrder: true);
 
         } // CargarBuildOrder>
 
