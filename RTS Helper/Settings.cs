@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.IO;
 using static RTSHelper.Global;
 using static Vixark.General;
+using System.Linq;
 
 
 
@@ -147,7 +148,7 @@ namespace RTSHelper {
 
         public double ImageBackgroundOpacity { get; set; } = 0.3;
 
-        public double ImageHorizontalMargin { get; set; } = 20;
+        public double EntityHorizontalMargin { get; set; } = 20; // Espaciado para las entidades: imágenes y textos entre []. Porcentaje del alto de la entidad  cada lado.
 
         public double ImageBackgroundRoundedCornersRadius { get; set; } = 10;
 
@@ -159,10 +160,10 @@ namespace RTSHelper {
         #region Nombres
 
         public Dictionary<NameType, int> DisplayPriority { get; set; } = new Dictionary<NameType, int> {
-            { NameType.Image, 0 }, { NameType.Common, 1 }, { NameType.Complete, 2 }, { NameType.Abbreviation, 3 }, { NameType.Acronym, 4 }, 
-            { NameType.CommonPlural, 5 }, { NameType.AbbreviationPlural, 6 }, { NameType.AcronymPlural, 7 }, { NameType.Custom, 8 },  { NameType.BR, 9 }, 
-            { NameType.DE, 10 }, { NameType.ES, 11 }, { NameType.FR, 12 }, { NameType.HI, 13 }, { NameType.IT, 14 }, { NameType.JP, 15 }, 
-            { NameType.KO, 16 }, { NameType.MS, 17 }, { NameType.MX, 18 }, { NameType.PL, 19 }, { NameType.RU, 20 }, { NameType.TR, 21 }, 
+            { NameType.Image, 0 }, { NameType.Abbreviation, 1 }, { NameType.Acronym, 2 }, { NameType.Common, 3 }, { NameType.Complete, 4 },
+            { NameType.Custom, 5 }, { NameType.AbbreviationPlural, 6 }, { NameType.AcronymPlural, 7 }, { NameType.CommonPlural, 8 }, { NameType.BR, 9 },
+            { NameType.DE, 10 }, { NameType.ES, 11 }, { NameType.FR, 12 }, { NameType.HI, 13 }, { NameType.IT, 14 }, { NameType.JP, 15 },
+            { NameType.KO, 16 }, { NameType.MS, 17 }, { NameType.MX, 18 }, { NameType.PL, 19 }, { NameType.RU, 20 }, { NameType.TR, 21 },
             { NameType.TW, 22 }, { NameType.VI, 23 }, { NameType.ZH, 24 }
         };
 
@@ -219,6 +220,10 @@ namespace RTSHelper {
             }
 
         } // ObtenerGameSpeedText>
+
+
+        public Dictionary<NameType, int> ObtenerDisplayPriorityOrdenadas()
+            => DisplayPriority.OrderBy(kv => kv.Value).ToDictionary(g => g.Key, g => g.Value);
 
 
         public void EstablecerGameSpeed(string gameSpeedText, string game) {

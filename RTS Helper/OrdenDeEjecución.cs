@@ -147,6 +147,7 @@ namespace RTSHelper {
                             if (espaciadoVertical > mayorEspaciadoVertical) mayorEspaciadoVertical = espaciadoVertical;
                                 
                             Segmento segmentoEfectivo;
+                            var margenEnTexto = false;
                             if (segmento.Tipo == TipoSegmento.Entidad) {
 
                                 var entidad = ObtenerEntidad(segmento.Texto);
@@ -155,13 +156,16 @@ namespace RTSHelper {
                                     errores += $"The name {segmento.Texto} wasn't found." + Environment.NewLine;
                                     segmentoEfectivo = segmento.Clonar();
                                     segmentoEfectivo.Tipo = TipoSegmento.Texto;
+                                    margenEnTexto = false;
 
                                 } else {
                                     segmentoEfectivo = ObtenerSegmentoEfectivo(entidad);
+                                    margenEnTexto = segmentoEfectivo.Tipo != TipoSegmento.Imagen;  // Cuando se usa el marcado con corchetes cuadrados por ejemplo, [attack][town center] se espera que las entidades no sean adjuntas si están en texto, es decir, se espera que no se muestre ATTKTC, si no ATT TC. Por esto se debe agregar este margen adicional cuando la entidad no se vaya a mostrar como imagen.
                                 }
                                     
                             } else {
                                 segmentoEfectivo = segmento.Clonar();
+                                margenEnTexto = false; // El texto normal no lleva margen.
                             }
 
                             if (segmentoEfectivo.Tipo == TipoSegmento.Texto) {
@@ -173,7 +177,10 @@ namespace RTSHelper {
                                 textBlock.FontSize = (double)formato.TamañoFuenteEfectiva;
                                 textBlock.VerticalAlignment = VerticalAlignment.Center; // Es preferible el alineamiento central para facilitar el posicionamiento de las imágenes. Además, el alineamiento inferior no coincide exactamente con la línea base de los textos cuando se usan diferentes tamaños de fuente, entonces tampoco es muy útil. 
                                 textBlock.Foreground = ObtenerBrocha(formato.ColorHexadecimal);
-                              
+
+                                var margenTexto = (margenEnTexto ? formato.TamañoTextoEfectivo * (Preferencias.EntityHorizontalMargin / 200) : 0) ?? 0;
+                                textBlock.Margin = new Thickness(margenTexto, 0, margenTexto, 0);
+
                                 if ((bool)formato.Subrayado) textBlock.TextDecorations = TextDecorations.Underline;
 
                                 if (formato.Posición != PosiciónTexto.Normal) {
@@ -189,7 +196,7 @@ namespace RTSHelper {
 
                                 var tamaño = (double)formato.ObtenerTamañoImagenEfectiva((double)formato.ImageSize)!;
                                 altoSegmentoImagen = tamaño;
-                                var margen = tamaño * (Preferencias.ImageHorizontalMargin / 200); // Se divide por 200 porque el márgen se aplica a ambos lados.
+                                var margen = tamaño * (Preferencias.EntityHorizontalMargin / 200); // Se divide por 200 porque el margen se aplica a ambos lados.
                                 var margenDerecha = margen;
                                 var margenIzquierda = margen;
                                 var alineación = VerticalAlignment.Center;

@@ -14,8 +14,7 @@ using static Vixark.General;
 using System.Text.RegularExpressions;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
-
-
+using System.ComponentModel.DataAnnotations;
 
 namespace RTSHelper {
 
@@ -68,10 +67,18 @@ namespace RTSHelper {
 
         public static string SeparadorDecimales = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
 
-        public enum NameType { // Al agregar un valor aquí, se debe agregar a Settings.NamesTypesPriority.
-            Complete, Common, Abbreviation, Acronym, CommonPlural, AbbreviationPlural, AcronymPlural, // Todos estos son normalmente en inglés.
+        public enum NameType { // Al agregar un valor aquí, se debe agregar a Settings.NamesTypesPriority y en Idiomas si es un idioma.
+            [Display(Name = "Complete Name")] Complete, [Display(Name = "Common Name")] Common, Abbreviation, Acronym,
+            [Display(Name = "Plural Common Name")] CommonPlural, [Display(Name = "Plural Abbreviation")] AbbreviationPlural, 
+            [Display(Name = "Plural Acronym")] AcronymPlural, // Todos los anteriores son normalmente en inglés.
             Custom, Image, BR, DE, ES, FR, HI, IT, JP, KO, MS, MX, PL, RU, TR, TW, VI, ZH // TW es equivalente Chino tradicional según las pruebas que he hecho. ZH es Chino Simplificado
         }
+
+        public static Dictionary<string, string> Idiomas = new Dictionary<string, string> { { "BR", "Português (Brasil)" }, {"DE", "Deutsch" },
+            { "ES", "Español" }, { "FR", "Français" }, { "HI", "हिंदी" }, { "IT", "Italiano"}, { "JP", "日本語"}, { "KO", "한국어"}, { "MS", "Bahasa Melayu"}, 
+            { "MX", "Español (México)"}, { "PL", "Polski"}, { "RU", "Русский"}, { "TR", "Türkçe"}, { "TW", "繁體中文"}, { "VI", "Tiếng Việt"}, 
+            { "ZH", "简体中文"},
+        };
 
         public enum TipoSegmento { Entidad, Texto, Imagen } // Entidad puede convertirse en Texto o Imagen según las preferencias del usuario.
 
@@ -81,7 +88,9 @@ namespace RTSHelper {
 
         public enum TipoFuente { Sans, SansNegrita, Serif, SerifCuadrada, Caligráfica, Símbolos }
 
-        public static Dictionary<string, Nombre> Nombres = new Dictionary<string, Nombre>(); // La clave son todos los nombres posibles.
+        public static Dictionary<string, Nombre> Nombres = new Dictionary<string, Nombre>(); // Los nombres no repetidos. La utilidad de este diccionario es principalmente su uso para identificar nombres entre [] y reemplazarlo por la entidad correspondiente. La primera vez que aparezca un nombre sin importar en que idioma esté se agregará a este diccionario con ese idioma, los demás se ignoran. La clave son todos los nombres posibles.
+
+        public static List<(string, Nombre)> TodosLosNombres = new List<(string, Nombre)>(); // Todos los nombres. Su uso es obtener el valor de cierta entidad en cierto tipo/idioma. La clave son todos los nombres posibles.
 
         public static Dictionary<string, Entidad> Entidades = new Dictionary<string, Entidad>(); // La clave es el ID de la entidad.
 
@@ -276,16 +285,8 @@ namespace RTSHelper {
             CrearNombres();
             AgregarNombresAEntidades();
             CrearImágenes();
-            CrearPrioridadesNombres();
 
         } // CrearEntidadesYNombres>
-
-
-        public static void CrearPrioridadesNombres() {
-
-
-
-        } // CrearPrioridadesNombres>
 
 
         public static void CrearImágenes() {
@@ -326,9 +327,9 @@ namespace RTSHelper {
 
             foreach (var entidad in Entidades) {
 
-                var nombres = Nombres.Where(kv => kv.Value.ID == entidad.Key).ToDictionary(u => u.Key, u => u.Value);
+                var nombres = TodosLosNombres.Where(tupla => tupla.Item2.ID == entidad.Key).ToList();
                 foreach (var kv in nombres) {
-                    if (!entidad.Value.Nombres.ContainsKey(kv.Value.Tipo)) entidad.Value.Nombres.Add(kv.Value.Tipo, kv.Value.Valor); // Solo se agrega el primer nombre. El objetivo de estos nombres es mostrarlos cuando se elija ver la build order con ese tipo, por lo tanto cuando una entidad tenga un nombre que para el mismo tipo tiene varias opciones, por ejemplo la entidad Knight tiene opción en acrónimos de KT|KNT|KTS cuando se muestre la build order con acrónimos para Knight aparecerá KT en vez de KT|KNT|KTS.
+                    if (!entidad.Value.Nombres.ContainsKey(kv.Item2.Tipo)) entidad.Value.Nombres.Add(kv.Item2.Tipo, kv.Item2.Valor); // Solo se agrega el primer nombre. El objetivo de estos nombres es mostrarlos cuando se elija ver la build order con ese tipo, por lo tanto cuando una entidad tenga un nombre que para el mismo tipo tiene varias opciones, por ejemplo la entidad Knight tiene opción en acrónimos de KT|KNT|KTS cuando se muestre la build order con acrónimos para Knight aparecerá KT en vez de KT|KNT|KTS.
                 }
 
             }
@@ -437,6 +438,7 @@ namespace RTSHelper {
                                 nombresYTipoNombre.Add(nombreMinúscula, tipoNombre);
 
                             }
+                            TodosLosNombres.Add((nombreMinúscula, new Nombre(nombre, tipoNombre, id)));
 
                         }
 
@@ -1538,7 +1540,7 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("5660", "Petard"); names[NameType.Abbreviation].Add("5660", "Pet"); names[NameType.CommonPlural].Add("5660", "Petards"); names[NameType.AbbreviationPlural].Add("5660", "Pets");
                 names[NameType.Complete].Add("5097", "Trebuchet"); names[NameType.Abbreviation].Add("5097", "Treb"); names[NameType.CommonPlural].Add("5097", "Trebuchets"); names[NameType.AbbreviationPlural].Add("5097", "Trebs");
                 names[NameType.Complete].Add("5099", "Monk"); names[NameType.CommonPlural].Add("5099", "Monks");
-                names[NameType.Complete].Add("5691", "Missionary"); names[NameType.Abbreviation].Add("5691", "Donk"); names[NameType.CommonPlural].Add("5691", "Missionaries"); names[NameType.AcronymPlural].Add("5691", "Donks");
+                names[NameType.Complete].Add("5691", "Missionary"); names[NameType.Abbreviation].Add("5691", "Donk"); names[NameType.CommonPlural].Add("5691", "Missionaries"); names[NameType.AbbreviationPlural].Add("5691", "Donks");
                 names[NameType.Complete].Add("14121", "Villager"); names[NameType.Abbreviation].Add("14121", "Vil|Vill"); names[NameType.Acronym].Add("14121", "V"); names[NameType.CommonPlural].Add("14121", "Villagers"); names[NameType.AbbreviationPlural].Add("14121", "Vils|Vills");
                 names[NameType.Complete].Add("13319", "Trade Cart"); names[NameType.CommonPlural].Add("13319", "Trade Carts");
                 names[NameType.Complete].Add("19141", "Flemish Militia"); names[NameType.CommonPlural].Add("19141", "Flemish Militias");
@@ -2118,8 +2120,7 @@ namespace RTSHelper {
         /// <returns></returns>
         public static Segmento ObtenerSegmentoEfectivo(Entidad entidad) {
 
-            var prioridades = Preferencias.DisplayPriority.OrderBy(kv => kv.Value).ToDictionary(g => g.Key, g => g.Value);
-            foreach (var prioridad in prioridades) {
+            foreach (var prioridad in Preferencias.ObtenerDisplayPriorityOrdenadas()) {
 
                 if (prioridad.Key == NameType.Image) {
                     var rutaImagen = ObtenerRutaImagen(entidad, out string imagen);

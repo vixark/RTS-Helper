@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:RTSHelper"
         mc:Ignorable="d" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" ResizeMode="CanResizeWithGrip"
-        Title="Settings - RTS Helper" Height="450" Width="520" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
+        Title="Settings - RTS Helper" Height="460" Width="520" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
     <!--Se debe establecer CanResizeWithGrip porque algunos usuarios les aparece la ventana de settings cortada. No se porqué... Si se quiere quitar el botón de maximizar usar esto https://stackoverflow.com/questions/18707782/disable-maximize-button-of-wpf-window-keeping-resizing-feature-intact -->
 
     <Grid>
@@ -277,8 +277,8 @@
                 
             </TabItem>
 
-            <TabItem Header="Display" x:Name="TbiDisplay">
-
+            <TabItem Header="Display Priority" x:Name="TbiDisplayPriority">
+                <StackPanel Margin="20 20 0 0" Orientation="Vertical" x:Name="SpnDisplayPriority" />
             </TabItem>
 
         </TabControl>

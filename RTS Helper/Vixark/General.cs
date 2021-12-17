@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -97,6 +99,40 @@ namespace Vixark {
             return Color.FromArgb(notNullMediaColor.A, notNullMediaColor.R, notNullMediaColor.G, notNullMediaColor.B);
 
         } // ObtenerColor>
+
+
+        /// <summary>
+        /// Obtiene el valor del atributo Display del valor de la enumeración. Es útil para usar un texto personalizado para cada elemento en una enumeración.
+        /// </summary>
+        public static string ATexto<T>(this T enumeración) where T : struct, Enum {
+
+            var tipo = enumeración.GetType();
+            var textoDirecto = enumeración.ToString();
+
+            string obtenerTexto(string textoDirecto)
+                => tipo.GetMember(textoDirecto).Where(x => x.MemberType == MemberTypes.Field && ((FieldInfo)x).FieldType == tipo)
+                       .First().GetCustomAttribute<DisplayAttribute>()?.Name ?? textoDirecto;
+
+            if (textoDirecto.Contiene(", ")) {
+
+                var texto = new StringBuilder();
+                foreach (var textoDirectoAux in textoDirecto.Split(", ")) {
+                    texto.Append($"{obtenerTexto(textoDirectoAux)}, ");
+                }
+                return texto.ToString()[0..^2];
+
+            } else {
+                return obtenerTexto(textoDirecto);
+            }
+
+        } // ATexto>
+
+
+        /// <summary>
+        /// Encapsulación de rápido acceso de Contains() usando StringComparison.Ordinal. Es útil para omitir la advertencia CA1307 sin saturar el código.
+        /// </summary>
+        public static bool Contiene(this string texto, string textoContenido, bool ignorarCapitalización = true)
+            => texto.Contains(textoContenido, ignorarCapitalización ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
 
 
     } // General>

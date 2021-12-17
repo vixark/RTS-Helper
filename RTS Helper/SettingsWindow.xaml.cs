@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Diagnostics;
 using static RTSHelper.Global;
 using System.IO;
+using static Vixark.General;
 
 
 
@@ -34,7 +35,7 @@ namespace RTSHelper {
             InitializeComponent();
             VentanaPrincipal = ventanaPrincipal;
 
-            CargarValores(Preferencias, primerInicio);
+            CargarValores(primerInicio);
             if (primerInicio) {
               
                 SpnLabels2.Visibility = Visibility.Collapsed;
@@ -48,7 +49,7 @@ namespace RTSHelper {
                 SpnBuildOrderPath.Visibility = Visibility.Collapsed;
                 TbiBehavior.Visibility = Visibility.Collapsed;
                 TbiImages.Visibility = Visibility.Collapsed;
-                TbiDisplay.Visibility = Visibility.Collapsed;
+                TbiDisplayPriority.Visibility = Visibility.Collapsed;
                 TbiStyle.Visibility = Visibility.Collapsed;
                 Height = 260;
                 TbcPreferencias.Height = 150;
@@ -62,46 +63,189 @@ namespace RTSHelper {
         } // SettingsWindow>
 
 
-        public void CargarValores(Settings preferencias, bool primerInicio) {
+        public void CargarValores(bool primerInicio) {
 
-            CmbResolution.Text = preferencias.ScreenResolution;
-            CmbGame.Text = preferencias.Game;
-            CmbGameSpeed.Text = preferencias.ObtenerGameSpeedText(preferencias.Game);
-            TxtOpacity.Text = preferencias.Opacity.ToString();
-            TxtBuildOrderPath.Text = preferencias.BuildOrderDirectory;    
-            TxtStepFontSize.Text = preferencias.CurrentStepFontSize.ToString();
-            TxtNextStepFontSize.Text = preferencias.NextStepFontSize.ToString();
-            ChkShowNextStep.IsChecked = preferencias.ShowNextStep;
+            CmbResolution.Text = Preferencias.ScreenResolution;
+            CmbGame.Text = Preferencias.Game;
+            CmbGameSpeed.Text = Preferencias.ObtenerGameSpeedText(Preferencias.Game);
+            TxtOpacity.Text = Preferencias.Opacity.ToString();
+            TxtBuildOrderPath.Text = Preferencias.BuildOrderDirectory;    
+            TxtStepFontSize.Text = Preferencias.CurrentStepFontSize.ToString();
+            TxtNextStepFontSize.Text = Preferencias.NextStepFontSize.ToString();
+            ChkShowNextStep.IsChecked = Preferencias.ShowNextStep;
             LeerSonidos();
-            CmbStartSound.Text = preferencias.StepStartSound;
-            CmbEndSound.Text = preferencias.StepEndSound;
+            CmbStartSound.Text = Preferencias.StepStartSound;
+            CmbEndSound.Text = Preferencias.StepEndSound;
             if (CmbStartSound.SelectedIndex == -1) CmbStartSound.Text = NoneSoundString;
             if (CmbEndSound.SelectedIndex == -1) CmbEndSound.Text = NoneSoundString;
-            ChkUnmuteAtStartup.IsChecked = preferencias.UnmuteAtStartup;
-            SldEndSoundVolume.Value = preferencias.StepEndSoundVolume;
-            SldStartSoundVolume.Value = preferencias.StepStartSoundVolume;
+            ChkUnmuteAtStartup.IsChecked = Preferencias.UnmuteAtStartup;
+            SldEndSoundVolume.Value = Preferencias.StepEndSoundVolume;
+            SldStartSoundVolume.Value = Preferencias.StepStartSoundVolume;
             
-            ChkMinimizeOnComplete.IsChecked = preferencias.MinimizeOnComplete;
-            ChkMuteOnComplete.IsChecked = preferencias.MuteOnComplete;
-            ChkStopFlashingOnComplete.IsChecked = preferencias.StopFlashingOnComplete;
-            ChkFlashOnStepChange.IsChecked = preferencias.FlashOnStepChange;
-            TxtFlashingOpacity.Text = preferencias.FlashingOpacity.ToString();
-            TxtStepDuration.Text = preferencias.StepDuration.ToString();
+            ChkMinimizeOnComplete.IsChecked = Preferencias.MinimizeOnComplete;
+            ChkMuteOnComplete.IsChecked = Preferencias.MuteOnComplete;
+            ChkStopFlashingOnComplete.IsChecked = Preferencias.StopFlashingOnComplete;
+            ChkFlashOnStepChange.IsChecked = Preferencias.FlashOnStepChange;
+            TxtFlashingOpacity.Text = Preferencias.FlashingOpacity.ToString();
+            TxtStepDuration.Text = Preferencias.StepDuration.ToString();
 
-            CmbFontName.Text = preferencias.FontName;
-            ChkCurrentStepFontBold.IsChecked = preferencias.CurrentStepFontBold;
-            ChkNextStepFontBold.IsChecked = preferencias.NextStepFontBold;
+            CmbFontName.Text = Preferencias.FontName;
+            ChkCurrentStepFontBold.IsChecked = Preferencias.CurrentStepFontBold;
+            ChkNextStepFontBold.IsChecked = Preferencias.NextStepFontBold;
 
-            TxtLineSpacing.Text = preferencias.LineSpacing.ToString();
-            TxtImageSize.Text = preferencias.ImageSize.ToString();
-            TxtImageBackgroundOpacity.Text = preferencias.ImageBackgroundOpacity.ToString();
-            TxtImageHorizontalMargin.Text = preferencias.ImageHorizontalMargin.ToString();
-            TxtImageBackgroundRoundedCornersRadius.Text = preferencias.ImageBackgroundRoundedCornersRadius.ToString();
-            TxtSubscriptAndSuperscriptImagesSize.Text = preferencias.SubscriptAndSuperscriptImagesSize.ToString();
+            TxtLineSpacing.Text = Preferencias.LineSpacing.ToString();
+            TxtImageSize.Text = Preferencias.ImageSize.ToString();
+            TxtImageBackgroundOpacity.Text = Preferencias.ImageBackgroundOpacity.ToString();
+            TxtImageHorizontalMargin.Text = Preferencias.EntityHorizontalMargin.ToString();
+            TxtImageBackgroundRoundedCornersRadius.Text = Preferencias.ImageBackgroundRoundedCornersRadius.ToString();
+            TxtSubscriptAndSuperscriptImagesSize.Text = Preferencias.SubscriptAndSuperscriptImagesSize.ToString();
+            CargarPrioridadesNombres();
 
             if (!primerInicio) VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en los botones.
 
         } // CargarValores>
+
+
+        private void CargarPrioridadesNombres() {
+
+            SpnDisplayPriority.Children.Clear();
+            var encontradoPrimerIdioma = false;
+            var idiomaEncontrado = "";
+            var cuenta = 0;
+            var totalNombresSinIdiomas = Preferencias.DisplayPriority.Count - Idiomas.Count + 1; // Se suma 1 porque siempre se muestra el idioma de más prioridad.
+            var displayPriorityOrdenadas = Preferencias.ObtenerDisplayPriorityOrdenadas();
+            
+            foreach (var displayPriority in displayPriorityOrdenadas) {
+
+                var esIdioma = false;
+                var textoNombre = displayPriority.Key.ToString();
+                if (Idiomas.ContainsKey(textoNombre)) {
+
+                    if (encontradoPrimerIdioma) continue;
+                    idiomaEncontrado = textoNombre;
+                    encontradoPrimerIdioma = true;
+                    esIdioma = true;
+
+                }
+                var SpnName = new StackPanel() { Orientation = System.Windows.Controls.Orientation.Horizontal };
+                var label = new System.Windows.Controls.Label() {
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Content = esIdioma ? "Other Language" : displayPriority.Key.ATexto(), Tag = displayPriority
+                };
+                var btnUp = new System.Windows.Controls.Button() { Margin = new Thickness(4), Height = 22, Width = 22, Content = "↑", Tag = (-1, label) };
+                var btnDown = new System.Windows.Controls.Button() { Margin = new Thickness(4), Height = 22, Width = 22, Content = "↓", Tag = (1, label) };
+                btnUp.Click += new System.Windows.RoutedEventHandler(this.BtnMovePriority_Click);
+                btnDown.Click += new System.Windows.RoutedEventHandler(this.BtnMovePriority_Click);
+
+                if (cuenta <= 0) btnUp.IsEnabled = false;
+                if (cuenta >= totalNombresSinIdiomas - 1) btnDown.IsEnabled = false;
+
+                SpnName.Children.Add(btnUp);
+                SpnName.Children.Add(btnDown);
+                SpnName.Children.Add(label);
+
+                if (esIdioma) { // Solo pasa por aquí cuando encuentra el primero.
+
+                    var cmbIdioma = new System.Windows.Controls.ComboBox() { VerticalAlignment = VerticalAlignment.Center };
+                    foreach (var kv in Idiomas) {
+
+                        var idioma = kv.Key;
+                        var nombreIdioma = kv.Value;
+                        var cmi = new ComboBoxItem() { Content = nombreIdioma, Tag = idioma };
+                        if (idioma == idiomaEncontrado) cmi.IsSelected = true;
+                        cmbIdioma.Items.Add(cmi);
+
+                    }
+                    cmbIdioma.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(this.CmbOtherLanguage_SelectionChanged);
+                    SpnName.Children.Add(cmbIdioma);
+
+                }
+                SpnDisplayPriority.Children.Add(SpnName);
+                cuenta++;
+
+            }
+
+        } // CargarPrioridadesNombres>
+
+
+        private void CmbOtherLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            var nombreIdiomaTexto = "";
+            var cbi = e.AddedItems[0] as ComboBoxItem;
+            if (cbi != null) {
+                nombreIdiomaTexto = cbi.Tag.ToString() ?? "";
+            } else {
+                return;
+            }
+
+            foreach (var displayPriority in Preferencias.ObtenerDisplayPriorityOrdenadas()) { // Busca el idioma actualmente en el top 10 y lo reemplaza por el seleccionado.
+
+                var prioridad = displayPriority.Value;
+                var nombre = displayPriority.Key;
+                var textoNombre = nombre.ToString();
+                if (Idiomas.ContainsKey(textoNombre)) {
+
+                    if (textoNombre != nombreIdiomaTexto) { // Si es el mismo actualmente seleccionado, no pasa nada.
+
+                        var idioma = (NameType)Enum.Parse(typeof(NameType), nombreIdiomaTexto); 
+                        var prioridadAnterior = Preferencias.DisplayPriority[idioma];
+                        Preferencias.DisplayPriority[idioma] = prioridad;
+                        Preferencias.DisplayPriority[nombre] = prioridadAnterior;
+
+                    }
+                    break;
+
+                }
+
+            }
+
+            CargarPrioridadesNombres();
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // CmbStartSound_SelectionChanged>
+
+
+        private void BtnMovePriority_Click(object sender, RoutedEventArgs e) {
+
+            var información = (ValueTuple<int, System.Windows.Controls.Label>)((System.Windows.Controls.Button)e.Source).Tag;
+            var cantidadAMover = información.Item1;
+            var label = información.Item2;
+            var kv = (KeyValuePair<NameType, int>)label.Tag;
+            var prioridadActual = kv.Value;
+            var nombreActual = kv.Key;
+            var encontradoPrimerIdioma = false;
+            var desfacePrioridad = 0;
+
+            foreach (var displayPriority in Preferencias.ObtenerDisplayPriorityOrdenadas()) {
+
+                var prioridad = displayPriority.Value;
+                var nombre = displayPriority.Key;
+                var textoNombre = nombre.ToString();
+
+                if (Idiomas.ContainsKey(textoNombre)) {
+
+                    if (encontradoPrimerIdioma) {
+                        desfacePrioridad++;
+                        continue;   
+                    }
+                    encontradoPrimerIdioma = true;
+
+                }
+
+                if (prioridad == prioridadActual) {
+                    Preferencias.DisplayPriority[nombre] += cantidadAMover;
+                } else if (cantidadAMover == -1 && prioridad - desfacePrioridad == prioridadActual - 1) {
+                    Preferencias.DisplayPriority[nombre] += -cantidadAMover;
+                } else if (cantidadAMover == 1 && prioridad - desfacePrioridad == prioridadActual + 1) {
+                    Preferencias.DisplayPriority[nombre] += -cantidadAMover;
+                }
+
+            }
+            
+            CargarPrioridadesNombres();
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // BtnMovePriority_Click>
 
 
         public void LeerSonidos() {
@@ -515,7 +659,7 @@ namespace RTSHelper {
 
             if (!Activado) return;
             if (double.TryParse(TxtImageHorizontalMargin.Text, out double margenHorizontal)) {
-                Preferencias.ImageHorizontalMargin = margenHorizontal;
+                Preferencias.EntityHorizontalMargin = margenHorizontal; // Esta preferencia se pone en imágenes porque tiene más sentido ahí y es donde más se usa, pero también afecta a las entidades que se muestran como texto en reemplazo de las imágenes. Si fuera necesario se podrían crear dos preferencias diferentes.
                 VentanaPrincipal.AplicarPreferencias();
             }
 

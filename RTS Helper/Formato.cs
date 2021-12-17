@@ -21,6 +21,7 @@ namespace RTSHelper {
         #region Propiedades 
         // Al agregar una nueva se debe agregar en ObtenerFormatoEfectivo() y en CopiarPropiedadesEnNulas().
 
+
         public TamañosFuente TamañoFuente { get; set; } = TamañosFuente.Indeterminado;
 
         public string? NombreFuente { get; set; }
@@ -248,8 +249,9 @@ namespace RTSHelper {
 
         public string? ColorHexadecimal => Color == null ? null : Color.ToString();
 
+        public double? TamañoTextoEfectivo => TamañoFuenteEfectiva * FactorTamañoTextoAPixeles;
 
-        public double? ObtenerTamañoImagenEfectiva(double imageSize) => TamañoFuenteEfectiva * FactorTamañoTextoAPixeles * (imageSize / 100);
+        public double? ObtenerTamañoImagenEfectiva(double imageSize) => TamañoTextoEfectivo * (imageSize / 100);
 
 
         public static FontFamily ObtenerFuentePosiciónEspecial(PosiciónTexto posición, string texto, string nombreFuente) {
