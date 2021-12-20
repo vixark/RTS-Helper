@@ -14,6 +14,8 @@ using System.Diagnostics;
 using static RTSHelper.Global;
 using System.IO;
 using static Vixark.General;
+using System.Linq;
+using Controles = System.Windows.Controls;
 
 
 
@@ -28,6 +30,10 @@ namespace RTSHelper {
         private MainWindow VentanaPrincipal { get; set; }
 
         public bool ActualizarDuraciónPasoAlSalir { get; set; } = false;
+
+        public Dictionary<NameType, Dictionary<string, string>>? NombresPersonalizados { get; set; } = null; // Se hace quí para que cada vez que se abra los settings de custom names se lea este archivo, esto permite más flexibilidad para editarlo a mano o reemplazarlo por otro sin reiniciar el programa, si el usuario desea.
+
+        public bool UnNombrePersonalizadoCambiado { get; set; } = false;
 
 
         public SettingsWindow(bool primerInicio, MainWindow ventanaPrincipal) {
@@ -50,13 +56,18 @@ namespace RTSHelper {
                 TbiBehavior.Visibility = Visibility.Collapsed;
                 TbiImages.Visibility = Visibility.Collapsed;
                 TbiDisplayPriority.Visibility = Visibility.Collapsed;
-                TbiStyle.Visibility = Visibility.Collapsed;
+                TbiFormat.Visibility = Visibility.Collapsed;
+                TbiAbout.Visibility = Visibility.Collapsed;
+                TbiCustomNames.Visibility = Visibility.Collapsed;
+                TbiOverrides.Visibility = Visibility.Collapsed;
                 Height = 260;
                 TbcPreferencias.Height = 150;
                 Width = 350;
                 LblStepDuration.Visibility = Visibility.Collapsed;
                 TxtStepDuration.Visibility = Visibility.Collapsed;
                 LblStepDurationSeconds.Visibility = Visibility.Collapsed;
+                ChkShowStepProgress.Visibility = Visibility.Collapsed;
+                ChkShowTime.Visibility = Visibility.Collapsed;
 
             }
 
@@ -101,9 +112,195 @@ namespace RTSHelper {
             TxtSubscriptAndSuperscriptImagesSize.Text = Preferencias.SubscriptAndSuperscriptImagesSize.ToString();
             CargarPrioridadesNombres();
 
+            ChkOverrideFlashingColor.IsChecked = Preferencias.OverrideFlashingColor;
+            ChkOverrideFlashingOpacity.IsChecked = Preferencias.OverrideFlashingOpacity;
+            ChkOverrideFlashOnStepChange.IsChecked = Preferencias.OverrideFlashOnStepChange;
+            ChkOverrideFontBold.IsChecked = Preferencias.OverrideFontBold;
+            ChkOverrideFontColor.IsChecked = Preferencias.OverrideFontColor;
+            ChkOverrideFontItalics.IsChecked = Preferencias.OverrideFontItalics;
+            ChkOverrideFontName.IsChecked = Preferencias.OverrideFontName;
+            ChkOverrideFontPosition.IsChecked = Preferencias.OverrideFontPosition;
+            ChkOverrideFontSize.IsChecked = Preferencias.OverrideFontSize;
+            ChkOverrideFontUnderline.IsChecked = Preferencias.OverrideFontUnderline;
+            ChkOverrideImageSize.IsChecked = Preferencias.OverrideImageSize;
+            ChkOverrideShowNextStep.IsChecked = Preferencias.OverrideShowNextStep;
+            ChkOverrideStepDuration.IsChecked = Preferencias.OverrideStepDuration;
+            ChkOverrideStepEndSound.IsChecked = Preferencias.OverrideStepEndSound;
+            ChkOverrideStepEndSoundVolume.IsChecked = Preferencias.OverrideStepEndSoundVolume;
+            ChkOverrideStepStartSound.IsChecked = Preferencias.OverrideStepStartSound;
+            ChkOverrideStepStartSoundVolume.IsChecked = Preferencias.OverrideStepStartSoundVolume;
+            ChkShowStepProgress.IsChecked = Preferencias.ShowStepProgress;
+            ChkShowTime.IsChecked = Preferencias.ShowTime;
+            ChkRandomImageForMultipleImages.IsChecked = Preferencias.RandomImageForMultipleImages;
+            ChkCapitalizeNames.IsChecked = Preferencias.CapitalizeNames;
+
             if (!primerInicio) VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en los botones.
 
         } // CargarValores>
+
+
+        private void TbiCustomNames_Selected(object sender, RoutedEventArgs e) => CargarNombresPersonalizados();
+
+
+        private void TbiCustomNames_Unselected(object sender, RoutedEventArgs e) => GuardarNombresPersonalizados(cerrando: false);
+
+
+        private void GuardarNombresPersonalizados(bool cerrando) {
+
+            if (NombresPersonalizados != null && UnNombrePersonalizadoCambiado) {
+
+                File.WriteAllText(Preferencias.CustomNamesPath, SerializarNombres(NombresPersonalizados));
+                CrearNombresYAgregarAEntidades();
+                if (!cerrando) VentanaPrincipal.AplicarPreferencias();
+                UnNombrePersonalizadoCambiado = false;
+
+            }
+
+        } // GuardarNombresPersonalizados>
+
+
+        private void ChkOverride_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            GuardarOverrides();
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkOverride_Checked>
+
+
+        private void GuardarOverrides() {
+
+            Preferencias.OverrideFlashingColor = (bool)ChkOverrideFlashingColor.IsChecked!;
+            Preferencias.OverrideFlashingOpacity = (bool)ChkOverrideFlashingOpacity.IsChecked!;
+            Preferencias.OverrideFlashOnStepChange = (bool)ChkOverrideFlashOnStepChange.IsChecked!;
+            Preferencias.OverrideFontBold = (bool)ChkOverrideFontBold.IsChecked!;
+            Preferencias.OverrideFontColor = (bool)ChkOverrideFontColor.IsChecked!;
+            Preferencias.OverrideFontItalics = (bool)ChkOverrideFontItalics.IsChecked!;
+            Preferencias.OverrideFontName = (bool)ChkOverrideFontName.IsChecked!;
+            Preferencias.OverrideFontPosition = (bool)ChkOverrideFontPosition.IsChecked!;
+            Preferencias.OverrideFontSize = (bool)ChkOverrideFontSize.IsChecked!;
+            Preferencias.OverrideFontUnderline = (bool)ChkOverrideFontUnderline.IsChecked!;
+            Preferencias.OverrideImageSize = (bool)ChkOverrideImageSize.IsChecked!;
+            Preferencias.OverrideShowNextStep = (bool)ChkOverrideShowNextStep.IsChecked!;
+            var overrideStepDuration = (bool)ChkOverrideStepDuration.IsChecked!;
+            if (!overrideStepDuration) 
+                MostrarInformación("If you don't allow build orders to override the default step duration and they have custom steps durations, " + 
+                    "their instructions won't be syncronized. It's recommended to leave this option checked.");
+            Preferencias.OverrideStepDuration = overrideStepDuration;
+
+            Preferencias.OverrideStepEndSound = (bool)ChkOverrideStepEndSound.IsChecked!;
+            Preferencias.OverrideStepEndSoundVolume = (bool)ChkOverrideStepEndSoundVolume.IsChecked!;
+            Preferencias.OverrideStepStartSound = (bool)ChkOverrideStepStartSound.IsChecked!;
+            Preferencias.OverrideStepStartSoundVolume = (bool)ChkOverrideStepStartSoundVolume.IsChecked!;
+            VentanaPrincipal.CargarBuildOrder();
+
+        } // GuardarOverrides>
+
+
+        private void CargarNombresPersonalizados() {
+
+            SpnCustomNames.Children.Clear();
+            NombresPersonalizados = DeserializarNombres(Preferencias.CustomNamesPath);
+            var nombresCompletosConPersonalizado = new List<string>();
+
+            foreach (var kv in NombresPersonalizados[NameType.Custom]) {
+
+                var nombreCompleto = kv.Key;
+                var nombrePersonalizado = kv.Value;
+                var id = Entidades.FirstOrDefault(e => e.Value.NombreCompleto == nombreCompleto).Key;
+                var SpnCustomName = new StackPanel() { Orientation = Controles.Orientation.Horizontal };
+                var label = new Controles.Label() { VerticalAlignment = VerticalAlignment.Center, Content = nombreCompleto , Tag = id, 
+                    Width = 150, HorizontalContentAlignment = System.Windows.HorizontalAlignment.Right, Margin = new Thickness(0, 0, 10, 0), 
+                    ToolTip = nombreCompleto };
+                var textbox = new Controles.TextBox() { Text = nombrePersonalizado, Width = 70, Tag = nombreCompleto,
+                    VerticalAlignment = VerticalAlignment.Center };
+                var buttonBorrar = new Controles.Button() { Content = "X", FontWeight = FontWeights.Normal, Tag = nombreCompleto, 
+                    Margin = new Thickness(5, 0, 0, 0), Padding = new Thickness(5, 2, 5, 2), VerticalAlignment = VerticalAlignment.Center };
+
+                buttonBorrar.Click += new RoutedEventHandler(this.BtnBorrarNombrePersonalizado_Click);
+                textbox.TextChanged += new Controles.TextChangedEventHandler(this.TxtCustomName_TextChanged);
+                nombresCompletosConPersonalizado.Add(nombreCompleto.ToLowerInvariant());
+
+                SpnCustomName.Children.Add(label);
+                SpnCustomName.Children.Add(textbox);
+                SpnCustomName.Children.Add(buttonBorrar);
+                SpnCustomNames.Children.Add(SpnCustomName);
+
+            }
+
+            var comboboxNuevo = new Controles.ComboBox() { Width = 150, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0) };
+            var textboxNuevo = new Controles.TextBox() { Width = 70, VerticalAlignment = VerticalAlignment.Center };
+            var nombresCompletosSinPersonalizado = TodosLosNombres.Where(tupla => tupla.Item2.Tipo == NameType.Complete
+                && !nombresCompletosConPersonalizado.Contains(tupla.Item1));
+            var buttonNuevo = new Controles.Button() { Content = "Add", Tag = (comboboxNuevo, textboxNuevo), Margin = new Thickness(5, 0, 0, 0), 
+                Padding = new Thickness(2), VerticalAlignment = VerticalAlignment.Center };
+            buttonNuevo.Click += new RoutedEventHandler(this.BtnNuevoNombrePersonalizado_Click);
+
+            foreach (var tupla in nombresCompletosSinPersonalizado.OrderBy(n => n.Item1)) {
+
+                var nombreCompletoCapitalizaciónCorrecta 
+                    = Nombres.FirstOrDefault(t => t.Value.ID == tupla.Item2.ID && t.Value.Tipo == NameType.Complete).Value?.Valor;
+                if (!string.IsNullOrEmpty(nombreCompletoCapitalizaciónCorrecta)) comboboxNuevo.Items.Add(nombreCompletoCapitalizaciónCorrecta);
+
+            }
+
+            var SpnCustomNameNuevo = new StackPanel() { Orientation = Controles.Orientation.Horizontal, Margin = new Thickness(0, 5, 0, 0) };
+            SpnCustomNameNuevo.Children.Add(comboboxNuevo);
+            SpnCustomNameNuevo.Children.Add(textboxNuevo);
+            SpnCustomNameNuevo.Children.Add(buttonNuevo);
+            SpnCustomNames.Children.Add(SpnCustomNameNuevo);
+
+            SpnCustomNames.Children.Add(new Controles.Label() { Margin = new Thickness(0, 10, 0, 10),
+                Content = "To use them, in 'Display Priority' section move 'Custom Name' to the top."
+            });
+
+        } // CargarNombresPersonalizados>
+
+
+        private void BtnBorrarNombrePersonalizado_Click(object sender, RoutedEventArgs e) {
+
+            var nombreCompleto = (string)((Controles.Button)e.Source).Tag;
+            if (!string.IsNullOrEmpty(nombreCompleto) && NombresPersonalizados != null
+                && NombresPersonalizados[NameType.Custom].ContainsKey(nombreCompleto)) {
+
+                NombresPersonalizados[NameType.Custom].Remove(nombreCompleto);
+                UnNombrePersonalizadoCambiado = true;
+                GuardarNombresPersonalizados(cerrando: false);
+                CargarNombresPersonalizados();
+
+            }
+
+        } // BtnBorrarNombrePersonalizado_Click>
+
+
+        private void BtnNuevoNombrePersonalizado_Click(object sender, RoutedEventArgs e) {
+
+            var tupla = ((ValueTuple<Controles.ComboBox, Controles.TextBox>)((Controles.Button)e.Source).Tag);
+            var comboboxNuevo = tupla.Item1;
+            var nombrePersonalizado = tupla.Item2?.Text;
+            if (comboboxNuevo.SelectedItem == null) return; 
+            var nuevoNombre = comboboxNuevo.SelectedItem.ToString();
+            if (NombresPersonalizados != null && nuevoNombre != null && !string.IsNullOrEmpty(nombrePersonalizado) 
+                && !NombresPersonalizados[NameType.Custom].ContainsKey(nuevoNombre)) {
+
+                NombresPersonalizados[NameType.Custom].Add(nuevoNombre, nombrePersonalizado);
+                UnNombrePersonalizadoCambiado = true;
+                GuardarNombresPersonalizados(cerrando: false);
+                CargarNombresPersonalizados();
+
+            }
+
+        } // BtnNuevoNombrePersonalizado_Click>
+
+
+        private void TxtCustomName_TextChanged(object sender, TextChangedEventArgs e) {
+
+            var textbox = (Controles.TextBox)sender;
+            var nombreCompleto = textbox.Tag?.ToString();
+            if (NombresPersonalizados != null && nombreCompleto != null) NombresPersonalizados[NameType.Custom][nombreCompleto] = textbox.Text;
+            UnNombrePersonalizadoCambiado = true;
+
+        } // TxtCustomName_TextChanged>
 
 
         private void CargarPrioridadesNombres() {
@@ -127,13 +324,13 @@ namespace RTSHelper {
                     esIdioma = true;
 
                 }
-                var SpnName = new StackPanel() { Orientation = System.Windows.Controls.Orientation.Horizontal };
-                var label = new System.Windows.Controls.Label() {
+                var SpnName = new StackPanel() { Orientation = Controles.Orientation.Horizontal };
+                var label = new Controles.Label() {
                     VerticalAlignment = VerticalAlignment.Center,
                     Content = esIdioma ? "Other Language" : displayPriority.Key.ATexto(), Tag = displayPriority
                 };
-                var btnUp = new System.Windows.Controls.Button() { Margin = new Thickness(4), Height = 22, Width = 22, Content = "↑", Tag = (-1, label) };
-                var btnDown = new System.Windows.Controls.Button() { Margin = new Thickness(4), Height = 22, Width = 22, Content = "↓", Tag = (1, label) };
+                var btnUp = new Controles.Button() { Margin = new Thickness(4), Height = 22, Width = 22, Content = "↑", Tag = (-1, label) };
+                var btnDown = new Controles.Button() { Margin = new Thickness(4), Height = 22, Width = 22, Content = "↓", Tag = (1, label) };
                 btnUp.Click += new System.Windows.RoutedEventHandler(this.BtnMovePriority_Click);
                 btnDown.Click += new System.Windows.RoutedEventHandler(this.BtnMovePriority_Click);
 
@@ -146,7 +343,7 @@ namespace RTSHelper {
 
                 if (esIdioma) { // Solo pasa por aquí cuando encuentra el primero.
 
-                    var cmbIdioma = new System.Windows.Controls.ComboBox() { VerticalAlignment = VerticalAlignment.Center };
+                    var cmbIdioma = new Controles.ComboBox() { VerticalAlignment = VerticalAlignment.Center };
                     foreach (var kv in Idiomas) {
 
                         var idioma = kv.Key;
@@ -156,7 +353,7 @@ namespace RTSHelper {
                         cmbIdioma.Items.Add(cmi);
 
                     }
-                    cmbIdioma.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(this.CmbOtherLanguage_SelectionChanged);
+                    cmbIdioma.SelectionChanged += new Controles.SelectionChangedEventHandler(this.CmbOtherLanguage_SelectionChanged);
                     SpnName.Children.Add(cmbIdioma);
 
                 }
@@ -207,7 +404,7 @@ namespace RTSHelper {
 
         private void BtnMovePriority_Click(object sender, RoutedEventArgs e) {
 
-            var información = (ValueTuple<int, System.Windows.Controls.Label>)((System.Windows.Controls.Button)e.Source).Tag;
+            var información = (ValueTuple<int, Controles.Label>)((Controles.Button)e.Source).Tag;
             var cantidadAMover = información.Item1;
             var label = información.Item2;
             var kv = (KeyValuePair<NameType, int>)label.Tag;
@@ -342,6 +539,7 @@ namespace RTSHelper {
 
         private void Window_Closed(object sender, EventArgs e) {
 
+            GuardarNombresPersonalizados(cerrando: true);
             VentanaPrincipal.AplicarPreferencias();
             Settings.Guardar(Preferencias, RutaPreferencias);
             if (ActualizarDuraciónPasoAlSalir) VentanaPrincipal.ActualizarDuraciónPaso(); // Se aplica solo al salir para no reiniciar el timer cada vez que se haga un cambio en los controles.
@@ -431,13 +629,17 @@ namespace RTSHelper {
 
             if (!Activado) return;
             if (Directory.Exists(TxtBuildOrderPath.Text)) {
+
                 Preferencias.BuildOrderDirectory = TxtBuildOrderPath.Text;
                 VentanaPrincipal.LeerBuildOrders();
                 VentanaPrincipal.CargarBuildOrder();
+
             } else if (string.IsNullOrEmpty(TxtBuildOrderPath.Text)) { 
+
                 Preferencias.BuildOrderDirectory = null;
                 VentanaPrincipal.LeerBuildOrders();
                 VentanaPrincipal.CargarBuildOrder();
+
             } 
 
         } // TxtBuildOrderPath_TextChanged>
@@ -686,6 +888,42 @@ namespace RTSHelper {
             }
 
         } // TxtSubscriptAndSuperscriptImagesSize_TextChanged>
+
+
+        private void ChkRandomImageForMultipleImages_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.RandomImageForMultipleImages = ChkRandomImageForMultipleImages.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkRandomImageForMultipleImages_Checked>
+
+
+        private void ChkCapitalizeNames_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.CapitalizeNames = ChkCapitalizeNames.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkCapitalizeNames_Checked>
+
+
+        private void ChkShowStepProgress_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.ShowStepProgress = ChkShowStepProgress.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkShowStepProgress_Checked>
+
+
+        private void ChkShowTime_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.ShowTime = ChkShowTime.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkShowTime_Checked>
 
 
     } // SettingsWindow>

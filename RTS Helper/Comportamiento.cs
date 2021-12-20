@@ -105,36 +105,44 @@ namespace RTSHelper {
                         switch (comportamientoId) {
                             case "s":
 
-                                Sonido = valor;
-                                if (Sonido == "default") Sonido = Preferencias.StepStartSound;
-                                if (Sonido != "none" && !File.Exists(Path.Combine(DirectorioSonidosCortos, Sonido))) {
-                                    MostrarError($"{Sonido} sound file doesn't exists in {DirectorioSonidosCortos}.");
-                                    Sonido = null;
+                                if (Preferencias.OverrideStepStartSound) {
+                                    Sonido = valor;
+                                    if (Sonido == "default") Sonido = Preferencias.StepStartSound;
+                                    if (Sonido != "none" && !File.Exists(Path.Combine(DirectorioSonidosCortos, Sonido))) {
+                                        MostrarError($"{Sonido} sound file doesn't exists in {DirectorioSonidosCortos}.");
+                                        Sonido = null;
+                                    }
                                 }
                                 break;
 
                             case "es":
 
-                                Presonido = valor;
-                                if (Presonido == "default") Presonido = Preferencias.StepEndSound;
-                                if (Presonido != "none" && !File.Exists(Path.Combine(DirectorioSonidosLargos, Presonido))) {
-                                    MostrarError($"{Presonido} sound file doesn't exists in {DirectorioSonidosLargos}.");
-                                    Presonido = null;
+                                if (Preferencias.OverrideStepEndSound) {
+                                    Presonido = valor;
+                                    if (Presonido == "default") Presonido = Preferencias.StepEndSound;
+                                    if (Presonido != "none" && !File.Exists(Path.Combine(DirectorioSonidosLargos, Presonido))) {
+                                        MostrarError($"{Presonido} sound file doesn't exists in {DirectorioSonidosLargos}.");
+                                        Presonido = null;
+                                    }
                                 }
                                 break;
 
                             case "fc":
 
                                 if (valor == "none") {
-                                    Flash = false;
+                                    if (Preferencias.OverrideFlashOnStepChange) Flash = false;
                                 } else {
 
-                                    Flash = true;
-                                    ColorFlash = valor;
-                                    var mediaColorFlash = ObtenerMediaColor(ColorFlash);
-                                    if (mediaColorFlash == null) {
-                                        MessageBox.Show($"The value {valor} for fc is invalid.");
-                                        Flash = false;
+                                    if (Preferencias.OverrideFlashOnStepChange) Flash = true;
+                                    if (Preferencias.OverrideFlashingColor) {
+
+                                        ColorFlash = valor;
+                                        var mediaColorFlash = ObtenerMediaColor(ColorFlash);
+                                        if (mediaColorFlash == null) {
+                                            MessageBox.Show($"The value {valor} for fc is invalid.");
+                                            if (Preferencias.OverrideFlashOnStepChange) Flash = false;
+                                        }
+
                                     }
 
                                 }
@@ -142,12 +150,16 @@ namespace RTSHelper {
 
                             case "sns":
 
-                                if (valor == "yes" || valor == "true") {
-                                    MostrarSiguientePaso = true;
-                                } else if (valor == "no" || valor == "false") {
-                                    MostrarSiguientePaso = false;
-                                } else {
-                                    MessageBox.Show($"The value {valor} for sns is invalid.");
+                                if (Preferencias.OverrideShowNextStep) {
+
+                                    if (valor == "yes" || valor == "true") {
+                                        MostrarSiguientePaso = true;
+                                    } else if (valor == "no" || valor == "false") {
+                                        MostrarSiguientePaso = false;
+                                    } else {
+                                        MessageBox.Show($"The value {valor} for sns is invalid.");
+                                    }
+
                                 }
                                 break;
 
@@ -174,15 +186,19 @@ namespace RTSHelper {
                         switch (comportamientoId) {
                             case "t":
 
-                                int número;
-                                if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número)) {
-                                    MostrarError("t value should be an integer.");
-                                } else {
+                                if (Preferencias.OverrideStepDuration) {
 
-                                    if (número > 0 && número <= 86400) {
-                                        Duración = número;
+                                    int número;
+                                    if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número)) {
+                                        MostrarError("t value should be an integer.");
                                     } else {
-                                        MostrarError("t value should be between 1 and 86400.");
+
+                                        if (número > 0 && número <= 86400) {
+                                            Duración = número;
+                                        } else {
+                                            MostrarError("t value should be between 1 and 86400.");
+                                        }
+
                                     }
 
                                 }
@@ -190,24 +206,32 @@ namespace RTSHelper {
 
                             case "fco":
 
-                                OpacidadFlash = double.Parse(ObtenerTextoNúmeroLocal(valor));
-                                if (OpacidadFlash > 1 || OpacidadFlash < 0) {
-                                    OpacidadFlash = null;
-                                    MostrarError("fo value should be between 0 and 1.");
+                                if (Preferencias.OverrideFlashingOpacity) {
+
+                                    OpacidadFlash = double.Parse(ObtenerTextoNúmeroLocal(valor));
+                                    if (OpacidadFlash > 1 || OpacidadFlash < 0) {
+                                        OpacidadFlash = null;
+                                        MostrarError("fo value should be between 0 and 1.");
+                                    }
+
                                 }
                                 break;
 
                             case "sv":
 
-                                int número2;
-                                if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número2)) {
-                                    MostrarError("sv value should be an integer.");
-                                } else {
+                                if (Preferencias.OverrideStepStartSoundVolume) {
 
-                                    if (número2 >= 0 && número2 <= 100) {
-                                        VolumenSonido = número2;
+                                    int número2;
+                                    if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número2)) {
+                                        MostrarError("sv value should be an integer.");
                                     } else {
-                                        MostrarError("sv value should be between 0 and 100.");
+
+                                        if (número2 >= 0 && número2 <= 100) {
+                                            VolumenSonido = número2;
+                                        } else {
+                                            MostrarError("sv value should be between 0 and 100.");
+                                        }
+
                                     }
 
                                 }
@@ -215,15 +239,19 @@ namespace RTSHelper {
 
                             case "esv":
 
-                                int número3;
-                                if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número3)) {
-                                    MostrarError("esv value should be an integer.");
-                                } else {
+                                if (Preferencias.OverrideStepEndSoundVolume) {
 
-                                    if (número3 >= 0 && número3 <= 100) {
-                                        VolumenPresonido = número3;
+                                    int número3;
+                                    if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número3)) {
+                                        MostrarError("esv value should be an integer.");
                                     } else {
-                                        MostrarError("esv value should be between 0 and 100.");
+
+                                        if (número3 >= 0 && número3 <= 100) {
+                                            VolumenPresonido = número3;
+                                        } else {
+                                            MostrarError("esv value should be between 0 and 100.");
+                                        }
+
                                     }
 
                                 }

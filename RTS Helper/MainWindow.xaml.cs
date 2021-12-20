@@ -119,6 +119,7 @@ namespace RTSHelper {
 
             if (Estado == EEstado.Stoped || Estado == EEstado.Paused) {
                 LblTiempoEnJuego.Content = "0:00"; // Para evitar un pequeño retraso en la actualización.
+                CpgProgresoPaso.Value = 0;
                 BtnStart.Content = "❚❚";
                 BtnStart.ToolTip = "Pause";
                 BtnRestart.ToolTip = "Restart";
@@ -186,6 +187,7 @@ namespace RTSHelper {
                 case EEstado.Running: // Restart.
 
                     LblTiempoEnJuego.Content = "0:00"; // Para evitar un pequeño retraso en la actualización.
+                    CpgProgresoPaso.Value = 0;
                     OrdenDeEjecución.NúmeroPaso = 0;
                     ReiniciarPasoActual();
                     if (Preferencias.MuteOnComplete && SilenciadoAlCompletar) {
@@ -200,6 +202,7 @@ namespace RTSHelper {
                 case EEstado.Paused: // Stop.
 
                     LblTiempoEnJuego.Content = "0:00";
+                    CpgProgresoPaso.Value = 0;
                     OrdenDeEjecución.NúmeroPaso = 0;
                     ActualizarPaso(stop: true);
                     CmbVelocidadEjecución.IsEnabled = true; // Cuando está parado completamente si se puede cambiar la velocidad de ejecución.
@@ -337,10 +340,10 @@ namespace RTSHelper {
 
             if (Estado == EEstado.Paused) {
 
-                if (LblTiempoEnJuego.Visibility == Visibility.Visible) {
-                    LblTiempoEnJuego.Visibility = Visibility.Hidden;
+                if (SpnIndicadoresDeProgreso.Visibility == Visibility.Visible) {
+                    SpnIndicadoresDeProgreso.Visibility = Visibility.Hidden;
                 } else {
-                    LblTiempoEnJuego.Visibility = Visibility.Visible;
+                    SpnIndicadoresDeProgreso.Visibility = Visibility.Visible;
                 }
 
             }
@@ -487,13 +490,16 @@ namespace RTSHelper {
                 if (MedidorTimer.IsRunning) {
 
                     var velocidadJuegoEfectiva = ObtenerVelocidadJuegoEfectiva(Preferencias.GameSpeed);
-                    var segundosJuego = Paso.ObtenerDuraciónPasosAnteriores(OrdenDeEjecución.Pasos, OrdenDeEjecución.NúmeroPaso)
-                        + (ObtenerTiempoPasoActual().TotalMilliseconds + DuraciónPasoParcialAnterior) * velocidadJuegoEfectiva / 1000; // Step duration es en segundos de juego, en cambio el temporizador es en segundos reales, por eso solo se ajusta este último valor a los segundos en el juego que son los que finalmente se muestran.
+                    var segundosPasosAnteriores = Paso.ObtenerDuraciónPasosAnteriores(OrdenDeEjecución.Pasos, OrdenDeEjecución.NúmeroPaso);
+                    var segundosPasoActual = (ObtenerTiempoPasoActual().TotalMilliseconds + DuraciónPasoParcialAnterior) * velocidadJuegoEfectiva / 1000;
+                    var segundosJuego = segundosPasosAnteriores + segundosPasoActual; // Step duration es en segundos de juego, en cambio el temporizador es en segundos reales, por eso solo se ajusta este último valor a los segundos en el juego que son los que finalmente se muestran.
                     var segundos = segundosJuego % 60;
                     if (segundos < ÚltimosSegundosJuego) { // En algunas ocasiones en el límite del entre dos pasos el MedidorTimer se adelanta al Tick del Timer y por lo tanto sucede que por ejemplo tenga 60.04 segundos (dando 0.04 en el nuevo paso) mientras que el Timer aún no ha hecho el evento Tick y por lo tanto aún no se ha aumentado el paso. Esto produce error en la presentación porque pasa de 29 a 15 y después a 31 rápidamente. Para evitarlo sin complejizar mucho el código simplemente no se actualizará la UI en estos casos.
                         //var msmedidortimer = MedidorTimer.Elapsed.TotalSeconds;
                         //var mstimer = Timer.Interval.TotalSeconds;
                     } else {
+                        CpgProgresoPaso.Value 
+                            = (segundosPasoActual / (ObtenerDuraciónPaso(OrdenDeEjecución.NúmeroPaso) / Preferencias.ExecutionSpeed)) * 100;
                         LblTiempoEnJuego.Content = Math.Floor(segundosJuego / 60).ToString() + ":" + (segundos > 59 ? 59 : Math.Round(segundos)).ToString("00");
                     }
                     ÚltimosSegundosJuego = segundos;
@@ -602,6 +608,11 @@ namespace RTSHelper {
             Application.Current.Resources["BrushFlashingColor"] = (SolidColorBrush)new BrushConverter().ConvertFrom(ObtenerColorFlash(-1)); // Solo se establece para que sea efectivo en la ventana de preferencias.
             Application.Current.Resources["BrushImageBackgroundColor"] 
                 = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.ImageBackgroundColor);
+            Application.Current.Resources["GrosorBarraProgresoCircularDelPaso"] = Preferencias.ThicknessCircularProgressBar;
+            Application.Current.Resources["MargenBarraProgresoCircularDelPaso"] = new Thickness(0, 0, Preferencias.RightMarginCircularProgressBar, 0);
+            Application.Current.Resources["VisibilidadProgresoPaso"] = Preferencias.ShowStepProgress ? Visibility.Visible : Visibility.Collapsed;
+            Application.Current.Resources["VisibilidadTiempoEnJuego"] = Preferencias.ShowTime ? Visibility.Visible : Visibility.Collapsed;
+
             AplicarPreferenciasMuted(iniciando);
 
             this.Width = Preferencias.Width; // Se deben establecer manualmente porque no funciona el DynamicResource.
@@ -787,10 +798,10 @@ namespace RTSHelper {
 
             var formatoPaso = new Formato($"{Preferencias.CurrentStepFontColor} {(Preferencias.CurrentStepFontBold ? "b" : "")} " +
                 $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null) { TamañoBaseFuente = Preferencias.CurrentStepFontSize,
-                ImageSize = Preferencias.ImageSize };
+                TamañoImagen = Preferencias.ImageSize };
             var formatoSiguientePaso = new Formato($"{Preferencias.NextStepFontColor} {(Preferencias.NextStepFontBold ? "b" : "")} " +
                 $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null) { TamañoBaseFuente = Preferencias.NextStepFontSize,
-                ImageSize = Preferencias.ImageSize
+                TamañoImagen = Preferencias.ImageSize
             };
     
             OrdenDeEjecución.MostrarPaso(númeroPaso, formatoPaso, SpnPaso, mostrarSiempreÚltimoPaso: true, 
@@ -841,7 +852,7 @@ namespace RTSHelper {
 
         private void SuspenderBlinkingTiempoJuego() {
 
-            LblTiempoEnJuego.Visibility = Visibility.Visible;
+            SpnIndicadoresDeProgreso.Visibility = Visibility.Visible;
             TimerBlinkerGameTime.Stop();
 
         } // SuspenderBlinkingTiempoJuego>

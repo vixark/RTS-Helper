@@ -135,7 +135,7 @@ namespace RTSHelper {
                             var formato = Formato.ObtenerFormatoEfectivo(segmento.Formato, formatoPredeterminado);
                             if (formato.Negrita == null || formato.Cursiva == null || formato.NombreFuente == null || formato.Subrayado == null
                                 || formato.TamañoFuenteEfectiva == null || formato.Color == null || formato.ColorHexadecimal == null ||
-                                formato.ImageSize == null || formato.ObtenerTamañoImagenEfectiva((double)formato.ImageSize) == null) {
+                                formato.TamañoImagen == null || formato.ObtenerTamañoImagenEfectiva((double)formato.TamañoImagen) == null) {
                                 errores += "To Developer: Unespected null value in formato in MostrarPaso()." + Environment.NewLine;
                                 continue;
                             }
@@ -160,7 +160,7 @@ namespace RTSHelper {
 
                                 } else {
                                     segmentoEfectivo = ObtenerSegmentoEfectivo(entidad);
-                                    margenEnTexto = segmentoEfectivo.Tipo != TipoSegmento.Imagen;  // Cuando se usa el marcado con corchetes cuadrados por ejemplo, [attack][town center] se espera que las entidades no sean adjuntas si están en texto, es decir, se espera que no se muestre ATTKTC, si no ATT TC. Por esto se debe agregar este margen adicional cuando la entidad no se vaya a mostrar como imagen.
+                                    margenEnTexto = segmentoEfectivo.Tipo != TipoSegmento.Imagen; // Cuando se usa el marcado con corchetes cuadrados por ejemplo, [attack][town center] se espera que las entidades no sean adjuntas si están en texto, es decir, se espera que no se muestre ATTKTC, si no ATT TC. Por esto se debe agregar este margen adicional cuando la entidad no se vaya a mostrar como imagen.
                                 }
                                     
                             } else {
@@ -194,7 +194,7 @@ namespace RTSHelper {
 
                             } else if (segmentoEfectivo.Tipo == TipoSegmento.Imagen) {
 
-                                var tamaño = (double)formato.ObtenerTamañoImagenEfectiva((double)formato.ImageSize)!;
+                                var tamaño = (double)formato.ObtenerTamañoImagenEfectiva((double)formato.TamañoImagen)!;
                                 altoSegmentoImagen = tamaño;
                                 var margen = tamaño * (Preferencias.EntityHorizontalMargin / 200); // Se divide por 200 porque el margen se aplica a ambos lados.
                                 var margenDerecha = margen;

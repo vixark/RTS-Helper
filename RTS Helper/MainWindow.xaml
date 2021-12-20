@@ -193,10 +193,21 @@
 
             <StackPanel x:Name="SpnInferior" Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
 
-                <Label x:Name="LblTiempoEnJuego" ToolTip="Game Time" Foreground="{DynamicResource BrushFuente}" 
-                       FontSize="{DynamicResource FuenteGrande}">0:00</Label>
-                <!--Siempre inicia en ceros para tener algún contenido y no tener movimientos extraños en la interface cuando se le da start.-->
+                <StackPanel Orientation="Horizontal" x:Name="SpnIndicadoresDeProgreso">
 
+                    <local:CircularProgress x:Name="CpgProgresoPaso" Height="{DynamicResource TamañoBotones}" 
+                                            Width="{DynamicResource TamañoBotones}" Margin="{DynamicResource MargenBarraProgresoCircularDelPaso}" 
+                                            Value="0" HorizontalAlignment="Center" ToolTip="Step Progress"
+                                            Visibility="{DynamicResource VisibilidadProgresoPaso}"
+                                            StrokeThickness="{DynamicResource GrosorBarraProgresoCircularDelPaso}" />
+
+                    <Label x:Name="LblTiempoEnJuego" ToolTip="Game Time" Foreground="{DynamicResource BrushFuente}" 
+                           Visibility="{DynamicResource VisibilidadTiempoEnJuego}"
+                           FontSize="{DynamicResource FuenteGrande}" Margin="{DynamicResource MargenBarraProgresoCircularDelPaso}">0:00</Label>
+                    <!--Siempre inicia en ceros para tener algún contenido y no tener movimientos extraños en la interface cuando se le da start.-->
+
+                </StackPanel>
+                
                 <ComboBox x:Name="CmbVelocidadEjecución" ToolTip="Execution Speed" SelectionChanged="CmbVelocidadEjecución_SelectionChanged" SelectedIndex="0" 
                       Style="{StaticResource ComboBoxColor}" Margin="{DynamicResource MargenBotones}" Foreground="{DynamicResource BrushFuente}" 
                       Width="{DynamicResource AnchoSelectorVelocidadEjecución}" FontSize="{DynamicResource FuenteNormal}" VerticalAlignment="Center">

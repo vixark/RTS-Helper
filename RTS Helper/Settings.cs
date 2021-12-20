@@ -18,6 +18,7 @@ namespace RTSHelper {
     public class Settings {
 
 
+
         #region Generales
 
         public string Game { get; set; } = AOE2Name; // Es una pseudopreferencia porque no se usa por si sola si no para establecer otros valores.
@@ -40,7 +41,12 @@ namespace RTSHelper {
 
         public double LineSpacing { get; set; } = 20;
 
+        public bool ShowStepProgress { get; set; } = true;
+
+        public bool ShowTime { get; set; } = false;
+
         #endregion Generales>
+
 
 
         #region Sonidos
@@ -62,6 +68,7 @@ namespace RTSHelper {
         public bool MuteOnComplete { get; set; } = true;
 
         #endregion Sonidos>
+
 
 
         #region Colores
@@ -87,6 +94,7 @@ namespace RTSHelper {
         #endregion Colores>
 
 
+
         #region Fuentes
 
         public string FontName { get; set; } = NombreFuentePredeterminada;
@@ -96,6 +104,7 @@ namespace RTSHelper {
         public bool NextStepFontBold { get; set; } = false;
 
         #endregion Fuentes>
+
 
 
         #region Tamaños
@@ -137,10 +146,15 @@ namespace RTSHelper {
 
         public double ExecutionSpeedSelectorWidth { get; set; }
 
+        public double ThicknessCircularProgressBar { get; set; }
+
+        public double RightMarginCircularProgressBar { get; set; }
+
         #endregion Tamaños>
 
 
-        #region Imágenes
+
+        #region Imágenes y Entidades
 
         public double ImageSize { get; set; } = ImageSizePredeterminado;
 
@@ -154,7 +168,52 @@ namespace RTSHelper {
 
         public double SubscriptAndSuperscriptImagesSize { get; set; } = SubscriptAndSuperscriptImagesSizePredeterminado;
 
-        #endregion Imágenes>
+        public bool RandomImageForMultipleImages { get; set; } = true; // Si es falso, se usa la primera.
+
+        public bool CapitalizeNames { get; set; } = true;
+
+        #endregion Imágenes y Entidades>
+
+
+
+        #region Anulación de Opciones
+
+        public bool OverrideFontSize { get; set; } = true;
+
+        public bool OverrideFontName { get; set; } = true; 
+
+        public bool OverrideFontColor { get; set; } = true; // Aunque el color no debería tenerse que cambiar porque se pueden dar situaciones de usuarios que usen otros fondos de color y sea imposible de leer, para que esto suceda debe darse que el usuario use un fondo de color especial y además cargue una build order con un color no compatible. Se considera que esto es un caso poco frecuente que se soluciona desactivando manualmente esta opción, entonces se permite el cambio.
+
+        public bool OverrideFontBold { get; set; } = true;
+
+        public bool OverrideFontItalics { get; set; } = true;
+
+        public bool OverrideFontUnderline { get; set; } = true;
+
+        public bool OverrideFontPosition { get; set; } = true;
+
+        public bool OverrideImageSize { get; set; } = true;
+
+        public bool OverrideStepEndSound { get; set; } = true;
+
+        public bool OverrideStepStartSound { get; set; } = true;
+
+        public bool OverrideStepEndSoundVolume { get; set; } = false; // El volumen es una preferencia muy personal y adaptada al equipo de cada usuario, no debería tenerse que modificar desde la build order.
+
+        public bool OverrideStepStartSoundVolume { get; set; } = false; // El volumen es una preferencia muy personal y adaptada al equipo de cada usuario, no debería tenerse que modificar desde la build order.
+
+        public bool OverrideFlashOnStepChange { get; set; } = true;
+
+        public bool OverrideFlashingColor { get; set; } = true;
+
+        public bool OverrideFlashingOpacity { get; set; } = true;
+
+        public bool OverrideShowNextStep { get; set; } = true;
+
+        public bool OverrideStepDuration { get; set; } = true;
+
+        #endregion Anulación de Opciones>
+
 
 
         #region Nombres
@@ -243,7 +302,7 @@ namespace RTSHelper {
 
             ShowNextStep = true;
             GameSpeed = 1.7;
-            StepDuration = 50; // El tiempo de creación de 2 aldeanos.
+            StepDuration = 25; // El tiempo de creación de 2 aldeanos.
 
             switch (resolución) {
                 case "1920x1080":
@@ -266,6 +325,8 @@ namespace RTSHelper {
                     RightMarginNextStep = 67;
                     BuildOrderSelectorWidth = 145;
                     ExecutionSpeedSelectorWidth = 55;
+                    ThicknessCircularProgressBar = 6;
+                    RightMarginCircularProgressBar = 6;
                     break;
 
                 case "2560x1440":
@@ -288,6 +349,8 @@ namespace RTSHelper {
                     RightMarginNextStep = 90;
                     BuildOrderSelectorWidth = 200;
                     ExecutionSpeedSelectorWidth = 75;
+                    ThicknessCircularProgressBar = 8;
+                    RightMarginCircularProgressBar = 7;
                     break;
 
                 case "1366x768":
@@ -310,6 +373,8 @@ namespace RTSHelper {
                     RightMarginNextStep = 45;
                     BuildOrderSelectorWidth = 110;
                     ExecutionSpeedSelectorWidth = 40;
+                    ThicknessCircularProgressBar = 4;
+                    RightMarginCircularProgressBar = 4;
                     break;
 
                 default:

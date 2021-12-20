@@ -71,7 +71,7 @@ namespace RTSHelper {
             [Display(Name = "Complete Name")] Complete, [Display(Name = "Common Name")] Common, Abbreviation, Acronym,
             [Display(Name = "Plural Common Name")] CommonPlural, [Display(Name = "Plural Abbreviation")] AbbreviationPlural, 
             [Display(Name = "Plural Acronym")] AcronymPlural, // Todos los anteriores son normalmente en inglés.
-            Custom, Image, BR, DE, ES, FR, HI, IT, JP, KO, MS, MX, PL, RU, TR, TW, VI, ZH // TW es equivalente Chino tradicional según las pruebas que he hecho. ZH es Chino Simplificado
+            [Display(Name = "Custom Name")] Custom, Image, BR, DE, ES, FR, HI, IT, JP, KO, MS, MX, PL, RU, TR, TW, VI, ZH // TW es equivalente Chino tradicional según las pruebas que he hecho. ZH es Chino Simplificado
         }
 
         public static Dictionary<string, string> Idiomas = new Dictionary<string, string> { { "BR", "Português (Brasil)" }, {"DE", "Deutsch" },
@@ -88,7 +88,7 @@ namespace RTSHelper {
 
         public enum TipoFuente { Sans, SansNegrita, Serif, SerifCuadrada, Caligráfica, Símbolos }
 
-        public static Dictionary<string, Nombre> Nombres = new Dictionary<string, Nombre>(); // Los nombres no repetidos. La utilidad de este diccionario es principalmente su uso para identificar nombres entre [] y reemplazarlo por la entidad correspondiente. La primera vez que aparezca un nombre sin importar en que idioma esté se agregará a este diccionario con ese idioma, los demás se ignoran. La clave son todos los nombres posibles.
+        public static Dictionary<string, Nombre> Nombres = new Dictionary<string, Nombre>(); // Los nombres no repetidos. La utilidad de este diccionario es principalmente para identificar nombres entre [] y reemplazarlo por la entidad correspondiente. La primera vez que aparezca un nombre sin importar en que idioma esté se agregará a este diccionario con ese idioma, los demás se ignoran. La clave son todos los nombres posibles.
 
         public static List<(string, Nombre)> TodosLosNombres = new List<(string, Nombre)>(); // Todos los nombres. Su uso es obtener el valor de cierta entidad en cierto tipo/idioma. La clave son todos los nombres posibles.
 
@@ -180,7 +180,7 @@ namespace RTSHelper {
 
         public static bool FlashOnStepChangePredeterminado = true;
 
-        public static string FlashingColorPredeterminado = Color.FromRgb(255, 255, 255).ToString();
+        public static string FlashingColorPredeterminado = "#498205";
 
         public static double FlashingOpacityPredeterminado = 1;
 
@@ -194,7 +194,7 @@ namespace RTSHelper {
 
         public static int StepEndSoundVolumePredeterminado = 20;
 
-        public static double StepDurationPredeterminado = 25; // 50 es la duración de la creación de 2 aldeanos en Age of Empires II, es un valor adeucado para generar instrucciones de a dos aldeanos. También se puede usar 25 que es el tiempo de creación de aldeanos.
+        public static double StepDurationPredeterminado = 25; // 50 es la duración de la creación de 2 aldeanos en Age of Empires II, es un valor adecuado para generar instrucciones de a dos aldeanos. También se puede usar 25 que es el tiempo de creación de 1 aldeano.
 
         public static double ImageSizePredeterminado = 138; // 138 permite tener 4 líneas de imágenes.
 
@@ -282,11 +282,16 @@ namespace RTSHelper {
             if (!File.Exists(Preferencias.TypesPath)) File.Copy(Preferencias.TypesDefaultPath, Preferencias.TypesPath);
             if (File.Exists(Preferencias.EnglishNamesPath) && File.Exists(Preferencias.NamesPath)) File.Delete(Preferencias.EnglishNamesPath); // El archivo EnglishNamesPath es innecesario, solo es temporal para la creación de NamesPath.
             CrearEntidades();
-            CrearNombres();
-            AgregarNombresAEntidades();
+            CrearNombresYAgregarAEntidades();
             CrearImágenes();
 
         } // CrearEntidadesYNombres>
+
+
+        public static void CrearNombresYAgregarAEntidades() {
+            CrearNombres();
+            AgregarNombresAEntidades();
+        } // CrearNombresYAgregarAEntidades>
 
 
         public static void CrearImágenes() {
@@ -327,6 +332,8 @@ namespace RTSHelper {
 
             foreach (var entidad in Entidades) {
 
+                entidad.Value.Nombres.Clear(); // Siempre se limpian para permitir la actualización desde settings después de cambiar los nombres personalizados. En la primera carga no tiene ningún efecto.
+
                 var nombres = TodosLosNombres.Where(tupla => tupla.Item2.ID == entidad.Key).ToList();
                 foreach (var kv in nombres) {
                     if (!entidad.Value.Nombres.ContainsKey(kv.Item2.Tipo)) entidad.Value.Nombres.Add(kv.Item2.Tipo, kv.Item2.Valor); // Solo se agrega el primer nombre. El objetivo de estos nombres es mostrarlos cuando se elija ver la build order con ese tipo, por lo tanto cuando una entidad tenga un nombre que para el mismo tipo tiene varias opciones, por ejemplo la entidad Knight tiene opción en acrónimos de KT|KNT|KTS cuando se muestre la build order con acrónimos para Knight aparecerá KT en vez de KT|KNT|KTS.
@@ -362,7 +369,9 @@ namespace RTSHelper {
 
         public static void CrearNombres() {
 
-            Nombres = new Dictionary<string, Nombre>();
+            TodosLosNombres.Clear();
+            Nombres.Clear();
+
             var names = DeserializarNombres(Preferencias.NamesPath);
             var customNames = DeserializarNombres(Preferencias.CustomNamesPath);
 
@@ -1260,13 +1269,13 @@ namespace RTSHelper {
                 customNames[NameType.Custom].Add("Feudal Age", "FDL");
                 customNames[NameType.Custom].Add("Castle Age", "CST");
                 customNames[NameType.Custom].Add("Imperial Age", "IMP");
-                customNames[NameType.Custom].Add("Food", "F");
-                customNames[NameType.Custom].Add("Wood", "W");
-                customNames[NameType.Custom].Add("Stone", "S");
-                customNames[NameType.Custom].Add("Gold", "G");
+                customNames[NameType.Custom].Add("Food", "[Image]");
+                customNames[NameType.Custom].Add("Wood", "[Image]");
+                customNames[NameType.Custom].Add("Stone", "[Image]");
+                customNames[NameType.Custom].Add("Gold", "[Image]");
                 customNames[NameType.Custom].Add("Straggler Trees", "STR");
                 customNames[NameType.Custom].Add("Archer", "ARCH");
-                customNames[NameType.Custom].Add("Crossbowman", "XBOW");
+                customNames[NameType.Custom].Add("Crossbowman", "[Acronym]");
                 customNames[NameType.Custom].Add("Arbalester", "ARB");
                 customNames[NameType.Custom].Add("Skirmisher", "SKR");
                 customNames[NameType.Custom].Add("Elite Skirmisher", "ESKR");
@@ -2103,7 +2112,7 @@ namespace RTSHelper {
 
         public static string? ObtenerRutaImagen(Entidad entidad, out string imagen) {
 
-            imagen = entidad.ObtenerImagenEfectiva(aletatoria: true);
+            imagen = entidad.ObtenerImagenEfectiva(Preferencias.RandomImageForMultipleImages);
             if (Imágenes.ContainsKey(imagen)) {
                 return Imágenes[imagen];
             } else {
@@ -2122,12 +2131,28 @@ namespace RTSHelper {
 
             foreach (var prioridad in Preferencias.ObtenerDisplayPriorityOrdenadas()) {
 
-                if (prioridad.Key == NameType.Image) {
+                var tipoNombre = prioridad.Key;
+
+                if (tipoNombre == NameType.Custom && entidad.Nombres.ContainsKey(NameType.Custom) && entidad.Nombres[NameType.Custom].StartsWith("[") &&
+                    entidad.Nombres[NameType.Custom].Contains("]")) {
+
+                    var tipoNombreTexto = entidad.Nombres[NameType.Custom].TrimEnd('*');
+                    tipoNombreTexto = tipoNombreTexto[1..(tipoNombreTexto.IndexOf(']'))];
+                    Enum.TryParse(typeof(NameType), tipoNombreTexto, ignoreCase: true, out object? resultado);
+                    if (resultado != null) tipoNombre = (NameType)resultado;
+
+                }
+
+                if (tipoNombre == NameType.Image) {
                     var rutaImagen = ObtenerRutaImagen(entidad, out string imagen);
                     if (rutaImagen != null) return new Segmento(imagen, null, TipoSegmento.Imagen, null);
                 } else {
-                    if (entidad.Nombres.ContainsKey(prioridad.Key)) 
-                        return new Segmento(entidad.Nombres[prioridad.Key], null, TipoSegmento.Texto, null);
+
+                    if (entidad.Nombres.ContainsKey(tipoNombre)) {
+                        var textoSegmento = entidad.Nombres[tipoNombre];
+                        return new Segmento(Preferencias.CapitalizeNames ? textoSegmento.ToUpper() : textoSegmento , null, TipoSegmento.Texto, null);
+                    }
+                        
                 }
 
             }

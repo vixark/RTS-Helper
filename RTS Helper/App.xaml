@@ -15,7 +15,7 @@
             <Color x:Key="ColorFondo" R="0" G="0" B="0" A="255" />
             <SolidColorBrush x:Key="BrushPaso" Color="#FFF" />
             <SolidColorBrush x:Key="BrushPasoSiguiente" Color="#999" />
-            <SolidColorBrush x:Key="BrushFlashingColor" Color="#FFF" />
+            <SolidColorBrush x:Key="BrushFlashingColor" Color="#498205" />
             <SolidColorBrush x:Key="BrushImageBackgroundColor" Color="#000" />
             <System:Double x:Key="Opacidad">0.6</System:Double>
             <Visibility x:Key="VisibilidadPasoSiguiente">Visible</Visibility>
@@ -36,6 +36,11 @@
             <System:Double x:Key="AnchoSelectorBuildOrder">140</System:Double>
             <System:Double x:Key="AnchoSelectorVelocidadEjecución">75</System:Double>
             <System:String x:Key="AlertContentMoreHeightThanWindow">Content is longer than window height. Resize window or edit the build order.</System:String>
+            <System:Double x:Key="GrosorBarraProgresoCircularDelPaso">8</System:Double>
+            <Thickness x:Key="MargenBarraProgresoCircularDelPaso">0, 0, 0, 0</Thickness>
+
+            <Visibility x:Key="VisibilidadProgresoPaso">Visible</Visibility>
+            <Visibility x:Key="VisibilidadTiempoEnJuego">Collapsed</Visibility>
             
             <!-- Valores no en Preferencias !-->
             <SolidColorBrush x:Key="BrushFondoControles" Color="Transparent" />

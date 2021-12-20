@@ -21,7 +21,6 @@ namespace RTSHelper {
         #region Propiedades 
         // Al agregar una nueva se debe agregar en ObtenerFormatoEfectivo() y en CopiarPropiedadesEnNulas().
 
-
         public TamañosFuente TamañoFuente { get; set; } = TamañosFuente.Indeterminado;
 
         public string? NombreFuente { get; set; }
@@ -36,10 +35,9 @@ namespace RTSHelper {
 
         public PosiciónTexto Posición { get; set; } = PosiciónTexto.Indeterminado;
 
-        public double? TamañoBaseFuente { get; set; }
+        public double? TamañoBaseFuente { get; set; } // Esta propiedad no es personalizable desde los archivos de texto de build orders.
 
-        public double? ImageSize { get; set; }
-
+        public double? TamañoImagen { get; set; }
 
         #endregion Propiedades>
 
@@ -101,16 +99,16 @@ namespace RTSHelper {
 
                     switch (valor) {
                         case "b":
-                            Negrita = true;  
+                            if (Preferencias.OverrideFontBold) Negrita = true;  
                             break;
                         case "nb":
-                            Negrita = false;
+                            if (Preferencias.OverrideFontBold) Negrita = false;
                             break;
                         case "i":
-                            Cursiva = true;
+                            if (Preferencias.OverrideFontItalics) Cursiva = true;
                             break;
                         case "u":
-                            Subrayado = true;
+                            if (Preferencias.OverrideFontUnderline) Subrayado = true;
                             break;
                         default:
                             MostrarError($"To Developer: The value '{valor}' wasn't expected in Formato().");
@@ -121,24 +119,26 @@ namespace RTSHelper {
                 }
 
                 if (Tamaños.Contains(valor)) {
-                    TamañoFuente = (TamañosFuente)Enum.Parse(typeof(TamañosFuente), valor.ToUpperInvariant());
+                    if (Preferencias.OverrideFontSize) TamañoFuente = (TamañosFuente)Enum.Parse(typeof(TamañosFuente), valor.ToUpperInvariant());
                     valorIdentificado = true;
                 }    
 
                 if (Posiciones.Contains(valor)) {
 
-                    switch (valor) {
-                        case "sub":
-                            Posición = PosiciónTexto.Subíndice;
-                            break;
-                        case "sup":
-                            Posición = PosiciónTexto.Superíndice;
-                            break;
-                        case "normalpos":
-                            Posición = PosiciónTexto.Normal;
-                            break;
-                        default:
-                            break;
+                    if (Preferencias.OverrideFontPosition) {
+                        switch (valor) {
+                            case "sub":
+                                Posición = PosiciónTexto.Subíndice;
+                                break;
+                            case "sup":
+                                Posición = PosiciónTexto.Superíndice;
+                                break;
+                            case "normalpos":
+                                Posición = PosiciónTexto.Normal;
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     valorIdentificado = true;
 
@@ -146,14 +146,16 @@ namespace RTSHelper {
 
                 if (Colores.Contains(valor) || valor.StartsWith("#")) {
 
-                    Color = ObtenerMediaColor(valor);
-                    if (Color == null) MostrarError($"Color '{valor}' isn't valid.");
+                    if (Preferencias.OverrideFontColor) {
+                        Color = ObtenerMediaColor(valor);
+                        if (Color == null) MostrarError($"Color '{valor}' isn't valid.");
+                    }
                     valorIdentificado = true;
 
                 }
 
                 if (Fuentes.Keys.Contains(valor)) {
-                    NombreFuente = Fuentes[valor].Nombre;
+                    if (Preferencias.OverrideFontName) NombreFuente = Fuentes[valor].Nombre;
                     valorIdentificado = true;
                 }
 
@@ -161,8 +163,10 @@ namespace RTSHelper {
 
                     var coincidencias = Regex.Matches(valor, "is([0-9]+)");
                     if (coincidencias.Count == 1) {
-                        ImageSize = double.Parse(coincidencias[0].Groups[1].Value);
+
+                        if (Preferencias.OverrideImageSize) TamañoImagen = double.Parse(coincidencias[0].Groups[1].Value);
                         valorIdentificado = true;
+
                     } else {
                         MostrarError($"The format keyword '{valor}' isn't supported.");
                     }
@@ -201,7 +205,7 @@ namespace RTSHelper {
             destino.Color ??= origen.Color;
             if (destino.TamañoFuente == TamañosFuente.Indeterminado) destino.TamañoFuente = origen.TamañoFuente;
             if (destino.Posición == PosiciónTexto.Indeterminado) destino.Posición = origen.Posición;
-            destino.ImageSize ??= origen.ImageSize;
+            destino.TamañoImagen ??= origen.TamañoImagen;
             destino.TamañoBaseFuente ??= origen.TamañoBaseFuente;
 
         } // CopiarPropiedadesEnNulas>
@@ -219,7 +223,7 @@ namespace RTSHelper {
                 : (formatoHijo != null ? formatoHijo.TamañoFuente : TamañosFuente.M);
             formato.Posición = formatoHijo?.Posición == PosiciónTexto.Indeterminado ? formatoPadre.Posición 
                 : (formatoHijo != null ? formatoHijo.Posición : PosiciónTexto.Normal);
-            formato.ImageSize = (formatoHijo?.ImageSize ?? formatoPadre.ImageSize) ?? ImageSizePredeterminado;
+            formato.TamañoImagen = (formatoHijo?.TamañoImagen ?? formatoPadre.TamañoImagen) ?? ImageSizePredeterminado;
 
             if (formatoHijo?.TamañoBaseFuente != null && formatoPadre.TamañoBaseFuente != null
                 && formatoHijo.TamañoBaseFuente != formatoPadre.TamañoBaseFuente)
@@ -345,6 +349,7 @@ namespace RTSHelper {
 
 
         #endregion Funciones y Procedimientos>
+
 
 
     } // Formato>
