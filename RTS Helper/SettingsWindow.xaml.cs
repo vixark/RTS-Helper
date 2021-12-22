@@ -16,6 +16,7 @@ using System.IO;
 using static Vixark.General;
 using System.Linq;
 using Controles = System.Windows.Controls;
+using System.Reflection;
 
 
 
@@ -40,6 +41,8 @@ namespace RTSHelper {
 
             InitializeComponent();
             VentanaPrincipal = ventanaPrincipal;
+            var versión = Assembly.GetEntryAssembly()?.GetName().Version;
+            LblVersion.Content = $"{versión?.Major}.{versión?.Minor}{(versión?.Build == 0 ? "" : $".{versión?.Build.ToString()}")}";
 
             CargarValores(primerInicio);
             if (primerInicio) {
@@ -53,10 +56,10 @@ namespace RTSHelper {
                 LblFontColor.Visibility = Visibility.Collapsed;
                 LblOpacity.Visibility = Visibility.Collapsed;
                 SpnBuildOrderPath.Visibility = Visibility.Collapsed;
-                TbiBehavior.Visibility = Visibility.Collapsed;
+                TbiNotifications.Visibility = Visibility.Collapsed;
                 TbiImages.Visibility = Visibility.Collapsed;
                 TbiDisplayPriority.Visibility = Visibility.Collapsed;
-                TbiFormat.Visibility = Visibility.Collapsed;
+                TbiPersonalization.Visibility = Visibility.Collapsed;
                 TbiAbout.Visibility = Visibility.Collapsed;
                 TbiCustomNames.Visibility = Visibility.Collapsed;
                 TbiOverrides.Visibility = Visibility.Collapsed;
@@ -66,6 +69,8 @@ namespace RTSHelper {
                 LblStepDuration.Visibility = Visibility.Collapsed;
                 TxtStepDuration.Visibility = Visibility.Collapsed;
                 LblStepDurationSeconds.Visibility = Visibility.Collapsed;
+                LblShowProgress.Visibility = Visibility.Collapsed;
+                LblShowTime.Visibility = Visibility.Collapsed;
                 ChkShowStepProgress.Visibility = Visibility.Collapsed;
                 ChkShowTime.Visibility = Visibility.Collapsed;
 
@@ -80,7 +85,7 @@ namespace RTSHelper {
             CmbGame.Text = Preferencias.Game;
             CmbGameSpeed.Text = Preferencias.ObtenerGameSpeedText(Preferencias.Game);
             TxtOpacity.Text = Preferencias.Opacity.ToString();
-            TxtBuildOrderPath.Text = Preferencias.BuildOrderDirectory;    
+            TxtBuildOrderPath.Text = Preferencias.BuildOrderCustomDirectory;    
             TxtStepFontSize.Text = Preferencias.CurrentStepFontSize.ToString();
             TxtNextStepFontSize.Text = Preferencias.NextStepFontSize.ToString();
             ChkShowNextStep.IsChecked = Preferencias.ShowNextStep;
@@ -529,10 +534,6 @@ namespace RTSHelper {
         } // BtnNextStepFontColor_Click>
 
 
-        private void LnkDavid_Click(object sender, RoutedEventArgs e) =>
-            Process.Start(new ProcessStartInfo(((Hyperlink)sender).NavigateUri.ToString()) { UseShellExecute = true });
-
-
         private void BtnSave_Click(object sender, RoutedEventArgs e) 
             => this.Close();
 
@@ -555,6 +556,8 @@ namespace RTSHelper {
             TxtStepDuration.Text = Preferencias.StepDuration.ToString(); // Es el único valor que se actualiza en la interface de preferencias después de haber cambiado el juego. No es lo más óptimo, pero de todas maneras lo ideal es que cada archivo de txt de build orders traiga su propio StepDuration.
             VentanaPrincipal.AplicarPreferencias();
             CrearEntidadesYNombres();
+            VentanaPrincipal.LeerBuildOrders();
+            VentanaPrincipal.CargarBuildOrder();
             ActualizarDuraciónPasoAlSalir = true;
 
         } // CmbGame_SelectionChanged>
@@ -630,13 +633,13 @@ namespace RTSHelper {
             if (!Activado) return;
             if (Directory.Exists(TxtBuildOrderPath.Text)) {
 
-                Preferencias.BuildOrderDirectory = TxtBuildOrderPath.Text;
+                Preferencias.BuildOrderCustomDirectory = TxtBuildOrderPath.Text;
                 VentanaPrincipal.LeerBuildOrders();
                 VentanaPrincipal.CargarBuildOrder();
 
             } else if (string.IsNullOrEmpty(TxtBuildOrderPath.Text)) { 
 
-                Preferencias.BuildOrderDirectory = null;
+                Preferencias.BuildOrderCustomDirectory = null;
                 VentanaPrincipal.LeerBuildOrders();
                 VentanaPrincipal.CargarBuildOrder();
 
@@ -774,14 +777,14 @@ namespace RTSHelper {
 
             var folderDialog = new FolderBrowserDialog();
             folderDialog.SelectedPath = TxtBuildOrderPath.Text;
-            if (string.IsNullOrEmpty(folderDialog.SelectedPath)) folderDialog.SelectedPath = Global.DirectorioBuildOrdersPredeterminado;
+            if (string.IsNullOrEmpty(folderDialog.SelectedPath)) folderDialog.SelectedPath = Preferencias.BuildOrdersDirectory;
             var respuesta = folderDialog.ShowDialog();
             if (respuesta != System.Windows.Forms.DialogResult.Cancel) TxtBuildOrderPath.Text = folderDialog.SelectedPath;
 
         } // BtnBuildOrderPath_Click>
 
 
-        private void LnkDonate_Click(object sender, RoutedEventArgs e) 
+        private void Lnk_Click(object sender, RoutedEventArgs e) 
             => Process.Start(new ProcessStartInfo(((Hyperlink)sender).NavigateUri.ToString()) { UseShellExecute = true });
 
 

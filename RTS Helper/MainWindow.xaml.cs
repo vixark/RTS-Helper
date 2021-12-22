@@ -97,9 +97,9 @@ namespace RTSHelper {
             TimerBlinkerGameTime.Tick += new EventHandler(TimerBlinkerGameTime_Tick);
 
             LeerPreferencias(); 
-            OrdenDeEjecución.CargarPasos(DirectorioBuildOrdersEfectivo, Preferencias.CurrentBuildOrder);
+            OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder);
             LeerBuildOrders();
-            CargarBuildOrder();
+            CargarBuildOrder(iniciando: true);
             CargarVelocidadEjecución();
             CrearEntidadesYNombres();
             ActualizarContenidoPaso(númeroPaso: null);
@@ -124,8 +124,6 @@ namespace RTSHelper {
                 BtnStart.ToolTip = "Pause";
                 BtnRestart.ToolTip = "Restart";
                 BtnRestart.Content = "⟳";
-                BtnNext.IsEnabled = true;
-                BtnPrevious.IsEnabled = true;
                 TxtPaso.IsEnabled = true;
                 CmbVelocidadEjecución.IsEnabled = true;
             }
@@ -133,32 +131,33 @@ namespace RTSHelper {
             switch (Estado) {
                 case EEstado.Stoped: // Start.
 
+                    Estado = EEstado.Running;
                     OrdenDeEjecución.NúmeroPaso = 0;
                     ReiniciarPasoActual();
-                    Estado = EEstado.Running;
                     SuspenderBlinkingTiempoJuego();
+                    BtnNext.IsEnabled = true;
+                    BtnPrevious.IsEnabled = true;
                     break;
 
                 case EEstado.Running: // Pause.
 
+                    Estado = EEstado.Paused;
                     BtnStart.Content = "▷";
                     BtnStart.ToolTip = "Restart";
                     BtnRestart.ToolTip = "Stop";
                     BtnRestart.Content = "■";
-                    BtnNext.IsEnabled = false;
-                    BtnPrevious.IsEnabled = false;
                     TxtPaso.IsEnabled = false;
                     CmbVelocidadEjecución.IsEnabled = false; // Para cambiar la velocidad de ejeución se requiere el MedidorTimer ejecutando.            
                     MedidorTimer.Stop(); // Lo suspende, pero almacena la duración actual.
                     Timer?.Stop(); // Lo suspende completamente.
                     TimerFlash.Stop(); // Lo suspende completamente.
-                    TimerStepEndSound?.Stop(); // Lo suspende completamente.
-                    Estado = EEstado.Paused;
+                    TimerStepEndSound?.Stop(); // Lo suspende completamente.     
                     TimerBlinkerGameTime.Start();
                     break;
 
                 case EEstado.Paused: // Restart.
 
+                    Estado = EEstado.Running;
                     if (Timer != null) {
 
                         MedidorTimer.Start();
@@ -167,8 +166,7 @@ namespace RTSHelper {
                         ActualizarIntervaloTimer(new TimeSpan(0, 0, 0, 0, (int)Math.Round(Timer.Interval.TotalMilliseconds - MedidorTimer.ElapsedMilliseconds, 0)));
                         ActualizarUI();
 
-                    }
-                    Estado = EEstado.Running;
+                    }  
                     SuspenderBlinkingTiempoJuego();
                     break;
 
@@ -186,6 +184,7 @@ namespace RTSHelper {
                     break;
                 case EEstado.Running: // Restart.
 
+                    Estado = EEstado.Running;
                     LblTiempoEnJuego.Content = "0:00"; // Para evitar un pequeño retraso en la actualización.
                     CpgProgresoPaso.Value = 0;
                     OrdenDeEjecución.NúmeroPaso = 0;
@@ -194,24 +193,26 @@ namespace RTSHelper {
                         Preferencias.Muted = false;
                         SilenciadoAlCompletar = false;
                         AplicarPreferenciasMuted(iniciando: false);
-                    }
-                    Estado = EEstado.Running;
+                    }    
                     SuspenderBlinkingTiempoJuego();
                     break;
 
                 case EEstado.Paused: // Stop.
 
+                    Estado = EEstado.Stoped;
                     LblTiempoEnJuego.Content = "0:00";
                     CpgProgresoPaso.Value = 0;
                     OrdenDeEjecución.NúmeroPaso = 0;
                     ActualizarPaso(stop: true);
+                    TxtPaso.Text = "";
                     CmbVelocidadEjecución.IsEnabled = true; // Cuando está parado completamente si se puede cambiar la velocidad de ejecución.
                     Timer?.Stop();
                     TimerFlash.Stop();
                     MedidorTimer.Reset();
                     TimerStepEndSound?.Stop();
-                    ActualizarUI();
-                    Estado = EEstado.Stoped;
+                    ActualizarUI();  
+                    BtnNext.IsEnabled = false;
+                    BtnPrevious.IsEnabled = false;
                     SuspenderBlinkingTiempoJuego();
                     break;
 
@@ -255,8 +256,8 @@ namespace RTSHelper {
             }
             if (Timer?.Interval != nuevaDuraciónPaso) ActualizarIntervaloTimer(nuevaDuraciónPaso); // Necesario para soportar los comportamientos personalizados por paso.
 
-            if (Preferencias.MinimizeOnComplete && OrdenDeEjecución.EsÚltimoPaso) this.WindowState = WindowState.Minimized;
-            if (Preferencias.MuteOnComplete && OrdenDeEjecución.EsÚltimoPaso) { // Se hace después de reproducir el último sonido por consistencia.
+            if (Preferencias.MinimizeOnComplete && OrdenDeEjecución.EsPasoDespuésDeÚltimo) this.WindowState = WindowState.Minimized; // Se hace con EsPasoDespuésDeÚltimo porque ya se aumentó el valor del paso al siguiente.
+            if (Preferencias.MuteOnComplete && (OrdenDeEjecución.EsPasoDespuésDeÚltimo || OrdenDeEjecución.EsDespuésDeÚltimoPaso)) { // Se hace después de reproducir el último sonido por consistencia. Se incluye el condicional EsDespuésDeÚltimoPaso para los casos que el usuario se haya saltado los pasos hasta el final manualmente.
                 Preferencias.Muted = true;
                 SilenciadoAlCompletar = true;
                 AplicarPreferenciasMuted(iniciando: false);
@@ -280,7 +281,7 @@ namespace RTSHelper {
 
             OrdenDeEjecución.NúmeroPaso++;
             GuardarDuraciónPaso(OrdenDeEjecución.NúmeroPaso - 1);
-            ActualizarPaso();
+            ActualizarPaso(siguienteOAnterior: true);
             ActualizarUI();
 
         } // BtnNext_Click>
@@ -293,7 +294,7 @@ namespace RTSHelper {
                 OrdenDeEjecución.NúmeroPaso = 0;
                 ReiniciarPasoActual();
             } else {
-                ActualizarPaso();
+                ActualizarPaso(siguienteOAnterior: true);
                 ActualizarUI();
             }
 
@@ -303,9 +304,16 @@ namespace RTSHelper {
         private void TxtPaso_TextChanged(object sender, TextChangedEventArgs e) {
 
             if (int.TryParse(TxtPaso.Text, out int intPaso)) {
+
+                if (OrdenDeEjecución.NúmeroPaso < intPaso) {
+                    for (int i = OrdenDeEjecución.NúmeroPaso; i < intPaso; i++) {
+                        GuardarDuraciónPaso(i);
+                    }
+                }
                 OrdenDeEjecución.NúmeroPaso = intPaso;
                 if (CambiandoTxtPasoAutomáticamente) return;
                 ReiniciarPasoActual();
+
             }
 
         } // TxtPaso_TextChanged>
@@ -330,7 +338,7 @@ namespace RTSHelper {
 
         private void TimerActualizadorUIPorCambioTamaño_Tick(object? sender, EventArgs e) {
 
-            ActualizarPaso();
+            ActualizarPaso(cambióTamaño: true);
             TimerActualizadorUIPorCambioTamaño.Stop();
 
         } // TimerActualizadorUIPorCambioTamaño_Tick>
@@ -472,7 +480,7 @@ namespace RTSHelper {
             CmbBuildOrders.SelectedIndex = 0;
             EditandoComboBoxEnCódigo = false;
 
-            var archivosBuildOrders = Directory.GetFiles(DirectorioBuildOrdersEfectivo, "*.txt");
+            var archivosBuildOrders = Directory.GetFiles(Preferencias.BuildOrdersDirectory, "*.txt");
             foreach (var archivoBuildOrder in archivosBuildOrders) {
                 var nombreBuildOrder = Path.GetFileNameWithoutExtension(archivoBuildOrder);
                 if (nombreBuildOrder.ToLower() != "default") CmbBuildOrders.Items.Add(nombreBuildOrder);
@@ -767,25 +775,25 @@ namespace RTSHelper {
         } // ActualizarDuraciónPaso>
 
 
-        private void ActualizarPaso(bool stop = false, bool aplicandoPreferencias = false, bool cargandoBuildOrder = false) {
+        private void ActualizarPaso(bool stop = false, bool aplicandoPreferencias = false, bool cargandoBuildOrder = false, 
+            bool siguienteOAnterior = false, bool cambióTamaño = false) {
 
             if (stop) {
                 ActualizarContenidoPaso(númeroPaso: null);
             } else {
 
-                if ((Timer is null || !Timer.IsEnabled) && !aplicandoPreferencias && !cargandoBuildOrder) return; // Evita que se actualice el texto si no se ha dado clic en Start.
-                if (!aplicandoPreferencias) {
+                if ((Timer is null || !Timer.IsEnabled) && !aplicandoPreferencias && !cargandoBuildOrder && !siguienteOAnterior && !cambióTamaño) return; // Evita que se actualice el texto si no se ha dado clic en Start.
+                if (!aplicandoPreferencias && Estado != EEstado.Stoped) {
 
                     if (OrdenDeEjecución.NúmeroPaso < 0) OrdenDeEjecución.NúmeroPaso = 0;
                     CambiandoTxtPasoAutomáticamente = true;
                     TxtPaso.Text = OrdenDeEjecución.NúmeroPaso.ToString();
                     CambiandoTxtPasoAutomáticamente = false;
-                    ActualizarContenidoPaso(OrdenDeEjecución.NúmeroPaso);
 
-                } else {
-                    ActualizarContenidoPaso(Estado == EEstado.Stoped ? (int?)null : OrdenDeEjecución.NúmeroPaso);
                 }
-                
+
+                ActualizarContenidoPaso(Estado == EEstado.Stoped ? (int?)null : OrdenDeEjecución.NúmeroPaso);
+
             }
 
         } // ActualizarPaso>
@@ -820,20 +828,21 @@ namespace RTSHelper {
                 Application.Current.Resources["VisibilidadPasoSiguiente"] = Visibility.Collapsed;
             }
 
-            BtnAlert.Visibility = (superóAltoPasoActual || superóAltoSiguientePaso) ? Visibility.Visible : Visibility.Collapsed;
+            if (this.WindowState == WindowState.Normal) 
+                BtnAlert.Visibility = (superóAltoPasoActual || superóAltoSiguientePaso) ? Visibility.Visible : Visibility.Collapsed;
 
         } // ActualizarContenidoPaso>
 
 
-        public void CargarBuildOrder() {
+        public void CargarBuildOrder(bool iniciando = false) {
 
             if (CmbBuildOrders.Text != Preferencias.CurrentBuildOrder) {
                 EditandoComboBoxEnCódigo = true;
                 CmbBuildOrders.Text = Preferencias.CurrentBuildOrder;
                 EditandoComboBoxEnCódigo = false;
             }
-            OrdenDeEjecución.CargarPasos(DirectorioBuildOrdersEfectivo, Preferencias.CurrentBuildOrder);
-            ActualizarPaso(cargandoBuildOrder: true);
+            OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder);
+            if (!iniciando) ActualizarPaso(stop: Estado == EEstado.Stoped, cargandoBuildOrder: true);
 
         } // CargarBuildOrder>
 

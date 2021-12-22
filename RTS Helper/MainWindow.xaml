@@ -4,7 +4,7 @@
         SizeChanged="Window_SizeChanged" MouseDown="Window_MouseDown" Closed="Window_Closed" MouseUp="Window_MouseUp" mc:Ignorable="d" 
         Title="RTS Helper" AllowsTransparency="True" WindowStyle="None" ResizeMode="CanResizeWithGrip" Topmost="True" WindowStartupLocation="Manual" 
         Height="{DynamicResource Alto}" Width="{DynamicResource Ancho}" Top="{DynamicResource PosiciónY}" Left="{DynamicResource PosiciónX}">
-    
+
     <Window.Background>
         <SolidColorBrush Opacity="{DynamicResource Opacidad}" Color="{DynamicResource ColorFondo}" />
     </Window.Background>
@@ -22,20 +22,20 @@
                                           IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
                                 <ToggleButton.Template>
                                     <ControlTemplate>
-                                        
+
                                         <Grid>
                                             
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="5*" />
+                                                <ColumnDefinition Width="4*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            
-                                            <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2" Background="{DynamicResource BrushFondo}" 
+
+                                            <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2" Background="Transparent" 
                                                     BorderBrush="{DynamicResource BrushFuente}" BorderThickness="1" />
-                                            
-                                            <Border Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" Background="{DynamicResource BrushFondo}" 
+
+                                            <Border x:Name="Fondo" Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" Background="Transparent" 
                                                     BorderBrush="{DynamicResource BrushFuente}" BorderThickness="0,0,1,0" />
-                                            
+
                                             <Path x:Name="Arrow" Grid.Column="1" Fill="{DynamicResource BrushFuente}" HorizontalAlignment="Center" 
                                                   VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" />
                                             
@@ -45,6 +45,7 @@
                                             
                                             <Trigger Property="ToggleButton.IsMouseOver" Value="true">
                                                 <Setter TargetName="Border" Property="Background" Value="#498205" />
+                                                <Setter TargetName="Fondo" Property="Background" Value="{DynamicResource BrushFondo}" />
                                             </Trigger>
                                             
                                             <Trigger Property="ToggleButton.IsChecked" Value="true">
@@ -56,8 +57,8 @@
                                     </ControlTemplate>
                                 </ToggleButton.Template>
                             </ToggleButton>
-                            
-                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" 
+
+                            <ContentPresenter Opacity="1" Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" 
                                               ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
                                               ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="4" />
                             
@@ -101,8 +102,20 @@
         </Style>
         <!-- Menú contextual sin margen izquierda> !-->
         
+        <RoutedUICommand x:Key="CmdNext" Text="" />
+        <RoutedUICommand x:Key="CmdPrevious" Text="" />
+        
     </Window.Resources>
 
+    <Window.InputBindings>
+        <KeyBinding Key="Right" Command="{StaticResource CmdNext}" />
+        <KeyBinding Key="Left" Command="{StaticResource CmdPrevious}" />
+    </Window.InputBindings>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource CmdNext}" Executed="BtnNext_Click" />
+        <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnPrevious_Click" />
+    </Window.CommandBindings>
     
     <Grid>
 
@@ -169,6 +182,16 @@
                         </ContextMenu>
                     </TextBox.ContextMenu>
 
+                    <TextBox.CommandBindings>
+                        <CommandBinding Command="{StaticResource CmdNext}" Executed="BtnNext_Click" />
+                        <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnPrevious_Click" />
+                    </TextBox.CommandBindings>
+                    
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Right" Command="{StaticResource CmdNext}" />
+                        <KeyBinding Key="Left" Command="{StaticResource CmdPrevious}" />
+                    </TextBox.InputBindings>
+                    
                 </TextBox>
 
 
@@ -222,17 +245,40 @@
                     <ComboBoxItem Tag="75">75%</ComboBoxItem>
                     <ComboBoxItem Tag="70">70%</ComboBoxItem>
                     <ComboBoxItem Tag="60">60%</ComboBoxItem>
+
+                    <ComboBox.CommandBindings>
+                        <CommandBinding Command="{StaticResource CmdNext}" Executed="BtnNext_Click" />
+                        <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnPrevious_Click" />
+                    </ComboBox.CommandBindings>
+
+                    <ComboBox.InputBindings>
+                        <KeyBinding Key="Right" Command="{StaticResource CmdNext}" />
+                        <KeyBinding Key="Left" Command="{StaticResource CmdPrevious}" />
+                    </ComboBox.InputBindings>
+                    
                 </ComboBox>
 
                 <ComboBox x:Name="CmbBuildOrders" ToolTip="Build Order" SelectionChanged="CmbBuildOrders_SelectionChanged" SelectedIndex="0" 
                       Style="{StaticResource ComboBoxColor}" Margin="{DynamicResource MargenBotones}" Foreground="{DynamicResource BrushFuente}" 
                       Width="{DynamicResource AnchoSelectorBuildOrder}" FontSize="{DynamicResource FuenteNormal}" VerticalAlignment="Center">
+                    
                     <ComboBoxItem>Default</ComboBoxItem>
                     <ComboBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem x:Name="MniReloadBuildOrder" Click="MniReloadBuildOrder_Click"  Header="Reload" />
                         </ContextMenu>
                     </ComboBox.ContextMenu>
+
+                    <ComboBox.CommandBindings>
+                        <CommandBinding Command="{StaticResource CmdNext}" Executed="BtnNext_Click" />
+                        <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnPrevious_Click" />
+                    </ComboBox.CommandBindings>
+
+                    <ComboBox.InputBindings>
+                        <KeyBinding Key="Right" Command="{StaticResource CmdNext}" />
+                        <KeyBinding Key="Left" Command="{StaticResource CmdPrevious}" />
+                    </ComboBox.InputBindings>
+                    
                 </ComboBox>
 
             </StackPanel>

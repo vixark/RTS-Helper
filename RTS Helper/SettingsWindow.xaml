@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:RTSHelper"
         mc:Ignorable="d" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" ResizeMode="CanResizeWithGrip"
-        Title="Settings - RTS Helper" Height="460" Width="540" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
+        Title="Settings - RTS Helper" Height="460" Width="600" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
     <!--Se debe establecer CanResizeWithGrip porque algunos usuarios les aparece la ventana de settings cortada. No se porqué... Si se quiere quitar el botón de maximizar usar esto https://stackoverflow.com/questions/18707782/disable-maximize-button-of-wpf-window-keeping-resizing-feature-intact -->
 
     <Grid>
@@ -19,9 +19,9 @@
                                 <Label Margin="2">Game:</Label>
                                 <Label Margin="2">Game Speed:</Label>
                                 <Label Margin="2">Screen Resolution:</Label>
-                                <Label Margin="2" x:Name="LblBackColor">Color:</Label>
-                                <Label Margin="2" x:Name="LblFontColor">Font Color:</Label>
-                                <Label Margin="2" x:Name="LblOpacity">Opacity:</Label>
+                                <Label x:Name="LblStepDuration" Margin="2">Step Duration:</Label>
+                                <Label x:Name="LblShowProgress" Margin="2">Show Progress:</Label>
+                                <Label x:Name="LblShowTime" Margin="2">Show Time:</Label>
                             </StackPanel>
 
                             <StackPanel Orientation="Vertical" Width="130">
@@ -45,36 +45,18 @@
                                     <ComboBoxItem>1366x768</ComboBoxItem>
                                 </ComboBox>
 
-                                <Button Click="BtnBackcolor_Click" x:Name="BtnBackcolor" Margin="4" Height="22" 
-                                    Foreground="{DynamicResource BrushFuente}" Background="{DynamicResource BrushFondo}">
-                                    Change
-                                </Button>
-
-                                <Button Click="BtnFontcolor_Click" x:Name="BtnFontcolor" Margin="4" Height="22" 
-                                Foreground="{DynamicResource BrushFuente}" Background="{DynamicResource BrushFondo}">Change</Button>
-
-                                <TextBox TextChanged="TxtOpacity_TextChanged" x:Name="TxtOpacity" Margin="5"></TextBox>
-     
-                            </StackPanel>
-
-                            <StackPanel Orientation="Vertical" Margin="20 0 0 0">
-                                
-                                <Label x:Name="LblStepDuration" Margin="2">Step Duration:</Label>
-                                
-                                <CheckBox Checked="ChkShowStepProgress_Checked" Unchecked="ChkShowStepProgress_Checked" x:Name="ChkShowStepProgress" 
-                                      Margin="4 9 0 9" Content="Show Progress" />
-
-                                <CheckBox Checked="ChkShowTime_Checked" Unchecked="ChkShowTime_Checked" x:Name="ChkShowTime" Margin="4 5 0 0" 
-                                          Content="Show Time" />
-
-                            </StackPanel>
-
-                            <StackPanel Orientation="Vertical" Width="130">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBox TextChanged="TxtStepDuration_TextChanged"  Width="40" x:Name="TxtStepDuration" Margin="5"></TextBox>
                                     <Label x:Name="LblStepDurationSeconds">seconds</Label>
                                 </StackPanel>
+     
+                                <CheckBox Checked="ChkShowStepProgress_Checked" Unchecked="ChkShowStepProgress_Checked" x:Name="ChkShowStepProgress" 
+                                      Margin="4 9 0 9" />
+
+                                <CheckBox Checked="ChkShowTime_Checked" Unchecked="ChkShowTime_Checked" x:Name="ChkShowTime" Margin="4 5 0 0" />
+                                
                             </StackPanel>
+
 
                         </StackPanel>
 
@@ -89,111 +71,144 @@
                 </ScrollViewer>
                 
             </TabItem>
-            <TabItem Header="Format" x:Name="TbiFormat">
+            <TabItem Header="Personalization" x:Name="TbiPersonalization">
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="20 20 0 0">
-                        <StackPanel Orientation="Horizontal">
 
-                            <StackPanel x:Name="SpnLabels2" Orientation="Vertical">
-                                <Label Margin="2">Font Name:</Label>
-                                <Label Margin="2">Current Step Font Size:</Label>
-                                <Label Margin="2">Current Step Font Color:</Label>
-                                <Label Margin="2">Current Step Font Bold:</Label>
-                                <Label Margin="2">Show Next Step:</Label>
-                                <Label Margin="2">Next Step Font Size:</Label>
-                                <Label Margin="2">Next Step Font Color:</Label>
-                                <Label Margin="2">Next Step Font Bold:</Label>
-                                <Label Margin="2">Line Spacing:</Label>
-                                <Label Margin="2">Capitalize Names:</Label>
-                            </StackPanel>
+                    <StackPanel Orientation="Horizontal">
 
-                            <StackPanel x:Name="SpnSettings2" Orientation="Vertical" Width="140">
+                        <StackPanel Margin="20 20 0 0">
+                            <StackPanel Orientation="Horizontal">
 
-                                <ComboBox SelectionChanged="CmbFontName_SelectionChanged" HorizontalAlignment="Stretch" Margin="4 4 4 7" x:Name="CmbFontName">
-                                    <ComboBoxItem>Arial</ComboBoxItem>
-                                    <ComboBoxItem>Arial Black</ComboBoxItem>
-                                    <ComboBoxItem>Calibri</ComboBoxItem>
-                                    <ComboBoxItem>Cambria</ComboBoxItem>
-                                    <ComboBoxItem>Cambria Math</ComboBoxItem>
-                                    <ComboBoxItem>Candara</ComboBoxItem>
-                                    <ComboBoxItem>Comic Sans MS</ComboBoxItem>
-                                    <ComboBoxItem>Consolas</ComboBoxItem>
-                                    <ComboBoxItem>Constantia</ComboBoxItem>
-                                    <ComboBoxItem>Corbel</ComboBoxItem>
-                                    <ComboBoxItem>Courier New</ComboBoxItem>
-                                    <ComboBoxItem>Ebrima</ComboBoxItem>
-                                    <ComboBoxItem>Franklin Gothic Medium</ComboBoxItem>
-                                    <ComboBoxItem>Gabriola</ComboBoxItem>
-                                    <ComboBoxItem>Georgia</ComboBoxItem>
-                                    <ComboBoxItem>Impact</ComboBoxItem>
-                                    <ComboBoxItem>Lucida Console</ComboBoxItem>
-                                    <ComboBoxItem>Lucida Sans Unicode</ComboBoxItem>
-                                    <ComboBoxItem>Malgun Gothic</ComboBoxItem>
-                                    <ComboBoxItem>Microsoft Himalaya</ComboBoxItem>
-                                    <ComboBoxItem>Microsoft JhengHei</ComboBoxItem>
-                                    <ComboBoxItem>Microsoft New Tai Lue</ComboBoxItem>
-                                    <ComboBoxItem>Microsoft PhagsPa</ComboBoxItem>
-                                    <ComboBoxItem>Microsoft Sans Serif</ComboBoxItem>
-                                    <ComboBoxItem>Microsoft Tai Le</ComboBoxItem>
-                                    <ComboBoxItem>Microsoft YaHei</ComboBoxItem>
-                                    <ComboBoxItem>Microsoft Yi Baiti</ComboBoxItem>
-                                    <ComboBoxItem>Mongolian Baiti</ComboBoxItem>
-                                    <ComboBoxItem>MS Gothic</ComboBoxItem>
-                                    <ComboBoxItem>MV Boli</ComboBoxItem>
-                                    <ComboBoxItem>Palatino Linotype</ComboBoxItem>
-                                    <ComboBoxItem>Segoe Print</ComboBoxItem>
-                                    <ComboBoxItem>Segoe Script</ComboBoxItem>
-                                    <ComboBoxItem>Segoe UI</ComboBoxItem>
-                                    <ComboBoxItem>Segoe UI Symbol</ComboBoxItem>
-                                    <ComboBoxItem>SimSun</ComboBoxItem>
-                                    <ComboBoxItem>Sylfaen</ComboBoxItem>
-                                    <ComboBoxItem>Symbol</ComboBoxItem>
-                                    <ComboBoxItem>Tahoma</ComboBoxItem>
-                                    <ComboBoxItem>Times New Roman</ComboBoxItem>
-                                    <ComboBoxItem>Trebuchet MS</ComboBoxItem>
-                                    <ComboBoxItem>Verdana</ComboBoxItem>
-                                    <ComboBoxItem>Webdings</ComboBoxItem>
-                                    <ComboBoxItem>Wingdings</ComboBoxItem>
-                                </ComboBox>
-
-                                <TextBox TextChanged="TxtStepFontSize_TextChanged" x:Name="TxtStepFontSize" Margin="4" />
-
-                                <Button Click="BtnStepFontColor_Click" x:Name="BtnStepFontColor" Margin="4" Height="22" 
-                                Foreground="{DynamicResource BrushPaso}" Background="{DynamicResource BrushFondo}">Change</Button>
-
-                                <CheckBox Checked="ChkCurrentStepFontBold_Checked" Unchecked="ChkCurrentStepFontBold_Checked" x:Name="ChkCurrentStepFontBold" 
-                                      Margin="4 9 0 9" />
-
-                                <CheckBox Checked="ChkShowNextStep_CheckedChanged" Unchecked="ChkShowNextStep_CheckedChanged" x:Name="ChkShowNextStep" 
-                                      Margin="4 4 0 11" />
-
-                                <TextBox TextChanged="TxtNextStepFontSize_TextChanged" x:Name="TxtNextStepFontSize" Margin="4" />
-
-                                <Button Click="BtnNextStepFontColor_Click" x:Name="BtnNextStepFontColor" Margin="4" Height="22" 
-                                Foreground="{DynamicResource BrushPasoSiguiente}" Background="{DynamicResource BrushFondo}">Change</Button>
-
-                                <CheckBox Checked="ChkNextStepFontBold_Checked" Unchecked="ChkNextStepFontBold_Checked" x:Name="ChkNextStepFontBold" 
-                                      Margin="4 9 0 9" />
-
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBox TextChanged="TxtLineSpacing_TextChanged" x:Name="TxtLineSpacing" Margin="4" Width="40" />
-                                    <Label>% of line height.</Label>
+                                <StackPanel x:Name="SpnLabels2" Orientation="Vertical">
+                                    <Label Margin="2" x:Name="LblBackColor">Color:</Label>
+                                    <Label Margin="2" x:Name="LblFontColor">Font Color:</Label>
+                                    <Label Margin="2" x:Name="LblOpacity">Opacity:</Label>
+                                    <Label Margin="2">Font Name:</Label>
+                                    <Label Margin="2">Font Size:</Label>
+                                    <Label Margin="2">Font Color:</Label>
+                                    <Label Margin="2">Font Bold:</Label>
+                                    <Label Margin="2">Line Spacing:</Label>
+                                    <Label Margin="2">Capitalize Names:</Label>
                                 </StackPanel>
 
-                                <CheckBox Checked="ChkCapitalizeNames_Checked" Unchecked="ChkCapitalizeNames_Checked" x:Name="ChkCapitalizeNames" 
-                                      Margin="4 9 0 9" />
+                                <StackPanel x:Name="SpnSettings2" Orientation="Vertical" Width="140">
+
+                                    <Button Click="BtnBackcolor_Click" x:Name="BtnBackcolor" Margin="4" Height="22" 
+                                            Foreground="{DynamicResource BrushFuente}" Background="{DynamicResource BrushFondo}">
+                                        Change
+                                    </Button>
+
+                                    <Button Click="BtnFontcolor_Click" x:Name="BtnFontcolor" Margin="4" Height="22" 
+                                        Foreground="{DynamicResource BrushFuente}" Background="{DynamicResource BrushFondo}">Change</Button>
+
+                                    <TextBox TextChanged="TxtOpacity_TextChanged" x:Name="TxtOpacity" Margin="5"></TextBox>
+
+                                    <ComboBox SelectionChanged="CmbFontName_SelectionChanged" HorizontalAlignment="Stretch" Margin="4 4 4 7" x:Name="CmbFontName">
+                                        <ComboBoxItem>Arial</ComboBoxItem>
+                                        <ComboBoxItem>Arial Black</ComboBoxItem>
+                                        <ComboBoxItem>Calibri</ComboBoxItem>
+                                        <ComboBoxItem>Cambria</ComboBoxItem>
+                                        <ComboBoxItem>Cambria Math</ComboBoxItem>
+                                        <ComboBoxItem>Candara</ComboBoxItem>
+                                        <ComboBoxItem>Comic Sans MS</ComboBoxItem>
+                                        <ComboBoxItem>Consolas</ComboBoxItem>
+                                        <ComboBoxItem>Constantia</ComboBoxItem>
+                                        <ComboBoxItem>Corbel</ComboBoxItem>
+                                        <ComboBoxItem>Courier New</ComboBoxItem>
+                                        <ComboBoxItem>Ebrima</ComboBoxItem>
+                                        <ComboBoxItem>Franklin Gothic Medium</ComboBoxItem>
+                                        <ComboBoxItem>Gabriola</ComboBoxItem>
+                                        <ComboBoxItem>Georgia</ComboBoxItem>
+                                        <ComboBoxItem>Impact</ComboBoxItem>
+                                        <ComboBoxItem>Lucida Console</ComboBoxItem>
+                                        <ComboBoxItem>Lucida Sans Unicode</ComboBoxItem>
+                                        <ComboBoxItem>Malgun Gothic</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Himalaya</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft JhengHei</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft New Tai Lue</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft PhagsPa</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Sans Serif</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Tai Le</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft YaHei</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Yi Baiti</ComboBoxItem>
+                                        <ComboBoxItem>Mongolian Baiti</ComboBoxItem>
+                                        <ComboBoxItem>MS Gothic</ComboBoxItem>
+                                        <ComboBoxItem>MV Boli</ComboBoxItem>
+                                        <ComboBoxItem>Palatino Linotype</ComboBoxItem>
+                                        <ComboBoxItem>Segoe Print</ComboBoxItem>
+                                        <ComboBoxItem>Segoe Script</ComboBoxItem>
+                                        <ComboBoxItem>Segoe UI</ComboBoxItem>
+                                        <ComboBoxItem>Segoe UI Symbol</ComboBoxItem>
+                                        <ComboBoxItem>SimSun</ComboBoxItem>
+                                        <ComboBoxItem>Sylfaen</ComboBoxItem>
+                                        <ComboBoxItem>Symbol</ComboBoxItem>
+                                        <ComboBoxItem>Tahoma</ComboBoxItem>
+                                        <ComboBoxItem>Times New Roman</ComboBoxItem>
+                                        <ComboBoxItem>Trebuchet MS</ComboBoxItem>
+                                        <ComboBoxItem>Verdana</ComboBoxItem>
+                                        <ComboBoxItem>Webdings</ComboBoxItem>
+                                        <ComboBoxItem>Wingdings</ComboBoxItem>
+                                    </ComboBox>
+
+                                    <TextBox TextChanged="TxtStepFontSize_TextChanged" x:Name="TxtStepFontSize" Margin="4" />
+
+                                    <Button Click="BtnStepFontColor_Click" x:Name="BtnStepFontColor" Margin="4" Height="22" 
+                                    Foreground="{DynamicResource BrushPaso}" Background="{DynamicResource BrushFondo}">Change</Button>
+
+                                    <CheckBox Checked="ChkCurrentStepFontBold_Checked" Unchecked="ChkCurrentStepFontBold_Checked" x:Name="ChkCurrentStepFontBold" 
+                                          Margin="4 9 0 9" />
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox TextChanged="TxtLineSpacing_TextChanged" x:Name="TxtLineSpacing" Margin="4" Width="40" />
+                                        <Label>% of line height.</Label>
+                                    </StackPanel>
+
+                                    <CheckBox Checked="ChkCapitalizeNames_Checked" Unchecked="ChkCapitalizeNames_Checked" x:Name="ChkCapitalizeNames" 
+                                          Margin="4 9 0 9" />
                                 
+                                </StackPanel>
+
                             </StackPanel>
 
                         </StackPanel>
 
+                        <StackPanel Orientation="Horizontal" Margin="20 20 0 0">
+
+                            <StackPanel x:Name="SpnLabels3" Orientation="Vertical">
+                                <Label FontWeight="Bold">Next Step</Label>
+                                <Label Margin="2">Show Next Step:</Label>
+                                <Label Margin="2">Font Size:</Label>
+                                <Label Margin="2">Font Color:</Label>
+                                <Label Margin="2">Font Bold:</Label>
+                            </StackPanel>
+
+                            <StackPanel x:Name="SpnSettings3" Orientation="Vertical" Width="80">
+                                
+                                <CheckBox Checked="ChkShowNextStep_CheckedChanged" Unchecked="ChkShowNextStep_CheckedChanged" x:Name="ChkShowNextStep" 
+                                          Margin="4 34 0 11" />
+
+                                <TextBox TextChanged="TxtNextStepFontSize_TextChanged" x:Name="TxtNextStepFontSize" Margin="4" />
+
+                                <Button Click="BtnNextStepFontColor_Click" x:Name="BtnNextStepFontColor" Margin="4" Height="22" 
+                                    Foreground="{DynamicResource BrushPasoSiguiente}" Background="{DynamicResource BrushFondo}">Change</Button>
+
+                                <CheckBox Checked="ChkNextStepFontBold_Checked" Unchecked="ChkNextStepFontBold_Checked" x:Name="ChkNextStepFontBold" 
+                                          Margin="4 9 0 9" />
+                                
+                            </StackPanel>
+
+                      
+                            
+                        </StackPanel>
+                        
                     </StackPanel>
+                    
                 </ScrollViewer>
                 
             </TabItem>
 
-            <TabItem Header="Behavior" x:Name="TbiBehavior">
+            <TabItem Header="Notifications" x:Name="TbiNotifications">
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="15 20 0 0">
@@ -216,7 +231,7 @@
                             </StackPanel>
 
                             <CheckBox Checked="ChkUnmuteAtStartup_Checked" Unchecked="ChkUnmuteAtStartup_Checked" 
-                                  x:Name="ChkUnmuteAtStartup" Margin="5" >Unmute at startup</CheckBox>
+                                  x:Name="ChkUnmuteAtStartup" Margin="5 10 5 5" >Unmute at startup</CheckBox>
 
                             <CheckBox Checked="ChkMinimizeOnComplete_Checked" Unchecked="ChkMinimizeOnComplete_Checked" 
                                   x:Name="ChkMinimizeOnComplete" Margin="5" >Minimize when last step ends</CheckBox>
@@ -303,14 +318,14 @@
 
             <TabItem Header="Display Priority" x:Name="TbiDisplayPriority">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="20 20 0 0" Orientation="Vertical" x:Name="SpnDisplayPriority" />
+                    <StackPanel Margin="0 20 0 0" Orientation="Vertical" x:Name="SpnDisplayPriority" HorizontalAlignment="Center" />
                 </ScrollViewer>
             </TabItem>
 
             <TabItem Header="Custom Names" x:Name="TbiCustomNames" Selector.Selected="TbiCustomNames_Selected" 
                      Selector.Unselected="TbiCustomNames_Unselected">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="20 20 0 0" Orientation="Vertical" x:Name="SpnCustomNames" >
+                    <StackPanel Margin="0 20 0 0" Orientation="Vertical" x:Name="SpnCustomNames" HorizontalAlignment="Center" >
                         
                     </StackPanel>
                 </ScrollViewer>
@@ -322,15 +337,15 @@
                     <StackPanel Margin="20 20 20 0" Orientation="Vertical" x:Name="SpnOverrides" >
 
                         <TextBlock TextWrapping="Wrap">
-                        Build orders can replace the format and behavior options. Check the options that could be changed by build orders and uncheck 
-                        the ones you want to remain unchanged:
+                            Build orders can override some of your selected options. Check the options that could be changed by build orders and uncheck 
+                            the ones you want to remain unchanged:
                         </TextBlock>
 
                         <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
 
                             <StackPanel Orientation="Vertical" Margin="0 0 20 0">
 
-                                <Label FontWeight="Bold">Behavior</Label>
+                                <Label FontWeight="Bold" Margin="-4 0 0 0">Behavior</Label>
                                 <CheckBox Checked="ChkOverride_Checked" Unchecked="ChkOverride_Checked" x:Name="ChkOverrideStepEndSound" 
                                       Margin="0 5 0 5">Step End Sound</CheckBox>
                                 <CheckBox Checked="ChkOverride_Checked" Unchecked="ChkOverride_Checked" x:Name="ChkOverrideStepStartSound" 
@@ -354,7 +369,7 @@
 
                             <StackPanel Orientation="Vertical" Margin="20 0 0 0">
 
-                                <Label FontWeight="Bold">Format</Label>
+                                <Label FontWeight="Bold" Margin="-4 0 0 0">Format</Label>
                                 <CheckBox Checked="ChkOverride_Checked" Unchecked="ChkOverride_Checked" x:Name="ChkOverrideFontSize" 
                                       Margin="0 5 0 5">Font Size</CheckBox>
                                 <CheckBox Checked="ChkOverride_Checked" Unchecked="ChkOverride_Checked" x:Name="ChkOverrideFontName" 
@@ -381,7 +396,77 @@
             
             <TabItem Header="About" x:Name="TbiAbout">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="20 20 20 0" Orientation="Vertical" x:Name="SpnAbout">
+                        
+                        <StackPanel Orientation="Horizontal" Margin="-5 0 0 0">
+                            <Label FontSize="{DynamicResource FuenteGrande}" FontWeight="Bold">RTS Helper</Label>
+                            <Label FontSize="{DynamicResource FuenteGrande}" FontWeight="Bold" x:Name="LblVersion">1.3</Label>
+                        </StackPanel>
 
+                        <StackPanel>
+                            <TextBlock Margin="0 0 0 5">Copyright© 2022 Vixark (vixark@outlook.com, github/vixark)</TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="0 0 0 5">Help:
+                                <Hyperlink Click="Lnk_Click" NavigateUri="http://vixark.com/age-of-empires-ii/rts-helper-help">vixark.com/age-of-empires-ii/rts-helper-help</Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="0 0 0 5">Website:
+                                <Hyperlink Click="Lnk_Click" NavigateUri="http://vixark.com/age-of-empires-ii/rts-helper">vixark.com/age-of-empires-ii/rts-helper</Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="0 0 0 5">Documentation:
+                                <Hyperlink Click="Lnk_Click" NavigateUri="http://vixark.com/age-of-empires-ii/rts-helper-documentation">vixark.com/age-of-empires-ii/rts-helper-documentation</Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="0 0 0 5">Code:
+                                <Hyperlink Click="Lnk_Click" NavigateUri="https://github.com/vixark/RTS-Helper">github/rts-helper</Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="0 0 0 5">Licence:
+                                <Hyperlink Click="Lnk_Click" NavigateUri="https://github.com/vixark/RTS-Helper/blob/master/LICENSE">GNU Affero General Public License v3.0</Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" Margin="-5 10 0 0">
+                            <Label FontSize="{DynamicResource FuenteGrande}" FontWeight="Bold">Thanks</Label>
+                        </StackPanel>
+                         <TextBlock TextWrapping="Wrap" Margin="0 0 0 10">
+                            Thanks to Shorcle and Bryan for their help with testing and ideas.
+                        </TextBlock>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label FontSize="{DynamicResource FuenteGrande}" FontWeight="Bold" Margin="-5 0 0 0">Legal</Label>
+                        </StackPanel>
+
+                        <TextBlock TextWrapping="Wrap" Margin="0 0 0 10">
+                                Age of Empires II © Microsoft Corporation.
+                                RTS Helper was created under Microsoft's "<Hyperlink Click="Lnk_Click" 
+                                NavigateUri="https://www.xbox.com/en-us/developers/rules">Game Content Usage Rules</Hyperlink>" 
+                                using assets from Age of Empires II, and it is not endorsed by or affiliated with Microsoft.
+                        </TextBlock>
+
+                        <TextBlock TextWrapping="Wrap">
+                                Age of Empires IV © Microsoft Corporation.
+                                RTS Helper was created under Microsoft's "<Hyperlink Click="Lnk_Click" 
+                                NavigateUri="https://www.xbox.com/en-us/developers/rules">Game Content Usage Rules</Hyperlink>" 
+                                using assets from Age of Empires IV, and it is not endorsed by or affiliated with Microsoft.
+                        </TextBlock>
+
+                        <TextBlock TextWrapping="Wrap" Margin="0 10 0 5">
+                                Sounds from Orange Free Sounds©. Find more sounds in <Hyperlink Click="Lnk_Click" 
+                                NavigateUri="https://orangefreesounds.com/">orangefreesounds.com</Hyperlink>.
+                        </TextBlock>
+                    </StackPanel>
                 </ScrollViewer>
             </TabItem>
             
@@ -391,8 +476,8 @@
 
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock VerticalAlignment="Center" Margin="0 0 10 0">RTS Helper was made by David (<Hyperlink Click="LnkDavid_Click" x:Name="LnkDavid" NavigateUri="http://vixark.com/age-of-empires-ii">vixark.com</Hyperlink>)</TextBlock>
-                    <TextBlock Margin="0 3 10 0">If you like this application, consider to <Hyperlink Click="LnkDonate_Click" x:Name="LnkDonate" NavigateUri="https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW">donate</Hyperlink>.</TextBlock>
+                    <TextBlock VerticalAlignment="Center" Margin="0 0 10 0">RTS Helper was made by David (<Hyperlink Click="Lnk_Click" x:Name="LnkDavid" NavigateUri="http://vixark.com/age-of-empires-ii">vixark.com</Hyperlink>)</TextBlock>
+                    <TextBlock Margin="0 3 10 0">If you like this application, consider to <Hyperlink Click="Lnk_Click" x:Name="LnkDonate" NavigateUri="https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW">donate</Hyperlink>.</TextBlock>
                 </StackPanel>
                 <Button Click="BtnSave_Click" x:Name="BtnSave" Width="60" Margin="5 0 10 0">Save</Button>
             </StackPanel>

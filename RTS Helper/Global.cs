@@ -51,17 +51,15 @@ namespace RTSHelper {
 
         public static double FactorTamañoTextoAPixeles = 136D / 113; // Es un factor experimental para la fuente actual predeterminada (Tahoma) que permite convertir el tamaño de la fuente al tamaño de la imagen para que ambos sean del mismo alto. Se hace para la fuente predeterminada aunque no debería ser muy diferente con otras fuentes.
 
-        public static string DirectorioBuildOrdersPredeterminado = Path.Combine(DirectorioAplicación, "Build Orders");
-
         public static string DirectorioSonidosCortos = Path.Combine(DirectorioAplicación, "Sounds", "Short");
 
         public static string DirectorioSonidosLargos = Path.Combine(DirectorioAplicación, "Sounds", "Long");
 
         public static string DirectorioNombres = Path.Combine(DirectorioAplicación, "Names");
 
-        public static string DirectorioImágenes = Path.Combine(DirectorioAplicación, "Images");
+        public static string DirectorioÓrdenesDeEjecución = Path.Combine(DirectorioAplicación, "Build Orders");
 
-        public static string DirectorioBuildOrdersEfectivo => Preferencias.BuildOrderDirectory ?? DirectorioBuildOrdersPredeterminado;
+        public static string DirectorioImágenes = Path.Combine(DirectorioAplicación, "Images");
 
         public static string AlinearInferiormenteId = "\f";
 
@@ -298,6 +296,7 @@ namespace RTSHelper {
 
         public static void CrearImágenes() {
 
+            Imágenes.Clear();
             var imágenesHuérfanas = ""; // Se usa internamente para fines de revisión de las imágenes.
             var directorioImágenesGame = Path.Combine(DirectorioImágenes, Preferencias.Game);
             var carpetas = Directory.GetDirectories(directorioImágenesGame, "*", SearchOption.AllDirectories).ToList();
@@ -348,7 +347,7 @@ namespace RTSHelper {
 
         public static void CrearEntidades() {
 
-            Entidades = new Dictionary<string, Entidad>();
+            Entidades.Clear();
             var names = DeserializarNombres(Preferencias.NamesPath);
             var types = DeserializarTipos(Preferencias.TypesPath);
             var customImages = DeserializarNombres(Preferencias.CustomImagesPath);         

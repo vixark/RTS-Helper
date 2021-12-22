@@ -35,9 +35,9 @@ namespace RTSHelper {
 
         public bool ShowNextStep { get; set; } = ShowNextStepPredeterminado;
 
-        public string? BuildOrderDirectory { get; set; }
+        public string? BuildOrderCustomDirectory { get; set; }
 
-        public bool MinimizeOnComplete { get; set; } = true;
+        public bool MinimizeOnComplete { get; set; } = false;
 
         public double LineSpacing { get; set; } = 20;
 
@@ -230,6 +230,17 @@ namespace RTSHelper {
 
 
         #region Propiedades Autocalculadas
+
+        public string BuildOrdersDirectory {
+            get {
+
+                if (Preferencias.BuildOrderCustomDirectory != null) return Preferencias.BuildOrderCustomDirectory;
+                var directorioÓrdenesDeEjecución = Path.Combine(DirectorioÓrdenesDeEjecución, Game);
+                if (!Directory.Exists(directorioÓrdenesDeEjecución)) Directory.CreateDirectory(directorioÓrdenesDeEjecución);
+                return directorioÓrdenesDeEjecución;
+
+            }
+        }
 
         public string NamesDirectory {
             get {
