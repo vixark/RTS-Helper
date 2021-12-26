@@ -65,6 +65,8 @@ namespace RTSHelper {
 
         public static string NuevaLíneaId = "\n";
 
+        public static double CorrecciónEscala = 1.25 / (WForms.Screen.PrimaryScreen.Bounds.Width / SystemParameters.PrimaryScreenWidth); // Todos los valores son calculados experimentalmente en mi computador que tiene una escala de 125, entonces para ser usado en computadores de otra escala se debe ajustar todos los valores con este factor.
+
         public static string SeparadorDecimales = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
 
         public enum NameType { // Al agregar un valor aquí, se debe agregar a Settings.NamesTypesPriority y en Idiomas si es un idioma.
@@ -172,7 +174,7 @@ namespace RTSHelper {
 
         public static string FontColorPredeterminado = Color.FromRgb(150, 150, 150).ToString();
 
-        public static double OpacityPredeterminado = 0.6;
+        public static double OpacityPredeterminado = 0.7;
 
         public static string CurrentStepFontColorPredeterminado = Color.FromRgb(220, 220, 220).ToString();
 

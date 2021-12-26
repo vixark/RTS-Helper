@@ -313,79 +313,79 @@ namespace RTSHelper {
 
             ShowNextStep = true;
             GameSpeed = 1.7;
-            StepDuration = 25; // El tiempo de creación de 2 aldeanos.
+            StepDuration = 25; // El tiempo de creación de 1 aldeano.
 
             switch (resolución) {
                 case "1920x1080":
 
-                    Height = 146;
-                    Width = 495;
-                    Top = 718;
-                    Left = 722;
-                    CurrentStepFontSize = 19;
-                    NextStepFontSize = 11.5;
-                    ButtonsSize = 24;
-                    ButtonsMargin = 2;
-                    ButtonsPadding = 2;
-                    LargeFontSize = 16;
-                    MediumFontSize = 14;
-                    LeftMarginCurrentStep = 15;
-                    TopMarginCurrentStep = 3;
-                    TopMarginNextStep = 27;
-                    BottomMargenSteps = 3;
-                    RightMarginNextStep = 67;
-                    BuildOrderSelectorWidth = 145;
-                    ExecutionSpeedSelectorWidth = 55;
-                    ThicknessCircularProgressBar = 6;
-                    RightMarginCircularProgressBar = 6;
+                    Height = 146 * CorrecciónEscala;
+                    Width = 495 * CorrecciónEscala;
+                    Top = 718 * CorrecciónEscala;
+                    Left = 722 * CorrecciónEscala;
+                    CurrentStepFontSize = 19 * CorrecciónEscala;
+                    NextStepFontSize = 11.5 * CorrecciónEscala;
+                    ButtonsSize = 24 * CorrecciónEscala;
+                    ButtonsMargin = 2 * CorrecciónEscala;
+                    ButtonsPadding = 2 * CorrecciónEscala;
+                    LargeFontSize = 16 * CorrecciónEscala;
+                    MediumFontSize = 14 * CorrecciónEscala;
+                    LeftMarginCurrentStep = 15 * CorrecciónEscala;
+                    TopMarginCurrentStep = 3 * CorrecciónEscala;
+                    TopMarginNextStep = 27 * CorrecciónEscala;
+                    BottomMargenSteps = 3 * CorrecciónEscala;
+                    RightMarginNextStep = 67 * CorrecciónEscala;
+                    BuildOrderSelectorWidth = 145 * CorrecciónEscala;
+                    ExecutionSpeedSelectorWidth = 55 * CorrecciónEscala;
+                    ThicknessCircularProgressBar = 6 * CorrecciónEscala;
+                    RightMarginCircularProgressBar = 6 * CorrecciónEscala;
                     break;
 
                 case "2560x1440":
 
-                    Height = 195;
-                    Width = 662; // No cambiar, normalmente uso el minimapa 25% más grande y el valor mi valor sería 635.
-                    Top = 957;
-                    Left = 962;
-                    CurrentStepFontSize = 25;
-                    NextStepFontSize = 16;
-                    ButtonsSize = 33;
-                    ButtonsMargin = 3;
-                    ButtonsPadding = 2;
-                    LargeFontSize = 24;
-                    MediumFontSize = 18;
-                    LeftMarginCurrentStep = 17;
-                    TopMarginCurrentStep = 5;
-                    TopMarginNextStep = 31;
-                    BottomMargenSteps = 5;
-                    RightMarginNextStep = 90;
-                    BuildOrderSelectorWidth = 200;
-                    ExecutionSpeedSelectorWidth = 75;
-                    ThicknessCircularProgressBar = 8;
-                    RightMarginCircularProgressBar = 7;
+                    Height = 195 * CorrecciónEscala;
+                    Width = 662 * CorrecciónEscala; // No cambiar, normalmente uso el minimapa 25% más grande y el valor mi valor sería 635.
+                    Top = 957 * CorrecciónEscala;
+                    Left = 962 * CorrecciónEscala;
+                    CurrentStepFontSize = 25 * CorrecciónEscala;
+                    NextStepFontSize = 16 * CorrecciónEscala;
+                    ButtonsSize = 33 * CorrecciónEscala;
+                    ButtonsMargin = 3 * CorrecciónEscala;
+                    ButtonsPadding = 2 * CorrecciónEscala;
+                    LargeFontSize = 24 * CorrecciónEscala;
+                    MediumFontSize = 18 * CorrecciónEscala;
+                    LeftMarginCurrentStep = 17 * CorrecciónEscala;
+                    TopMarginCurrentStep = 5 * CorrecciónEscala;
+                    TopMarginNextStep = 31 * CorrecciónEscala;
+                    BottomMargenSteps = 5 * CorrecciónEscala;
+                    RightMarginNextStep = 90 * CorrecciónEscala;
+                    BuildOrderSelectorWidth = 200 * CorrecciónEscala;
+                    ExecutionSpeedSelectorWidth = 75 * CorrecciónEscala;
+                    ThicknessCircularProgressBar = 8 * CorrecciónEscala;
+                    RightMarginCircularProgressBar = 7 * CorrecciónEscala;
                     break;
 
                 case "1366x768":
 
-                    Height = 105;
-                    Width = 354;
-                    Top = 510;
-                    Left = 513;
-                    CurrentStepFontSize = 13.5;
-                    NextStepFontSize = 8.3;
-                    ButtonsSize = 17;
-                    ButtonsMargin = 1;
-                    ButtonsPadding = 1;
-                    LargeFontSize = 12;
-                    MediumFontSize = 10;
-                    LeftMarginCurrentStep = 8;
-                    TopMarginCurrentStep = 2;
-                    TopMarginNextStep = 15;
-                    BottomMargenSteps = 2;
-                    RightMarginNextStep = 45;
-                    BuildOrderSelectorWidth = 110;
-                    ExecutionSpeedSelectorWidth = 40;
-                    ThicknessCircularProgressBar = 4;
-                    RightMarginCircularProgressBar = 4;
+                    Height = 105 * CorrecciónEscala;
+                    Width = 354 * CorrecciónEscala;
+                    Top = 510 * CorrecciónEscala;
+                    Left = 513 * CorrecciónEscala;
+                    CurrentStepFontSize = 13.5 * CorrecciónEscala;
+                    NextStepFontSize = 8.3 * CorrecciónEscala;
+                    ButtonsSize = 17 * CorrecciónEscala;
+                    ButtonsMargin = 1 * CorrecciónEscala;
+                    ButtonsPadding = 1 * CorrecciónEscala;
+                    LargeFontSize = 12 * CorrecciónEscala;
+                    MediumFontSize = 10 * CorrecciónEscala;
+                    LeftMarginCurrentStep = 8 * CorrecciónEscala;
+                    TopMarginCurrentStep = 2 * CorrecciónEscala;
+                    TopMarginNextStep = 15 * CorrecciónEscala;
+                    BottomMargenSteps = 2 * CorrecciónEscala;
+                    RightMarginNextStep = 45 * CorrecciónEscala;
+                    BuildOrderSelectorWidth = 110 * CorrecciónEscala;
+                    ExecutionSpeedSelectorWidth = 40 * CorrecciónEscala;
+                    ThicknessCircularProgressBar = 4 * CorrecciónEscala;
+                    RightMarginCircularProgressBar = 4 * CorrecciónEscala;
                     break;
 
                 default:
@@ -415,35 +415,35 @@ namespace RTSHelper {
                 switch (resolución) {
                     case "1920x1080":
 
-                        BottomMargenSteps += 32;
-                        Height = 146;
-                        Width = 263;
-                        Top = 718;
-                        Left = 1044;
-                        CurrentStepFontSize = 14.5;
-                        BuildOrderSelectorWidth = 140;
+                        BottomMargenSteps += 32 * CorrecciónEscala;
+                        Height = 146 * CorrecciónEscala;
+                        Width = 263 * CorrecciónEscala;
+                        Top = 718 * CorrecciónEscala;
+                        Left = 1044 * CorrecciónEscala;
+                        CurrentStepFontSize = 14.5 * CorrecciónEscala;
+                        BuildOrderSelectorWidth = 140 * CorrecciónEscala;
                         break;
 
                     case "2560x1440":
 
-                        BottomMargenSteps += 40;
-                        Width = 355;
-                        Left = 1389;
-                        Height = 195;
-                        Top = 957;
-                        CurrentStepFontSize = 19.5;
-                        BuildOrderSelectorWidth = 185;
+                        BottomMargenSteps += 40 * CorrecciónEscala;
+                        Width = 355 * CorrecciónEscala;
+                        Left = 1389 * CorrecciónEscala;
+                        Height = 195 * CorrecciónEscala;
+                        Top = 957 * CorrecciónEscala;
+                        CurrentStepFontSize = 19.5 * CorrecciónEscala;
+                        BuildOrderSelectorWidth = 185 * CorrecciónEscala;
                         break;
 
                     case "1366x768":
 
-                        BottomMargenSteps += 26;
-                        Height = 105;
-                        Width = 188;
-                        Top = 510;
-                        Left = 743;
-                        CurrentStepFontSize = 10;
-                        BuildOrderSelectorWidth = 97;
+                        BottomMargenSteps += 26 * CorrecciónEscala;
+                        Height = 105 * CorrecciónEscala;
+                        Width = 188 * CorrecciónEscala;
+                        Top = 510 * CorrecciónEscala;
+                        Left = 743 * CorrecciónEscala;
+                        CurrentStepFontSize = 10 * CorrecciónEscala;
+                        BuildOrderSelectorWidth = 97 * CorrecciónEscala;
                         break;
 
                     default:
