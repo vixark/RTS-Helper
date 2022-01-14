@@ -50,7 +50,7 @@ namespace RTSHelper {
 
 
         #region Sonidos
-
+        
         public string StepStartSound { get; set; } = StepStartSoundPredeterminado;
 
         public string StepEndSound { get; set; } = StepEndSoundPredeterminado;

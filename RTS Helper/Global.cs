@@ -572,7 +572,7 @@ namespace RTSHelper {
                 types["Type"].Add("Heavy Cavalry Archer", "Unit");
                 types["Type"].Add("Genitour", "Unit");
                 types["Type"].Add("Elite Genitour", "Unit");
-                types["Type"].Add("Militia", "Unit");
+                types["Type"].Add("Militia", "Unit");  
                 types["Type"].Add("Man-at-Arms", "Unit");
                 types["Type"].Add("Long Swordsman", "Unit");
                 types["Type"].Add("Two-Handed Swordsman", "Unit");
@@ -1101,6 +1101,12 @@ namespace RTSHelper {
                 types["Type"].Add("8", "Other");
                 types["Type"].Add("9", "Other");
                 types["Type"].Add("0", "Other");
+                types["Type"].Add("-", "Other");
+                types["Type"].Add("Explore", "Action");
+                types["Type"].Add("Flag", "Other");
+                types["Type"].Add("Space", "Other");
+                types["Type"].Add("Double Space", "Other");
+                types["Type"].Add("Triple Space", "Other");
 
             }
 
@@ -1445,7 +1451,7 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("5397", "Tree (Oak)"); names[NameType.Common].Add("5397", "Tree"); names[NameType.CommonPlural].Add("5397", "Trees");
                 names[NameType.Complete].Add("5401", "Forage Bush"); names[NameType.Common].Add("5401", "Berry Bush"); names[NameType.Abbreviation].Add("5401", "Berry"); names[NameType.CommonPlural].Add("5401", "Forage Bushes|Berry Bushes"); names[NameType.AbbreviationPlural].Add("5401", "Berries");
                 names[NameType.Complete].Add("5406", "Wild Boar"); names[NameType.Common].Add("5406", "Boar"); names[NameType.CommonPlural].Add("5406", "Boars");
-                names[NameType.Complete].Add("5498", "Sheep"); names[NameType.CommonPlural].Add("5498", "Sheeps");
+                names[NameType.Complete].Add("5498", "Sheep"); names[NameType.Acronym].Add("5498", "SHP"); names[NameType.CommonPlural].Add("5498", "Sheeps");
                 names[NameType.Complete].Add("5502", "Cow"); names[NameType.CommonPlural].Add("5502", "Cows");
                 names[NameType.Complete].Add("5503", "Llama"); names[NameType.CommonPlural].Add("5503", "Llamas");
                 names[NameType.Complete].Add("4301", "Food"); names[NameType.Acronym].Add("4301", "F");
@@ -1491,7 +1497,7 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("5412", "Heavy Cavalry Archer"); names[NameType.Acronym].Add("5412", "HCA"); names[NameType.CommonPlural].Add("5412", "Heavy Cavalry Archers");
                 names[NameType.Complete].Add("5137", "Genitour"); names[NameType.Abbreviation].Add("5137", "Geni"); names[NameType.CommonPlural].Add("5137", "Genitours"); names[NameType.AbbreviationPlural].Add("5137", "Genis");
                 names[NameType.Complete].Add("5139", "Elite Genitour");
-                names[NameType.Complete].Add("5079", "Militia"); names[NameType.CommonPlural].Add("5079", "Militias");
+                names[NameType.Complete].Add("5079", "Militia"); names[NameType.Abbreviation].Add("5079", "Mil"); names[NameType.CommonPlural].Add("5079", "Militias");
                 names[NameType.Complete].Add("5080", "Man-at-Arms"); names[NameType.Acronym].Add("5080", "MAA|M@A"); names[NameType.CommonPlural].Add("5080", "Men-at-Arms");
                 names[NameType.Complete].Add("5081", "Long Swordsman"); names[NameType.Abbreviation].Add("5081", "Longsword"); names[NameType.Acronym].Add("5081", "LS"); names[NameType.CommonPlural].Add("5081", "Long Swordsmen"); names[NameType.AbbreviationPlural].Add("5081", "Longswords");
                 names[NameType.Complete].Add("5411", "Two-Handed Swordsman"); names[NameType.Acronym].Add("5411", "2HS"); names[NameType.CommonPlural].Add("5411", "Two-Handed Swordsmen");
@@ -2020,6 +2026,12 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("22127", "8");
                 names[NameType.Complete].Add("22128", "9");
                 names[NameType.Complete].Add("99", "0");
+                names[NameType.Complete].Add("9648", "-");
+                names[NameType.Complete].Add("13055", "Explore");
+                names[NameType.Complete].Add("13330", "Flag");
+                names[NameType.Complete].Add("400048", "Space"); names[NameType.Common].Add("400048", " ");
+                names[NameType.Complete].Add("400049", "Double Space"); names[NameType.Common].Add("400049", "  ");
+                names[NameType.Complete].Add("400050", "Triple Space"); names[NameType.Common].Add("400050", "   ");
 
                 string elite(string original) => "Elite " + original.Replace("|", $"|Elite ");
 

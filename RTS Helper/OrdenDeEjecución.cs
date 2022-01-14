@@ -27,11 +27,24 @@ namespace RTSHelper {
 
         public Paso? Introducción { get; set; } = null;
 
-        public int NúmeroPaso { get; set; } = 0;
+        private int _NúmeroPaso = 0;
+        public int NúmeroPaso {
+
+            get { return _NúmeroPaso; }
+            set {
+                if (_NúmeroPaso != value && EnCambioNúmeroPaso != null) EnCambioNúmeroPaso();
+                _NúmeroPaso = value;
+
+            } 
+
+        }
 
         public Dictionary<string, Comportamiento> ClasesDeComportamientos { get; set; } = new Dictionary<string, Comportamiento>();
 
         public Dictionary<string, Formato> ClasesDeFormatos { get; set; } = new Dictionary<string, Formato>();
+
+        public Action? EnCambioNúmeroPaso;
+        
 
         #endregion Propiedades>
 
@@ -58,7 +71,7 @@ namespace RTSHelper {
             var rutaBuildOrder = Path.Combine(directorioBuildOrders, $"{nombreBuildOrder}.txt");
             if (!Directory.Exists(directorioBuildOrders)) Directory.CreateDirectory(directorioBuildOrders);
             if (!File.Exists(rutaBuildOrder))
-                File.WriteAllText(rutaBuildOrder, $@"Edit '\RTS Helper\Build Orders\{nombreBuildOrder}.txt' \\n to add your build order.");
+                File.WriteAllText(rutaBuildOrder, $@"Edit '\RTS Helper\Build Orders{Preferencias.Game}\{nombreBuildOrder}.txt' \\n to add your build order.");
 
             var textosPasos = File.ReadAllLines(rutaBuildOrder);
             Formato? formatoGlobal = null;
@@ -66,7 +79,8 @@ namespace RTSHelper {
 
             foreach (var textoPaso in textosPasos) {
 
-                var textoPasoTrimmed = textoPaso.Trim();
+                var textoPasoSinComentarios = EliminarComentarios(textoPaso) ?? "";
+                var textoPasoTrimmed = textoPasoSinComentarios.Trim();
 
                 if (textoPasoTrimmed.StartsWith("<<") && textoPasoTrimmed.EndsWith(">>")) { // Es necesario hacerlo así y no con Regex por facilidad y para que no entre en conflicto con las clases de comportamientos que van entre <>.
 
@@ -82,9 +96,9 @@ namespace RTSHelper {
 
                     Introducción = new Paso(textoPasoTrimmed[2..^2], comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos);
 
-                } else if (!string.IsNullOrWhiteSpace(textoPaso)) { // No se agrega el paso si es un espacio en la build order. Estos espacios son útiles para tener más orden de edición.
+                } else if (!string.IsNullOrWhiteSpace(textoPasoTrimmed)) { // No se agrega el paso si es un espacio en la build order. Estos espacios son útiles para tener más orden de edición.
 
-                    pasos.Add(new Paso(textoPaso, comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos));
+                    pasos.Add(new Paso(textoPasoTrimmed, comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos));
 
                 }
 
@@ -99,6 +113,33 @@ namespace RTSHelper {
             Pasos = pasos;
 
         } // CargarPasos>
+
+
+        public string? EliminarComentarios(string? texto) {
+
+            if (texto is null) return null;
+            if (!texto.Contains("||")) return texto;
+            var textoSinComentarios = new StringBuilder();
+            var índiceActual = 0;
+            var índiceAnterior = 0;
+            var esComentario = texto.StartsWith("||");
+            var inicioTexto = true;
+
+            do {
+
+                índiceAnterior = índiceActual;
+                índiceActual = texto.IndexOf("||", índiceAnterior + 2);
+                var índiceInicial = inicioTexto ? 0 : índiceAnterior + 2;
+                if (!esComentario)
+                    textoSinComentarios.Append(índiceActual == -1 ? texto[índiceInicial..^0] : texto[índiceInicial..índiceActual]);
+                esComentario = !esComentario;
+                inicioTexto = false;
+
+            } while (índiceActual != -1);
+
+            return textoSinComentarios.ToString();
+
+        } // EliminarComentarios>
 
 
         public void MostrarPaso(int? númeroPaso, Formato formatoPredeterminado, StackPanel contenedor, bool mostrarSiempreÚltimoPaso, double altoMáximo,
@@ -125,7 +166,7 @@ namespace RTSHelper {
             } else {
                 paso = Pasos[(int)númeroPasoAMostrar];
             }
-  
+
             if (paso != null) {
 
                 var sumaAlto = 0D;
@@ -150,7 +191,7 @@ namespace RTSHelper {
 
                         var espaciadoVertical = altoSegmentoTexto * (Preferencias.LineSpacing / 100);
                         if (espaciadoVertical > mayorEspaciadoVertical) mayorEspaciadoVertical = espaciadoVertical;
-                                
+
                         Segmento segmentoEfectivo;
                         var margenEnTexto = false;
                         if (segmento.Tipo == TipoSegmento.Entidad) {
@@ -167,7 +208,7 @@ namespace RTSHelper {
                                 segmentoEfectivo = ObtenerSegmentoEfectivo(entidad);
                                 margenEnTexto = segmentoEfectivo.Tipo != TipoSegmento.Imagen; // Cuando se usa el marcado con corchetes cuadrados por ejemplo, [attack][town center] se espera que las entidades no sean adjuntas si están en texto, es decir, se espera que no se muestre ATTKTC, si no ATT TC. Por esto se debe agregar este margen adicional cuando la entidad no se vaya a mostrar como imagen.
                             }
-                                    
+
                         } else {
                             segmentoEfectivo = segmento.Clonar();
                             margenEnTexto = false; // El texto normal no lleva margen.
@@ -189,7 +230,7 @@ namespace RTSHelper {
                             if ((bool)formato.Subrayado) textBlock.TextDecorations = TextDecorations.Underline;
 
                             if (formato.Posición != PosiciónTexto.Normal) {
-                                textBlock.FontFamily = Formato.ObtenerFuentePosiciónEspecial(formato.Posición, segmentoEfectivo.Texto, 
+                                textBlock.FontFamily = Formato.ObtenerFuentePosiciónEspecial(formato.Posición, segmentoEfectivo.Texto,
                                     formato.NombreFuente);
                                 if (formato.Posición == PosiciónTexto.Superíndice) textBlock.Typography.Variants = FontVariants.Superscript;
                                 if (formato.Posición == PosiciónTexto.Subíndice) textBlock.Typography.Variants = FontVariants.Subscript;
@@ -233,15 +274,15 @@ namespace RTSHelper {
 
                                             if (formato.Posición == PosiciónTexto.Superíndice)
                                                 borderAnterior.CornerRadius = new CornerRadius(radioAnterior, 0, 0, radioAnterior);
-                                            if (formato.Posición == PosiciónTexto.Subíndice) ambosÍndices = true; 
-                                                    
+                                            if (formato.Posición == PosiciónTexto.Subíndice) ambosÍndices = true;
+
                                             break;
 
                                         case VerticalAlignment.Bottom:
 
-                                            if (formato.Posición == PosiciónTexto.Subíndice) 
+                                            if (formato.Posición == PosiciónTexto.Subíndice)
                                                 borderAnterior.CornerRadius = new CornerRadius(radioAnterior, 0, 0, radioAnterior);
-                                            if (formato.Posición == PosiciónTexto.Superíndice) ambosÍndices = true; 
+                                            if (formato.Posición == PosiciónTexto.Superíndice) ambosÍndices = true;
                                             break;
 
                                         case VerticalAlignment.Center:
@@ -257,9 +298,9 @@ namespace RTSHelper {
                                     }
 
                                     if (ambosÍndices) { // Se está usando tanto el superíndice como el subíndice. Se debe verificar un objeto aún más atrás para corregir los bordes del original.
-                                            
+
                                         margenIzquierda = -margen - tamaño; // Para que quede justo abajo/arriba del otro super/subíndice.
-                                        if (spnHorizontal.Children.Count > 1 
+                                        if (spnHorizontal.Children.Count > 1
                                             && spnHorizontal.Children[spnHorizontal.Children.Count - 2] is Grid gridAnterior2
                                             && gridAnterior2.Children[0] is Border borderAnterior2 &&
                                             gridAnterior2.VerticalAlignment == VerticalAlignment.Center) { // Solo se analiza el caso de imagen grande anterior a la anterior. Los otros no son casos usuales.
@@ -276,13 +317,16 @@ namespace RTSHelper {
                             } // formato.Posición != PosiciónTexto.Normal>
 
                             var grid = new Grid { Margin = new Thickness(0), VerticalAlignment = alineación };
-                            var border = new Border { Height = tamaño, CornerRadius = new CornerRadius(radioEsquinasIzquierdas, 
-                                radioEsquinasDerechas, radioEsquinasDerechas, radioEsquinasIzquierdas), 
+                            var border = new Border {
+                                Height = tamaño, CornerRadius = new CornerRadius(radioEsquinasIzquierdas,
+                                radioEsquinasDerechas, radioEsquinasDerechas, radioEsquinasIzquierdas),
                                 Opacity = Preferencias.ImageBackgroundOpacity, Background = ObtenerBrocha(Preferencias.ImageBackgroundColor),
-                                Margin = new Thickness(margenIzquierda, 0, margenDerecha, 0) 
+                                Margin = new Thickness(margenIzquierda, 0, margenDerecha, 0)
                             };
-                            var image = new Image { Source = ObtenerImagen(segmentoEfectivo.Texto), Height = tamaño,
-                                Margin = new Thickness(margenIzquierda, 0, margenDerecha, 0) }; // El texto del segmentoEfectivo es el nombre de la imagen.
+                            var image = new Image {
+                                Source = ObtenerImagen(segmentoEfectivo.Texto), Height = tamaño,
+                                Margin = new Thickness(margenIzquierda, 0, margenDerecha, 0)
+                            }; // El texto del segmentoEfectivo es el nombre de la imagen.
                             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
                             grid.Children.Add(border);
                             grid.Children.Add(image);
@@ -312,7 +356,7 @@ namespace RTSHelper {
                     contenedor.Children.Add(spnHorizontal);
 
                 } // foreach instrucción>
-                    
+
             } // paso != null>
 
             if (!string.IsNullOrEmpty(errores)) MostrarError(errores);

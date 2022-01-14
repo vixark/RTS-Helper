@@ -126,6 +126,12 @@
                                Width="{Binding ActualHeight, ElementName=BtnSettings, Mode=OneWay}" Style="{StaticResource customButton}" 
                                bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
                                ToolTip="{DynamicResource AlertContentMoreHeightThanWindow}">⚠</local:HoverButton>
+
+            <local:HoverButton x:Name="BtnAlternarPasoSiguienteAnterior" Click="BtnAlternarVistaPasoSiguienteAnterior_Click" 
+                               BorderThickness="0" Foreground="{DynamicResource BrushFuente}" 
+                               FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}" 
+                               Width="{Binding ActualHeight, ElementName=BtnSettings, Mode=OneWay}" Style="{StaticResource customButton}" 
+                               bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" ToolTip="See Previous Step">⮨</local:HoverButton>
             
             <local:HoverButton x:Name="BtnSettings" Click="BtnSettings_Click" BorderThickness="0" Foreground="{DynamicResource BrushFuente}" 
                                FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}" 
@@ -201,13 +207,29 @@
                         FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}"                
                         BorderBrush="{DynamicResource BrushFuente}" BorderThickness="1" Margin="{DynamicResource MargenBotones}" 
                         Style="{StaticResource customButton}" bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
-                        Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Previous Step">|◁</local:HoverButton>
+                        Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Previous Step" Content="|◁">
+
+                        <local:HoverButton.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="MniDelay" Click="MniDelay_Click" Header="Delay 5 seconds" />
+                            </ContextMenu>
+                        </local:HoverButton.ContextMenu>
+
+                    </local:HoverButton>
 
                     <local:HoverButton x:Name="BtnNext" Click="BtnNext_Click" Foreground="{DynamicResource BrushFuente}" IsEnabled="False"  
                         FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}"                
                         BorderBrush="{DynamicResource BrushFuente}" BorderThickness="1" Margin="{DynamicResource MargenBotones}" 
                         Style="{StaticResource customButton}" bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
-                        Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Next Step">▷|</local:HoverButton>
+                        Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Next Step" Content="▷|">
+
+                        <local:HoverButton.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="MniRush" Click="MniRush_Click" Header="Rush 5 seconds" />
+                            </ContextMenu>
+                        </local:HoverButton.ContextMenu>
+
+                    </local:HoverButton>
 
                 </StackPanel>
 
@@ -294,6 +316,11 @@
                     Background="{DynamicResource BrushFondoControles}" Margin="{DynamicResource MargenPasoSiguiente}"
                     Visibility="{DynamicResource VisibilidadPasoSiguiente}" >
         </StackPanel>
-       
+
+        <StackPanel x:Name="SpnPasoAnterior" Orientation="Vertical" Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                    Background="{DynamicResource BrushFondoControles}" Margin="{DynamicResource MargenPasoSiguiente}"
+                    Visibility="{DynamicResource VisibilidadPasoAnterior}" Opacity="1" >
+        </StackPanel>
+        
     </Grid>
 </Window>

@@ -64,7 +64,7 @@ namespace RTSHelper {
 
         private bool EditandoComboBoxEnCódigo = false;
 
-        private double DuraciónPasoParcialAnterior = 0;
+        private double DuraciónAntesDePausa = 0;
 
         private bool SilenciadoAlCompletar = false;
 
@@ -73,6 +73,8 @@ namespace RTSHelper {
         private EEstado Estado { get; set; } = EEstado.Stoped;
 
         private enum EEstado { Stoped, Running, Paused }
+
+        private bool MostrandoPasoAnterior = false;
 
         #endregion Propiedades y Variables>
 
@@ -96,7 +98,8 @@ namespace RTSHelper {
             TimerBlinkerGameTime.Interval = TimeSpan.FromMilliseconds(300);
             TimerBlinkerGameTime.Tick += new EventHandler(TimerBlinkerGameTime_Tick);
 
-            LeerPreferencias(); 
+            LeerPreferencias();
+            OrdenDeEjecución.EnCambioNúmeroPaso = () => ActualizarVistaPasoSiguienteAnterior(nuevoMostrandoPasoAnterior: false);
             OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder);
             LeerBuildOrders();
             CargarBuildOrder(iniciando: true);
@@ -118,6 +121,7 @@ namespace RTSHelper {
         private void BtnStart_Click(object sender, RoutedEventArgs e) {
 
             if (Estado == EEstado.Stoped || Estado == EEstado.Paused) {
+
                 LblTiempoEnJuego.Content = "0:00"; // Para evitar un pequeño retraso en la actualización.
                 CpgProgresoPaso.Value = 0;
                 BtnStart.Content = "❚❚";
@@ -126,6 +130,7 @@ namespace RTSHelper {
                 BtnRestart.Content = "⟳";
                 TxtPaso.IsEnabled = true;
                 CmbVelocidadEjecución.IsEnabled = true;
+
             }
 
             switch (Estado) {
@@ -146,9 +151,8 @@ namespace RTSHelper {
                     BtnStart.ToolTip = "Restart";
                     BtnRestart.ToolTip = "Stop";
                     BtnRestart.Content = "■";
-                    TxtPaso.IsEnabled = false;
-                    CmbVelocidadEjecución.IsEnabled = false; // Para cambiar la velocidad de ejeución se requiere el MedidorTimer ejecutando.            
-                    MedidorTimer.Stop(); // Lo suspende, pero almacena la duración actual.
+                    CmbVelocidadEjecución.IsEnabled = false; // Para cambiar la velocidad de ejecución se requiere el MedidorTimer ejecutando.            
+                    MedidorTimer.Stop(); // Lo suspende, pero mantiene el valor de la duración actual.
                     Timer?.Stop(); // Lo suspende completamente.
                     TimerFlash.Stop(); // Lo suspende completamente.
                     TimerStepEndSound?.Stop(); // Lo suspende completamente.     
@@ -162,7 +166,7 @@ namespace RTSHelper {
 
                         MedidorTimer.Start();
                         ActualizarDuraciónPasoEnTimerEnPróximoTick = true;
-                        DuraciónPasoParcialAnterior += MedidorTimer.ElapsedMilliseconds;
+                        DuraciónAntesDePausa += MedidorTimer.ElapsedMilliseconds;
                         ActualizarIntervaloTimer(new TimeSpan(0, 0, 0, 0, (int)Math.Round(Timer.Interval.TotalMilliseconds - MedidorTimer.ElapsedMilliseconds, 0)));
                         ActualizarUI();
 
@@ -188,6 +192,7 @@ namespace RTSHelper {
                     LblTiempoEnJuego.Content = "0:00"; // Para evitar un pequeño retraso en la actualización.
                     CpgProgresoPaso.Value = 0;
                     OrdenDeEjecución.NúmeroPaso = 0;
+                    DuraciónAntesDePausa = 0;
                     ReiniciarPasoActual();
                     if (Preferencias.MuteOnComplete && SilenciadoAlCompletar) {
                         Preferencias.Muted = false;
@@ -203,14 +208,16 @@ namespace RTSHelper {
                     LblTiempoEnJuego.Content = "0:00";
                     CpgProgresoPaso.Value = 0;
                     OrdenDeEjecución.NúmeroPaso = 0;
+                    DuraciónAntesDePausa = 0;
                     ActualizarPaso(stop: true);
                     TxtPaso.Text = "";
+                    TxtPaso.IsEnabled = false;
                     CmbVelocidadEjecución.IsEnabled = true; // Cuando está parado completamente si se puede cambiar la velocidad de ejecución.
                     Timer?.Stop();
                     TimerFlash.Stop();
                     MedidorTimer.Reset();
                     TimerStepEndSound?.Stop();
-                    ActualizarUI();  
+                    ActualizarUI(forzar: true);  
                     BtnNext.IsEnabled = false;
                     BtnPrevious.IsEnabled = false;
                     SuspenderBlinkingTiempoJuego();
@@ -243,7 +250,7 @@ namespace RTSHelper {
             MedidorTimer.Reset();
             OrdenDeEjecución.NúmeroPaso++;
             ActualizarPaso();
-            DuraciónPasoParcialAnterior = 0;
+            DuraciónAntesDePausa = 0;
             GuardarDuraciónPaso(OrdenDeEjecución.NúmeroPaso - 1);
             ActualizarUI();
             Flash();
@@ -264,7 +271,7 @@ namespace RTSHelper {
             }
 
             if (!(Timer is null)) ReiniciarTimerStepEndSound(Timer.Interval);
-            MedidorTimer.Start(); // Se reinicia siempre para evitar que se descoordine con el Timer. Si se dejaba correr por su propia cuenta terminaba desfazándose con el Timer y generando problemas en los momentos entre paso y paso. Pasaba de 19 a 10 y después a 21.
+            MedidorTimer.Start(); // Se reinicia siempre para evitar que se descoordine con el Timer. Si se dejaba correr por su propia cuenta, terminaba desfazándose con el Timer y generando problemas en los momentos entre paso y paso. Pasaba de 19 a 10 y después a 21.
 
         } // Timer_Tick>
 
@@ -282,7 +289,7 @@ namespace RTSHelper {
             OrdenDeEjecución.NúmeroPaso++;
             GuardarDuraciónPaso(OrdenDeEjecución.NúmeroPaso - 1);
             ActualizarPaso(siguienteOAnterior: true);
-            ActualizarUI();
+            ActualizarUI(forzar: true);
 
         } // BtnNext_Click>
 
@@ -290,12 +297,12 @@ namespace RTSHelper {
         private void BtnPrevious_Click(object sender, RoutedEventArgs e) {
 
             OrdenDeEjecución.NúmeroPaso--;
-            if (OrdenDeEjecución.NúmeroPaso == -1) {
+            if (OrdenDeEjecución.NúmeroPaso == -1 && Estado == EEstado.Running) {
                 OrdenDeEjecución.NúmeroPaso = 0;
                 ReiniciarPasoActual();
             } else {
                 ActualizarPaso(siguienteOAnterior: true);
-                ActualizarUI();
+                ActualizarUI(forzar: true);
             }
 
         } // BtnPrevious_Click>
@@ -310,10 +317,17 @@ namespace RTSHelper {
                         GuardarDuraciónPaso(i);
                     }
                 }
-                OrdenDeEjecución.NúmeroPaso = intPaso;
-                if (CambiandoTxtPasoAutomáticamente) return;
-                ReiniciarPasoActual();
 
+                OrdenDeEjecución.NúmeroPaso = intPaso;
+                if (CambiandoTxtPasoAutomáticamente) {
+                    return;
+                } else if (Estado == EEstado.Running) {
+                    ReiniciarPasoActual();
+                } else {
+                    ActualizarPaso(siguienteOAnterior: true);
+                    ActualizarUI(forzar: true);
+                }
+   
             }
 
         } // TxtPaso_TextChanged>
@@ -447,8 +461,9 @@ namespace RTSHelper {
             for (int i = pasoInicial; i < OrdenDeEjecución.NúmeroPaso; i++) {
                 OrdenDeEjecución.Pasos[i].DuraciónEnJuego = OrdenDeEjecución.Pasos[pasoInicial].DuraciónEnJuego;
             }
-            ActualizarPaso();
-            ActualizarUI();
+
+            ActualizarPaso(siguienteOAnterior: true);
+            ActualizarUI(forzar:true);
 
         } // MniLastStep_Click>
 
@@ -465,11 +480,48 @@ namespace RTSHelper {
             MostrarInformación((string)Application.Current.Resources["AlertContentMoreHeightThanWindow"]);
 
 
+        private void BtnAlternarVistaPasoSiguienteAnterior_Click(object sender, RoutedEventArgs e) 
+            => ActualizarVistaPasoSiguienteAnterior(!MostrandoPasoAnterior, actualizarPaso: true);
+
+
+        private void MniDelay_Click(object sender, RoutedEventArgs e) {
+
+            if (Timer == null) return;
+            MedidorTimer.Restart();
+            var nuevaDuraciónPasoCompleto = ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed, OrdenDeEjecución.NúmeroPaso);
+            var tiempoPasoActual = ObtenerTiempoPasoActual().Add(new TimeSpan(0, 0, 0, 0, -5000));
+            var duraciónPasoParcial = nuevaDuraciónPasoCompleto.Add(-tiempoPasoActual);
+            ActualizarIntervaloTimer(duraciónPasoParcial);
+            ActualizarUI(forzar: true);
+
+        } // MniDelay_Click>
+
+
+        private void MniRush_Click(object sender, RoutedEventArgs e) {
+
+        } // MniRush_Click>
+
+
         #endregion Eventos>
 
 
 
         #region Procedimientos y Funciones
+
+
+        public void ActualizarVistaPasoSiguienteAnterior(bool nuevoMostrandoPasoAnterior, bool actualizarPaso = false) {
+
+            if (!nuevoMostrandoPasoAnterior) {
+                BtnAlternarPasoSiguienteAnterior.Content = "⮨";
+                BtnAlternarPasoSiguienteAnterior.ToolTip = "See Previous Step";
+            } else {
+                BtnAlternarPasoSiguienteAnterior.Content = "⮩";
+                BtnAlternarPasoSiguienteAnterior.ToolTip = "See Next Step";
+            }
+            MostrandoPasoAnterior = nuevoMostrandoPasoAnterior;
+            if (actualizarPaso) ActualizarPaso(alternandoSiguienteAnteriorPaso: true);
+
+        } // ActualizarVistaPasoSiguienteAnterior>
 
 
         public void LeerBuildOrders() {
@@ -489,32 +541,25 @@ namespace RTSHelper {
         } // LeerBuildOrders>
 
 
-        private void ActualizarUI() {
+        private void ActualizarUI(bool forzar = false) {
 
-            if (Timer is null || !Timer.IsEnabled) {
-                // Cuando esté en pausa no debe actualizar ni borrar el temporizador.
+            var actualizar = forzar || (!(Timer is null || !Timer.IsEnabled) && MedidorTimer.IsRunning); // Cuando esté en pausa no debe actualizar ni borrar el temporizador.      
+            if (!actualizar) return;
+
+            var velocidadJuegoEfectiva = ObtenerVelocidadJuegoEfectiva(Preferencias.GameSpeed);
+            var segundosPasosAnteriores = Paso.ObtenerDuraciónPasosAnteriores(OrdenDeEjecución.Pasos, OrdenDeEjecución.NúmeroPaso);
+            var segundosPasoActual = (ObtenerTiempoPasoActual().TotalMilliseconds + DuraciónAntesDePausa) * velocidadJuegoEfectiva / 1000;
+            var segundosJuego = segundosPasosAnteriores + segundosPasoActual; // Step duration es en segundos de juego, en cambio el temporizador es en segundos reales, por eso solo se ajusta este último valor a los segundos en el juego que son los que finalmente se muestran.
+            var segundos = segundosJuego % 60;
+            if (segundos < ÚltimosSegundosJuego && !forzar) { // En algunas ocasiones en el límite del entre dos pasos el MedidorTimer se adelanta al Tick del Timer y por lo tanto sucede que por ejemplo tenga 60.04 segundos (dando 0.04 en el nuevo paso) mientras que el Timer aún no ha hecho el evento Tick y por lo tanto aún no se ha aumentado el paso. Esto produce error en la presentación porque pasa de 29 a 15 y después a 31 rápidamente. Para evitarlo sin complejizar mucho el código simplemente no se actualizará la UI en estos casos.
+                //var msmedidortimer = MedidorTimer.Elapsed.TotalSeconds;
+                //var mstimer = Timer.Interval.TotalSeconds;
             } else {
-
-                if (MedidorTimer.IsRunning) {
-
-                    var velocidadJuegoEfectiva = ObtenerVelocidadJuegoEfectiva(Preferencias.GameSpeed);
-                    var segundosPasosAnteriores = Paso.ObtenerDuraciónPasosAnteriores(OrdenDeEjecución.Pasos, OrdenDeEjecución.NúmeroPaso);
-                    var segundosPasoActual = (ObtenerTiempoPasoActual().TotalMilliseconds + DuraciónPasoParcialAnterior) * velocidadJuegoEfectiva / 1000;
-                    var segundosJuego = segundosPasosAnteriores + segundosPasoActual; // Step duration es en segundos de juego, en cambio el temporizador es en segundos reales, por eso solo se ajusta este último valor a los segundos en el juego que son los que finalmente se muestran.
-                    var segundos = segundosJuego % 60;
-                    if (segundos < ÚltimosSegundosJuego) { // En algunas ocasiones en el límite del entre dos pasos el MedidorTimer se adelanta al Tick del Timer y por lo tanto sucede que por ejemplo tenga 60.04 segundos (dando 0.04 en el nuevo paso) mientras que el Timer aún no ha hecho el evento Tick y por lo tanto aún no se ha aumentado el paso. Esto produce error en la presentación porque pasa de 29 a 15 y después a 31 rápidamente. Para evitarlo sin complejizar mucho el código simplemente no se actualizará la UI en estos casos.
-                        //var msmedidortimer = MedidorTimer.Elapsed.TotalSeconds;
-                        //var mstimer = Timer.Interval.TotalSeconds;
-                    } else {
-                        CpgProgresoPaso.Value 
-                            = (segundosPasoActual / (ObtenerDuraciónPaso(OrdenDeEjecución.NúmeroPaso) / Preferencias.ExecutionSpeed)) * 100;
-                        LblTiempoEnJuego.Content = Math.Floor(segundosJuego / 60).ToString() + ":" + (segundos > 59 ? 59 : Math.Round(segundos)).ToString("00");
-                    }
-                    ÚltimosSegundosJuego = segundos;
-
-                }
-
+                CpgProgresoPaso.Value 
+                    = (segundosPasoActual / (ObtenerDuraciónPaso(OrdenDeEjecución.NúmeroPaso) / Preferencias.ExecutionSpeed)) * 100;
+                LblTiempoEnJuego.Content = Math.Floor(segundosJuego / 60).ToString() + ":" + (segundos > 59 ? 59 : Math.Round(segundos)).ToString("00");
             }
+            ÚltimosSegundosJuego = segundos;
 
         } // ActualizarUI>
 
@@ -620,6 +665,7 @@ namespace RTSHelper {
             Application.Current.Resources["MargenBarraProgresoCircularDelPaso"] = new Thickness(0, 0, Preferencias.RightMarginCircularProgressBar, 0);
             Application.Current.Resources["VisibilidadProgresoPaso"] = Preferencias.ShowStepProgress ? Visibility.Visible : Visibility.Collapsed;
             Application.Current.Resources["VisibilidadTiempoEnJuego"] = Preferencias.ShowTime ? Visibility.Visible : Visibility.Collapsed;
+            BtnAlternarPasoSiguienteAnterior.Visibility = Preferencias.ShowNextStep ? Visibility.Visible : Visibility.Collapsed;
 
             AplicarPreferenciasMuted(iniciando);
 
@@ -682,9 +728,11 @@ namespace RTSHelper {
 
         private void ReiniciarPasoActual() {
 
+            if (Estado == EEstado.Paused) BtnStart_Click(BtnStart, new RoutedEventArgs());
             if (!(Timer is null)) Timer.Stop();
             Timer = new DispatcherTimer();
             Timer.Tick += new EventHandler(Timer_Tick);
+            DuraciónAntesDePausa = 0;
 
             if (!(TimerStepEndSound is null)) TimerStepEndSound.Stop();
             TimerStepEndSound = new DispatcherTimer();
@@ -762,11 +810,11 @@ namespace RTSHelper {
                 ActualizarPaso();
                 var duraciónTranscurridaPasoActual = tiempoPasoActual.Add(-pasosSaltadosEnteros * nuevaDuraciónPasoCompleto);
                 duraciónPasoParcial = nuevaDuraciónPasoCompleto - duraciónTranscurridaPasoActual; // Es la duración con la que se debe hacer un paso parcial. Es la duración del nuevo paso menos el tiempo que ya ha transcurrido de este.
-                DuraciónPasoParcialAnterior = duraciónTranscurridaPasoActual.TotalMilliseconds;
+                DuraciónAntesDePausa = duraciónTranscurridaPasoActual.TotalMilliseconds;
 
             } else { // Con la nueva velocidad el paso actual aún no habría terminado. Se hace un paso parcial para terminarlo.
                 duraciónPasoParcial = nuevaDuraciónPasoCompleto.Add(-tiempoPasoActual);
-                DuraciónPasoParcialAnterior = tiempoPasoActual.TotalMilliseconds;
+                DuraciónAntesDePausa = tiempoPasoActual.TotalMilliseconds;
             }
 
             ActualizarDuraciónPasoEnTimerEnPróximoTick = true;
@@ -776,13 +824,15 @@ namespace RTSHelper {
 
 
         private void ActualizarPaso(bool stop = false, bool aplicandoPreferencias = false, bool cargandoBuildOrder = false, 
-            bool siguienteOAnterior = false, bool cambióTamaño = false) {
+            bool siguienteOAnterior = false, bool cambióTamaño = false, bool alternandoSiguienteAnteriorPaso = false) {
 
             if (stop) {
                 ActualizarContenidoPaso(númeroPaso: null);
             } else {
 
-                if ((Timer is null || !Timer.IsEnabled) && !aplicandoPreferencias && !cargandoBuildOrder && !siguienteOAnterior && !cambióTamaño) return; // Evita que se actualice el texto si no se ha dado clic en Start.
+                if ((Timer is null || !Timer.IsEnabled) 
+                    && !aplicandoPreferencias && !cargandoBuildOrder && !siguienteOAnterior && !cambióTamaño && !alternandoSiguienteAnteriorPaso) return; // Evita que se actualice el texto si no se ha dado clic en Start.
+                
                 if (!aplicandoPreferencias && Estado != EEstado.Stoped) {
 
                     if (OrdenDeEjecución.NúmeroPaso < 0) OrdenDeEjecución.NúmeroPaso = 0;
@@ -803,6 +853,7 @@ namespace RTSHelper {
 
             SpnPaso.Children.Clear();
             SpnPasoSiguiente.Children.Clear();
+            SpnPasoAnterior.Children.Clear();
 
             var formatoPaso = new Formato($"{Preferencias.CurrentStepFontColor} {(Preferencias.CurrentStepFontBold ? "b" : "")} " +
                 $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null) { TamañoBaseFuente = Preferencias.CurrentStepFontSize,
@@ -828,8 +879,21 @@ namespace RTSHelper {
                 Application.Current.Resources["VisibilidadPasoSiguiente"] = Visibility.Collapsed;
             }
 
+            var superóAltoAnteriorPaso = false;
+            if (númeroPaso != null && númeroPaso > 0 && MostrandoPasoAnterior) {
+
+                OrdenDeEjecución.MostrarPaso(númeroPaso - 1, formatoSiguientePaso, SpnPasoAnterior, mostrarSiempreÚltimoPaso: false,
+                    this.Height - (SpnInferior.ActualHeight == 0 ? 42 : SpnInferior.ActualHeight) - Preferencias.BottomMargenSteps
+                    - Preferencias.TopMarginNextStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoAnteriorPaso);
+                Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Visible;
+                Application.Current.Resources["VisibilidadPasoSiguiente"] = Visibility.Collapsed;
+
+            } else {
+                Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Collapsed;
+            }
+
             if (this.WindowState == WindowState.Normal) 
-                BtnAlert.Visibility = (superóAltoPasoActual || superóAltoSiguientePaso) ? Visibility.Visible : Visibility.Collapsed;
+                BtnAlert.Visibility = (superóAltoPasoActual || superóAltoSiguientePaso || superóAltoAnteriorPaso) ? Visibility.Visible : Visibility.Collapsed;
 
         } // ActualizarContenidoPaso>
 
@@ -876,9 +940,7 @@ namespace RTSHelper {
             => MediaPlayer.PlayFile(Path.Combine(DirectorioSonidosLargos, 
                 ObtenerPresonido(OrdenDeEjecución.NúmeroPaso)), ObtenerVolumenPresonido(OrdenDeEjecución.NúmeroPaso));
 
-
         #endregion Procedimientos y Funciones>
-
 
 
     } // MainWindow>
