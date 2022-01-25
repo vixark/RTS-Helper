@@ -42,7 +42,10 @@
 
             <Visibility x:Key="VisibilidadProgresoPaso">Visible</Visibility>
             <Visibility x:Key="VisibilidadTiempoEnJuego">Collapsed</Visibility>
-            
+
+            <Visibility x:Key="VisibilidadBotónAddIdleTime">Collapsed</Visibility>
+            <Visibility x:Key="VisibilidadBotónRemoveIdleTime">Collapsed</Visibility>
+
             <!-- Valores no en Preferencias !-->
             <SolidColorBrush x:Key="BrushFondoControles" Color="Transparent" />
 

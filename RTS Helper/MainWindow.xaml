@@ -2,8 +2,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:RTSHelper"
         SizeChanged="Window_SizeChanged" MouseDown="Window_MouseDown" Closed="Window_Closed" MouseUp="Window_MouseUp" mc:Ignorable="d" 
-        Title="RTS Helper" AllowsTransparency="True" WindowStyle="None" ResizeMode="CanResizeWithGrip" Topmost="True" WindowStartupLocation="Manual" 
-        Height="{DynamicResource Alto}" Width="{DynamicResource Ancho}" Top="{DynamicResource PosiciónY}" Left="{DynamicResource PosiciónX}">
+        Title="RTS Helper" AllowsTransparency="True" WindowStyle="None" ResizeMode="CanResizeWithGrip" 
+        Topmost="True" WindowStartupLocation="Manual" Height="{DynamicResource Alto}" Width="{DynamicResource Ancho}" 
+        Top="{DynamicResource PosiciónY}" Left="{DynamicResource PosiciónX}">
 
     <Window.Background>
         <SolidColorBrush Opacity="{DynamicResource Opacidad}" Color="{DynamicResource ColorFondo}" />
@@ -181,13 +182,6 @@
                     FontSize="{DynamicResource FuenteGrande}" TextAlignment="Center" Background="{DynamicResource BrushFondoControles}" 
                     Foreground="{DynamicResource BrushFuente}" ToolTip="Current Step" IsEnabled="False">
 
-                    <TextBox.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem  x:Name="MniLastStep" Click="MniLastStep_Click"  Header="Go to last step" />
-                            <MenuItem x:Name="MniRestartStep" Click="MniRestartStep_Click" Header="Restart current step" />
-                        </ContextMenu>
-                    </TextBox.ContextMenu>
-
                     <TextBox.CommandBindings>
                         <CommandBinding Command="{StaticResource CmdNext}" Executed="BtnNext_Click" />
                         <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnPrevious_Click" />
@@ -211,10 +205,11 @@
 
                         <local:HoverButton.ContextMenu>
                             <ContextMenu>
-                                <MenuItem x:Name="MniDelay" Click="MniDelay_Click" Header="Delay 5 seconds" />
+                                <MenuItem x:Name="MniRestartStep" Click="MniRestartStep_Click" Header="Restart Step" />
+                                <MenuItem x:Name="MniBackward" Click="MniBackward_Click" Header="Backward 5 Seconds" />
                             </ContextMenu>
                         </local:HoverButton.ContextMenu>
-
+   
                     </local:HoverButton>
 
                     <local:HoverButton x:Name="BtnNext" Click="BtnNext_Click" Foreground="{DynamicResource BrushFuente}" IsEnabled="False"  
@@ -225,7 +220,9 @@
 
                         <local:HoverButton.ContextMenu>
                             <ContextMenu>
-                                <MenuItem x:Name="MniRush" Click="MniRush_Click" Header="Rush 5 seconds" />
+                                <MenuItem x:Name="MniLastStep" Click="MniLastStep_Click"  Header="Last Step" />
+                                <MenuItem x:Name="MniStartNextStep" Click="MniStartNextStep_Click"  Header="Start Next Step" />
+                                <MenuItem x:Name="MniFordward" Click="MniFordward_Click" Header="Fordward 5 Seconds" />
                             </ContextMenu>
                         </local:HoverButton.ContextMenu>
 
@@ -237,6 +234,18 @@
 
 
             <StackPanel x:Name="SpnInferior" Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+
+                <local:HoverButton x:Name="BtnRemoveIdleTime" Click="BtnRemoveIdleTime_Click" Foreground="{DynamicResource BrushFuente}" 
+                                   IsEnabled="False" FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}"                
+                                   BorderBrush="{DynamicResource BrushFuente}" BorderThickness="1" Margin="{DynamicResource MargenBotones}" 
+                                   Style="{StaticResource customButton}" bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
+                                   Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Remove Idle Time" 
+                                   Visibility="{DynamicResource VisibilidadBotónRemoveIdleTime}"
+                                   Content="➖">
+
+                </local:HoverButton>
+
+                <StackPanel Width="8"></StackPanel>
 
                 <StackPanel Orientation="Horizontal" x:Name="SpnIndicadoresDeProgreso">
 
@@ -252,34 +261,16 @@
                     <!--Siempre inicia en ceros para tener algún contenido y no tener movimientos extraños en la interface cuando se le da start.-->
 
                 </StackPanel>
+
+                <local:HoverButton x:Name="BtnAddIdleTime" Click="BtnAddIdleTime_Click" Foreground="{DynamicResource BrushFuente}" IsEnabled="False"        
+                        FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}"                
+                        BorderBrush="{DynamicResource BrushFuente}" BorderThickness="1" Margin="{DynamicResource MargenBotones}" 
+                        Style="{StaticResource customButton}" bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
+                        Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Add Idle Time" Content="➕"
+                        Visibility="{DynamicResource VisibilidadBotónAddIdleTime}">
+
+                </local:HoverButton>
                 
-                <ComboBox x:Name="CmbVelocidadEjecución" ToolTip="Execution Speed" SelectionChanged="CmbVelocidadEjecución_SelectionChanged" SelectedIndex="0" 
-                      Style="{StaticResource ComboBoxColor}" Margin="{DynamicResource MargenBotones}" Foreground="{DynamicResource BrushFuente}" 
-                      Width="{DynamicResource AnchoSelectorVelocidadEjecución}" FontSize="{DynamicResource FuenteNormal}" VerticalAlignment="Center">
-                    <ComboBoxItem Tag="100">100%</ComboBoxItem>
-                    <ComboBoxItem Tag="98">98%</ComboBoxItem>
-                    <ComboBoxItem Tag="96">96%</ComboBoxItem>
-                    <ComboBoxItem Tag="94">94%</ComboBoxItem>
-                    <ComboBoxItem Tag="92">92%</ComboBoxItem>
-                    <ComboBoxItem Tag="90">90%</ComboBoxItem>
-                    <ComboBoxItem Tag="85">85%</ComboBoxItem>
-                    <ComboBoxItem Tag="80">80%</ComboBoxItem>
-                    <ComboBoxItem Tag="75">75%</ComboBoxItem>
-                    <ComboBoxItem Tag="70">70%</ComboBoxItem>
-                    <ComboBoxItem Tag="60">60%</ComboBoxItem>
-
-                    <ComboBox.CommandBindings>
-                        <CommandBinding Command="{StaticResource CmdNext}" Executed="BtnNext_Click" />
-                        <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnPrevious_Click" />
-                    </ComboBox.CommandBindings>
-
-                    <ComboBox.InputBindings>
-                        <KeyBinding Key="Right" Command="{StaticResource CmdNext}" />
-                        <KeyBinding Key="Left" Command="{StaticResource CmdPrevious}" />
-                    </ComboBox.InputBindings>
-                    
-                </ComboBox>
-
                 <ComboBox x:Name="CmbBuildOrders" ToolTip="Build Order" SelectionChanged="CmbBuildOrders_SelectionChanged" SelectedIndex="0" 
                       Style="{StaticResource ComboBoxColor}" Margin="{DynamicResource MargenBotones}" Foreground="{DynamicResource BrushFuente}" 
                       Width="{DynamicResource AnchoSelectorBuildOrder}" FontSize="{DynamicResource FuenteNormal}" VerticalAlignment="Center">
@@ -321,6 +312,9 @@
                     Background="{DynamicResource BrushFondoControles}" Margin="{DynamicResource MargenPasoSiguiente}"
                     Visibility="{DynamicResource VisibilidadPasoAnterior}" Opacity="1" >
         </StackPanel>
+
+        <Label Background="White" Panel.ZIndex="4"  Visibility="Collapsed" HorizontalAlignment="Right" Margin="0 30 90 0" VerticalAlignment="Top" 
+               Foreground="Red" FontSize="16" FontWeight="Bold" x:Name="LblDepuración">Depuración</Label>
         
     </Grid>
 </Window>

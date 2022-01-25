@@ -29,7 +29,7 @@ namespace RTSHelper {
 
         public double ExecutionSpeed { get; set; } = 1; // 1 es la máxima velocidad. En esta velocidad cada conjunto de comandos corresponde a un minuto en el juego.
 
-        public double StepDuration { get; set; } = StepDurationPredeterminado; 
+        public double StepDuration { get; set; } = StepDurationPredeterminado;
 
         public string CurrentBuildOrder { get; set; } = "Default";
 
@@ -50,7 +50,7 @@ namespace RTSHelper {
 
 
         #region Sonidos
-        
+
         public string StepStartSound { get; set; } = StepStartSoundPredeterminado;
 
         public string StepEndSound { get; set; } = StepEndSoundPredeterminado;
@@ -172,6 +172,8 @@ namespace RTSHelper {
 
         public bool CapitalizeNames { get; set; } = true;
 
+        public string GameLanguage { get; set; } = "EN";
+
         #endregion Imágenes y Entidades>
 
 
@@ -180,7 +182,7 @@ namespace RTSHelper {
 
         public bool OverrideFontSize { get; set; } = true;
 
-        public bool OverrideFontName { get; set; } = true; 
+        public bool OverrideFontName { get; set; } = true;
 
         public bool OverrideFontColor { get; set; } = true; // Aunque el color no debería tenerse que cambiar porque se pueden dar situaciones de usuarios que usen otros fondos de color y sea imposible de leer, para que esto suceda debe darse que el usuario use un fondo de color especial y además cargue una build order con un color no compatible. Se considera que esto es un caso poco frecuente que se soluciona desactivando manualmente esta opción, entonces se permite el cambio.
 
@@ -214,6 +216,30 @@ namespace RTSHelper {
 
         #endregion Anulación de Opciones>
 
+
+        #region Control
+
+        public Dictionary<ScreenCaptureText, System.Drawing.RectangleF>? ScreenCaptureRectangles { get; set; } = null;
+
+        public bool AutoAdjustIdleTime { get; set; } = true;
+
+        public bool PauseDetection { get; set; } = true;
+
+        public bool ShowAddIdleTimeButton { get; set; } = false;
+
+        public bool ShowRemoveIdleTimeButton { get; set; } = false;
+
+        public int AutoAdjustIdleTimeInterval { get; set; } = 1; // En segundos.
+
+        public int PauseDetectionInterval { get; set; } = 1; // En segundos.
+
+        public int AddIdleTimeSeconds { get; set; } = 10;
+
+        public int RemoveIdleTimeSeconds { get; set; } = 10;
+
+        public int MinimumDelayToAutoAdjustIdleTime { get; set; } = 3;
+
+        #endregion Control>
 
 
         #region Nombres
@@ -322,7 +348,7 @@ namespace RTSHelper {
                     Width = 495 * CorrecciónEscala;
                     Top = 718 * CorrecciónEscala;
                     Left = 722 * CorrecciónEscala;
-                    CurrentStepFontSize = 19 * CorrecciónEscala;
+                    CurrentStepFontSize = 18.5 * CorrecciónEscala;
                     NextStepFontSize = 11.5 * CorrecciónEscala;
                     ButtonsSize = 24 * CorrecciónEscala;
                     ButtonsMargin = 2 * CorrecciónEscala;
@@ -346,7 +372,7 @@ namespace RTSHelper {
                     Width = 662 * CorrecciónEscala; // No cambiar, normalmente uso el minimapa 25% más grande y el valor mi valor sería 635.
                     Top = 957 * CorrecciónEscala;
                     Left = 962 * CorrecciónEscala;
-                    CurrentStepFontSize = 25 * CorrecciónEscala;
+                    CurrentStepFontSize = 24.7 * CorrecciónEscala;
                     NextStepFontSize = 16 * CorrecciónEscala;
                     ButtonsSize = 33 * CorrecciónEscala;
                     ButtonsMargin = 3 * CorrecciónEscala;

@@ -63,8 +63,9 @@ namespace RTSHelper {
                 TbiAbout.Visibility = Visibility.Collapsed;
                 TbiCustomNames.Visibility = Visibility.Collapsed;
                 TbiOverrides.Visibility = Visibility.Collapsed;
-                Height = 260;
-                TbcPreferencias.Height = 150;
+                TbiControl.Visibility = Visibility.Collapsed;
+                Height = 300;
+                TbcPreferencias.Height = 190;
                 Width = 350;
                 LblStepDuration.Visibility = Visibility.Collapsed;
                 TxtStepDuration.Visibility = Visibility.Collapsed;
@@ -138,6 +139,20 @@ namespace RTSHelper {
             ChkShowTime.IsChecked = Preferencias.ShowTime;
             ChkRandomImageForMultipleImages.IsChecked = Preferencias.RandomImageForMultipleImages;
             ChkCapitalizeNames.IsChecked = Preferencias.CapitalizeNames;
+
+            ChkAutoadjustIdleTime.IsChecked = Preferencias.AutoAdjustIdleTime;
+            ChkPauseDetection.IsChecked = Preferencias.PauseDetection;
+            ChkShowAddIdleTime.IsChecked = Preferencias.ShowAddIdleTimeButton;
+            ChkShowRemoveIdleTime.IsChecked = Preferencias.ShowRemoveIdleTimeButton;
+
+            TxtAutoadjustIdleTimeInterval.Text = Preferencias.AutoAdjustIdleTimeInterval.ToString();
+            TxtPauseDetectionInterval.Text = Preferencias.PauseDetectionInterval.ToString();
+            TxtAddIdleTimeSeconds.Text = Preferencias.AddIdleTimeSeconds.ToString();
+            TxtRemoveIdleTimeSeconds.Text = Preferencias.RemoveIdleTimeSeconds.ToString();
+            TxtMinimumDelayToAutoAdjustIdleTime.Text = Preferencias.MinimumDelayToAutoAdjustIdleTime.ToString();
+
+            AgregarIdiomas(CmbGameLanguage, Preferencias.GameLanguage, IdiomasJuego);
+            CargarVelocidadEjecución();
 
             if (!primerInicio) VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en los botones.
 
@@ -314,14 +329,14 @@ namespace RTSHelper {
             var encontradoPrimerIdioma = false;
             var idiomaEncontrado = "";
             var cuenta = 0;
-            var totalNombresSinIdiomas = Preferencias.DisplayPriority.Count - Idiomas.Count + 1; // Se suma 1 porque siempre se muestra el idioma de más prioridad.
+            var totalNombresSinIdiomas = Preferencias.DisplayPriority.Count - IdiomasNombres.Count + 1; // Se suma 1 porque siempre se muestra el idioma de más prioridad.
             var displayPriorityOrdenadas = Preferencias.ObtenerDisplayPriorityOrdenadas();
             
             foreach (var displayPriority in displayPriorityOrdenadas) {
 
                 var esIdioma = false;
                 var textoNombre = displayPriority.Key.ToString();
-                if (Idiomas.ContainsKey(textoNombre)) {
+                if (IdiomasNombres.ContainsKey(textoNombre)) {
 
                     if (encontradoPrimerIdioma) continue;
                     idiomaEncontrado = textoNombre;
@@ -349,15 +364,7 @@ namespace RTSHelper {
                 if (esIdioma) { // Solo pasa por aquí cuando encuentra el primero.
 
                     var cmbIdioma = new Controles.ComboBox() { VerticalAlignment = VerticalAlignment.Center };
-                    foreach (var kv in Idiomas) {
-
-                        var idioma = kv.Key;
-                        var nombreIdioma = kv.Value;
-                        var cmi = new ComboBoxItem() { Content = nombreIdioma, Tag = idioma };
-                        if (idioma == idiomaEncontrado) cmi.IsSelected = true;
-                        cmbIdioma.Items.Add(cmi);
-
-                    }
+                    AgregarIdiomas(cmbIdioma, idiomaEncontrado, IdiomasNombres);
                     cmbIdioma.SelectionChanged += new Controles.SelectionChangedEventHandler(this.CmbOtherLanguage_SelectionChanged);
                     SpnName.Children.Add(cmbIdioma);
 
@@ -368,6 +375,21 @@ namespace RTSHelper {
             }
 
         } // CargarPrioridadesNombres>
+
+
+        private void AgregarIdiomas(Controles.ComboBox cmbIdioma, string idiomaSeleccionado, Dictionary<string, string> idiomas) {
+
+            foreach (var kv in idiomas) {
+
+                var idioma = kv.Key;
+                var nombreIdioma = kv.Value;
+                var cmi = new ComboBoxItem() { Content = nombreIdioma, Tag = idioma };
+                if (idioma == idiomaSeleccionado) cmi.IsSelected = true;
+                cmbIdioma.Items.Add(cmi);
+
+            }
+
+        } // AgregarIdiomas>
 
 
         private void CmbOtherLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -385,7 +407,7 @@ namespace RTSHelper {
                 var prioridad = displayPriority.Value;
                 var nombre = displayPriority.Key;
                 var textoNombre = nombre.ToString();
-                if (Idiomas.ContainsKey(textoNombre)) {
+                if (IdiomasNombres.ContainsKey(textoNombre)) {
 
                     if (textoNombre != nombreIdiomaTexto) { // Si es el mismo actualmente seleccionado, no pasa nada.
 
@@ -424,7 +446,7 @@ namespace RTSHelper {
                 var nombre = displayPriority.Key;
                 var textoNombre = nombre.ToString();
 
-                if (Idiomas.ContainsKey(textoNombre)) {
+                if (IdiomasNombres.ContainsKey(textoNombre)) {
 
                     if (encontradoPrimerIdioma) {
                         desfacePrioridad++;
@@ -927,6 +949,135 @@ namespace RTSHelper {
             VentanaPrincipal.AplicarPreferencias();
 
         } // ChkShowTime_Checked>
+
+
+        private void CmbGameLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.GameLanguage = ObtenerSeleccionadoEnCombobox(e, tag: true);
+
+        } // CmbGameLanguage_SelectionChanged>
+
+
+        private void CmbVelocidadEjecución_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            if (!Activado) return;
+            var cbi = e.AddedItems[0] as ComboBoxItem;
+            if (cbi is null) return;
+            Preferencias.ExecutionSpeed = Convert.ToDouble(cbi.Tag) / 100;
+            VentanaPrincipal.ActualizarDuraciónPaso();
+
+        } // CmbVelocidadJugador_SelectionChanged>
+
+
+        private void CargarVelocidadEjecución() {
+
+            var textoVelocidadEjecución = (Preferencias.ExecutionSpeed * 100).ToString() + "%";
+            if (CmbVelocidadEjecución.Text != textoVelocidadEjecución) {
+                VentanaPrincipal.EditandoComboBoxEnCódigo = true;
+                CmbVelocidadEjecución.Text = textoVelocidadEjecución;
+                VentanaPrincipal.EditandoComboBoxEnCódigo = false;
+            }
+
+        } // CargarVelocidadEjecución>
+
+        private void ChkAutoadjustIdleTime_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.AutoAdjustIdleTime = ChkAutoadjustIdleTime.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkAutoadjustIdleTime_Checked>
+
+
+        private void TxtAutoadjustIdleTimeInterval_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (int.TryParse(TxtAutoadjustIdleTimeInterval.Text, out int valor) && valor > 0) {
+                Preferencias.AutoAdjustIdleTimeInterval = valor;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtAutoadjustIdleTimeInterval_TextChanged>
+
+
+        private void ChkPauseDetection_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.PauseDetection = ChkPauseDetection.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkPauseDetection_Checked>
+
+
+        private void TxtPauseDetectionInterval_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (int.TryParse(TxtPauseDetectionInterval.Text, out int valor) && valor > 0) {
+                Preferencias.PauseDetectionInterval = valor;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtPauseDetectionInterval_TextChanged>
+
+
+        private void ChkShowAddIdleTime_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.ShowAddIdleTimeButton = ChkShowAddIdleTime.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkShowAddIdleTime_Checked>
+
+
+        private void TxtAddIdleTimeSeconds_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (int.TryParse(TxtAddIdleTimeSeconds.Text, out int valor) && valor > 0) {
+                Preferencias.AddIdleTimeSeconds = valor;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtAddIdleTimeSeconds_TextChanged>
+
+
+        private void ChkShowRemoveIdleTime_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.ShowRemoveIdleTimeButton = ChkShowRemoveIdleTime.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkShowRemoveIdleTime_Checked>
+
+
+        private void TxtRemoveIdleTimeSeconds_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (int.TryParse(TxtRemoveIdleTimeSeconds.Text, out int valor) && valor > 0) {
+                Preferencias.RemoveIdleTimeSeconds = valor;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtRemoveIdleTimeSeconds_TextChanged>
+
+
+        private void TxtMinimumDelayToAutoAdjustIdleTime_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (int.TryParse(TxtMinimumDelayToAutoAdjustIdleTime.Text, out int valor) && valor > 0) {
+
+                if (valor <= Preferencias.AutoAdjustIdleTimeInterval) {
+                    System.Windows.MessageBox.Show("MinimumDelayToAutoAdjustIdleTime should be at least 1 second more than AutoAdjustIdleTimeInterval.", 
+                        "Error");
+                    TxtMinimumDelayToAutoAdjustIdleTime.Text = (Preferencias.AutoAdjustIdleTimeInterval + 1).ToString();
+                } else {
+                    Preferencias.MinimumDelayToAutoAdjustIdleTime = valor;
+                    VentanaPrincipal.AplicarPreferencias();
+                }
+
+            }
+
+        } // TxtMinimumDelayToAutoAdjustIdleTime_TextChanged>
 
 
     } // SettingsWindow>

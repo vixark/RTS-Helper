@@ -50,6 +50,8 @@ namespace RTSHelper {
 
         public static Dictionary<string, int?> DuraciónPresonidos = new Dictionary<string, int?>();
 
+        public int? Progreso { get; set; } // Progreso de la orden de ejecución. Normalmente es la cantidad de unidades recolectoras económicas (aldeanos).
+
         #endregion Propiedades>
 
 
@@ -65,7 +67,7 @@ namespace RTSHelper {
             if (string.IsNullOrEmpty(texto)) return; // Si el texto es vacío, no contiene ni comportamientos ni clases.
 
             var palabrasClaveTextos = "s|es|fc|sns";
-            var palabrasClaveNúmeros = "t|fco|sv|esv";
+            var palabrasClaveNúmeros = "t|fco|sv|esv|p";
             var palabrasClave = $"{palabrasClaveTextos}|{palabrasClaveNúmeros}".Split("|").ToList();
             var textoMinúscula = texto.ToLowerInvariant();
 
@@ -257,6 +259,16 @@ namespace RTSHelper {
                                 }
                                 break;
 
+                            case "p":
+
+                                int número4;
+                                if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número4)) {
+                                    MostrarError("p value should be an integer.");
+                                } else {
+                                    Progreso = número4;
+                                }
+                                break;
+
                             default:
                                 MostrarError($"To Developer: The value {comportamientoId} as a behavior wasn't expected.");
                                 break;
@@ -300,6 +312,7 @@ namespace RTSHelper {
             destino.VolumenPresonido ??= origen.VolumenPresonido;
             destino.VolumenSonido ??= origen.VolumenSonido;
             destino.MostrarSiguientePaso ??= origen.MostrarSiguientePaso;
+            destino.Progreso ??= origen.Progreso;
 
         } // CopiarPropiedadesEnNulas>
 
@@ -328,6 +341,7 @@ namespace RTSHelper {
             comportamiento.VolumenPresonido = comportamientoHijo?.VolumenPresonido ?? comportamientoPadre.VolumenPresonido;
             comportamiento.VolumenSonido = comportamientoHijo?.VolumenSonido ?? comportamientoPadre.VolumenSonido;
             comportamiento.MostrarSiguientePaso = comportamientoHijo?.MostrarSiguientePaso ?? comportamientoPadre.MostrarSiguientePaso;
+            comportamiento.Progreso = comportamientoHijo?.Progreso ?? comportamientoPadre.Progreso;
             return comportamiento;
 
         } // ObtenerComportamientoEfectivo>

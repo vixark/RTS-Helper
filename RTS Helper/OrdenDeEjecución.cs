@@ -13,6 +13,8 @@ using System.Windows.Documents;
 using System.Diagnostics;
 using System.IO;
 
+
+
 namespace RTSHelper {
 
 
@@ -72,6 +74,8 @@ namespace RTSHelper {
             if (!Directory.Exists(directorioBuildOrders)) Directory.CreateDirectory(directorioBuildOrders);
             if (!File.Exists(rutaBuildOrder))
                 File.WriteAllText(rutaBuildOrder, $@"Edit '\RTS Helper\Build Orders{Preferencias.Game}\{nombreBuildOrder}.txt' \\n to add your build order.");
+
+            if (!ObtenerArchivoLibre(rutaBuildOrder)) return; // Si pasado el tiempo máximo permitido el archivo no está libre, no carga los pasos.
 
             var textosPasos = File.ReadAllLines(rutaBuildOrder);
             Formato? formatoGlobal = null;

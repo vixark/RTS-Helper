@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:RTSHelper"
         mc:Ignorable="d" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" ResizeMode="CanResizeWithGrip"
-        Title="Settings - RTS Helper" Height="460" Width="600" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
+        Title="Settings - RTS Helper" Height="485" Width="600" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
     <!--Se debe establecer CanResizeWithGrip porque algunos usuarios les aparece la ventana de settings cortada. No se porqué... Si se quiere quitar el botón de maximizar usar esto https://stackoverflow.com/questions/18707782/disable-maximize-button-of-wpf-window-keeping-resizing-feature-intact -->
 
     <Grid>
@@ -19,12 +19,13 @@
                                 <Label Margin="2">Game:</Label>
                                 <Label Margin="2">Game Speed:</Label>
                                 <Label Margin="2">Screen Resolution:</Label>
+                                <Label Margin="2">Game Language:</Label>
                                 <Label x:Name="LblStepDuration" Margin="2">Step Duration:</Label>
                                 <Label x:Name="LblShowProgress" Margin="2">Show Progress:</Label>
                                 <Label x:Name="LblShowTime" Margin="2">Show Time:</Label>
                             </StackPanel>
 
-                            <StackPanel Orientation="Vertical" Width="130">
+                            <StackPanel Orientation="Vertical" Width="135">
 
                                 <ComboBox SelectionChanged="CmbGame_SelectionChanged" HorizontalAlignment="Stretch" Margin="4" x:Name="CmbGame">
                                     <ComboBoxItem>Age of Empires II</ComboBoxItem>
@@ -45,9 +46,14 @@
                                     <ComboBoxItem>1366x768</ComboBoxItem>
                                 </ComboBox>
 
+                                <ComboBox SelectionChanged="CmbGameLanguage_SelectionChanged" x:Name="CmbGameLanguage" Margin="4">
+                                    
+                                </ComboBox>
+                                
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBox TextChanged="TxtStepDuration_TextChanged"  Width="40" x:Name="TxtStepDuration" Margin="5"></TextBox>
-                                    <Label x:Name="LblStepDurationSeconds">seconds</Label>
+                                    <TextBox TextChanged="TxtStepDuration_TextChanged"  Width="30" Height="25" x:Name="TxtStepDuration" Margin="5" 
+                                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                    <Label x:Name="LblStepDurationSeconds" VerticalAlignment="Center">game seconds.</Label>
                                 </StackPanel>
      
                                 <CheckBox Checked="ChkShowStepProgress_Checked" Unchecked="ChkShowStepProgress_Checked" x:Name="ChkShowStepProgress" 
@@ -62,8 +68,8 @@
 
                         <StackPanel x:Name="SpnBuildOrderPath" Orientation="Horizontal" Margin="2 5 20 0">
                             <Label>Build Order Folder:</Label>
-                            <TextBox TextChanged="TxtBuildOrderPath_TextChanged" Width="280" Height="20" 
-                                 x:Name="TxtBuildOrderPath" Margin="3.5 0 0 0"></TextBox>
+                            <TextBox TextChanged="TxtBuildOrderPath_TextChanged" Width="280" Height="25" 
+                                 x:Name="TxtBuildOrderPath" Margin="3.5 0 0 0" VerticalContentAlignment="Center"></TextBox>
                             <Button Margin="5 0 0 0" Padding="3 0 3 0" Click="BtnBuildOrderPath_Click" x:Name="BtnBuildOrderPath">Change</Button>
                         </StackPanel>
 
@@ -102,7 +108,8 @@
                                     <Button Click="BtnFontcolor_Click" x:Name="BtnFontcolor" Margin="4" Height="22" 
                                         Foreground="{DynamicResource BrushFuente}" Background="{DynamicResource BrushFondo}">Change</Button>
 
-                                    <TextBox TextChanged="TxtOpacity_TextChanged" x:Name="TxtOpacity" Margin="5"></TextBox>
+                                    <TextBox TextChanged="TxtOpacity_TextChanged" x:Name="TxtOpacity" Margin="4 2 4 2" HorizontalAlignment="Left"
+                                             HorizontalContentAlignment="Center" Height="25" Width="40" VerticalContentAlignment="Center"></TextBox>
 
                                     <ComboBox SelectionChanged="CmbFontName_SelectionChanged" HorizontalAlignment="Stretch" Margin="4 4 4 7" x:Name="CmbFontName">
                                         <ComboBoxItem>Arial</ComboBoxItem>
@@ -151,7 +158,9 @@
                                         <ComboBoxItem>Wingdings</ComboBoxItem>
                                     </ComboBox>
 
-                                    <TextBox TextChanged="TxtStepFontSize_TextChanged" x:Name="TxtStepFontSize" Margin="4" />
+                                    <TextBox TextChanged="TxtStepFontSize_TextChanged" x:Name="TxtStepFontSize" Margin="4 1 4 1" 
+                                             HorizontalContentAlignment="Center" Width="40" Height="25" HorizontalAlignment="Left" 
+                                             VerticalContentAlignment="Center" />
 
                                     <Button Click="BtnStepFontColor_Click" x:Name="BtnStepFontColor" Margin="4" Height="22" 
                                     Foreground="{DynamicResource BrushPaso}" Background="{DynamicResource BrushFondo}">Change</Button>
@@ -160,7 +169,8 @@
                                           Margin="4 9 0 9" />
 
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBox TextChanged="TxtLineSpacing_TextChanged" x:Name="TxtLineSpacing" Margin="4" Width="40" />
+                                        <TextBox TextChanged="TxtLineSpacing_TextChanged" x:Name="TxtLineSpacing" Margin="4 1 4 1" Width="40" Height="25"
+                                                 VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                                         <Label>% of line height.</Label>
                                     </StackPanel>
 
@@ -188,7 +198,8 @@
                                 <CheckBox Checked="ChkShowNextStep_CheckedChanged" Unchecked="ChkShowNextStep_CheckedChanged" x:Name="ChkShowNextStep" 
                                           Margin="4 34 0 11" />
 
-                                <TextBox TextChanged="TxtNextStepFontSize_TextChanged" x:Name="TxtNextStepFontSize" Margin="4" />
+                                <TextBox TextChanged="TxtNextStepFontSize_TextChanged" x:Name="TxtNextStepFontSize" Margin="4 0 4 0" Height="25" 
+                                         VerticalContentAlignment="Center" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
 
                                 <Button Click="BtnNextStepFontColor_Click" x:Name="BtnNextStepFontColor" Margin="4" Height="22" 
                                     Foreground="{DynamicResource BrushPasoSiguiente}" Background="{DynamicResource BrushFondo}">Change</Button>
@@ -247,7 +258,7 @@
                                 <Label VerticalContentAlignment="Center">with</Label>
                                 <TextBox TextChanged="TxtFlashingOpacity_TextChanged" x:Name="TxtFlashingOpacity" Margin="5 0 0 0" 
                                      VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
-                                     Width="30">0.5</TextBox>
+                                     Width="30" Height="25">0.5</TextBox>
                                 <Label VerticalContentAlignment="Center">opacity when step starts</Label>
                             </StackPanel>
 
@@ -278,31 +289,34 @@
 
                         <StackPanel Orientation="Vertical">
 
-                            <StackPanel Orientation="Horizontal" Margin="3">
-                                <TextBox TextChanged="TxtImageSize_TextChanged" x:Name="TxtImageSize" Width="40" VerticalContentAlignment="Center" />
+                            <StackPanel Orientation="Horizontal" Margin="2">
+                                <TextBox TextChanged="TxtImageSize_TextChanged" x:Name="TxtImageSize" Width="40" Height="25" VerticalContentAlignment="Center" 
+                                         HorizontalContentAlignment="Center"/>
                                 <Label>% of line height.</Label>
                             </StackPanel>
 
-                            <Button Click="BtnImageBackgroundColor_Click" Margin="3" Height="26" Padding="4" x:Name="BtnImageBackgroundColor" 
+                            <Button Click="BtnImageBackgroundColor_Click" Margin="2" Height="26" Padding="4" x:Name="BtnImageBackgroundColor" 
                                 Foreground="White" Background="{DynamicResource BrushImageBackgroundColor}">Change</Button>
 
-                            <TextBox TextChanged="TxtImageBackgroundOpacity_TextChanged" x:Name="TxtImageBackgroundOpacity" Margin="3"></TextBox>
+                            <TextBox TextChanged="TxtImageBackgroundOpacity_TextChanged" x:Name="TxtImageBackgroundOpacity" Margin="2" 
+                                     HorizontalContentAlignment="Center" Width="40" Height="25" VerticalContentAlignment="Center" 
+                                     HorizontalAlignment="Left"></TextBox>
 
-                            <StackPanel Orientation="Horizontal" Margin="3" >
-                                <TextBox TextChanged="TxtImageHorizontalMargin_TextChanged" x:Name="TxtImageHorizontalMargin" Width="40" 
-                                     VerticalContentAlignment="Center" />
-                                <Label>% of image height.</Label>
+                            <StackPanel Orientation="Horizontal" Margin="2">
+                                <TextBox TextChanged="TxtImageHorizontalMargin_TextChanged" x:Name="TxtImageHorizontalMargin" Width="40" Height="25"
+                                     VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                                <Label VerticalAlignment="Top">% of image height.</Label>
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" Margin="3" >
+                            <StackPanel Orientation="Horizontal" Margin="2">
                                 <TextBox TextChanged="TxtImageBackgroundRoundedCornersRadius_TextChanged" x:Name="TxtImageBackgroundRoundedCornersRadius" 
-                                     Width="40" VerticalContentAlignment="Center" />
+                                     Width="40" Height="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                                 <Label>% of image height.</Label>
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" Margin="3" >
+                            <StackPanel Orientation="Horizontal" Margin="2">
                                 <TextBox TextChanged="TxtSubscriptAndSuperscriptImagesSize_TextChanged" x:Name="TxtSubscriptAndSuperscriptImagesSize" 
-                                     Width="40" VerticalContentAlignment="Center" />
+                                     Width="40" Height="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                                 <Label>% of image height.</Label>
                             </StackPanel>
 
@@ -316,6 +330,87 @@
                 
             </TabItem>
 
+            <TabItem Header="Control" x:Name="TbiControl">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="20 20 0 0" Orientation="Horizontal">
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                            <Label Margin="2">Automatic Idle Time Adjustment:</Label>
+                            <Label Margin="2">Automatic Pause Detection:</Label>
+                            <Label Margin="2">Show Add Idle Time Button:</Label>
+                            <Label Margin="2">Show Remove Idle Time Button:</Label>
+                            <Label Margin="2">Execution Speed:</Label>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+
+                            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+
+                                <CheckBox Margin="3 7 3 1" x:Name="ChkAutoadjustIdleTime" Checked="ChkAutoadjustIdleTime_Checked" 
+                                      Unchecked="ChkAutoadjustIdleTime_Checked" />
+                                <Label>check every</Label>
+                                <TextBox TextChanged="TxtAutoadjustIdleTimeInterval_TextChanged" x:Name="TxtAutoadjustIdleTimeInterval" Width="25" 
+                                         VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                <Label>seconds if delay is more than</Label>
+                                <TextBox TextChanged="TxtMinimumDelayToAutoAdjustIdleTime_TextChanged" x:Name="TxtMinimumDelayToAutoAdjustIdleTime" 
+                                         Width="25" VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                <Label>seconds.</Label>
+                                
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+
+                                <CheckBox Margin="3 5 3 3" x:Name="ChkPauseDetection" Checked="ChkPauseDetection_Checked" 
+                                      Unchecked="ChkPauseDetection_Checked" />
+                                <Label>check every</Label>
+                                <TextBox TextChanged="TxtPauseDetectionInterval_TextChanged" x:Name="TxtPauseDetectionInterval" Width="25" 
+                                         VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                <Label>seconds.</Label>
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+
+                                <CheckBox Margin="3 5 3 3" x:Name="ChkShowAddIdleTime" Checked="ChkShowAddIdleTime_Checked" 
+                                      Unchecked="ChkShowAddIdleTime_Checked" />
+                                <Label>of</Label>
+                                <TextBox TextChanged="TxtAddIdleTimeSeconds_TextChanged" x:Name="TxtAddIdleTimeSeconds" Width="25" 
+                                         VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                <Label>seconds.</Label>
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+
+                                <CheckBox Margin="3 5 3 3" x:Name="ChkShowRemoveIdleTime" Checked="ChkShowRemoveIdleTime_Checked" 
+                                      Unchecked="ChkShowRemoveIdleTime_Checked" />
+                                <Label>of</Label>
+                                <TextBox TextChanged="TxtRemoveIdleTimeSeconds_TextChanged" x:Name="TxtRemoveIdleTimeSeconds" Width="25" 
+                                         VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                <Label>seconds.</Label>
+
+                            </StackPanel>
+                            
+                            <ComboBox x:Name="CmbVelocidadEjecución" HorizontalAlignment="Left" Margin="4 0 4 0" 
+                                      SelectionChanged="CmbVelocidadEjecución_SelectionChanged" Width="80">
+                                <ComboBoxItem Tag="100">100%</ComboBoxItem>
+                                <ComboBoxItem Tag="98">98%</ComboBoxItem>
+                                <ComboBoxItem Tag="96">96%</ComboBoxItem>
+                                <ComboBoxItem Tag="94">94%</ComboBoxItem>
+                                <ComboBoxItem Tag="92">92%</ComboBoxItem>
+                                <ComboBoxItem Tag="90">90%</ComboBoxItem>
+                                <ComboBoxItem Tag="85">85%</ComboBoxItem>
+                                <ComboBoxItem Tag="80">80%</ComboBoxItem>
+                                <ComboBoxItem Tag="75">75%</ComboBoxItem>
+                                <ComboBoxItem Tag="70">70%</ComboBoxItem>
+                                <ComboBoxItem Tag="60">60%</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            
             <TabItem Header="Display Priority" x:Name="TbiDisplayPriority">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="0 20 0 0" Orientation="Vertical" x:Name="SpnDisplayPriority" HorizontalAlignment="Center" />

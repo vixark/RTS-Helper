@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +11,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 
 
@@ -133,6 +137,139 @@ namespace Vixark {
         /// </summary>
         public static bool Contiene(this string texto, string textoContenido, bool ignorarCapitalización = true)
             => texto.Contains(textoContenido, ignorarCapitalización ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
+
+
+        public static int ObtenerDistanciaLevenshtein(string texto1, string texto2) {
+
+            int[,] d = new int[texto1.Length + 1, texto2.Length + 1];
+            int i;
+            int j;
+            int costo;
+            char[] str1 = texto1.ToCharArray();
+            char[] str2 = texto2.ToCharArray();
+
+            for (i = 0; i <= str1.Length; i++) {
+                d[i, 0] = i;
+            }
+                
+            for (j = 0; j <= str2.Length; j++) {
+                d[0, j] = j;
+            }
+                
+            for (i = 1; i <= str1.Length; i++) {
+                for (j = 1; j <= str2.Length; j++) {
+
+                    costo = str1[i - 1] == str2[j - 1] ? 0 : 1;
+                    d[i, j] = Math.Min(d[i - 1, j] + 1, Math.Min(d[i, j - 1] + 1, d[i - 1, j - 1] + costo)); // Eliminación e inserción.
+                    if ((i > 1) && (j > 1) && (str1[i - 1] == str2[j - 2]) && (str1[i - 2] == str2[j - 1]))
+                        d[i, j] = Math.Min(d[i, j], d[i - 2, j - 2] + costo); // Sustitución.
+
+                }
+            }
+
+            return d[str1.Length, str2.Length];
+
+        } // ObtenerDistanciaLevenshtein>
+
+
+        public static Bitmap Transformar(Bitmap bmp, bool negativo, bool blancoYNegro, double escala, float luminosidad, float contraste,
+            InterpolationMode modoInterpolación = InterpolationMode.HighQualityBicubic, PixelFormat formatoPíxeles = PixelFormat.Format32bppArgb) { // Ver https://mariusbancila.ro/blog/2009/11/13/using-colormatrix-for-creating-negative-image/.
+
+            var nuevoAncho = (int)Math.Round(bmp.Width * escala, 0);
+            var nuevoAlto = (int)Math.Round(bmp.Height * escala, 0);
+            var nuevoBmp = new Bitmap(nuevoAncho, nuevoAlto, formatoPíxeles);
+            var g = Graphics.FromImage(nuevoBmp);
+
+            var matrizNegativo = new float[][] { new float[] {-1, 0, 0, 0, 0}, new float[] {0, -1, 0, 0, 0}, new float[] {0, 0, -1, 0, 0},
+                  new float[] {0, 0, 0, 1, 0}, new float[] {1, 1, 1, 0, 1} };
+            var matrizBlancoYNegro = new float[][] { new float[] {0.299F, 0.299F, 0.299F, 0, 0}, new float[] { 0.587F, 0.587F, 0.587F, 0, 0}, 
+                new float[] { 0.114F, 0.114F, 0.114F, 0, 0}, new float[] {0, 0, 0, 1, 0}, new float[] { 0, 0, 0, 0, 1 } };
+            var matrizLuminosidadYContraste = new float[][] { new float[] { contraste, 0, 0, 0, 0}, new float[] {0, contraste, 0, 0, 0}, new float[] 
+                {0, 0, contraste, 0, 0}, new float[] {0, 0, 0, 1.0f, 0}, new float[] { 1 - luminosidad, 1 - luminosidad, 1 - luminosidad, 0, 1}};
+            var matriz = new float[][] { new float[] {1, 0, 0, 0, 0}, new float[] {0, 1, 0, 0, 0}, new float[] {0, 0, 1, 0, 0},
+                  new float[] {0, 0, 0, 1, 0}, new float[] {0, 0, 0, 0, 1} };
+
+            if (negativo) matriz = MultiplicarMatrices(matriz, matrizNegativo, 5);
+            if (blancoYNegro) matriz = MultiplicarMatrices(matriz, matrizBlancoYNegro, 5);
+            if (luminosidad != 1 || contraste != 1) matriz = MultiplicarMatrices(matriz, matrizLuminosidadYContraste, 5);
+
+            var attributes = new ImageAttributes();
+            attributes.SetColorMatrix(new ColorMatrix(matriz));
+            
+            if (escala != 1) g.InterpolationMode = modoInterpolación;
+            g.DrawImage(bmp, new Rectangle(0, 0, nuevoAncho, nuevoAlto), 0, 0, bmp.Width, bmp.Height, GraphicsUnit.Pixel, attributes);
+            g.Dispose();
+
+            return nuevoBmp;
+
+        } // Transformar>
+
+
+        private static float[][] MultiplicarMatrices(float[][] f1, float[][] f2, int longitud) { // Ver https://www.codeproject.com/Articles/7836/Multiple-Matrices-With-ColorMatrix-in-C.
+            
+            var x = new float[longitud][];
+            for (int d = 0; d < longitud; d++) {
+                x[d] = new float[longitud];
+            }    
+            
+            var size = longitud;
+            var column = new float[longitud];
+            for (int j = 0; j < longitud; j++) {
+
+                for (int k = 0; k < longitud; k++) {
+                    column[k] = f1[k][j];
+                }
+
+                for (int i = 0; i < longitud; i++) {
+
+                    var row = f2[i];
+                    var s = 0f;
+                    for (int k = 0; k < size; k++) {
+                        s += row[k] * column[k];
+                    }
+                    x[i][j] = s;
+
+                }
+            }
+
+            return x;
+
+        } // MultiplicarMatrices>
+
+
+        public static string LimpiarNombreArchivo(string? nombreArchivo, string carácterSustitución = " ") {
+
+            if (nombreArchivo == null) return carácterSustitución;
+            var carácteresInválidos = new Regex(@"[\\/:*?""<>|]");
+            return carácteresInválidos.Replace(nombreArchivo, carácterSustitución);
+
+        } // LimpiarNombreArchivo>
+
+
+        /// <summary>
+        /// Obtiene un archivo que puede estar siendo usado por otro proceso, pero que se espera que pronto sea liberado.
+        /// </summary>
+        /// <param name="ruta"></param>
+        /// <param name="máximosIntentos"></param>
+        /// <returns></returns>
+        public static bool ObtenerArchivoLibre(string ruta, int máximosIntentos = 20) { // Ver https://stackoverflow.com/a/21053032/8330412.
+
+            var estáLibre = false;
+            var intentos = 0;
+            while (intentos <= máximosIntentos && !estáLibre) {
+                try {
+                    using (File.Open(ruta, FileMode.Open, FileAccess.ReadWrite)) {
+                        estáLibre = true;
+                    }
+                } catch {
+                    intentos++;
+                    Thread.Sleep(100);
+                }
+            }
+
+            return estáLibre;
+
+        } // ObtenerArchivoLibre>
 
 
     } // General>

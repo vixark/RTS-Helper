@@ -15,6 +15,11 @@ using System.Text.RegularExpressions;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing.Drawing2D;
+using DImg = System.Drawing.Imaging;
+using SDrw = System.Drawing;
+using System.Runtime.InteropServices;
+using System.Drawing.Imaging;
 
 
 
@@ -31,9 +36,18 @@ namespace RTSHelper {
 
         public static bool ModoDesarrollo = true;
 
-        public static string AOE2Name = "Age of Empires II";
+        public static bool ModoDesarrolloOCR = true;
 
-        public static string AOE4Name = "Age of Empires IV";
+        public const string AOE2Name = "Age of Empires II";
+
+        public const string AOE4Name = "Age of Empires IV";
+
+        public static List<string> NombresVentanasJuegos = new List<string>() { "Age of Empires II: Definitive Edition", "Age of Empires IV", 
+            "Age of Empires II: HD Edition" };
+
+        public static Dictionary<string, List<string>> TextosPausa = new Dictionary<string, List<string>> { { AOE2Name,  new List<string> 
+            { "Game Paused", "Jogo Pausado", "Spiel pausiert", "Partida en pausa", "Partie mise en pause", "Partita sospesa",
+            "Permainan Dijeda", "Partida en pausa", "Gra wstrzymana", "Oyun Duraklatildi", "Van choi bi tam dung", "(F3)" } } }; // No se agregan "गेम रोका गया",  "一時停止", "게임 일시 중지", "遊戲暫停", "Пауза" "游戏暂停" porque Tesseract no reconoce estos carácteres. "Oyun Duraklatıldı", "Ván chơi bị tạm dừng" se llevan a alfabeto latino que es el reconocido por Tesseract. Para AOE2 no se incluye el paréntesis y la tecla usada para pausar (F3) para no incluirla en las verificaciones iniciales del texto con Contains.
 
         public static string OtherName = "Other";
 
@@ -61,6 +75,8 @@ namespace RTSHelper {
 
         public static string DirectorioImágenes = Path.Combine(DirectorioAplicación, "Images");
 
+        public static string DirectorioPruebasOCR = Path.Combine(DirectorioAplicación, "OCR Tests");
+
         public static string AlinearInferiormenteId = "\f";
 
         public static string NuevaLíneaId = "\n";
@@ -76,7 +92,13 @@ namespace RTSHelper {
             [Display(Name = "Custom Name")] Custom, Image, BR, DE, ES, FR, HI, IT, JP, KO, MS, MX, PL, RU, TR, TW, VI, ZH // TW es equivalente Chino tradicional según las pruebas que he hecho. ZH es Chino Simplificado
         }
 
-        public static Dictionary<string, string> Idiomas = new Dictionary<string, string> { { "BR", "Português (Brasil)" }, {"DE", "Deutsch" },
+        public static Dictionary<string, string> IdiomasJuego = new Dictionary<string, string> { { "EN", "English" }, { "BR", "Português (Brasil)" }, 
+            {"DE", "Deutsch" }, { "ES", "Español" }, { "FR", "Français" }, { "HI", "हिंदी" }, { "IT", "Italiano"}, { "JP", "日本語"}, { "KO", "한국어"}, 
+            { "MS", "Bahasa Melayu"}, { "MX", "Español (México)"}, { "PL", "Polski"}, { "RU", "Русский"}, { "TR", "Türkçe"}, { "TW", "繁體中文"},
+            { "VI", "Tiếng Việt"}, { "ZH", "简体中文"},
+        };
+
+        public static Dictionary<string, string> IdiomasNombres = new Dictionary<string, string> { { "BR", "Português (Brasil)" }, {"DE", "Deutsch" },
             { "ES", "Español" }, { "FR", "Français" }, { "HI", "हिंदी" }, { "IT", "Italiano"}, { "JP", "日本語"}, { "KO", "한국어"}, { "MS", "Bahasa Melayu"}, 
             { "MX", "Español (México)"}, { "PL", "Polski"}, { "RU", "Русский"}, { "TR", "Türkçe"}, { "TW", "繁體中文"}, { "VI", "Tiếng Việt"}, 
             { "ZH", "简体中文"},
@@ -206,34 +228,113 @@ namespace RTSHelper {
 
         public static bool ShowNextStepPredeterminado = false;
 
+        public static ParámetrosExtracción NNL2C2x1 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true, 
+            blancoYNegro: true, escala: 1, luminosidad: 2, contraste: 2, InterpolationMode.NearestNeighbor, DImg.PixelFormat.Format8bppIndexed); // Por alguna razón desconocida es necesario que el bitmap sea de 8 bits para que Tesseract lo reconozca adecuadamente. Se usa NearestNeighbor porque lo exige el constructor, pero al tener escala 1, no se aplica ningún modo de interpolación.
+
+        public static ParámetrosExtracción NNL1C2x1 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
+            blancoYNegro: true, escala: 1, luminosidad: 1, contraste: 2, InterpolationMode.NearestNeighbor, DImg.PixelFormat.Format8bppIndexed); // Por alguna razón desconocida es necesario que el bitmap sea de 8 bits para que Tesseract lo reconozca adecuadamente. Se usa NearestNeighbor porque lo exige el constructor, pero al tener escala 1, no se aplica ningún modo de interpolación.
+
+        public static ParámetrosExtracción NNL2C2x2 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true, 
+            blancoYNegro: true, escala: 2, luminosidad: 2, contraste: 2, InterpolationMode.NearestNeighbor, DImg.PixelFormat.Format8bppIndexed);
+
+        public static ParámetrosExtracción NNL1C2x2 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
+            blancoYNegro: true, escala: 2, luminosidad: 1, contraste: 2, InterpolationMode.NearestNeighbor, DImg.PixelFormat.Format8bppIndexed);
+
+        public static ParámetrosExtracción HQBCL2C2x4 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true, 
+            blancoYNegro: true, escala: 4, luminosidad: 2, contraste: 2, InterpolationMode.HighQualityBicubic, DImg.PixelFormat.Format8bppIndexed);
+
+        public static ParámetrosExtracción HQBCL1C2x4 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
+            blancoYNegro: true, escala: 4, luminosidad: 1, contraste: 2, InterpolationMode.HighQualityBicubic, DImg.PixelFormat.Format8bppIndexed);
+
+        public static ParámetrosExtracción HQBCL2C2x16 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
+            blancoYNegro: true, escala: 16, luminosidad: 2, contraste: 2, InterpolationMode.HighQualityBicubic, DImg.PixelFormat.Format8bppIndexed);
+
+        public static ParámetrosExtracción HQBCL1C2x16 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
+            blancoYNegro: true, escala: 16, luminosidad: 1, contraste: 2, InterpolationMode.HighQualityBicubic, DImg.PixelFormat.Format8bppIndexed);
+
+        public static ParámetrosExtracción HQBCL4C6x4 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
+            blancoYNegro: true, escala: 4, luminosidad: 4, contraste: 6, InterpolationMode.HighQualityBicubic, DImg.PixelFormat.Format8bppIndexed);
+
+        public static ParámetrosExtracción HQBCL2C6x4 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
+            blancoYNegro: true, escala: 4, luminosidad: 2, contraste: 6, InterpolationMode.HighQualityBicubic, DImg.PixelFormat.Format8bppIndexed);
+
+        public static ParámetrosExtracción AlfanuméricoSinProcesamiento = new ParámetrosExtracción(soloNúmeros: false, 
+            permitirUnCarácter: false, negativo: false, blancoYNegro: false, escala: 1, luminosidad: 1, contraste: 1, InterpolationMode.NearestNeighbor, 
+            DImg.PixelFormat.Format32bppArgb); // Se usa NearestNeighbor porque lo exige el constructor, pero al tener escala 1, no se aplica ningún modo de interpolación.
+
+        public static ParámetrosExtracción AlfaNumNegByNL2C2 = new ParámetrosExtracción(soloNúmeros: false,
+            permitirUnCarácter: false, negativo: true, blancoYNegro: true, escala: 1, luminosidad: 2, contraste: 2, InterpolationMode.NearestNeighbor,
+            DImg.PixelFormat.Format8bppIndexed);
+
+        public enum ScreenCaptureText : int { // Por facilidad y flexibilidad se agregan todos los posibles textos en la misma enumeración. El prefijo es el nombre del juego usando _ en vez de espacios para poder filtrarlo fácilmente en opciones.
+            Age_of_Empires_II_PauseF3XS, Age_of_Empires_II_PauseF3S, Age_of_Empires_II_PauseF3M, Age_of_Empires_II_PauseF3L, Age_of_Empires_II_PauseF3XL,
+            Age_of_Empires_II_PauseM, Age_of_Empires_II_PauseL,
+            Age_of_Empires_II_Villagers_0_to_9, Age_of_Empires_II_Villagers_10_to_99, Age_of_Empires_II_Villagers_100_to_999,
+            Age_of_Empires_II_Wood, Age_of_Empires_II_Food, Age_of_Empires_II_Gold, Age_of_Empires_II_Stone, Age_of_Empires_II_Population,
+            Age_of_Empires_II_Maximum_Population, Age_of_Empires_II_Villagers_on_Wood, Age_of_Empires_II_Villagers_on_Food, 
+            Age_of_Empires_II_Villagers_on_Gold, Age_of_Empires_II_Villagers_on_Stone, Age_of_Empires_II_Timer, Age_of_Empires_II_Speed, 
+            Age_of_Empires_II_Age,
+        }
+
+        public static float ConfianzaOCRAceptable = 0.50f;
+
         #endregion Variables>
 
 
         #region Funciones y Procedimientos
 
-        public static string ObtenerSeleccionadoEnCombobox(SelectionChangedEventArgs e) {
+        public static string ObtenerSeleccionadoEnCombobox(SelectionChangedEventArgs e, bool tag = false) {
 
             var cbi = e.AddedItems[0] as ComboBoxItem;
             if (cbi != null) {
-                if (cbi.Content is null) {
-                    throw new Exception("No se encontró el elemento seleccionado en cbi.Content."); // Nunca debería pasar.
+
+                if (tag) {
+
+                    if (cbi.Tag is null) {
+                        throw new Exception("No se encontró el elemento seleccionado en cbi.Tag."); // Nunca debería pasar.
+                    } else {
+                        return cbi.Tag?.ToString() ?? throw new Exception("No se encontró el elemento seleccionado en cbi.Tag?.ToString().");
+                    }
+
                 } else {
-                    return cbi.Content?.ToString() ?? throw new Exception("No se encontró el elemento seleccionado en cbi.Content?.ToString().");
-                }              
+
+                    if (cbi.Content is null) {
+                        throw new Exception("No se encontró el elemento seleccionado en cbi.Content."); // Nunca debería pasar.
+                    } else {
+                        return cbi.Content?.ToString() ?? throw new Exception("No se encontró el elemento seleccionado en cbi.Content?.ToString().");
+                    }
+
+                }
+
             } else {
                 var str = e.AddedItems[0] as string;
                 return str ?? throw new Exception("No se encontró el elemento seleccionado en str.");
             }
-
+             
         } // ObtenerSeleccionadoEnCombobox>
+
+
+        public static SDrw.Rectangle ObtenerRectánguloPantallaActual(bool ajustadoEscala) {
+
+            if (ajustadoEscala) {
+                return new SDrw.Rectangle(0, 0, (int)Math.Round(SystemParameters.PrimaryScreenWidth),
+                    (int)Math.Round(SystemParameters.PrimaryScreenHeight));
+            } else {
+
+                var interopHelper = new WindowInteropHelper(System.Windows.Application.Current.MainWindow);
+                var pantallaActual = WForms.Screen.FromHandle(interopHelper.Handle);
+                return pantallaActual.Bounds;
+
+            }
+
+        } // ObtenerRectánguloPantallaActual>
 
 
         public static string ObtenerResoluciónRecomendada() {
 
-            var interopHelper = new WindowInteropHelper(System.Windows.Application.Current.MainWindow);
-            var pantallaActual = WForms.Screen.FromHandle(interopHelper.Handle);
-            var anchoPantalla = pantallaActual.Bounds.Width;
-            var altoPantalla = pantallaActual.Bounds.Height;
+            var rectánguloPantalla = ObtenerRectánguloPantallaActual(ajustadoEscala: false);
+            var anchoPantalla = rectánguloPantalla.Width;
+            var altoPantalla = rectánguloPantalla.Height;
             var resolución = "1920x1080";
             if (anchoPantalla == 1920 && altoPantalla == 1080) {
                 resolución = "1920x1080";
@@ -2185,6 +2286,476 @@ namespace RTSHelper {
         public static MessageBoxResult MostrarError(string mensaje) => MessageBox.Show(mensaje, "Error");
 
         public static MessageBoxResult MostrarInformación(string mensaje) => MessageBox.Show(mensaje, "Info");
+
+
+        public static string? ExtraerTextoDePantalla(ScreenCaptureText tipo, ParámetrosExtracción parámetros, out float confianza) {
+
+            using var bmp = CapturaDePantalla.ObtenerBitmap(ObtenerRectánguloTextoEnPantalla(tipo), parámetros.Negativo, parámetros.BlancoYNegro,
+                parámetros.Escala, parámetros.Luminosidad, parámetros.Contraste, parámetros.ModoInterpolación, parámetros.FormatoPixeles);
+            var texto = OCR.ObtenerTexto(bmp, parámetros.SoloNúmeros, parámetros.PermitirUnCarácter, out confianza);
+
+            if (ModoDesarrolloOCR) {
+
+                if (!Directory.Exists(DirectorioPruebasOCR)) Directory.CreateDirectory(DirectorioPruebasOCR);
+                try {
+                    bmp.Save(Path.Combine(DirectorioPruebasOCR, $"{LimpiarNombreArchivo(texto)}.bmp"), ImageFormat.Bmp);
+                } catch (Exception) {
+                    bmp.Save(Path.Combine(DirectorioPruebasOCR, $"{DateTime.Now.ToString("yyyyMMddhhmmss")}.bmp"), ImageFormat.Bmp);
+                }
+                
+            }
+
+            return texto;
+
+        } // ExtraerTextoDePantalla>
+
+
+        public static string? LeerPausa(out float confianza) {
+
+            var tipo = ScreenCaptureText.Age_of_Empires_II_PauseM;
+            if (Preferencias.Game == Global.AOE2Name) {
+
+                switch (Preferencias.GameLanguage) {
+
+                    case "EN":
+                    case "IT":
+                    case "DE":
+                    case "BR":
+                        tipo = ScreenCaptureText.Age_of_Empires_II_PauseM;
+                        break;
+                    case "ES":
+                    case "MX":
+                    case "PL":
+                    case "MS":
+                    case "FR":
+                    case "TR":
+                        tipo = ScreenCaptureText.Age_of_Empires_II_PauseL;
+                        break;
+                    case "ZH":
+                    case "TW":
+                    case "JP":
+                        tipo = ScreenCaptureText.Age_of_Empires_II_PauseF3XS;
+                        break;
+                    case "RU":
+                        tipo = ScreenCaptureText.Age_of_Empires_II_PauseF3S;
+                        break;
+                    case "HI":
+                        tipo = ScreenCaptureText.Age_of_Empires_II_PauseF3M;
+                        break;
+                    case "KO":
+                        tipo = ScreenCaptureText.Age_of_Empires_II_PauseF3L;
+                        break;
+                    case "VI":
+                        tipo = ScreenCaptureText.Age_of_Empires_II_PauseF3XL;
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+            return ExtraerTextoDePantalla(tipo, new List<string>(), out confianza);
+
+        } // LeerPausa>
+
+
+        public static int? LeerProgreso(int progresoActual, out float confianza, int? rangoValoresEsperados = null) { // null se usa el valor predeterminado/recomendado para el juego. Por ejemplo para Age of Empires II, 3 es un valor aceptable para el rango de valores esperados cuando hay más de 30 aldeanos (cantidad de aldeanos en una build order de castillos rápida). Sería como si 3 centros de pueblo crearan aldeanos en el mismo segundo y aún así el RTS lo aceptara como correcto. Es improbable por el lado del juego que esto suceda, pero entre más se alargue el tiempo entre extracciones de progreso, más probable sería que suceda que se creen o se mueran 4 aldeanos entre estas verificaciones y el RTS no lo acepte cómo válidas.
+
+            string? texto = null;
+            confianza = 0;
+            var valoresEsperados = new List<string>();
+
+            if (rangoValoresEsperados == null) {
+
+                if (Preferencias.Game == Global.AOE2Name) {
+                    rangoValoresEsperados = progresoActual > 30 ? 3 : 2; // Para menos de 30 aldeanos no es posible que hayan 3 centros de pueblo produciendo aldeanos en condiciones de juego normales. Se prefiere acortar el rango de valores esperados para evitar errores. Aún si hubieran 3 centros de pueblo produciendo aldeanos, sería improbable que los 3 salieran en el mismo segundo, entonces el 2 tampoco funcionaría del todo mal en ese caso.
+                } else {
+                    rangoValoresEsperados = 3;
+                }
+
+            }
+
+            for (int i = progresoActual - (int)rangoValoresEsperados; i <= progresoActual + rangoValoresEsperados; i++) {
+                if (i >= 0) valoresEsperados.Add(i.ToString());
+            }
+
+            if (Preferencias.Game == Global.AOE2Name) {
+
+                if (progresoActual < 9) {
+
+                    texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, new List<string>(), out confianza, 
+                        extraConfianzaRequerida: 0.3f); // Se agrega más confianza requerida porque el 8 se puede confundir con el 3 en 1080. No se usa lista de valores esperados porque puede confundirse el 5 con el 3 que están muy cerca y se prefiere evitar este error.
+                    confianza+= 1; // Se suma 1 a la confianza para evitar que en el intervalo de 0 a 9 se consideren lecturas no confiables por no proveer la lista de valores esperados y se retrase el ajuste innecesariamente un paso más.
+
+                } else if (progresoActual == 9 || progresoActual == 10) {
+
+                    var texto2n = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, valoresEsperados, out float c2n);
+                    if (c2n > ConfianzaOCRAceptable) {
+
+                        texto = texto2n;
+                        confianza = c2n;
+
+                    } else {
+
+                        var texto1n = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, new List<string>(), out float c1n, 
+                            extraConfianzaRequerida: 0.3f);
+                        texto = texto1n;
+                        confianza = c1n + 1; // Ver confianza += 1;
+
+                    }
+                    
+                } else if (progresoActual > 10 && progresoActual < 99) {
+
+                    texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, valoresEsperados, out confianza);
+
+                } else if (progresoActual == 99 || progresoActual == 100) {
+
+                    var texto3n = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, valoresEsperados, out float c3n);
+                    if (c3n > ConfianzaOCRAceptable) {
+
+                        texto = texto3n;
+                        confianza = c3n;
+
+                    } else {
+
+                        var texto2n = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, valoresEsperados, out float c2n);
+                        texto = texto2n;
+                        confianza = c2n;
+
+                    }
+
+                } else if (progresoActual > 100) {
+
+                    texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, valoresEsperados, out confianza);
+
+                }
+
+            }
+
+            var éxito = int.TryParse(texto, out int progreso);
+            return éxito ? progreso : (int?)null;
+
+        } // LeerProgreso>
+
+
+        public static SDrw.RectangleF ObtenerRectánguloTextoEnPantalla(ScreenCaptureText tipo) {
+
+            if (Preferencias.ScreenCaptureRectangles == null) CrearOCompletarScreenCaptureRectangles();
+            if (Preferencias.ScreenCaptureRectangles!.ContainsKey(tipo)) { // Después de CrearOCompletarScreenCaptureRectangles() se asegura que Preferencias.ScreenCaptureRectangles no es nulo.
+                return Preferencias.ScreenCaptureRectangles![tipo]; 
+            } else {
+                return new SDrw.RectangleF(0, 0, 0.1f, 0.1f); // Un rectángulo cualquiera para que no saque error.
+            }
+
+        } // ObtenerRectánguloTextoEnPantalla>
+
+
+        public static void CrearOCompletarScreenCaptureRectangles() {
+
+            var cambió = false;
+            if (Preferencias.ScreenCaptureRectangles == null) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles = new Dictionary<ScreenCaptureText, SDrw.RectangleF>();    
+            }
+                     
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9)) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, 
+                    new SDrw.RectangleF(582F / 2560, 49F / 1440, 13F / 2560, 17F / 1440)); // El algoritmo de OCR es inestable, cambia con el recorte realizado. Se debe procurar hacer siempre el mismo recorte. Si se cambia el rectángulo de recorte, se deben verificar la estabilidad del algoritmo con todos los números del rango aplicable.
+            }
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99)) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99,
+                     new SDrw.RectangleF(573F / 2560, 48F / 1440, 23F / 2560, 17F / 1440));
+            }          
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999)) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999,
+                     new SDrw.RectangleF(565F / 2560, 49F / 1440, 30F / 2560, 17F / 1440));
+            }
+            
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseM)) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseM,
+                    new SDrw.RectangleF(1113F / 2560, 675F / 1440, 335F / 2560, 91F / 1440));
+            }
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseL)) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseL,
+                    new SDrw.RectangleF(1084F / 2560, 672F / 1440, 393F / 2560, 95F / 1440));
+            }
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseF3XS)) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseF3XS,
+                    new SDrw.RectangleF(1310F / 2560, 682F / 1440, 79F / 2560, 71F / 1440));
+            }
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseF3S)) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseF3S,
+                    new SDrw.RectangleF(1295F / 2560, 682F / 1440, 79F / 2560, 71F / 1440));
+            }
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseF3M)) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseF3M,
+                    new SDrw.RectangleF(1322F / 2560, 682F / 1440, 79F / 2560, 71F / 1440));
+            }
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseF3L)) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseF3L,
+                    new SDrw.RectangleF(1351F / 2560, 682F / 1440, 79F / 2560, 71F / 1440));
+            }
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseF3XL)) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseF3XL,
+                    new SDrw.RectangleF(1417F / 2560, 682F / 1440, 79F / 2560, 71F / 1440));
+            }
+
+            if (cambió) Settings.Guardar(Preferencias, RutaPreferencias);
+
+        } // CrearOCompletarScreenCaptureRectangles>
+
+
+        public static ParámetrosExtracción ObtenerParámetrosOCR(ScreenCaptureText tipo, int númeroRecomendado) {
+
+            switch (tipo) {
+                case ScreenCaptureText.Age_of_Empires_II_PauseM:
+                case ScreenCaptureText.Age_of_Empires_II_PauseL:
+                case ScreenCaptureText.Age_of_Empires_II_PauseF3XS:
+                case ScreenCaptureText.Age_of_Empires_II_PauseF3S:
+                case ScreenCaptureText.Age_of_Empires_II_PauseF3M:
+                case ScreenCaptureText.Age_of_Empires_II_PauseF3L:
+                case ScreenCaptureText.Age_of_Empires_II_PauseF3XL:
+                    return AlfaNumNegByNL2C2;
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9:
+
+                    switch (númeroRecomendado) {
+                        case 1:
+
+                            switch (Preferencias.ScreenResolution) {
+                                case "1920x1080":
+                                case "1366x768":
+                                    return NNL1C2x2;
+                                case "2560x1440":
+                                default:
+                                    return NNL2C2x2;
+                            }
+
+                        case 2:
+
+                            switch (Preferencias.ScreenResolution) {
+                                case "1920x1080":
+                                case "1366x768":
+                                    return HQBCL1C2x4;
+                                case "2560x1440":
+                                default:
+                                    return HQBCL2C2x4;
+                            }
+
+                        case 3:
+
+                            switch (Preferencias.ScreenResolution) {
+                                case "1920x1080":
+                                case "1366x768":
+                                    return NNL1C2x1;
+                                case "2560x1440":
+                                default:
+                                    return NNL2C2x1;
+                            }
+                            
+                    }
+                    break;
+
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99:
+
+                    switch (númeroRecomendado) {
+                        case 1:
+
+                            switch (Preferencias.ScreenResolution) {
+                                case "1920x1080":
+                                case "1366x768":
+                                    return HQBCL1C2x16;
+                                case "2560x1440":
+                                default:
+                                    return HQBCL2C2x16; // Extrañamente se requiere establecer la variable unCarácter en verdadero para que coincida adecuadamente números de 2 cifras. Parece ser un bug del algorítmo de Tesseract.
+                            }
+
+                        case 2:
+
+                            switch (Preferencias.ScreenResolution) {
+                                case "1920x1080":
+                                case "1366x768":
+                                    return HQBCL2C6x4;
+                                case "2560x1440":
+                                default:
+                                    return HQBCL4C6x4;
+                            }
+
+                        case 3:
+
+                            switch (Preferencias.ScreenResolution) {
+                                case "1920x1080":
+                                case "1366x768":
+                                    return NNL1C2x1;
+                                case "2560x1440":
+                                default:
+                                    return NNL2C2x1;
+                            }
+                            
+                    }
+                    break;
+
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999:
+
+                    switch (númeroRecomendado) {
+                        case 1:
+
+                            switch (Preferencias.ScreenResolution) {
+                                case "1920x1080":
+                                case "1366x768":
+                                    return HQBCL2C6x4;
+                                case "2560x1440":
+                                default:
+                                    return HQBCL4C6x4;
+                            }
+
+                        case 2:
+
+                            switch (Preferencias.ScreenResolution) {
+                                case "1920x1080":
+                                case "1366x768":
+                                    return NNL1C2x1;
+                                case "2560x1440":
+                                default:
+                                    return NNL2C2x1;
+                            }
+
+                        case 3:
+
+                            switch (Preferencias.ScreenResolution) {
+                                case "1920x1080":
+                                case "1366x768":
+                                    return HQBCL1C2x16;
+                                case "2560x1440":
+                                default:
+                                    return HQBCL2C2x16; 
+                            }
+
+                    }
+                    break;
+
+                case ScreenCaptureText.Age_of_Empires_II_Wood:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Food:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Gold:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Stone:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Population:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Maximum_Population:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_on_Wood:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_on_Food:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_on_Gold:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_on_Stone:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Timer:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Speed:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Age:
+                    break;
+                default:
+                    break;
+            }
+
+            return AlfanuméricoSinProcesamiento;
+
+        } // ObtenerParámetrosOCR>
+
+
+        /// <summary>
+        /// Si el resultado de la extracción es uno de los valores esperados, se acepta una extracción con baja confianza.
+        /// </summary>
+        /// <param name="tipo"></param>
+        /// <param name="máximosParámetrosExtracción"></param>
+        /// <param name="valoresEsperados"></param>
+        /// <param name="máximaConfianza"></param>
+        /// <returns></returns>
+        public static string? ExtraerTextoDePantalla(ScreenCaptureText tipo, List<string> valoresEsperados, out float máximaConfianza, float extraConfianzaRequerida = 0) {
+
+            var máximosIntentosDiferentesExtracción = 1;
+            switch (tipo) {
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9:
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99:
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999:
+                    máximosIntentosDiferentesExtracción = 3;
+                    break;
+                default:
+                    máximosIntentosDiferentesExtracción = 1;
+                    break;
+            }
+
+            máximaConfianza = 0;
+
+            for (int i = 1; i <= máximosIntentosDiferentesExtracción; i++) {
+                
+                var texto = ExtraerTextoDePantalla(tipo, ObtenerParámetrosOCR(tipo, i), out float confianza) ?? "";
+                if (valoresEsperados.Contains(texto)) {
+
+                    máximaConfianza = 1 + confianza;
+                    return texto;
+
+                } else if (confianza >= ConfianzaOCRAceptable + extraConfianzaRequerida) {
+
+                    máximaConfianza = confianza;
+                    return texto;
+
+                } else if (i == máximosIntentosDiferentesExtracción) {
+
+                    máximaConfianza = -1f;
+                    return texto; // Igual se devuelve el texto encontrado, pero la función que lo llama debe verificar que la confianza no sea -1.
+
+                }
+
+            }
+
+            return "";
+
+        } // ExtraerTextoDePantalla>
+
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)] static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)] static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)] static extern int GetWindowTextLength(IntPtr hWnd);
+
+        private static string ObtenerNombreVentanaActual() {
+
+            var título = string.Empty;
+            var handle = GetForegroundWindow(); 
+            var longitud = GetWindowTextLength(handle) + 1; 
+            var stringBuilder = new StringBuilder(longitud);
+            if (GetWindowText(handle, stringBuilder, longitud) > 0) título = stringBuilder.ToString();
+            return título;
+
+        } // ObtenerNombreVentanaActual>
+
+
+        public static bool Jugando() => NombresVentanasJuegos.Contains(ObtenerNombreVentanaActual());
 
 
         #endregion Procedimientos y Funciones>
