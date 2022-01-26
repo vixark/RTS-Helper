@@ -86,7 +86,7 @@ namespace RTSHelper {
 
         private bool MostrandoPasoAnterior = false;
 
-        private double MilisegundosJuegoDesface = 0; // Milisegundos de desface acumulado. Se usa principalmente para ajustar el reloj para que no se vea afectado por los desfaces. Esto se hace así por diseño debido a que el reloj se espera que esté sincronizado con el reloj del juego y los desfaces son causados debidos a errores del jugador, por ejemplo si no creo el aldeano a tiempo y tardó 10 segundos con el centro de pueblo desocupado se debería desfazar la ejecución 10 segundos, pero el reloj se mantendría igual.
+        private double MilisegundosJuegoDesface = 0; // Milisegundos de desface acumulado. Se usa principalmente para ajustar el reloj para que no se vea afectado por los desfaces. Esto se hace así por diseño debido a que el reloj se espera que esté sincronizado con el reloj del juego y los desfaces son causados debidos a errores del jugador, por ejemplo si no creó el aldeano a tiempo y tardó 10 segundos con el centro de pueblo desocupado se debería desfazar la ejecución 10 segundos, pero el reloj se mantendría igual.
 
         FileSystemWatcher SupervisorOrdenDeEjecuciónActual;
 
@@ -282,6 +282,7 @@ namespace RTSHelper {
             ActualizarPaso();
             MilisegundosTimerAntesDePausa = 0;
             GuardarDuraciónPaso(OrdenDeEjecución.NúmeroPaso - 1);
+            GuardarDesfaceAcumulado(OrdenDeEjecución.NúmeroPaso - 1);
             ActualizarUI();
             Flash();
             var nuevaDuraciónPaso = ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed, OrdenDeEjecución.NúmeroPaso);
@@ -389,43 +390,42 @@ namespace RTSHelper {
             if (!Preferencias.AutoAdjustIdleTime) return;
             if (!Jugando()) return;
             if (Estado != EEstado.Running) return;
-            if (ModoDesarrolloOCR) LblDepuración.Visibility = Visibility.Visible;
-            
+
             var pasoActual = OrdenDeEjecución.NúmeroPaso;
             var progresoActual = (int?)null;
             if (pasoActual <= OrdenDeEjecución.Pasos.Count - 1) progresoActual = OrdenDeEjecución.Pasos[pasoActual].Comportamiento?.Progreso;
             var progresoLeído = (int?)null;
             var confianza = -2f;
             if (progresoActual != null) progresoLeído = LeerProgreso((int)progresoActual, out confianza);
+            if (progresoLeído == ÚltimoProgresoLeído) return; // Cuando el progresoLeído es igual al ÚltimoProgresoLeído, no se realiza ninguna acción. 
             var segundosJuegoPasoActual = ObtenerSegundosJuegoPasoActual();
 
-            var procesar = true;
-            if (ÚltimoProgresoLeído == null) {
-                ÚltimoProgresoLeído = progresoLeído;
-                procesar = false;
-            }
-               
-            if (procesar && progresoLeído != null && progresoLeído != ÚltimoProgresoLeído) { // Cuando el progresoLeído es igual al ÚltimoProgresoLeído, no se realiza ninguna acción. 
+            if (progresoLeído != null) {
 
-                var confiable = confianza > 1 || (confianza > 0 && (progresoLeído == ÚltimoProgresoLeído + 1 || progresoLeído == ÚltimoProgresoLeído - 1));  // Cuando la confianza está entre 0 y 1 es una lectura dudosa que no está en el rango esperado y requiere comprobación con el ÚltimoProgresoLeído para verificar que el último progreso leído era un progreso inmediatamente anterior al progreso actual y confirmar así que la lectura actual es confiable. Esto sucede por ejemplo en el caso de tener 15 aldeanos y en el mismo segundo perder 3 aldeanos (improbable, pero podría suceder), la siguiente lectura serían 11 aldeanos que sería descartada por no estar en el rango esperado 13-14-15-16-17, el RTS Helper pasaría al paso con progreso 16 y la siguente lectura sería 12 que tampoco estaría en el rango 14-15-16-17-18, pero si sería un consecutivo desde el último progreso leído 11, entonces se considerará que es confiable. Se agrega también el consecutivo hacia atrás para considerar el caso de 3 aldeanos muertos seguidos por uno más muerto.
-                ÚltimoProgresoLeído = (int)progresoLeído;
+                var confiable = confianza > 1 || (confianza > 0 && (progresoLeído == ÚltimoProgresoLeído + 1 || progresoLeído == ÚltimoProgresoLeído - 1));  // Cuando la confianza está entre 0 y 1 es una lectura dudosa que no está en el rango esperado y requiere comprobación con el ÚltimoProgresoLeído para verificar que el último progreso leído era un progreso inmediatamente anterior al progreso actual y confirmar así que la lectura actual es confiable. Esto sucede por ejemplo en el caso de tener 15 aldeanos y en el mismo segundo perder 3 aldeanos (improbable, pero podría suceder), la siguiente lectura serían 11 aldeanos que sería descartada por no estar en el rango esperado 13-14-15-16-17, el RTS Helper pasaría al paso con progreso 16 y la siguente lectura sería 12 que tampoco estaría en el rango 14-15-16-17-18, pero si sería un consecutivo desde el último progreso leído 11, entonces se considerará que es confiable. Se agrega también el consecutivo hacia atrás para considerar el caso de 3 aldeanos muertos seguidos por uno más muerto.      
+                if (confianza > 0) {
+                    ÚltimoProgresoLeído = progresoLeído;
+                } else {
+                    ÚltimoProgresoLeído = null;
+                }
 
                 if (confiable) {
   
                     var desface = 0D;
                     var direcciónBúsqueda = progresoLeído == progresoActual ? 0 : (progresoLeído > progresoActual ? 1 : -1); // Si se está más adelante, se busca en los pasos posteriores y el desface es negativo. Cuando el progresoLeído es igual al progresoActual, no se necesita revisar otros pasos para encontrar el valor de duraciónDesface.
-                    var encontradoPaso = direcciónBúsqueda == 0 || progresoLeído - 1 == progresoActual; // Si progresoLeído - 1 == progresoActual, es porque el juego acaba de entrar a un paso justo después que el RTS Helper, en estos casos el desface es únicamente la diferencia entre la longitud del paso anterior y los segundos recorridos por el paso anterior, es decir los segundos que le faltan al RTS Helper para llegar a la posición actual del juego, por lo tanto no es necesario realizar búsquedas en pasos anteriores.
+                    var encontradoPaso = direcciónBúsqueda == 0; 
 
                     if (!encontradoPaso) { 
 
                         var paso = pasoActual + direcciónBúsqueda;
-                        while (paso > 0 && paso < OrdenDeEjecución.Pasos.Count - 1) {
-
-                            desface += -direcciónBúsqueda * ObtenerDuraciónPaso(paso);
+                        while (paso >= 0 && paso <= OrdenDeEjecución.Pasos.Count - 1) {
+          
                             if (progresoLeído == OrdenDeEjecución.Pasos[paso].Comportamiento?.Progreso) {
+                                if (direcciónBúsqueda == -1) desface += -direcciónBúsqueda * ObtenerDuraciónPaso(paso); // Si la búsqueda es hacia atrás, tiene en cuenta el paso final. Por ejemplo, si se está en el inicio del paso de 7 aldeanos y se mueren 3 aldeanos, se debe sumar el largo del paso 6, 5 y 4 (que es el paso en el que se cumple la condición progresoLeído == OrdenDeEjecución.Pasos[paso].Comportamiento?.Progreso). Si la búsqueda es hacia adelante, no se suma el paso en el que se cumple la condición. Por ejemplo, si se tienen 4 aldeanos y se está en el final del paso y se convierten 3 en el mismo momento, se debe sumar la duración del paso de 5 aldeanos y de 6 aldeanos. El de 7 no se suma porque queda al inicio de este. Los ajustes de pasos incompletos para ambos casos se hacen en el condicional siguiente if (encontradoPaso).
                                 encontradoPaso = true;
                                 break;
                             }
+                            desface += -direcciónBúsqueda * ObtenerDuraciónPaso(paso);
                             paso += direcciónBúsqueda;
 
                         }
@@ -454,13 +454,22 @@ namespace RTSHelper {
                     }
 
                 } else {
-                    LblDepuración.Content = $"No Confiable";
+
+                    if (confianza < 0) {
+                        LblDepuración.Content = $"No Confiable";
+                    } else {
+                        LblDepuración.Content = $"No Consecutivo";
+                    }
+                    
                 }
 
-                LblDepuración.Content += $"{Environment.NewLine}Progreso Leído: {progresoLeído}{Environment.NewLine}Progreso: {progresoActual}";
+                LblDepuración.Content += $"{Environment.NewLine}Progreso Leído: {(confianza < 0 ? "x" : progresoLeído.ToString())}{Environment.NewLine}Progreso: {progresoActual}";
 
-            } 
-
+            } else {
+                ÚltimoProgresoLeído = null;
+                LblDepuración.Content = $"No Leído{Environment.NewLine}Progreso Leído: {(confianza < 0 ? "x" : progresoLeído.ToString())}{Environment.NewLine}Progreso: {progresoActual}";
+            }
+    
         } // TimerDetecciónProgreso_Tick>
 
 
@@ -881,7 +890,13 @@ namespace RTSHelper {
         private void GuardarDuraciónPaso(int númeroPaso) {
             if (númeroPaso <= OrdenDeEjecución.Pasos.Count - 1) 
                 OrdenDeEjecución.Pasos[númeroPaso].DuraciónEnJuego = ObtenerDuraciónPaso(númeroPaso) / Preferencias.ExecutionSpeed;
-        } // GuardarDuraciónPasoAnterior>
+        } // GuardarDuraciónPaso>
+
+
+        private void GuardarDesfaceAcumulado(int númeroPaso) {
+            if (númeroPaso <= OrdenDeEjecución.Pasos.Count - 1)
+                OrdenDeEjecución.Pasos[númeroPaso].DesfaceAcumulado = MilisegundosJuegoDesface / 1000;
+        } // GuardarDesfaceAcumulado>
 
 
         private T ObtenerPropiedadDePaso<T>(int númeroPaso, Func<Comportamiento, T?> propiedad, T valorPreferencias) where T : struct {

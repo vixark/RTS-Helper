@@ -25,6 +25,8 @@ namespace RTSHelper {
 
         public Comportamiento Comportamiento { get; set; } = new Comportamiento();
 
+        public double DesfaceAcumulado { get; set; } = 0; // El desface acumulado generado hasta este paso. En el caso de Age of Empires II equivale al tiempo desocupado que estuvo el centro de pueblo durante desde el inico del juego hasta el final de este paso.
+
         #endregion Propiedades>
 
 

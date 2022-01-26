@@ -313,8 +313,8 @@
                     Visibility="{DynamicResource VisibilidadPasoAnterior}" Opacity="1" >
         </StackPanel>
 
-        <Label Background="White" Panel.ZIndex="4"  Visibility="Collapsed" HorizontalAlignment="Right" Margin="0 30 90 0" VerticalAlignment="Top" 
-               Foreground="Red" FontSize="16" FontWeight="Bold" x:Name="LblDepuración">Depuración</Label>
+        <Label Background="White" Panel.ZIndex="4"  Visibility="Collapsed" HorizontalAlignment="Right" Margin="0 25 90 0" VerticalAlignment="Top" 
+               Foreground="Red" FontSize="12" FontWeight="Bold" x:Name="LblDepuración">Depuración</Label>
         
     </Grid>
 </Window>

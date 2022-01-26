@@ -36,7 +36,7 @@ namespace RTSHelper {
 
         public static bool ModoDesarrollo = true;
 
-        public static bool ModoDesarrolloOCR = true;
+        public static bool ModoDesarrolloOCR = false;
 
         public const string AOE2Name = "Age of Empires II";
 
@@ -2385,7 +2385,7 @@ namespace RTSHelper {
 
                     texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, new List<string>(), out confianza, 
                         extraConfianzaRequerida: 0.3f); // Se agrega más confianza requerida porque el 8 se puede confundir con el 3 en 1080. No se usa lista de valores esperados porque puede confundirse el 5 con el 3 que están muy cerca y se prefiere evitar este error.
-                    confianza+= 1; // Se suma 1 a la confianza para evitar que en el intervalo de 0 a 9 se consideren lecturas no confiables por no proveer la lista de valores esperados y se retrase el ajuste innecesariamente un paso más.
+                    if (confianza != -1) confianza+= 1; // Se suma 1 a la confianza para evitar que en el intervalo de 0 a 9 se consideren lecturas no confiables por no proveer la lista de valores esperados y se retrase el ajuste innecesariamente un paso más.
 
                 } else if (progresoActual == 9 || progresoActual == 10) {
 
@@ -2400,11 +2400,11 @@ namespace RTSHelper {
                         var texto1n = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, new List<string>(), out float c1n, 
                             extraConfianzaRequerida: 0.3f);
                         texto = texto1n;
-                        confianza = c1n + 1; // Ver confianza += 1;
+                        confianza = c1n + (confianza == -1 ? 0 : 1); // Ver confianza += 1;
 
                     }
                     
-                } else if (progresoActual > 10 && progresoActual < 99) {
+                } else if (progresoActual > 11 && progresoActual < 99) {
 
                     texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, valoresEsperados, out confianza);
 
