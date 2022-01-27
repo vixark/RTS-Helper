@@ -166,7 +166,7 @@ namespace RTSHelper {
                     ReiniciarPasoActual();
                     SuspenderBlinkingTiempoJuego();
                     BtnNext.IsEnabled = true;
-                    BtnPrevious.IsEnabled = true;
+                    BtnBack.IsEnabled = true;
                     BtnRemoveIdleTime.IsEnabled = true;
                     BtnAddIdleTime.IsEnabled = true;
                     TimerDetecciónPausa.Start();
@@ -233,7 +233,7 @@ namespace RTSHelper {
                     TimerDetecciónProgreso.Stop();
                     ActualizarUI(forzar: true);  
                     BtnNext.IsEnabled = false;
-                    BtnPrevious.IsEnabled = false;
+                    BtnBack.IsEnabled = false;
                     BtnRemoveIdleTime.IsEnabled = false;
                     BtnAddIdleTime.IsEnabled = false;
                     SuspenderBlinkingTiempoJuego();
@@ -313,12 +313,6 @@ namespace RTSHelper {
             if (!Preferencias.Muted) PlaySonidoFinal();
 
         } // TimerStepEndSound_Tick>
-
-
-        private void BtnNext_Click(object sender, RoutedEventArgs e) => SiguientePaso(proporcional: true);
-
-
-        private void BtnPrevious_Click(object sender, RoutedEventArgs e) => AnteriorPaso(proporcional: true);
 
 
         private void TxtPaso_TextChanged(object sender, TextChangedEventArgs e) {
@@ -619,7 +613,36 @@ namespace RTSHelper {
 
         private void BtnAddIdleTime_Click(object sender, RoutedEventArgs e) => Delay();
 
+        private void MniAddIdleTime_Click(object sender, RoutedEventArgs e) => Delay();
+
         private void BtnRemoveIdleTime_Click(object sender, RoutedEventArgs e) => Rush();
+
+        private void MniRemoveIdleTime_Click(object sender, RoutedEventArgs e) => Rush();
+
+        private void MniResetIdleTime_Click(object sender, RoutedEventArgs e) => Desfazar(-MilisegundosJuegoDesface, desfazarReloj: false);
+
+        private void BtnNext_Click(object sender, RoutedEventArgs e) => Next(proporcional: true);
+
+        private void BtnBack_Click(object sender, RoutedEventArgs e) => Back(proporcional: true);
+
+
+        private void MniBackMultipleSteps_Click(object sender, RoutedEventArgs e) {
+
+            for (int i = 0; i < Preferencias.BackMultipleSteps; i++) {
+                Back(proporcional: true);
+            }
+
+        } // MniBackMultipleSteps_Click>
+
+
+        private void MniNextMultipleSteps_Click(object sender, RoutedEventArgs e) {
+
+            for (int i = 0; i < Preferencias.NextMultipleSteps; i++) {
+                Next(proporcional: true);
+            }
+
+        } // MniNextMultipleSteps_Click>
+
 
         #endregion Eventos>
 
@@ -645,7 +668,7 @@ namespace RTSHelper {
         } // RestablecerColor>
 
 
-        private void SiguientePaso(bool proporcional) {
+        private void Next(bool proporcional) {
 
             OrdenDeEjecución.NúmeroPaso++;
             GuardarDuraciónPaso(OrdenDeEjecución.NúmeroPaso - 1);
@@ -657,7 +680,7 @@ namespace RTSHelper {
         } // SiguientePaso>
 
 
-        private void AnteriorPaso(bool proporcional) {
+        private void Back(bool proporcional) {
 
             OrdenDeEjecución.NúmeroPaso--;
             if (OrdenDeEjecución.NúmeroPaso == -1 && Estado == EEstado.Running) {
@@ -697,10 +720,10 @@ namespace RTSHelper {
         private void Rush() => Desfazar(-Preferencias.RemoveIdleTimeSeconds * 1000, desfazarReloj: false);
 
 
-        private void Fordward() => Desfazar(-5000, desfazarReloj: true);
+        private void Fordward() => Desfazar(-Preferencias.ForwardSeconds * 1000, desfazarReloj: true);
 
 
-        private void Backward() => Desfazar(5000, desfazarReloj: true);
+        private void Backward() => Desfazar(Preferencias.BackwardSeconds * 1000, desfazarReloj: true);
 
 
         private void Desfazar(double msJuegoDesface, bool desfazarReloj) {
@@ -1006,6 +1029,11 @@ namespace RTSHelper {
             this.Left = Preferencias.Left;
             this.Height = Preferencias.Height;
             this.Top = Preferencias.Top;
+            MniBackMultipleSteps.Header = $"|◁      Go Back {Preferencias.BackMultipleSteps} Steps";
+            MniNextMultipleSteps.Header = $"▷|      Advance {Preferencias.NextMultipleSteps} Steps";
+            MniBackward.Header = $"◁◁    Backward {Preferencias.BackwardSeconds} Seconds";
+            MniFordward.Header = $"▷▷    Fordward {Preferencias.ForwardSeconds} Seconds";
+
             EstableciendoTamaño = false;
             ActualizarSupervisorOrdenDeEjecución();
 
@@ -1064,7 +1092,7 @@ namespace RTSHelper {
 
         private void IniciarSiguientePaso() {
 
-            SiguientePaso(proporcional: false);
+            Next(proporcional: false);
             ReiniciarPasoActual();
 
         } // IniciarSiguientePaso>
@@ -1072,7 +1100,7 @@ namespace RTSHelper {
 
         private void IniciarAnteriorPaso() {
 
-            AnteriorPaso(proporcional: false);
+            Back(proporcional: false);
             ReiniciarPasoActual();
 
         } // IniciarAnteriorPaso>
@@ -1312,6 +1340,7 @@ namespace RTSHelper {
 
 
         #endregion Procedimientos y Funciones>
+
 
 
     } // MainWindow>

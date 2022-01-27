@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:RTSHelper"
         mc:Ignorable="d" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" ResizeMode="CanResizeWithGrip"
-        Title="Settings - RTS Helper" Height="485" Width="600" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
+        Title="Settings - RTS Helper" Height="490" Width="600" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
     <!--Se debe establecer CanResizeWithGrip porque algunos usuarios les aparece la ventana de settings cortada. No se porqué... Si se quiere quitar el botón de maximizar usar esto https://stackoverflow.com/questions/18707782/disable-maximize-button-of-wpf-window-keeping-resizing-feature-intact -->
 
     <Grid>
@@ -332,82 +332,130 @@
 
             <TabItem Header="Control" x:Name="TbiControl">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="20 20 0 0" Orientation="Horizontal">
 
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
-                            <Label Margin="2">Automatic Idle Time Adjustment:</Label>
-                            <Label Margin="2">Automatic Pause Detection:</Label>
-                            <Label Margin="2">Show Add Idle Time Button:</Label>
-                            <Label Margin="2">Show Remove Idle Time Button:</Label>
-                            <Label Margin="2">Execution Speed:</Label>
+                    <StackPanel Orientation="Vertical">
+                        
+                        <StackPanel Margin="20 20 0 0" Orientation="Horizontal">
+
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                                <Label Margin="2">Automatic Idle Time Adjustment:</Label>
+                                <Label Margin="2">Automatic Pause Detection:</Label>
+                                <Label Margin="2">Show Add Idle Time Button:</Label>
+                                <Label Margin="2">Show Remove Idle Time Button:</Label>
+                                <Label Margin="2">Execution Speed:</Label>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical">
+
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+
+                                    <CheckBox Margin="3 7 3 1" x:Name="ChkAutoadjustIdleTime" Checked="ChkAutoadjustIdleTime_Checked" 
+                                          Unchecked="ChkAutoadjustIdleTime_Checked" />
+                                    <Label>check every</Label>
+                                    <TextBox TextChanged="TxtAutoadjustIdleTimeInterval_TextChanged" x:Name="TxtAutoadjustIdleTimeInterval" Width="25" 
+                                             VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                    <Label>seconds if delay is more than</Label>
+                                    <TextBox TextChanged="TxtMinimumDelayToAutoAdjustIdleTime_TextChanged" x:Name="TxtMinimumDelayToAutoAdjustIdleTime" 
+                                             Width="25" VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                    <Label>seconds.</Label>
+                                
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+
+                                    <CheckBox Margin="3 5 3 3" x:Name="ChkPauseDetection" Checked="ChkPauseDetection_Checked" 
+                                          Unchecked="ChkPauseDetection_Checked" />
+                                    <Label>check every</Label>
+                                    <TextBox TextChanged="TxtPauseDetectionInterval_TextChanged" x:Name="TxtPauseDetectionInterval" Width="25" 
+                                             VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                    <Label>seconds.</Label>
+
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+
+                                    <CheckBox Margin="3 5 3 3" x:Name="ChkShowAddIdleTime" Checked="ChkShowAddIdleTime_Checked" 
+                                          Unchecked="ChkShowAddIdleTime_Checked" />
+                                    <Label>of</Label>
+                                    <TextBox TextChanged="TxtAddIdleTimeSeconds_TextChanged" x:Name="TxtAddIdleTimeSeconds" Width="25" 
+                                             VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                    <Label>seconds.</Label>
+
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+
+                                    <CheckBox Margin="3 5 3 3" x:Name="ChkShowRemoveIdleTime" Checked="ChkShowRemoveIdleTime_Checked" 
+                                          Unchecked="ChkShowRemoveIdleTime_Checked" />
+                                    <Label>of</Label>
+                                    <TextBox TextChanged="TxtRemoveIdleTimeSeconds_TextChanged" x:Name="TxtRemoveIdleTimeSeconds" Width="25" 
+                                             VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                    <Label>seconds.</Label>
+
+                                </StackPanel>
+
+                                <ComboBox x:Name="CmbVelocidadEjecución" HorizontalAlignment="Left" Margin="4 0 4 0" 
+                                          SelectionChanged="CmbVelocidadEjecución_SelectionChanged" Width="80">
+                                    <ComboBoxItem Tag="100">100%</ComboBoxItem>
+                                    <ComboBoxItem Tag="98">98%</ComboBoxItem>
+                                    <ComboBoxItem Tag="96">96%</ComboBoxItem>
+                                    <ComboBoxItem Tag="94">94%</ComboBoxItem>
+                                    <ComboBoxItem Tag="92">92%</ComboBoxItem>
+                                    <ComboBoxItem Tag="90">90%</ComboBoxItem>
+                                    <ComboBoxItem Tag="85">85%</ComboBoxItem>
+                                    <ComboBoxItem Tag="80">80%</ComboBoxItem>
+                                    <ComboBoxItem Tag="75">75%</ComboBoxItem>
+                                    <ComboBoxItem Tag="70">70%</ComboBoxItem>
+                                    <ComboBoxItem Tag="60">60%</ComboBoxItem>
+                                </ComboBox>
+
+                            </StackPanel>
+
                         </StackPanel>
 
-                        <StackPanel Orientation="Vertical">
+                        <Label FontWeight="Bold" Margin="20 10 0 0" xml:space="preserve">Right Click Options in Next and Back Buttons:</Label>
+                        
+                        <StackPanel Margin="20 0 0 0" Orientation="Horizontal">
 
-                            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                                <Label Margin="2">Backward:</Label>
+                                <Label Margin="2">Fordward:</Label>
+                                <Label Margin="2">Back Multiple:</Label>
+                                <Label Margin="2">Next Multiple:</Label>
+                            </StackPanel>
 
-                                <CheckBox Margin="3 7 3 1" x:Name="ChkAutoadjustIdleTime" Checked="ChkAutoadjustIdleTime_Checked" 
-                                      Unchecked="ChkAutoadjustIdleTime_Checked" />
-                                <Label>check every</Label>
-                                <TextBox TextChanged="TxtAutoadjustIdleTimeInterval_TextChanged" x:Name="TxtAutoadjustIdleTimeInterval" Width="25" 
-                                         VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
-                                <Label>seconds if delay is more than</Label>
-                                <TextBox TextChanged="TxtMinimumDelayToAutoAdjustIdleTime_TextChanged" x:Name="TxtMinimumDelayToAutoAdjustIdleTime" 
-                                         Width="25" VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
-                                <Label>seconds.</Label>
+                            <StackPanel Orientation="Vertical">
+
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                                    <TextBox TextChanged="TxtBackwardSeconds_TextChanged" x:Name="TxtBackwardSeconds" Width="25" 
+                                             VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                    <Label>seconds.</Label>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                                    <TextBox TextChanged="TxtFordwardSeconds_TextChanged" x:Name="TxtFordwardSeconds" Width="25" 
+                                             VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                    <Label>seconds.</Label>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                                    <TextBox TextChanged="TxtBackMultipleSteps_TextChanged" x:Name="TxtBackMultipleSteps" Width="25" 
+                                             VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                    <Label>steps.</Label>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                                    <TextBox TextChanged="TxtNextMultipleSteps_TextChanged" x:Name="TxtNextMultipleSteps" Width="25" 
+                                             VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
+                                    <Label>steps.</Label>
+                                </StackPanel>
                                 
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-
-                                <CheckBox Margin="3 5 3 3" x:Name="ChkPauseDetection" Checked="ChkPauseDetection_Checked" 
-                                      Unchecked="ChkPauseDetection_Checked" />
-                                <Label>check every</Label>
-                                <TextBox TextChanged="TxtPauseDetectionInterval_TextChanged" x:Name="TxtPauseDetectionInterval" Width="25" 
-                                         VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
-                                <Label>seconds.</Label>
-
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-
-                                <CheckBox Margin="3 5 3 3" x:Name="ChkShowAddIdleTime" Checked="ChkShowAddIdleTime_Checked" 
-                                      Unchecked="ChkShowAddIdleTime_Checked" />
-                                <Label>of</Label>
-                                <TextBox TextChanged="TxtAddIdleTimeSeconds_TextChanged" x:Name="TxtAddIdleTimeSeconds" Width="25" 
-                                         VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
-                                <Label>seconds.</Label>
-
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-
-                                <CheckBox Margin="3 5 3 3" x:Name="ChkShowRemoveIdleTime" Checked="ChkShowRemoveIdleTime_Checked" 
-                                      Unchecked="ChkShowRemoveIdleTime_Checked" />
-                                <Label>of</Label>
-                                <TextBox TextChanged="TxtRemoveIdleTimeSeconds_TextChanged" x:Name="TxtRemoveIdleTimeSeconds" Width="25" 
-                                         VerticalContentAlignment="Center" Height="25" HorizontalContentAlignment="Center"/>
-                                <Label>seconds.</Label>
-
-                            </StackPanel>
-                            
-                            <ComboBox x:Name="CmbVelocidadEjecución" HorizontalAlignment="Left" Margin="4 0 4 0" 
-                                      SelectionChanged="CmbVelocidadEjecución_SelectionChanged" Width="80">
-                                <ComboBoxItem Tag="100">100%</ComboBoxItem>
-                                <ComboBoxItem Tag="98">98%</ComboBoxItem>
-                                <ComboBoxItem Tag="96">96%</ComboBoxItem>
-                                <ComboBoxItem Tag="94">94%</ComboBoxItem>
-                                <ComboBoxItem Tag="92">92%</ComboBoxItem>
-                                <ComboBoxItem Tag="90">90%</ComboBoxItem>
-                                <ComboBoxItem Tag="85">85%</ComboBoxItem>
-                                <ComboBoxItem Tag="80">80%</ComboBoxItem>
-                                <ComboBoxItem Tag="75">75%</ComboBoxItem>
-                                <ComboBoxItem Tag="70">70%</ComboBoxItem>
-                                <ComboBoxItem Tag="60">60%</ComboBoxItem>
-                            </ComboBox>
                         </StackPanel>
-                        
+
                     </StackPanel>
+                
                 </ScrollViewer>
             </TabItem>
             

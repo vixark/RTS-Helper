@@ -239,6 +239,14 @@ namespace RTSHelper {
 
         public int MinimumDelayToAutoAdjustIdleTime { get; set; } = 3;
 
+        public int ForwardSeconds { get; set; } = 10;
+
+        public int BackwardSeconds { get; set; } = 10;
+
+        public int NextMultipleSteps { get; set; } = 5;
+
+        public int BackMultipleSteps { get; set; } = 5;
+
         #endregion Control>
 
 

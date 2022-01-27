@@ -91,7 +91,7 @@
 
         <!-- Menú contextual sin margen izquierda. https://stackoverflow.com/questions/5276826/system-windows-controls-menuitem-without-icon-area/17724242#17724242 -->
         <ItemsPanelTemplate x:Key="MenuItemPanelTemplate">
-            <StackPanel Margin="-20,0,0,0" />
+            <StackPanel Margin="-30, 0, -30, 0" Background="#CCC" />
         </ItemsPanelTemplate>
         
         <Style TargetType="{x:Type MenuItem}">
@@ -102,7 +102,7 @@
             <Setter Property="ItemsPanel" Value="{StaticResource MenuItemPanelTemplate}" />
         </Style>
         <!-- Menú contextual sin margen izquierda> !-->
-        
+ 
         <RoutedUICommand x:Key="CmdNext" Text="" />
         <RoutedUICommand x:Key="CmdPrevious" Text="" />
         
@@ -115,7 +115,7 @@
 
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource CmdNext}" Executed="BtnNext_Click" />
-        <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnPrevious_Click" />
+        <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnBack_Click" />
     </Window.CommandBindings>
     
     <Grid>
@@ -152,7 +152,7 @@
             <local:HoverButton x:Name="BtnClose" Click="BtnClose_Click" BorderThickness="0" Foreground="{DynamicResource BrushFuente}" 
                                FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}" 
                                Width="{Binding ActualHeight, ElementName=BtnClose, Mode=OneWay}" Style="{StaticResource customButton}" 
-                               bgColor="{DynamicResource BrushFondoControles}" hoverColor="DarkRed" ToolTip="Close">X</local:HoverButton>
+                               bgColor="{DynamicResource BrushFondoControles}" hoverColor="DarkRed" ToolTip="Close">🗙</local:HoverButton>
 
         </StackPanel>
 
@@ -184,7 +184,7 @@
 
                     <TextBox.CommandBindings>
                         <CommandBinding Command="{StaticResource CmdNext}" Executed="BtnNext_Click" />
-                        <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnPrevious_Click" />
+                        <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnBack_Click" />
                     </TextBox.CommandBindings>
                     
                     <TextBox.InputBindings>
@@ -197,7 +197,7 @@
 
                 <StackPanel Orientation="Horizontal">
 
-                    <local:HoverButton x:Name="BtnPrevious" Click="BtnPrevious_Click" Foreground="{DynamicResource BrushFuente}" IsEnabled="False"        
+                    <local:HoverButton x:Name="BtnBack" Click="BtnBack_Click" Foreground="{DynamicResource BrushFuente}" IsEnabled="False"        
                         FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}"                
                         BorderBrush="{DynamicResource BrushFuente}" BorderThickness="1" Margin="{DynamicResource MargenBotones}" 
                         Style="{StaticResource customButton}" bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
@@ -205,8 +205,13 @@
 
                         <local:HoverButton.ContextMenu>
                             <ContextMenu>
-                                <MenuItem x:Name="MniRestartStep" Click="MniRestartStep_Click" Header="Restart Step" />
-                                <MenuItem x:Name="MniBackward" Click="MniBackward_Click" Header="Backward 5 Seconds" />
+                                <MenuItem x:Name="MniResetIdleTime" Click="MniResetIdleTime_Click" Header="🗙      Reset Idle Time" />
+                                <Separator BorderBrush="#AAA" BorderThickness="0 2 0 0" Margin="0 5 0 5" />
+                                <MenuItem x:Name="MniAddIdleTime" Click="MniAddIdleTime_Click" Header="➕     Add Idle Time" />
+                                <Separator BorderBrush="#AAA" BorderThickness="0 2 0 0" Margin="0 5 0 5" />
+                                <MenuItem x:Name="MniBackMultipleSteps" Click="MniBackMultipleSteps_Click" Header="|◁      Back X Steps" />
+                                <MenuItem x:Name="MniBackward" Click="MniBackward_Click" Header="◁◁    Backward X Seconds" />
+                                <MenuItem x:Name="MniRestartStep" Click="MniRestartStep_Click" Header="|◁◁   Restart Step" />
                             </ContextMenu>
                         </local:HoverButton.ContextMenu>
    
@@ -220,9 +225,13 @@
 
                         <local:HoverButton.ContextMenu>
                             <ContextMenu>
-                                <MenuItem x:Name="MniLastStep" Click="MniLastStep_Click"  Header="Last Step" />
-                                <MenuItem x:Name="MniStartNextStep" Click="MniStartNextStep_Click"  Header="Start Next Step" />
-                                <MenuItem x:Name="MniFordward" Click="MniFordward_Click" Header="Fordward 5 Seconds" />
+                                <MenuItem x:Name="MniLastStep" Click="MniLastStep_Click"  Header="➤      Go to Last Step" />
+                                <Separator BorderBrush="#AAA" BorderThickness="0 2 0 0" Margin="0 5 0 5" />
+                                <MenuItem x:Name="MniRemoveIdleTime" Click="MniRemoveIdleTime_Click" Header="➖     Remove Idle Time" />
+                                <Separator BorderBrush="#AAA" BorderThickness="0 2 0 0" Margin="0 5 0 5" />
+                                <MenuItem x:Name="MniNextMultipleSteps" Click="MniNextMultipleSteps_Click" Header="▷|      Next X Steps" />
+                                <MenuItem x:Name="MniFordward" Click="MniFordward_Click" Header="▷▷    Fordward X Seconds" />
+                                <MenuItem x:Name="MniStartNextStep" Click="MniStartNextStep_Click"  Header="▷▷|   Start Next Step" />
                             </ContextMenu>
                         </local:HoverButton.ContextMenu>
 
@@ -284,7 +293,7 @@
 
                     <ComboBox.CommandBindings>
                         <CommandBinding Command="{StaticResource CmdNext}" Executed="BtnNext_Click" />
-                        <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnPrevious_Click" />
+                        <CommandBinding Command="{StaticResource CmdPrevious}" Executed="BtnBack_Click" />
                     </ComboBox.CommandBindings>
 
                     <ComboBox.InputBindings>

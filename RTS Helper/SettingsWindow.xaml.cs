@@ -150,6 +150,10 @@ namespace RTSHelper {
             TxtAddIdleTimeSeconds.Text = Preferencias.AddIdleTimeSeconds.ToString();
             TxtRemoveIdleTimeSeconds.Text = Preferencias.RemoveIdleTimeSeconds.ToString();
             TxtMinimumDelayToAutoAdjustIdleTime.Text = Preferencias.MinimumDelayToAutoAdjustIdleTime.ToString();
+            TxtBackMultipleSteps.Text = Preferencias.BackMultipleSteps.ToString();
+            TxtNextMultipleSteps.Text = Preferencias.NextMultipleSteps.ToString();
+            TxtFordwardSeconds.Text = Preferencias.ForwardSeconds.ToString();
+            TxtBackwardSeconds.Text = Preferencias.BackwardSeconds.ToString();
 
             AgregarIdiomas(CmbGameLanguage, Preferencias.GameLanguage, IdiomasJuego);
             CargarVelocidadEjecución();
@@ -1078,6 +1082,50 @@ namespace RTSHelper {
             }
 
         } // TxtMinimumDelayToAutoAdjustIdleTime_TextChanged>
+
+
+        private void TxtBackwardSeconds_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (int.TryParse(TxtBackwardSeconds.Text, out int valor) && valor > 0) {
+                Preferencias.BackwardSeconds = valor;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtBackwardSeconds_TextChanged>
+
+
+        private void TxtFordwardSeconds_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (int.TryParse(TxtFordwardSeconds.Text, out int valor) && valor > 0) {
+                Preferencias.ForwardSeconds = valor;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtFordwardSeconds_TextChanged>
+
+
+        private void TxtBackMultipleSteps_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (int.TryParse(TxtBackMultipleSteps.Text, out int valor) && valor > 0) {
+                Preferencias.BackMultipleSteps = valor;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtBackMultipleSteps_TextChanged>
+
+
+        private void TxtNextMultipleSteps_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (!Activado) return;
+            if (int.TryParse(TxtNextMultipleSteps.Text, out int valor) && valor > 0) {
+                Preferencias.NextMultipleSteps = valor;
+                VentanaPrincipal.AplicarPreferencias();
+            }
+
+        } // TxtNextMultipleSteps_TextChanged>
 
 
     } // SettingsWindow>
