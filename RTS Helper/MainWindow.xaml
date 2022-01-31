@@ -122,14 +122,20 @@
 
         <StackPanel x:Name="SpnSuperior" Panel.ZIndex="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
 
-            <local:HoverButton Click="BtnAlert_Click" x:Name="BtnAlert" BorderThickness="0" Foreground="Red" Visibility="Hidden"
+            <local:HoverButton Click="BtnAlert_Click" x:Name="BtnAlert" BorderThickness="0" Foreground="Red" Visibility="Collapsed"
                                FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}" 
                                Width="{Binding ActualHeight, ElementName=BtnSettings, Mode=OneWay}" Style="{StaticResource customButton}" 
                                bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
                                ToolTip="{DynamicResource AlertContentMoreHeightThanWindow}">⚠</local:HoverButton>
 
-            <local:HoverButton x:Name="BtnAlternarPasoSiguienteAnterior" Click="BtnAlternarVistaPasoSiguienteAnterior_Click" 
+            <local:HoverButton x:Name="BtnStats" Click="BtnStats_Click" Visibility="{DynamicResource VisibilidadBotónStats}" 
                                BorderThickness="0" Foreground="{DynamicResource BrushFuente}" 
+                               FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}" 
+                               Width="{Binding ActualHeight, ElementName=BtnSettings, Mode=OneWay}" Style="{StaticResource customButton}" 
+                               bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" ToolTip="See Stats">📊</local:HoverButton>
+               
+            <local:HoverButton x:Name="BtnAlternarPasoSiguienteAnterior" Click="BtnAlternarVistaPasoSiguienteAnterior_Click" 
+                               BorderThickness="0" Foreground="{DynamicResource BrushFuente}" Visibility="{DynamicResource VisibilidadBotónVerPasoAnterior}"
                                FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}" 
                                Width="{Binding ActualHeight, ElementName=BtnSettings, Mode=OneWay}" Style="{StaticResource customButton}" 
                                bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" ToolTip="See Previous Step">⮨</local:HoverButton>

@@ -90,6 +90,8 @@ namespace RTSHelper {
 
         FileSystemWatcher SupervisorOrdenDeEjecuciónActual;
 
+        FileSystemWatcher? SupervisorOrdenDeEjecuciónActualEnCódigo; // Para el modo de desarrollo también supervisa la carpeta de las órdenes de ejecución en la carpeta código para permitir que durante el desarrollo se tenga que actualizar únicamente este archivo.
+
         private int? ÚltimoProgresoLeído = null;
 
         #endregion Propiedades y Variables>
@@ -123,7 +125,7 @@ namespace RTSHelper {
             TimerDetecciónProgreso.Tick += new EventHandler(TimerDetecciónProgreso_Tick);
 
             LeerPreferencias();
-            OrdenDeEjecución.EnCambioNúmeroPaso = () => ActualizarVistaPasoSiguienteAnterior(nuevoMostrandoPasoAnterior: false);
+            OrdenDeEjecución.EnCambioNúmeroPaso = () => EnCambioNúmeroPaso();
             OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder);
             LeerBuildOrders();
             CargarBuildOrder(iniciando: true);
@@ -132,6 +134,13 @@ namespace RTSHelper {
             ActualizarSupervisorOrdenDeEjecución();
             SupervisorOrdenDeEjecuciónActual.Changed += OrdenDeEjecuciónActual_Changed;
             SupervisorOrdenDeEjecuciónActual.EnableRaisingEvents = true;
+
+            if (ModoDesarrollo) {
+                SupervisorOrdenDeEjecuciónActualEnCódigo = new FileSystemWatcher { NotifyFilter = NotifyFilters.LastWrite };
+                ActualizarSupervisorOrdenDeEjecuciónEnCódigo();
+                SupervisorOrdenDeEjecuciónActualEnCódigo.Changed += OrdenDeEjecuciónActualEnCódigo_Changed;
+                SupervisorOrdenDeEjecuciónActualEnCódigo.EnableRaisingEvents = true;
+            }
 
             CrearEntidadesYNombres();
             ActualizarContenidoPaso(númeroPaso: null);
@@ -145,7 +154,20 @@ namespace RTSHelper {
         private void OrdenDeEjecuciónActual_Changed(object source, FileSystemEventArgs e) {
 
             Thread.Sleep(100); // Le da un tiempo para que termine de grabar.
+            if (ModoDesarrollo) Thread.Sleep(100); // En modo desarrollo le da más tiempo para que termine de copiar el archivo desde la carpeta de código.
             this.Dispatcher.Invoke(() => CargarBuildOrder());
+
+        } // OrdenDeEjecuciónActual_Changed>
+
+
+        private void OrdenDeEjecuciónActualEnCódigo_Changed(object source, FileSystemEventArgs e) {
+
+            Thread.Sleep(100); // Le da un tiempo para que termine de grabar.
+            var nombreArchivo = $"{Preferencias.CurrentBuildOrder}.txt";
+            var rutaOrigen 
+                = Path.Combine(Settings.ObtenerDirectorioÓrdenesDeEjecución(Global.DirectorioÓrdenesDeEjecuciónCódigo, Preferencias.Game), nombreArchivo);
+            var rutaDestino = Path.Combine(Preferencias.BuildOrdersDirectory, nombreArchivo);
+            File.Copy(rutaOrigen, rutaDestino, overwrite: true); // Copia la orden de ejecución recién modificada en D:\Programas\RTS Helper\Código\RTS Helper\RTS Helper\Build Orders\[Juego] a la ruta de compilación donde el cambio del archivo es detectado por OrdenDeEjecuciónActual_Changed();
 
         } // OrdenDeEjecuciónActual_Changed>
 
@@ -197,13 +219,8 @@ namespace RTSHelper {
                     break;
                 case EEstado.Running: // Restart.
 
-                    MilisegundosJuegoDesface = 0;
-                    DuraciónPasoParcialPorCambioDuración = 0;
                     Estado = EEstado.Running;
-                    LblTiempoEnJuego.Content = "0:00"; // Para evitar un pequeño retraso en la actualización.
-                    CpgProgresoPaso.Value = 0;
-                    OrdenDeEjecución.NúmeroPaso = 0;
-                    MilisegundosTimerAntesDePausa = 0;
+                    ReiniciarVariables();
                     ReiniciarPasoActual();
                     if (Preferencias.MuteOnComplete && SilenciadoAlCompletar) {
                         Preferencias.Muted = false;
@@ -215,13 +232,8 @@ namespace RTSHelper {
 
                 case EEstado.Paused: // Stop.
 
-                    MilisegundosJuegoDesface = 0;
-                    DuraciónPasoParcialPorCambioDuración = 0;
                     Estado = EEstado.Stoped;
-                    LblTiempoEnJuego.Content = "0:00";
-                    CpgProgresoPaso.Value = 0;
-                    OrdenDeEjecución.NúmeroPaso = 0;
-                    MilisegundosTimerAntesDePausa = 0;
+                    ReiniciarVariables();
                     ActualizarPaso(stop: true);
                     TxtPaso.Text = "";
                     TxtPaso.IsEnabled = false;
@@ -513,7 +525,7 @@ namespace RTSHelper {
             if (!Inició || EditandoComboBoxEnCódigo) return;
             Preferencias.CurrentBuildOrder = ObtenerSeleccionadoEnCombobox(e);
             CargarBuildOrder();
-            ActualizarSupervisorOrdenDeEjecución();
+            ActualizarSupervisoresOrdenDeEjecución();
 
         } // CmbBuildOrders_SelectionChanged>
 
@@ -619,7 +631,16 @@ namespace RTSHelper {
 
         private void MniRemoveIdleTime_Click(object sender, RoutedEventArgs e) => Rush();
 
-        private void MniResetIdleTime_Click(object sender, RoutedEventArgs e) => Desfazar(-MilisegundosJuegoDesface, desfazarReloj: false);
+
+        private void MniResetIdleTime_Click(object sender, RoutedEventArgs e) {
+
+            foreach (var paso in OrdenDeEjecución.Pasos) {
+                paso.DesfaceAcumulado = null;
+            }
+            Desfazar(-MilisegundosJuegoDesface, desfazarReloj: false);
+
+        } // MniResetIdleTime_Click>
+
 
         private void BtnNext_Click(object sender, RoutedEventArgs e) => Next(proporcional: true);
 
@@ -644,11 +665,46 @@ namespace RTSHelper {
         } // MniNextMultipleSteps_Click>
 
 
+        private void BtnStats_Click(object sender, RoutedEventArgs e) {
+
+            var últimoDesfaceAcumulado = 0D;
+            var textoEstadísticas = "";
+            var cuentaPaso = 0;
+            var desfaces = new List<(int, double)>();
+
+            foreach (var paso in OrdenDeEjecución.Pasos) {
+
+                if (paso.DesfaceAcumulado != null && paso.DesfaceAcumulado != últimoDesfaceAcumulado) {
+                    desfaces.Add((cuentaPaso - 1, (double)paso.DesfaceAcumulado - últimoDesfaceAcumulado));
+                    últimoDesfaceAcumulado = (double)paso.DesfaceAcumulado;
+                }
+                cuentaPaso++;
+
+            }
+
+            var desfacesOrdenados = desfaces.OrderByDescending(t => t.Item2).ToList();
+            textoEstadísticas = $"Total Idle Time: {últimoDesfaceAcumulado:##0} s{Environment.NewLine}{Environment.NewLine}";
+            foreach (var kv in desfacesOrdenados) {
+                textoEstadísticas += $"{kv.Item2:#00} s - Step {kv.Item1}{Environment.NewLine}";
+            }
+            MessageBox.Show(textoEstadísticas, "Stats");
+
+        } // BtnStats_Click>
+
+
         #endregion Eventos>
 
 
 
         #region Procedimientos y Funciones
+
+
+        private void ActualizarSupervisoresOrdenDeEjecución() {
+
+            ActualizarSupervisorOrdenDeEjecución();
+            if (ModoDesarrollo) ActualizarSupervisorOrdenDeEjecuciónEnCódigo();
+
+        } // ActualizarSupervisoresOrdenDeEjecución>
 
 
         private void ActualizarSupervisorOrdenDeEjecución() {
@@ -658,6 +714,16 @@ namespace RTSHelper {
             SupervisorOrdenDeEjecuciónActual.Filter = $"{Preferencias.CurrentBuildOrder}.txt";
 
         } // ActualizarSupervisorOrdenDeEjecución>
+
+
+        private void ActualizarSupervisorOrdenDeEjecuciónEnCódigo() {
+
+            if (SupervisorOrdenDeEjecuciónActualEnCódigo == null) return;
+            SupervisorOrdenDeEjecuciónActualEnCódigo.Path 
+                = Settings.ObtenerDirectorioÓrdenesDeEjecución(Global.DirectorioÓrdenesDeEjecuciónCódigo, Preferencias.Game);
+            SupervisorOrdenDeEjecuciónActualEnCódigo.Filter = $"{Preferencias.CurrentBuildOrder}.txt";
+
+        } // ActualizarSupervisorOrdenDeEjecuciónEnCódigo>
 
 
         private void RestablecerColor() {
@@ -848,6 +914,37 @@ namespace RTSHelper {
         } // Pause>
 
 
+        public void EnCambioNúmeroPaso() {
+
+            ActualizarVistaPasoSiguienteAnterior(nuevoMostrandoPasoAnterior: false);
+            if (!Preferencias.ShowAlwaysStatsButton) {
+
+                if (OrdenDeEjecución.NúmeroPaso >= OrdenDeEjecución.Pasos.Count - 1) {
+                    BtnStats.Visibility = Visibility.Visible;
+                } else {
+                    BtnStats.Visibility = Visibility.Collapsed;
+                }
+
+            }
+
+        } // EnCambioNúmeroPaso>
+
+
+        public void ReiniciarVariables() {
+
+            MilisegundosJuegoDesface = 0;
+            DuraciónPasoParcialPorCambioDuración = 0;
+            LblTiempoEnJuego.Content = "0:00"; // Para evitar un pequeño retraso en la actualización.
+            CpgProgresoPaso.Value = 0;
+            OrdenDeEjecución.NúmeroPaso = 0;
+            MilisegundosTimerAntesDePausa = 0;
+            foreach (var paso in OrdenDeEjecución.Pasos) {
+                paso.DesfaceAcumulado = 0;
+            }
+
+        } // ReiniciarVariables>
+
+
         public void ActualizarVistaPasoSiguienteAnterior(bool nuevoMostrandoPasoAnterior, bool actualizarPaso = false) {
 
             if (!nuevoMostrandoPasoAnterior) {
@@ -1017,11 +1114,13 @@ namespace RTSHelper {
             Application.Current.Resources["MargenBarraProgresoCircularDelPaso"] = new Thickness(0, 0, Preferencias.RightMarginCircularProgressBar, 0);
             Application.Current.Resources["VisibilidadProgresoPaso"] = Preferencias.ShowStepProgress ? Visibility.Visible : Visibility.Collapsed;
             Application.Current.Resources["VisibilidadTiempoEnJuego"] = Preferencias.ShowTime ? Visibility.Visible : Visibility.Collapsed;
-            BtnAlternarPasoSiguienteAnterior.Visibility = Preferencias.ShowNextStep ? Visibility.Visible : Visibility.Collapsed;
             Application.Current.Resources["VisibilidadBotónRemoveIdleTime"] = Preferencias.ShowRemoveIdleTimeButton ? Visibility.Visible : Visibility.Collapsed;
             Application.Current.Resources["VisibilidadBotónAddIdleTime"] = Preferencias.ShowAddIdleTimeButton ? Visibility.Visible : Visibility.Collapsed;
             TimerDetecciónPausa.Interval = new TimeSpan(0, 0, Preferencias.PauseDetectionInterval);
             TimerDetecciónProgreso.Interval = new TimeSpan(0, 0, Preferencias.AutoAdjustIdleTimeInterval);
+            Application.Current.Resources["VisibilidadBotónStats"] = Preferencias.ShowAlwaysStatsButton ? Visibility.Visible : Visibility.Collapsed;
+            Application.Current.Resources["VisibilidadBotónVerPasoAnterior"] 
+                = Preferencias.ShowPreviousStepButton && Preferencias.ShowNextStep ? Visibility.Visible : Visibility.Collapsed;
 
             AplicarPreferenciasMuted(iniciando);
 
@@ -1035,7 +1134,7 @@ namespace RTSHelper {
             MniFordward.Header = $"▷▷    Fordward {Preferencias.ForwardSeconds} Seconds";
 
             EstableciendoTamaño = false;
-            ActualizarSupervisorOrdenDeEjecución();
+            ActualizarSupervisoresOrdenDeEjecución();
 
             if (!iniciando) ActualizarPaso(stop: false, aplicandoPreferencias: true);
 
@@ -1340,7 +1439,6 @@ namespace RTSHelper {
 
 
         #endregion Procedimientos y Funciones>
-
 
 
     } // MainWindow>

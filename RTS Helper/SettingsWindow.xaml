@@ -191,10 +191,13 @@
                                 <Label Margin="2">Font Size:</Label>
                                 <Label Margin="2">Font Color:</Label>
                                 <Label Margin="2">Font Bold:</Label>
+                                <Label FontWeight="Bold">Buttons:</Label>
+                                <Label Margin="2">Stats:</Label>
+                                <Label Margin="2">Previous Step:</Label>
                             </StackPanel>
 
                             <StackPanel x:Name="SpnSettings3" Orientation="Vertical" Width="80">
-                                
+
                                 <CheckBox Checked="ChkShowNextStep_CheckedChanged" Unchecked="ChkShowNextStep_CheckedChanged" x:Name="ChkShowNextStep" 
                                           Margin="4 34 0 11" />
 
@@ -206,11 +209,17 @@
 
                                 <CheckBox Checked="ChkNextStepFontBold_Checked" Unchecked="ChkNextStepFontBold_Checked" x:Name="ChkNextStepFontBold" 
                                           Margin="4 9 0 9" />
-                                
+
+                                <Label Margin="0 10 0 0"/>
+
+                                <CheckBox Checked="ChkShowAlwaysStatsButton_Checked" Unchecked="ChkShowAlwaysStatsButton_Checked" 
+                                          x:Name="ChkShowAlwaysStatsButton" Margin="4 9 0 9" />
+
+                                <CheckBox Checked="ChkShowPreviousStepButton_Checked" Unchecked="ChkShowPreviousStepButton_Checked" 
+                                          x:Name="ChkShowPreviousStepButton" Margin="4 9 0 9" />
+
                             </StackPanel>
 
-                      
-                            
                         </StackPanel>
                         
                     </StackPanel>

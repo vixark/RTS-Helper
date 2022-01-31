@@ -46,6 +46,9 @@
             <Visibility x:Key="VisibilidadBotónAddIdleTime">Collapsed</Visibility>
             <Visibility x:Key="VisibilidadBotónRemoveIdleTime">Collapsed</Visibility>
 
+            <Visibility x:Key="VisibilidadBotónStats">Visible</Visibility>
+            <Visibility x:Key="VisibilidadBotónVerPasoAnterior">Visible</Visibility>
+
             <!-- Valores no en Preferencias !-->
             <SolidColorBrush x:Key="BrushFondoControles" Color="Transparent" />
 

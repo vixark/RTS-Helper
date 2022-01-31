@@ -144,7 +144,6 @@ namespace RTSHelper {
             ChkPauseDetection.IsChecked = Preferencias.PauseDetection;
             ChkShowAddIdleTime.IsChecked = Preferencias.ShowAddIdleTimeButton;
             ChkShowRemoveIdleTime.IsChecked = Preferencias.ShowRemoveIdleTimeButton;
-
             TxtAutoadjustIdleTimeInterval.Text = Preferencias.AutoAdjustIdleTimeInterval.ToString();
             TxtPauseDetectionInterval.Text = Preferencias.PauseDetectionInterval.ToString();
             TxtAddIdleTimeSeconds.Text = Preferencias.AddIdleTimeSeconds.ToString();
@@ -154,6 +153,8 @@ namespace RTSHelper {
             TxtNextMultipleSteps.Text = Preferencias.NextMultipleSteps.ToString();
             TxtFordwardSeconds.Text = Preferencias.ForwardSeconds.ToString();
             TxtBackwardSeconds.Text = Preferencias.BackwardSeconds.ToString();
+            ChkShowAlwaysStatsButton.IsChecked = Preferencias.ShowAlwaysStatsButton;
+            ChkShowPreviousStepButton.IsChecked = Preferencias.ShowPreviousStepButton;
 
             AgregarIdiomas(CmbGameLanguage, Preferencias.GameLanguage, IdiomasJuego);
             CargarVelocidadEjecución();
@@ -1126,6 +1127,24 @@ namespace RTSHelper {
             }
 
         } // TxtNextMultipleSteps_TextChanged>
+
+
+        private void ChkShowAlwaysStatsButton_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.ShowAlwaysStatsButton = ChkShowAlwaysStatsButton.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkShowAlwaysStatsButton_Checked>
+
+
+        private void ChkShowPreviousStepButton_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.ShowPreviousStepButton = ChkShowPreviousStepButton.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkShowPreviousStepButton_Checked>
 
 
     } // SettingsWindow>

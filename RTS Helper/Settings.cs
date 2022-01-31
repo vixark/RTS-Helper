@@ -45,6 +45,10 @@ namespace RTSHelper {
 
         public bool ShowTime { get; set; } = false;
 
+        public bool ShowPreviousStepButton { get; set; } = true;
+
+        public bool ShowAlwaysStatsButton { get; set; } = true; // Si es falso, solo se muestra al final.
+
         #endregion Generales>
 
 
@@ -269,9 +273,7 @@ namespace RTSHelper {
             get {
 
                 if (Preferencias.BuildOrderCustomDirectory != null) return Preferencias.BuildOrderCustomDirectory;
-                var directorioÓrdenesDeEjecución = Path.Combine(DirectorioÓrdenesDeEjecución, Game);
-                if (!Directory.Exists(directorioÓrdenesDeEjecución)) Directory.CreateDirectory(directorioÓrdenesDeEjecución);
-                return directorioÓrdenesDeEjecución;
+                return ObtenerDirectorioÓrdenesDeEjecución(DirectorioÓrdenesDeEjecución, Game);
 
             }
         }
@@ -341,6 +343,15 @@ namespace RTSHelper {
             }
 
         } // EstablecerGameSpeed>
+
+
+        public static string ObtenerDirectorioÓrdenesDeEjecución(string directorioPadre, string juego) {
+     
+            var directorioÓrdenesDeEjecución = Path.Combine(directorioPadre, juego);
+            if (!Directory.Exists(directorioÓrdenesDeEjecución)) Directory.CreateDirectory(directorioÓrdenesDeEjecución);
+            return directorioÓrdenesDeEjecución;
+
+        } // ObtenerDirectorioÓrdenesDeEjecución>
 
 
         public void EstablecerValoresRecomendadosAOE2(string resolución) {

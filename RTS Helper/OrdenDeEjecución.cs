@@ -34,8 +34,10 @@ namespace RTSHelper {
 
             get { return _NúmeroPaso; }
             set {
-                if (_NúmeroPaso != value && EnCambioNúmeroPaso != null) EnCambioNúmeroPaso();
+
+                var hacerCambioNúmeroPaso = _NúmeroPaso != value;
                 _NúmeroPaso = value;
+                if (hacerCambioNúmeroPaso && EnCambioNúmeroPaso != null) EnCambioNúmeroPaso(); // Se hace aquí para que los procedimientos de la acción ya tengan del nuevo valor del paso.
 
             } 
 
@@ -46,7 +48,6 @@ namespace RTSHelper {
         public Dictionary<string, Formato> ClasesDeFormatos { get; set; } = new Dictionary<string, Formato>();
 
         public Action? EnCambioNúmeroPaso;
-        
 
         #endregion Propiedades>
 

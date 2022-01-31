@@ -1,0 +1,4 @@
+{{t=15 es="none" s="none" sns="no" short={t=5 s="default"} long={t=30}}}
+<<title=<b L> longtext=<s> footnote=<b xs is100>>>
+
+[[<title>Welcome to   RTS Helper!   <>This a tutorial build order.   <b>Author:<> http://vixark.com/age-of-empires-ii   <b>Duration:<> 5 min   Click ▷ to start.]]

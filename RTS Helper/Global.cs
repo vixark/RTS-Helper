@@ -55,7 +55,9 @@ namespace RTSHelper {
 
         public static string DirectorioAplicaciónReal = @"D:\Programas\RTS Helper";
 
-        public static string DirectorioAplicación = ModoDesarrollo ? DirectorioAplicaciónReal : (AppDomain.CurrentDomain.BaseDirectory ?? @"C:\"); // En realidad no veo en que situación podría ser null BaseDirectory.
+        public static string DirectorioCompilación = AppDomain.CurrentDomain.BaseDirectory ?? @"C:\"; // No veo en que situación podría ser null BaseDirectory.
+
+        public static string DirectorioAplicación = ModoDesarrollo ? DirectorioAplicaciónReal : DirectorioCompilación; 
 
         public static string RutaPreferencias = Path.Combine(DirectorioAplicación, "Settings.json");
 
@@ -71,7 +73,11 @@ namespace RTSHelper {
 
         public static string DirectorioNombres = Path.Combine(DirectorioAplicación, "Names");
 
-        public static string DirectorioÓrdenesDeEjecución = Path.Combine(DirectorioAplicación, "Build Orders");
+        public static string DirectorioÓrdenesDeEjecuciónCompilación = Path.Combine(DirectorioCompilación, "Build Orders");
+
+        public static string DirectorioÓrdenesDeEjecuciónCódigo = @"D:\Programas\RTS Helper\Código\RTS Helper\RTS Helper\Build Orders";
+
+        public static string DirectorioÓrdenesDeEjecución = DirectorioÓrdenesDeEjecuciónCompilación; // Tanto en desarrollo como en producción es la misma carpeta porque las órdenes de ejecución se almacenan en el repositorio y se copian al directorio en la compilación.
 
         public static string DirectorioImágenes = Path.Combine(DirectorioAplicación, "Images");
 
@@ -1205,9 +1211,16 @@ namespace RTSHelper {
                 types["Type"].Add("-", "Other");
                 types["Type"].Add("Explore", "Action");
                 types["Type"].Add("Flag", "Other");
-                types["Type"].Add("Space", "Other");
-                types["Type"].Add("Double Space", "Other");
-                types["Type"].Add("Triple Space", "Other");
+                types["Type"].Add("1s", "Other");
+                types["Type"].Add("2s", "Other");
+                types["Type"].Add("3s", "Other");
+                types["Type"].Add("4s", "Other");
+                types["Type"].Add("5s", "Other");
+                types["Type"].Add("6s", "Other");
+                types["Type"].Add("7s", "Other");
+                types["Type"].Add("8s", "Other");
+                types["Type"].Add("9s", "Other");
+                types["Type"].Add("10s", "Other");
 
             }
 
@@ -2130,9 +2143,16 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("9648", "-");
                 names[NameType.Complete].Add("13055", "Explore");
                 names[NameType.Complete].Add("13330", "Flag");
-                names[NameType.Complete].Add("400048", "Space"); names[NameType.Common].Add("400048", " ");
-                names[NameType.Complete].Add("400049", "Double Space"); names[NameType.Common].Add("400049", "  ");
-                names[NameType.Complete].Add("400050", "Triple Space"); names[NameType.Common].Add("400050", "   ");
+                names[NameType.Complete].Add("400048", "1s"); names[NameType.Common].Add("400048", " ");
+                names[NameType.Complete].Add("400049", "2s"); names[NameType.Common].Add("400049", "  ");
+                names[NameType.Complete].Add("400050", "3s"); names[NameType.Common].Add("400050", "   ");
+                names[NameType.Complete].Add("400051", "4s"); names[NameType.Common].Add("400051", "    ");
+                names[NameType.Complete].Add("400052", "5s"); names[NameType.Common].Add("400052", "     ");
+                names[NameType.Complete].Add("400053", "6s"); names[NameType.Common].Add("400053", "      ");
+                names[NameType.Complete].Add("400054", "7s"); names[NameType.Common].Add("400054", "       ");
+                names[NameType.Complete].Add("400055", "8s"); names[NameType.Common].Add("400055", "        ");
+                names[NameType.Complete].Add("400056", "9s"); names[NameType.Common].Add("400056", "         ");
+                names[NameType.Complete].Add("400057", "10s"); names[NameType.Common].Add("400057", "          ");
 
                 string elite(string original) => "Elite " + original.Replace("|", $"|Elite ");
 
