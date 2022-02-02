@@ -1,4 +1,38 @@
 {{t=15 es="none" s="none" sns="no" short={t=5 s="default"} long={t=30}}}
 <<title=<b L> longtext=<s> footnote=<b xs is100>>>
 
-[[<title>Welcome to   RTS Helper!   <>This a tutorial build order.   <b>Author:<> http://vixark.com/age-of-empires-ii   <b>Duration:<> 5 min   Click ▷ to start.]]
+[[<title>Welcome to   RTS Helper!   <>This a tutorial build order.   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com   <b>Duration:<> 5 min   Click ▷ to start.]]
+
+This is the first step.   Each step is a new line    in the build order file:   <i>Build Orders\Age of Empires   <i>IV\Default.txt<>
+
+{s="Sheep Bah.mp3"}This is the second step.   Don't like the sheep baah?   You can change it for other   sound, mute it or customize it   per step.
+
+{s="Ticket Machine 1.mp3"}<title>Images<>   <longtext>To load them you can use their   names between squared brackets.   Use abbreviations, common names   and acronyms; in plural or singular   and even names in other languages.   See examples next.
+
+{long}Vil:   (Pendiente Imágenes AOE4)
+
+{short}Make steps with   very short duration,   like this one, or as long as   you want.
+
+Customize the flashing   color per step.   For example, make it fucshia.
+
+{es="Sonar 1.mp3" fc="#F0F"}Play a sound before   ending the current step.
+
+Open <i>Build Orders\   <i>Age of Empires IV\Default.txt<>   to check the text file that was   used to create this tutorial   build order.
+
+Keep reading if you   want to see other examples.
+
+(Pendiente    Ejemplo Pasos Build Order   AOE4)
+
+<title>Font Sizes:    <xxxl>XXXL, <xxl>XXL, <xl>XL,    <l>L, <m>M, <s>S, <xs>XS, <xxs>XXS and <xxxs>XXXS.
+
+<title m>Font Styles:   <b>Bold   <u>Underline   <i>Italics
+
+<title>Fonts   <arial s>Arial<arial sub s>ABC123  <impact s>Impact<impact sub s>123    <timesnewroman s>Times New Roman<sub timesnewroman s>123<> <cambria s>Cambria<cambria sup s>ABC123   <arialblack s>Arial Black<arialblack sup s>123  <Constantia s>Constantia<Constantia sup s>123    <couriernew s>courier new<couriernew sub s>ABC123 <calibri s>Calibri<calibri sub s>123    <palatinoLinotype s>Palatino Linotype<palatinoLinotype sub s>ABC123   <MVBoli s>MV Boli<MVBoli sub s>123  <gabriola s>Gabriola<gabriola sup s>ABC123
+
+<title m>Colors:   <brown>Brown   <aqua>Aqua   <seagreen>Sea Green   <#B5B>Any custom color.
+
+End of tutorial.   To learn more visit:   http://vixark.com/age-of-empires-ii/rts-helper:Vixark.com
+
+
+
+

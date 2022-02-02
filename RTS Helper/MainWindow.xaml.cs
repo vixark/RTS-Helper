@@ -396,16 +396,21 @@ namespace RTSHelper {
             if (!Preferencias.AutoAdjustIdleTime) return;
             if (!Jugando()) return;
             if (Estado != EEstado.Running) return;
+            if (ModoDesarrolloOCR) {
+                var progresoLeído2 = LeerProgreso(50, out float confianza2, rangoValoresEsperados: 0); // No se usa rango de valores esperados para no contaminar las pruebas OCR con un dato de progreso actual. Se debe usar un número cualquiera de una cifra, de dos y de tres para probar el funcionamiento de la extracción de texto en cada uno de los segmentos.
+                LblDepuración.Content = $"Progreso Leído: {progresoLeído2.ToString()}{Environment.NewLine}Confianza: {confianza2}";
+                return; // En este modo se desactiva el ajuste de progreso automático para facilitar realizar los ensayos.
+            }
 
             var pasoActual = OrdenDeEjecución.NúmeroPaso;
             var progresoActual = (int?)null;
             if (pasoActual <= OrdenDeEjecución.Pasos.Count - 1) progresoActual = OrdenDeEjecución.Pasos[pasoActual].Comportamiento?.Progreso;
             var progresoLeído = (int?)null;
             var confianza = -2f;
-            if (progresoActual != null) progresoLeído = LeerProgreso((int)progresoActual, out confianza);
+            if (progresoActual != null) progresoLeído = LeerProgreso((int)progresoActual, out confianza); 
             if (progresoLeído == ÚltimoProgresoLeído) return; // Cuando el progresoLeído es igual al ÚltimoProgresoLeído, no se realiza ninguna acción. 
             var segundosJuegoPasoActual = ObtenerSegundosJuegoPasoActual();
-
+            
             if (progresoLeído != null) {
 
                 var confiable = confianza > 1 || (confianza > 0 && (progresoLeído == ÚltimoProgresoLeído + 1 || progresoLeído == ÚltimoProgresoLeído - 1));  // Cuando la confianza está entre 0 y 1 es una lectura dudosa que no está en el rango esperado y requiere comprobación con el ÚltimoProgresoLeído para verificar que el último progreso leído era un progreso inmediatamente anterior al progreso actual y confirmar así que la lectura actual es confiable. Esto sucede por ejemplo en el caso de tener 15 aldeanos y en el mismo segundo perder 3 aldeanos (improbable, pero podría suceder), la siguiente lectura serían 11 aldeanos que sería descartada por no estar en el rango esperado 13-14-15-16-17, el RTS Helper pasaría al paso con progreso 16 y la siguente lectura sería 12 que tampoco estaría en el rango 14-15-16-17-18, pero si sería un consecutivo desde el último progreso leído 11, entonces se considerará que es confiable. Se agrega también el consecutivo hacia atrás para considerar el caso de 3 aldeanos muertos seguidos por uno más muerto.      

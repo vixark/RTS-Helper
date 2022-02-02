@@ -395,23 +395,25 @@ namespace RTSHelper {
             if (texto.Contains("http", StringComparison.InvariantCultureIgnoreCase)) {
 
                 var textBlock = new TextBlock();
-                var matches = Regex.Matches(texto, @"https?:\/\/[^ ]+");
+                var matches = Regex.Matches(texto, @"(https?:\/\/[^ :]+):*([^ :]*)");
                 var índiceActual = 0;
                 foreach (Match? match in matches) {
                     if (match != null) {
 
                         var índiceMatch = match.Index;
                         var enlace = new Hyperlink();
-                        var url = match.Value;
+                        var url = match.Groups[1].Value;
+
                         if (Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute)) {
 
                             enlace.NavigateUri = new Uri(url);
-                            enlace.Inlines.Add(url);
+                            var textoEnlace = match.Groups[2].Value;
+                            enlace.Inlines.Add(string.IsNullOrWhiteSpace(textoEnlace) ? url : textoEnlace);
                             enlace.RequestNavigate += Enlace_RequestNavigate;
                             var textoPlano = texto.Substring(índiceActual, índiceMatch - índiceActual);
                             textBlock.Inlines.Add(new Run(textoPlano));
                             textBlock.Inlines.Add(enlace);
-                            índiceActual = índiceMatch + url.Length;
+                            índiceActual = índiceMatch + match.Value.Length;
 
                         }
 

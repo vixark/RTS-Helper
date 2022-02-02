@@ -1,7 +1,7 @@
 {{t=15 es="none" s="none" sns="no" short={t=5 s="default"} long={t=30}}}
 <<title=<b L> longtext=<s> footnote=<b xs is100>>>
 
-[[<title>Welcome to RTS Helper!   <>This a tutorial build order.  <b>Game:<> AOE2   <b>Author:<> http://vixark.com/age-of-empires-ii   <b>Civ.:<> Any  <b>Difficulty:<> Easy  <b>Duration:<> 5 min   Click ▷ to start.]]
+[[<title>Welcome to RTS Helper!   <>This a tutorial build order.  <b>Game:<> AOE2   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com   <b>Civ.:<> Any  <b>Difficulty:<> Easy  <b>Duration:<> 5 min   Click ▷ to start.]]
 
 This is the first step.   Each step is a new line in the build order file:   <i>Build Orders\Age of Empires II\Default.txt<>
 
@@ -41,4 +41,4 @@ Keep reading if you   want to see other examples.
 
 <title m>Colors:   <brown>Brown   <aqua>Aqua   <seagreen>Sea Green   <#B5B>Any custom color.
 
-End of tutorial.   To learn more visit:   http://vixark.com/age-of-empires-ii/rts-helper   
+End of tutorial.   To learn more visit:   http://vixark.com/age-of-empires-ii/rts-helper:Vixark.com

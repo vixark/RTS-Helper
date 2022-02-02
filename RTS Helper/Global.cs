@@ -240,6 +240,9 @@ namespace RTSHelper {
         public static ParámetrosExtracción NNL1C2x1 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
             blancoYNegro: true, escala: 1, luminosidad: 1, contraste: 2, InterpolationMode.NearestNeighbor, DImg.PixelFormat.Format8bppIndexed); // Por alguna razón desconocida es necesario que el bitmap sea de 8 bits para que Tesseract lo reconozca adecuadamente. Se usa NearestNeighbor porque lo exige el constructor, pero al tener escala 1, no se aplica ningún modo de interpolación.
 
+        public static ParámetrosExtracción NNL1_5C2x1 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
+            blancoYNegro: true, escala: 1, luminosidad: 1.5f, contraste: 2, InterpolationMode.NearestNeighbor, DImg.PixelFormat.Format8bppIndexed); // Por alguna razón desconocida es necesario que el bitmap sea de 8 bits para que Tesseract lo reconozca adecuadamente. Se usa NearestNeighbor porque lo exige el constructor, pero al tener escala 1, no se aplica ningún modo de interpolación.
+
         public static ParámetrosExtracción NNL2C2x2 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true, 
             blancoYNegro: true, escala: 2, luminosidad: 2, contraste: 2, InterpolationMode.NearestNeighbor, DImg.PixelFormat.Format8bppIndexed);
 
@@ -254,6 +257,9 @@ namespace RTSHelper {
 
         public static ParámetrosExtracción HQBCL2C2x16 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
             blancoYNegro: true, escala: 16, luminosidad: 2, contraste: 2, InterpolationMode.HighQualityBicubic, DImg.PixelFormat.Format8bppIndexed);
+
+        public static ParámetrosExtracción HQBCL1_5C2x16 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
+            blancoYNegro: true, escala: 16, luminosidad: 1.5f, contraste: 2, InterpolationMode.HighQualityBicubic, DImg.PixelFormat.Format8bppIndexed);
 
         public static ParámetrosExtracción HQBCL1C2x16 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true,
             blancoYNegro: true, escala: 16, luminosidad: 1, contraste: 2, InterpolationMode.HighQualityBicubic, DImg.PixelFormat.Format8bppIndexed);
@@ -270,6 +276,14 @@ namespace RTSHelper {
 
         public static ParámetrosExtracción AlfaNumNegByNL2C2 = new ParámetrosExtracción(soloNúmeros: false,
             permitirUnCarácter: false, negativo: true, blancoYNegro: true, escala: 1, luminosidad: 2, contraste: 2, InterpolationMode.NearestNeighbor,
+            DImg.PixelFormat.Format8bppIndexed);
+
+        public static ParámetrosExtracción AlfaNumNegByNL1C2 = new ParámetrosExtracción(soloNúmeros: false,
+            permitirUnCarácter: false, negativo: true, blancoYNegro: true, escala: 1, luminosidad: 1, contraste: 2, InterpolationMode.NearestNeighbor,
+            DImg.PixelFormat.Format8bppIndexed);
+
+        public static ParámetrosExtracción AlfaNumNegByNL1_5C2 = new ParámetrosExtracción(soloNúmeros: false,
+            permitirUnCarácter: false, negativo: true, blancoYNegro: true, escala: 1, luminosidad: 1.5f, contraste: 2, InterpolationMode.NearestNeighbor,
             DImg.PixelFormat.Format8bppIndexed);
 
         public enum ScreenCaptureText : int { // Por facilidad y flexibilidad se agregan todos los posibles textos en la misma enumeración. El prefijo es el nombre del juego usando _ en vez de espacios para poder filtrarlo fácilmente en opciones.
@@ -2424,9 +2438,12 @@ namespace RTSHelper {
 
                     }
                     
-                } else if (progresoActual > 11 && progresoActual < 99) {
+                } else if (progresoActual > 10 && progresoActual < 99) {
 
-                    texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, valoresEsperados, out confianza);
+                    var extraConfianzaRequerida 
+                        = progresoActual >= 90 && progresoActual <= 99 && Preferencias.ScreenResolution != "2560x1440" ? 0.2f : 0f; // Con la nueva fuente Sans Serif de 2022 el intervalo de 90 a 99 es muy inexacto y puede producir números consecutivos incorrectos en 98 y 99 que pueden ser leídos como 8 y 9. Para evitar, este problema se sube la confianza para que el 98 que se lee como 8 con confianza 0,61, no se lea.
+                    texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, valoresEsperados, out confianza, 
+                        extraConfianzaRequerida);
 
                 } else if (progresoActual == 99 || progresoActual == 100) {
 
@@ -2487,13 +2504,13 @@ namespace RTSHelper {
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99)) {
                 cambió = true;
                 Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99,
-                     new SDrw.RectangleF(573F / 2560, 48F / 1440, 23F / 2560, 17F / 1440));
+                     new SDrw.RectangleF(571F / 2560, 48F / 1440, 23F / 2560, 17F / 1440));
             }          
 
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999)) {
                 cambió = true;
                 Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999,
-                     new SDrw.RectangleF(565F / 2560, 49F / 1440, 30F / 2560, 17F / 1440));
+                     new SDrw.RectangleF(563F / 2560, 49F / 1440, 30F / 2560, 17F / 1440));
             }
             
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseM)) {
@@ -2553,7 +2570,7 @@ namespace RTSHelper {
                 case ScreenCaptureText.Age_of_Empires_II_PauseF3M:
                 case ScreenCaptureText.Age_of_Empires_II_PauseF3L:
                 case ScreenCaptureText.Age_of_Empires_II_PauseF3XL:
-                    return AlfaNumNegByNL2C2;
+                    return AlfaNumNegByNL1_5C2;
                 case ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9:
 
                     switch (númeroRecomendado) {
@@ -2562,7 +2579,7 @@ namespace RTSHelper {
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
                                 case "1366x768":
-                                    return NNL1C2x2;
+                                    return HQBCL1_5C2x16;
                                 case "2560x1440":
                                 default:
                                     return NNL2C2x2;
@@ -2573,7 +2590,7 @@ namespace RTSHelper {
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
                                 case "1366x768":
-                                    return HQBCL1C2x4;
+                                    return HQBCL2C2x16;
                                 case "2560x1440":
                                 default:
                                     return HQBCL2C2x4;
@@ -2601,10 +2618,10 @@ namespace RTSHelper {
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
                                 case "1366x768":
-                                    return HQBCL1C2x16;
+                                    return HQBCL1_5C2x16;
                                 case "2560x1440":
                                 default:
-                                    return HQBCL2C2x16; // Extrañamente se requiere establecer la variable unCarácter en verdadero para que coincida adecuadamente números de 2 cifras. Parece ser un bug del algorítmo de Tesseract.
+                                    return HQBCL1_5C2x16; // Extrañamente se requiere establecer la variable unCarácter en verdadero para que coincida adecuadamente números de 2 cifras. Parece ser un bug del algorítmo de Tesseract.
                             }
 
                         case 2:
@@ -2612,7 +2629,7 @@ namespace RTSHelper {
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
                                 case "1366x768":
-                                    return HQBCL2C6x4;
+                                    return HQBCL2C2x16;
                                 case "2560x1440":
                                 default:
                                     return HQBCL4C6x4;
@@ -2640,10 +2657,10 @@ namespace RTSHelper {
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
                                 case "1366x768":
-                                    return HQBCL2C6x4;
+                                    return HQBCL1_5C2x16;
                                 case "2560x1440":
                                 default:
-                                    return HQBCL4C6x4;
+                                    return HQBCL1_5C2x16;
                             }
 
                         case 2:
@@ -2651,10 +2668,10 @@ namespace RTSHelper {
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
                                 case "1366x768":
-                                    return NNL1C2x1;
+                                    return HQBCL2C2x16;
                                 case "2560x1440":
                                 default:
-                                    return NNL2C2x1;
+                                    return HQBCL4C6x4;
                             }
 
                         case 3:
@@ -2662,10 +2679,10 @@ namespace RTSHelper {
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
                                 case "1366x768":
-                                    return HQBCL1C2x16;
+                                    return NNL1C2x1;
                                 case "2560x1440":
                                 default:
-                                    return HQBCL2C2x16; 
+                                    return NNL2C2x1; 
                             }
 
                     }
@@ -2714,7 +2731,8 @@ namespace RTSHelper {
         /// <param name="valoresEsperados"></param>
         /// <param name="máximaConfianza"></param>
         /// <returns></returns>
-        public static string? ExtraerTextoDePantalla(ScreenCaptureText tipo, List<string> valoresEsperados, out float máximaConfianza, float extraConfianzaRequerida = 0) {
+        public static string? ExtraerTextoDePantalla(ScreenCaptureText tipo, List<string> valoresEsperados, out float máximaConfianza, 
+            float extraConfianzaRequerida = 0) {
 
             var máximosIntentosDiferentesExtracción = 1;
             switch (tipo) {
