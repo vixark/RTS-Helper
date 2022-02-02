@@ -393,14 +393,14 @@ namespace RTSHelper {
 
         private void TimerDetecciónProgreso_Tick(object? sender, EventArgs e) { // En mi computador tarda alrededor de 50 ms. La verificación de aldeanos es casi siempre un solo ensayo.
 
-            if (!Preferencias.AutoAdjustIdleTime) return;
-            if (!Jugando()) return;
-            if (Estado != EEstado.Running) return;
             if (ModoDesarrolloOCR) {
                 var progresoLeído2 = LeerProgreso(50, out float confianza2, rangoValoresEsperados: 0); // No se usa rango de valores esperados para no contaminar las pruebas OCR con un dato de progreso actual. Se debe usar un número cualquiera de una cifra, de dos y de tres para probar el funcionamiento de la extracción de texto en cada uno de los segmentos.
                 LblDepuración.Content = $"Progreso Leído: {progresoLeído2.ToString()}{Environment.NewLine}Confianza: {confianza2}";
                 return; // En este modo se desactiva el ajuste de progreso automático para facilitar realizar los ensayos.
             }
+            if (!Preferencias.AutoAdjustIdleTime) return;
+            if (!Jugando()) return;
+            if (Estado != EEstado.Running) return;
 
             var pasoActual = OrdenDeEjecución.NúmeroPaso;
             var progresoActual = (int?)null;
