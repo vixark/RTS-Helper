@@ -1235,6 +1235,7 @@ namespace RTSHelper {
                 types["Type"].Add("8s", "Other");
                 types["Type"].Add("9s", "Other");
                 types["Type"].Add("10s", "Other");
+                types["Type"].Add("Green Arabia", "Map");
 
             }
 
@@ -2167,6 +2168,7 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("400055", "8s"); names[NameType.Common].Add("400055", "        ");
                 names[NameType.Complete].Add("400056", "9s"); names[NameType.Common].Add("400056", "         ");
                 names[NameType.Complete].Add("400057", "10s"); names[NameType.Common].Add("400057", "          ");
+                names[NameType.Complete].Add("400058", "Green Arabia");
 
                 string elite(string original) => "Elite " + original.Replace("|", $"|Elite ");
 
@@ -2421,15 +2423,22 @@ namespace RTSHelper {
                         extraConfianzaRequerida: 0.3f); // Se agrega más confianza requerida porque el 8 se puede confundir con el 3 en 1080. No se usa lista de valores esperados porque puede confundirse el 5 con el 3 que están muy cerca y se prefiere evitar este error.
                     if (confianza != -1) confianza+= 1; // Se suma 1 a la confianza para evitar que en el intervalo de 0 a 9 se consideren lecturas no confiables por no proveer la lista de valores esperados y se retrase el ajuste innecesariamente un paso más.
 
-                } else if (progresoActual == 9 || progresoActual == 10) {
+                } else if (progresoActual == 9 || progresoActual == 10) { 
 
                     var texto2n = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, valoresEsperados, out float c2n);
+                    var leído2n = false;
                     if (c2n > ConfianzaOCRAceptable) {
 
-                        texto = texto2n;
-                        confianza = c2n;
+                        var éxito2 = int.TryParse(texto2n, out int progreso2);
+                        if (progreso2 < 15) { // Podía estar en progreso 9 y aún tener el 8 en el juego, leyendo incorrectamente 78 por leerlo con el recorte de dos cifras, después con el 9 leía 79 y generaba un desface por haber leído dos valores consecutivos en los 70s. Para evitar este problema se limitó en el momento del procesamiento del paso a máximo cambioMáximo pasos, pero aquí también se evitará aceptar un progreso leído claramente incorrecto si este es mayor de 15.
+                            leído2n = true;
+                            texto = texto2n;
+                            confianza = c2n;
+                        }
 
-                    } else {
+                    } 
+                    
+                    if (!leído2n) {
 
                         var texto1n = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, new List<string>(), out float c1n, 
                             extraConfianzaRequerida: 0.3f);

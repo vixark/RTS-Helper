@@ -285,7 +285,7 @@
                         Visibility="{DynamicResource VisibilidadBotónAddIdleTime}">
 
                 </local:HoverButton>
-                
+
                 <ComboBox x:Name="CmbBuildOrders" ToolTip="Build Order" SelectionChanged="CmbBuildOrders_SelectionChanged" SelectedIndex="0" 
                       Style="{StaticResource ComboBoxColor}" Margin="{DynamicResource MargenBotones}" Foreground="{DynamicResource BrushFuente}" 
                       Width="{DynamicResource AnchoSelectorBuildOrder}" FontSize="{DynamicResource FuenteNormal}" VerticalAlignment="Center">

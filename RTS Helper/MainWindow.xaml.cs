@@ -395,6 +395,8 @@ namespace RTSHelper {
 
             if (ModoDesarrolloOCR) {
                 var progresoLeído2 = LeerProgreso(50, out float confianza2, rangoValoresEsperados: 0); // No se usa rango de valores esperados para no contaminar las pruebas OCR con un dato de progreso actual. Se debe usar un número cualquiera de una cifra, de dos y de tres para probar el funcionamiento de la extracción de texto en cada uno de los segmentos.
+                //var progresoLeído3 = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, new List<string>(), out float confianza3,
+                //        extraConfianzaRequerida: 0.3f) ?? "";
                 LblDepuración.Content = $"Progreso Leído: {progresoLeído2.ToString()}{Environment.NewLine}Confianza: {confianza2}";
                 return; // En este modo se desactiva el ajuste de progreso automático para facilitar realizar los ensayos.
             }
@@ -405,16 +407,20 @@ namespace RTSHelper {
             var pasoActual = OrdenDeEjecución.NúmeroPaso;
             var progresoActual = (int?)null;
             if (pasoActual <= OrdenDeEjecución.Pasos.Count - 1) progresoActual = OrdenDeEjecución.Pasos[pasoActual].Comportamiento?.Progreso;
+            var segundosJuegoPasoActual = ObtenerSegundosJuegoPasoActual(); // Debe obtenerse este valor justo antes de leer el progreso con OCR porque ese procedimiento se tarda decenas de milisegundos. Cuando se asignaba segundosJuegoPasoActual después de él, mientras se hacía la lectura del progreso, por ejemplo la lectura del 8 en el juego y estaba en 7 casi finalizando en el programa, el temporizador pasaba al siguiente paso iniciando (paso 8) y se tomaba como si tuviera segundosJuegoPasoActual casi 0 iniciando el paso anterior (paso 7), esto generaba un desface de un paso hacia adelante incorrecto. El cálculo de segundosJuegoPasoActual debe estar lo más cerca posible del cálculo de progresoActual para que esa situación no suceda.
             var progresoLeído = (int?)null;
             var confianza = -2f;
             if (progresoActual != null) progresoLeído = LeerProgreso((int)progresoActual, out confianza); 
             if (progresoLeído == ÚltimoProgresoLeído) return; // Cuando el progresoLeído es igual al ÚltimoProgresoLeído, no se realiza ninguna acción. 
-            var segundosJuegoPasoActual = ObtenerSegundosJuegoPasoActual();
-            
+   
             if (progresoLeído != null) {
 
                 var confiable = confianza > 1 || (confianza > 0 && (progresoLeído == ÚltimoProgresoLeído + 1 || progresoLeído == ÚltimoProgresoLeído - 1));  // Cuando la confianza está entre 0 y 1 es una lectura dudosa que no está en el rango esperado y requiere comprobación con el ÚltimoProgresoLeído para verificar que el último progreso leído era un progreso inmediatamente anterior al progreso actual y confirmar así que la lectura actual es confiable. Esto sucede por ejemplo en el caso de tener 15 aldeanos y en el mismo segundo perder 3 aldeanos (improbable, pero podría suceder), la siguiente lectura serían 11 aldeanos que sería descartada por no estar en el rango esperado 13-14-15-16-17, el RTS Helper pasaría al paso con progreso 16 y la siguente lectura sería 12 que tampoco estaría en el rango 14-15-16-17-18, pero si sería un consecutivo desde el último progreso leído 11, entonces se considerará que es confiable. Se agrega también el consecutivo hacia atrás para considerar el caso de 3 aldeanos muertos seguidos por uno más muerto.      
-                if (confianza > 0) {
+                var cambioMáximo = 15;
+                var cambioGrande = ÚltimoProgresoLeído != null && Math.Abs((int)progresoLeído - (int)ÚltimoProgresoLeído) > cambioMáximo; 
+                if (cambioGrande) confiable = false; // No acepta cambios de más de cambioMáximo pasos. Podría suceder en lecturas erroneas donde confunde el número de las decenas con otro número y generar consecutivos falsos. Estaba sucediendo 8 por 78 y 9 por 79, pero podría funcionar con otros 2 números cualquiera, por ejemplo 15 y 75 o 33 y 83, etc. El cambioMáximo = 15 pasos es una cantidad máxima razonable considerando que se lee cada segundo. No se usa 10 porque se podría dar el caso de que no se puedan leer 10 progresos consecutivos (como el caso del 90 con AOE2 a 1080p) entonces cuando hiciera la lectura correcta no la aceptaría. 
+
+                if (confianza > 0 && !cambioGrande) {
                     ÚltimoProgresoLeído = progresoLeído;
                 } else {
                     ÚltimoProgresoLeído = null;
@@ -455,7 +461,7 @@ namespace RTSHelper {
 
                             LblDepuración.Content = $"Desface: {desface:##.0} s";
                             Desfazar(desface * 1000, desfazarReloj: false);
-
+                            
                         } else {
                             LblDepuración.Content = $"No Desface";
                         }
