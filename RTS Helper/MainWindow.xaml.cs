@@ -84,7 +84,9 @@ namespace RTSHelper {
 
         private enum EEstado { Stoped, Running, Paused }
 
-        private bool MostrandoPasoAnterior = false;
+        private bool ForzarMostrarPasoAnterior = false;
+
+        private bool ForzarMostrarPasoSiguiente = false;
 
         private double MilisegundosJuegoDesface = 0; // Milisegundos de desface acumulado. Se usa principalmente para ajustar el reloj para que no se vea afectado por los desfaces. Esto se hace así por diseño debido a que el reloj se espera que esté sincronizado con el reloj del juego y los desfaces son causados debidos a errores del jugador, por ejemplo si no creó el aldeano a tiempo y tardó 10 segundos con el centro de pueblo desocupado se debería desfazar la ejecución 10 segundos, pero el reloj se mantendría igual.
 
@@ -93,6 +95,8 @@ namespace RTSHelper {
         FileSystemWatcher? SupervisorOrdenDeEjecuciónActualEnCódigo; // Para el modo de desarrollo también supervisa la carpeta de las órdenes de ejecución en la carpeta código para permitir que durante el desarrollo se tenga que actualizar únicamente este archivo.
 
         private int? ÚltimoProgresoLeído = null;
+
+        private static DateTime ÚltimaEjecuciónDeOrdenDeEjecuciónActualChanged = DateTime.Now;
 
         #endregion Propiedades y Variables>
 
@@ -150,9 +154,11 @@ namespace RTSHelper {
 
         } // MainWindow>
 
-
+        
         private void OrdenDeEjecuciónActual_Changed(object source, FileSystemEventArgs e) {
 
+            if ((DateTime.Now - ÚltimaEjecuciónDeOrdenDeEjecuciónActualChanged).TotalSeconds < 1) return; // En algunas ocasiones se ejecuta varias veces el evento.
+            ÚltimaEjecuciónDeOrdenDeEjecuciónActualChanged = DateTime.Now;
             Thread.Sleep(100); // Le da un tiempo para que termine de grabar.
             if (ModoDesarrollo) Thread.Sleep(100); // En modo desarrollo le da más tiempo para que termine de copiar el archivo desde la carpeta de código.
             this.Dispatcher.Invoke(() => CargarBuildOrder());
@@ -625,8 +631,16 @@ namespace RTSHelper {
             MostrarInformación((string)Application.Current.Resources["AlertContentMoreHeightThanWindow"]);
 
 
-        private void BtnAlternarVistaPasoSiguienteAnterior_Click(object sender, RoutedEventArgs e) 
-            => ActualizarVistaPasoSiguienteAnterior(!MostrandoPasoAnterior, actualizarPaso: true);
+        private void BtnAlternarVistaPasoSiguienteAnterior_Click(object sender, RoutedEventArgs e) {
+
+            if (Preferencias.ShowNextStep) {
+                ActualizarVistaPasoSiguienteAnterior(!ForzarMostrarPasoAnterior, null, actualizarPaso: true);
+            } else if (Preferencias.ShowPreviousStep) {
+                ActualizarVistaPasoSiguienteAnterior(null, !ForzarMostrarPasoSiguiente, actualizarPaso: true);
+            }
+
+        } // BtnAlternarVistaPasoSiguienteAnterior_Click>
+
 
         private void MniBackward_Click(object sender, RoutedEventArgs e) => Backward();
         
@@ -925,9 +939,14 @@ namespace RTSHelper {
         } // Pause>
 
 
+        public void RestaurarVistaPasoSiguienteAnterior() 
+            => ActualizarVistaPasoSiguienteAnterior(nuevoMostrandoPasoAnterior: Preferencias.ShowNextStep ? false : (bool?)null,
+                nuevoMostrandoPasoSiguiente: Preferencias.ShowPreviousStep ? false : (bool?)null);
+
+
         public void EnCambioNúmeroPaso() {
 
-            ActualizarVistaPasoSiguienteAnterior(nuevoMostrandoPasoAnterior: false);
+            RestaurarVistaPasoSiguienteAnterior();
             if (!Preferencias.ShowAlwaysStatsButton) {
 
                 if (OrdenDeEjecución.NúmeroPaso >= OrdenDeEjecución.Pasos.Count - 1) {
@@ -956,16 +975,34 @@ namespace RTSHelper {
         } // ReiniciarVariables>
 
 
-        public void ActualizarVistaPasoSiguienteAnterior(bool nuevoMostrandoPasoAnterior, bool actualizarPaso = false) {
+        public void ActualizarVistaPasoSiguienteAnterior(bool? nuevoMostrandoPasoAnterior, bool? nuevoMostrandoPasoSiguiente, bool actualizarPaso = false) {
 
-            if (!nuevoMostrandoPasoAnterior) {
-                BtnAlternarPasoSiguienteAnterior.Content = "⮨";
-                BtnAlternarPasoSiguienteAnterior.ToolTip = "See Previous Step";
-            } else {
-                BtnAlternarPasoSiguienteAnterior.Content = "⮩";
-                BtnAlternarPasoSiguienteAnterior.ToolTip = "See Next Step";
+            if (nuevoMostrandoPasoSiguiente != null) {
+
+                if (!(bool)nuevoMostrandoPasoSiguiente) {
+                    BtnAlternarPasoSiguienteAnterior.Content = "⮩";
+                    BtnAlternarPasoSiguienteAnterior.ToolTip = "See Next Step";
+                } else {
+                    BtnAlternarPasoSiguienteAnterior.Content = "⮨";
+                    BtnAlternarPasoSiguienteAnterior.ToolTip = "See Previous Step";
+                }
+                ForzarMostrarPasoSiguiente = (bool)nuevoMostrandoPasoSiguiente;
+
             }
-            MostrandoPasoAnterior = nuevoMostrandoPasoAnterior;
+
+            if (nuevoMostrandoPasoAnterior != null) {
+
+                if (!(bool)nuevoMostrandoPasoAnterior) {
+                    BtnAlternarPasoSiguienteAnterior.Content = "⮨";
+                    BtnAlternarPasoSiguienteAnterior.ToolTip = "See Previous Step";
+                } else {
+                    BtnAlternarPasoSiguienteAnterior.Content = "⮩";
+                    BtnAlternarPasoSiguienteAnterior.ToolTip = "See Next Step";
+                }
+                ForzarMostrarPasoAnterior = (bool)nuevoMostrandoPasoAnterior;
+
+            }
+
             if (actualizarPaso) ActualizarPaso(alternandoSiguienteAnteriorPaso: true);
 
         } // ActualizarVistaPasoSiguienteAnterior>
@@ -1060,6 +1097,10 @@ namespace RTSHelper {
             => ObtenerPropiedadDePaso(númeroPaso, c => c.MostrarSiguientePaso, Preferencias.ShowNextStep);
 
 
+        private bool ObtenerMostrarAnteriorPaso(int númeroPaso)
+            => ObtenerPropiedadDePaso(númeroPaso, c => c.MostrarAnteriorPaso, Preferencias.ShowPreviousStep);
+
+
         private string ObtenerSonido(int númeroPaso) 
             => ObtenerPropiedadDePasoClase(númeroPaso, c => c.Sonido, Preferencias.StepStartSound);
 
@@ -1114,8 +1155,8 @@ namespace RTSHelper {
             Application.Current.Resources["Ancho"] = Preferencias.Width;
             Application.Current.Resources["PosiciónY"] = Preferencias.Top;
             Application.Current.Resources["PosiciónX"] = Preferencias.Left;
-            Application.Current.Resources["VisibilidadPasoSiguiente"] = ObtenerMostrarSiguientePaso(OrdenDeEjecución.NúmeroPaso) 
-                ? Visibility.Visible : Visibility.Collapsed;
+            Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = ObtenerMostrarSiguientePaso(OrdenDeEjecución.NúmeroPaso) 
+                || ObtenerMostrarAnteriorPaso(OrdenDeEjecución.NúmeroPaso) ? Visibility.Visible : Visibility.Collapsed;
             Application.Current.Resources["AnchoSelectorBuildOrder"] = Preferencias.BuildOrderSelectorWidth;
             Application.Current.Resources["AnchoSelectorVelocidadEjecución"] = Preferencias.ExecutionSpeedSelectorWidth;
             Application.Current.Resources["BrushFlashingColor"] = (SolidColorBrush)new BrushConverter().ConvertFrom(ObtenerColorFlash(-1)); // Solo se establece para que sea efectivo en la ventana de preferencias.
@@ -1130,8 +1171,8 @@ namespace RTSHelper {
             TimerDetecciónPausa.Interval = new TimeSpan(0, 0, Preferencias.PauseDetectionInterval);
             TimerDetecciónProgreso.Interval = new TimeSpan(0, 0, Preferencias.AutoAdjustIdleTimeInterval);
             Application.Current.Resources["VisibilidadBotónStats"] = Preferencias.ShowAlwaysStatsButton ? Visibility.Visible : Visibility.Collapsed;
-            Application.Current.Resources["VisibilidadBotónVerPasoAnterior"] 
-                = Preferencias.ShowPreviousStepButton && Preferencias.ShowNextStep ? Visibility.Visible : Visibility.Collapsed;
+            Application.Current.Resources["VisibilidadBotónVerPasoAnterior"] = Preferencias.ShowAlternateNextPreviousStepButton && 
+                (Preferencias.ShowNextStep || Preferencias.ShowPreviousStep) ? Visibility.Visible : Visibility.Collapsed;
 
             AplicarPreferenciasMuted(iniciando);
 
@@ -1146,6 +1187,7 @@ namespace RTSHelper {
 
             EstableciendoTamaño = false;
             ActualizarSupervisoresOrdenDeEjecución();
+            RestaurarVistaPasoSiguienteAnterior();
 
             if (!iniciando) ActualizarPaso(stop: false, aplicandoPreferencias: true);
 
@@ -1357,7 +1399,7 @@ namespace RTSHelper {
         private void ActualizarContenidoPaso(int? númeroPaso) {
 
             SpnPaso.Children.Clear();
-            SpnPasoSiguiente.Children.Clear();
+            SpnPasoSiguienteAnterior.Children.Clear();
             SpnPasoAnterior.Children.Clear();
 
             var formatoPaso = new Formato($"{Preferencias.CurrentStepFontColor} {(Preferencias.CurrentStepFontBold ? "b" : "")} " +
@@ -1373,25 +1415,26 @@ namespace RTSHelper {
                 Preferencias.BottomMargenSteps, out bool superóAltoPasoActual);
 
             var superóAltoSiguientePaso = false;
-            if (númeroPaso != null && ObtenerMostrarSiguientePaso((int)númeroPaso)) {
+            if (númeroPaso != null && ((!ForzarMostrarPasoAnterior && ObtenerMostrarSiguientePaso((int)númeroPaso)) || ForzarMostrarPasoSiguiente)) {
 
-                OrdenDeEjecución.MostrarPaso(númeroPaso + 1, formatoSiguientePaso, SpnPasoSiguiente, mostrarSiempreÚltimoPaso: false,
+                OrdenDeEjecución.MostrarPaso(númeroPaso + 1, formatoSiguientePaso, SpnPasoSiguienteAnterior, mostrarSiempreÚltimoPaso: false,
                     this.Height - (SpnInferior.ActualHeight == 0 ? 42 : SpnInferior.ActualHeight) - Preferencias.BottomMargenSteps 
                     - Preferencias.TopMarginNextStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoSiguientePaso); // ActualHeight es cero al iniciar antes de cargar la interface, entonces se usa un valor fijo aproximado de 42.
-                Application.Current.Resources["VisibilidadPasoSiguiente"] = Visibility.Visible;
+                Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Visible;
 
             } else {
-                Application.Current.Resources["VisibilidadPasoSiguiente"] = Visibility.Collapsed;
+                Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Collapsed;
             }
 
             var superóAltoAnteriorPaso = false;
-            if (númeroPaso != null && númeroPaso > 0 && MostrandoPasoAnterior) {
+            if (númeroPaso != null && númeroPaso > 0 && !OrdenDeEjecución.EsPasoDespuésDeÚltimo && (!ForzarMostrarPasoSiguiente && (ObtenerMostrarAnteriorPaso((int)númeroPaso)) 
+                || ForzarMostrarPasoAnterior)) {
 
                 OrdenDeEjecución.MostrarPaso(númeroPaso - 1, formatoSiguientePaso, SpnPasoAnterior, mostrarSiempreÚltimoPaso: false,
                     this.Height - (SpnInferior.ActualHeight == 0 ? 42 : SpnInferior.ActualHeight) - Preferencias.BottomMargenSteps
                     - Preferencias.TopMarginNextStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoAnteriorPaso);
                 Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Visible;
-                Application.Current.Resources["VisibilidadPasoSiguiente"] = Visibility.Collapsed;
+                Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Collapsed;
 
             } else {
                 Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Collapsed;

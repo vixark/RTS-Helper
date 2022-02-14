@@ -46,6 +46,8 @@ namespace RTSHelper {
 
         public bool? MostrarSiguientePaso { get; set; }
 
+        public bool? MostrarAnteriorPaso { get; set; }
+
         public int? DuraciónPresonido { get; set; } // Autocalculada al cambiar el valor de Presonido.
 
         public static Dictionary<string, int?> DuraciónPresonidos = new Dictionary<string, int?>();
@@ -66,7 +68,7 @@ namespace RTSHelper {
             clasesLeídas = new Dictionary<string, Comportamiento>();
             if (string.IsNullOrEmpty(texto)) return; // Si el texto es vacío, no contiene ni comportamientos ni clases.
 
-            var palabrasClaveTextos = "s|es|fc|sns";
+            var palabrasClaveTextos = "s|es|fc|sns|sps";
             var palabrasClaveNúmeros = "t|fco|sv|esv|p";
             var palabrasClave = $"{palabrasClaveTextos}|{palabrasClaveNúmeros}".Split("|").ToList();
             var textoMinúscula = texto.ToLowerInvariant();
@@ -152,7 +154,7 @@ namespace RTSHelper {
 
                             case "sns":
 
-                                if (Preferencias.OverrideShowNextStep) {
+                                if (Preferencias.OverrideShowNextPreviousStep) {
 
                                     if (valor == "yes" || valor == "true") {
                                         MostrarSiguientePaso = true;
@@ -160,6 +162,21 @@ namespace RTSHelper {
                                         MostrarSiguientePaso = false;
                                     } else {
                                         MessageBox.Show($"The value {valor} for sns is invalid.");
+                                    }
+
+                                }
+                                break;
+
+                            case "sps":
+
+                                if (Preferencias.OverrideShowNextPreviousStep) {
+
+                                    if (valor == "yes" || valor == "true") {
+                                        MostrarAnteriorPaso = true;
+                                    } else if (valor == "no" || valor == "false") {
+                                        MostrarAnteriorPaso = false;
+                                    } else {
+                                        MessageBox.Show($"The value {valor} for sps is invalid.");
                                     }
 
                                 }
@@ -312,6 +329,7 @@ namespace RTSHelper {
             destino.VolumenPresonido ??= origen.VolumenPresonido;
             destino.VolumenSonido ??= origen.VolumenSonido;
             destino.MostrarSiguientePaso ??= origen.MostrarSiguientePaso;
+            destino.MostrarAnteriorPaso ??= origen.MostrarAnteriorPaso;
             destino.Progreso ??= origen.Progreso;
 
         } // CopiarPropiedadesEnNulas>
@@ -341,6 +359,7 @@ namespace RTSHelper {
             comportamiento.VolumenPresonido = comportamientoHijo?.VolumenPresonido ?? comportamientoPadre.VolumenPresonido;
             comportamiento.VolumenSonido = comportamientoHijo?.VolumenSonido ?? comportamientoPadre.VolumenSonido;
             comportamiento.MostrarSiguientePaso = comportamientoHijo?.MostrarSiguientePaso ?? comportamientoPadre.MostrarSiguientePaso;
+            comportamiento.MostrarAnteriorPaso = comportamientoHijo?.MostrarAnteriorPaso ?? comportamientoPadre.MostrarAnteriorPaso;
             comportamiento.Progreso = comportamientoHijo?.Progreso ?? comportamientoPadre.Progreso;
             return comportamiento;
 

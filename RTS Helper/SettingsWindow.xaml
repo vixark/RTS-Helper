@@ -186,20 +186,24 @@
                         <StackPanel Orientation="Horizontal" Margin="20 20 0 0">
 
                             <StackPanel x:Name="SpnLabels3" Orientation="Vertical">
-                                <Label FontWeight="Bold">Next Step</Label>
-                                <Label Margin="2">Show Next Step:</Label>
+                                <Label FontWeight="Bold">Previous/Next Step</Label>
+                                <Label Margin="2">Show:</Label>
                                 <Label Margin="2">Font Size:</Label>
                                 <Label Margin="2">Font Color:</Label>
                                 <Label Margin="2">Font Bold:</Label>
                                 <Label FontWeight="Bold">Buttons:</Label>
                                 <Label Margin="2">Stats:</Label>
-                                <Label Margin="2">Previous Step:</Label>
+                                <Label Margin="2">Alternate View:</Label>
                             </StackPanel>
 
-                            <StackPanel x:Name="SpnSettings3" Orientation="Vertical" Width="80">
+                            <StackPanel x:Name="SpnSettings3" Orientation="Vertical" Width="150">
 
-                                <CheckBox Checked="ChkShowNextStep_CheckedChanged" Unchecked="ChkShowNextStep_CheckedChanged" x:Name="ChkShowNextStep" 
-                                          Margin="4 34 0 11" />
+                                <StackPanel Orientation="Horizontal" Margin="4 34 0 11">
+                                    <CheckBox Checked="ChkShowPreviousStep_Checked" Unchecked="ChkShowPreviousStep_Checked" 
+                                              x:Name="ChkShowPreviousStep" Margin="0 0 20 0">Previous</CheckBox>
+                                    <CheckBox Checked="ChkShowNextStep_Checked" Unchecked="ChkShowNextStep_Checked" 
+                                              x:Name="ChkShowNextStep">Next</CheckBox>
+                                </StackPanel>
 
                                 <TextBox TextChanged="TxtNextStepFontSize_TextChanged" x:Name="TxtNextStepFontSize" Margin="4 0 4 0" Height="25" 
                                          VerticalContentAlignment="Center" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
@@ -215,8 +219,8 @@
                                 <CheckBox Checked="ChkShowAlwaysStatsButton_Checked" Unchecked="ChkShowAlwaysStatsButton_Checked" 
                                           x:Name="ChkShowAlwaysStatsButton" Margin="4 9 0 9" />
 
-                                <CheckBox Checked="ChkShowPreviousStepButton_Checked" Unchecked="ChkShowPreviousStepButton_Checked" 
-                                          x:Name="ChkShowPreviousStepButton" Margin="4 9 0 9" />
+                                <CheckBox Checked="ChkShowAlternateNextPreviousStepButton_Checked" Unchecked="ChkShowAlternateNextPreviousStepButton_Checked" 
+                                          x:Name="ChkShowAlternateNextPreviousStepButton" Margin="4 9 0 9" />
 
                             </StackPanel>
 
@@ -512,8 +516,8 @@
                                       Margin="0 5 0 5">Flashing Color</CheckBox>
                                 <CheckBox Checked="ChkOverride_Checked" Unchecked="ChkOverride_Checked" x:Name="ChkOverrideFlashingOpacity" 
                                       Margin="0 5 0 5">Flashing Color Opacity</CheckBox>
-                                <CheckBox Checked="ChkOverride_Checked" Unchecked="ChkOverride_Checked" x:Name="ChkOverrideShowNextStep" 
-                                      Margin="0 5 0 5">Show Next Step</CheckBox>
+                                <CheckBox Checked="ChkOverride_Checked" Unchecked="ChkOverride_Checked" x:Name="ChkOverrideShowNextPreviousStep" 
+                                      Margin="0 5 0 5">Show Previous/Next Step</CheckBox>
                                 <CheckBox Checked="ChkOverride_Checked" Unchecked="ChkOverride_Checked" x:Name="ChkOverrideStepDuration" 
                                       Margin="0 5 0 5">Step Duration</CheckBox>
 

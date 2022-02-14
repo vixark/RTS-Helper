@@ -23,7 +23,9 @@ using System.Reflection;
 namespace RTSHelper {
 
 
+
     public partial class SettingsWindow : Window {
+
 
 
         public bool Activado { get; set; } = false;
@@ -90,6 +92,8 @@ namespace RTSHelper {
             TxtStepFontSize.Text = Preferencias.CurrentStepFontSize.ToString();
             TxtNextStepFontSize.Text = Preferencias.NextStepFontSize.ToString();
             ChkShowNextStep.IsChecked = Preferencias.ShowNextStep;
+            ChkShowPreviousStep.IsChecked = Preferencias.ShowPreviousStep;
+
             LeerSonidos();
             CmbStartSound.Text = Preferencias.StepStartSound;
             CmbEndSound.Text = Preferencias.StepEndSound;
@@ -129,7 +133,7 @@ namespace RTSHelper {
             ChkOverrideFontSize.IsChecked = Preferencias.OverrideFontSize;
             ChkOverrideFontUnderline.IsChecked = Preferencias.OverrideFontUnderline;
             ChkOverrideImageSize.IsChecked = Preferencias.OverrideImageSize;
-            ChkOverrideShowNextStep.IsChecked = Preferencias.OverrideShowNextStep;
+            ChkOverrideShowNextPreviousStep.IsChecked = Preferencias.OverrideShowNextPreviousStep;
             ChkOverrideStepDuration.IsChecked = Preferencias.OverrideStepDuration;
             ChkOverrideStepEndSound.IsChecked = Preferencias.OverrideStepEndSound;
             ChkOverrideStepEndSoundVolume.IsChecked = Preferencias.OverrideStepEndSoundVolume;
@@ -154,7 +158,7 @@ namespace RTSHelper {
             TxtFordwardSeconds.Text = Preferencias.ForwardSeconds.ToString();
             TxtBackwardSeconds.Text = Preferencias.BackwardSeconds.ToString();
             ChkShowAlwaysStatsButton.IsChecked = Preferencias.ShowAlwaysStatsButton;
-            ChkShowPreviousStepButton.IsChecked = Preferencias.ShowPreviousStepButton;
+            ChkShowAlternateNextPreviousStepButton.IsChecked = Preferencias.ShowAlternateNextPreviousStepButton;
 
             AgregarIdiomas(CmbGameLanguage, Preferencias.GameLanguage, IdiomasJuego);
             CargarVelocidadEjecución();
@@ -206,7 +210,7 @@ namespace RTSHelper {
             Preferencias.OverrideFontSize = (bool)ChkOverrideFontSize.IsChecked!;
             Preferencias.OverrideFontUnderline = (bool)ChkOverrideFontUnderline.IsChecked!;
             Preferencias.OverrideImageSize = (bool)ChkOverrideImageSize.IsChecked!;
-            Preferencias.OverrideShowNextStep = (bool)ChkOverrideShowNextStep.IsChecked!;
+            Preferencias.OverrideShowNextPreviousStep = (bool)ChkOverrideShowNextPreviousStep.IsChecked!;
             var overrideStepDuration = (bool)ChkOverrideStepDuration.IsChecked!;
             if (!overrideStepDuration) 
                 MostrarInformación("If you don't allow build orders to override the default step duration and they have custom steps durations, " + 
@@ -646,13 +650,24 @@ namespace RTSHelper {
         } // TxtNextStepFontSize_TextChanged>
 
 
-        private void ChkShowNextStep_CheckedChanged(object sender, RoutedEventArgs e) {
+        private void ChkShowNextStep_Checked(object sender, RoutedEventArgs e) {
 
             if (!Activado) return;
             Preferencias.ShowNextStep = (bool)ChkShowNextStep.IsChecked!;
+            if (Preferencias.ShowNextStep && Preferencias.ShowPreviousStep) ChkShowPreviousStep.IsChecked = false;
             VentanaPrincipal.AplicarPreferencias();
 
-        } // ChkShowNextStep_CheckedChanged>
+        } // ChkShowNextStep_Checked>
+
+
+        private void ChkShowPreviousStep_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.ShowPreviousStep = (bool)ChkShowPreviousStep.IsChecked!;
+            if (Preferencias.ShowNextStep && Preferencias.ShowPreviousStep) ChkShowNextStep.IsChecked = false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkShowPreviousStep_Checked>
 
 
         private void TxtBuildOrderPath_TextChanged(object sender, TextChangedEventArgs e) {
@@ -1138,13 +1153,13 @@ namespace RTSHelper {
         } // ChkShowAlwaysStatsButton_Checked>
 
 
-        private void ChkShowPreviousStepButton_Checked(object sender, RoutedEventArgs e) {
+        private void ChkShowAlternateNextPreviousStepButton_Checked(object sender, RoutedEventArgs e) {
 
             if (!Activado) return;
-            Preferencias.ShowPreviousStepButton = ChkShowPreviousStepButton.IsChecked ?? false;
+            Preferencias.ShowAlternateNextPreviousStepButton = ChkShowAlternateNextPreviousStepButton.IsChecked ?? false;
             VentanaPrincipal.AplicarPreferencias();
 
-        } // ChkShowPreviousStepButton_Checked>
+        } // ChkShowAlternateNextPreviousStepButton_Checked>
 
 
     } // SettingsWindow>

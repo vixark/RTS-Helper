@@ -234,6 +234,8 @@ namespace RTSHelper {
 
         public static bool ShowNextStepPredeterminado = false;
 
+        public static bool ShowPreviousStepPredeterminado = false;
+
         public static ParámetrosExtracción NNL2C2x1 = new ParámetrosExtracción(soloNúmeros: true, permitirUnCarácter: true, negativo: true, 
             blancoYNegro: true, escala: 1, luminosidad: 2, contraste: 2, InterpolationMode.NearestNeighbor, DImg.PixelFormat.Format8bppIndexed); // Por alguna razón desconocida es necesario que el bitmap sea de 8 bits para que Tesseract lo reconozca adecuadamente. Se usa NearestNeighbor porque lo exige el constructor, pero al tener escala 1, no se aplica ningún modo de interpolación.
 
@@ -1236,6 +1238,7 @@ namespace RTSHelper {
                 types["Type"].Add("9s", "Other");
                 types["Type"].Add("10s", "Other");
                 types["Type"].Add("Green Arabia", "Map");
+                types["Type"].Add("Opponent Villager", "Unit");
 
             }
 
@@ -1337,6 +1340,8 @@ namespace RTSHelper {
                 customImages[NameType.Image].Add("Tech: Elite Cannon Galleon", "Upgrade to Elite Cannon Galleon");
                 customImages[NameType.Image].Add("Range*", "Range");
                 customImages[NameType.Image].Add("Pierce Armor: ", "Pierce Armor");
+                customImages[NameType.Image].Add("Opponent Villager", "Opponent Male Villager|Opponent Female Villager");
+
 
             }
 
@@ -2169,6 +2174,7 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("400056", "9s"); names[NameType.Common].Add("400056", "         ");
                 names[NameType.Complete].Add("400057", "10s"); names[NameType.Common].Add("400057", "          ");
                 names[NameType.Complete].Add("400058", "Green Arabia");
+                names[NameType.Complete].Add("400059", "Opponent Villager"); names[NameType.Abbreviation].Add("400059", "Opponent Vil|Opponent Vill"); names[NameType.Acronym].Add("400059", "Opponent V"); names[NameType.CommonPlural].Add("400059", "Opponent Villagers"); names[NameType.AbbreviationPlural].Add("400059", "Opponent Vils|Opponent Vills");
 
                 string elite(string original) => "Elite " + original.Replace("|", $"|Elite ");
 

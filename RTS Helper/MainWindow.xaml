@@ -318,9 +318,9 @@
 
         </StackPanel>
 
-        <StackPanel x:Name="SpnPasoSiguiente" Orientation="Vertical" Panel.ZIndex="0" HorizontalAlignment="Right" VerticalAlignment="Top" 
+        <StackPanel x:Name="SpnPasoSiguienteAnterior" Orientation="Vertical" Panel.ZIndex="0" HorizontalAlignment="Right" VerticalAlignment="Top" 
                     Background="{DynamicResource BrushFondoControles}" Margin="{DynamicResource MargenPasoSiguiente}"
-                    Visibility="{DynamicResource VisibilidadPasoSiguiente}" >
+                    Visibility="{DynamicResource VisibilidadPasoSiguienteAnterior}" >
         </StackPanel>
 
         <StackPanel x:Name="SpnPasoAnterior" Orientation="Vertical" Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Top" 

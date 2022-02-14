@@ -18,7 +18,7 @@
             <SolidColorBrush x:Key="BrushFlashingColor" Color="#498205" />
             <SolidColorBrush x:Key="BrushImageBackgroundColor" Color="#000" />
             <System:Double x:Key="Opacidad">0.6</System:Double>
-            <Visibility x:Key="VisibilidadPasoSiguiente">Visible</Visibility>
+            <Visibility x:Key="VisibilidadPasoSiguienteAnterior">Visible</Visibility>
             <Visibility x:Key="VisibilidadPasoAnterior">Collapsed</Visibility>
 
             <System:Double x:Key="Alto">146</System:Double>

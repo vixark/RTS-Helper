@@ -35,6 +35,8 @@ namespace RTSHelper {
 
         public bool ShowNextStep { get; set; } = ShowNextStepPredeterminado;
 
+        public bool ShowPreviousStep { get; set; } = ShowPreviousStepPredeterminado;
+
         public string? BuildOrderCustomDirectory { get; set; }
 
         public bool MinimizeOnComplete { get; set; } = false;
@@ -45,7 +47,7 @@ namespace RTSHelper {
 
         public bool ShowTime { get; set; } = false;
 
-        public bool ShowPreviousStepButton { get; set; } = true;
+        public bool ShowAlternateNextPreviousStepButton { get; set; } = true;
 
         public bool ShowAlwaysStatsButton { get; set; } = true; // Si es falso, solo se muestra al final.
 
@@ -65,7 +67,7 @@ namespace RTSHelper {
 
         public int StepEndSoundDuration { get; set; } = 0; // Se establece automáticamente al cambiar el sonido.
 
-        public bool UnmuteAtStartup { get; set; } = true; // Permite que no se mantenga muted si la última vez que se usó la aplicación se cerró muted.
+        public bool UnmuteAtStartup { get; set; } = false; // Permite que no se mantenga muted si la última vez que se usó la aplicación se cerró muted.
 
         public bool Muted { get; set; } = false; // Se establece desde la interface principal.
 
@@ -214,7 +216,7 @@ namespace RTSHelper {
 
         public bool OverrideFlashingOpacity { get; set; } = true;
 
-        public bool OverrideShowNextStep { get; set; } = true;
+        public bool OverrideShowNextPreviousStep { get; set; } = true;
 
         public bool OverrideStepDuration { get; set; } = true;
 
@@ -356,7 +358,8 @@ namespace RTSHelper {
 
         public void EstablecerValoresRecomendadosAOE2(string resolución) {
 
-            ShowNextStep = true;
+            ShowNextStep = false;
+            ShowPreviousStep = true;
             GameSpeed = 1.7;
             StepDuration = 25; // El tiempo de creación de 1 aldeano.
 
@@ -455,6 +458,7 @@ namespace RTSHelper {
                 
                 GameSpeed = 1;
                 ShowNextStep = false;
+                ShowPreviousStep = false;
                 StepDuration = 60; // 60 es el tiempo de creación de 3 aldeanos.
 
                 switch (resolución) {
