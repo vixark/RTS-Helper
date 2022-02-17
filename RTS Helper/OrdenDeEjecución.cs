@@ -148,11 +148,11 @@ namespace RTSHelper {
 
 
         public void MostrarPaso(int? númeroPaso, Formato formatoPredeterminado, StackPanel contenedor, bool mostrarSiempreÚltimoPaso, double altoMáximo,
-            HorizontalAlignment alineaciónHorizontal, double margenInferior, out bool superóAlto) {
+            HorizontalAlignment alineaciónHorizontal, double margenInferior, out bool superóAlto, out string? errores) {
 
             superóAlto = false;
             var númeroPasoAMostrar = númeroPaso;
-            var errores = "";
+            errores = null;
             if (númeroPaso >= Pasos.Count) {
 
                 if (mostrarSiempreÚltimoPaso) {
@@ -363,8 +363,6 @@ namespace RTSHelper {
                 } // foreach instrucción>
 
             } // paso != null>
-
-            if (!string.IsNullOrEmpty(errores)) MostrarError(errores);
 
         } // MostrarPaso>
 

@@ -397,103 +397,7 @@ namespace RTSHelper {
         } // TimerBlinkerGameTime_Tick>
 
 
-        private void TimerDetecciónProgreso_Tick(object? sender, EventArgs e) { // En mi computador tarda alrededor de 50 ms. La verificación de aldeanos es casi siempre un solo ensayo.
-
-            if (ModoDesarrolloOCR) {
-                var progresoLeído2 = LeerProgreso(50, out float confianza2, rangoValoresEsperados: 0); // No se usa rango de valores esperados para no contaminar las pruebas OCR con un dato de progreso actual. Se debe usar un número cualquiera de una cifra, de dos y de tres para probar el funcionamiento de la extracción de texto en cada uno de los segmentos.
-                //var progresoLeído3 = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, new List<string>(), out float confianza3,
-                //        extraConfianzaRequerida: 0.3f) ?? "";
-                LblDepuración.Content = $"Progreso Leído: {progresoLeído2.ToString()}{Environment.NewLine}Confianza: {confianza2}";
-                return; // En este modo se desactiva el ajuste de progreso automático para facilitar realizar los ensayos.
-            }
-            if (!Preferencias.AutoAdjustIdleTime) return;
-            if (!Jugando()) return;
-            if (Estado != EEstado.Running) return;
-
-            var pasoActual = OrdenDeEjecución.NúmeroPaso;
-            var progresoActual = (int?)null;
-            if (pasoActual <= OrdenDeEjecución.Pasos.Count - 1) progresoActual = OrdenDeEjecución.Pasos[pasoActual].Comportamiento?.Progreso;
-            var segundosJuegoPasoActual = ObtenerSegundosJuegoPasoActual(); // Debe obtenerse este valor justo antes de leer el progreso con OCR porque ese procedimiento se tarda decenas de milisegundos. Cuando se asignaba segundosJuegoPasoActual después de él, mientras se hacía la lectura del progreso, por ejemplo la lectura del 8 en el juego y estaba en 7 casi finalizando en el programa, el temporizador pasaba al siguiente paso iniciando (paso 8) y se tomaba como si tuviera segundosJuegoPasoActual casi 0 iniciando el paso anterior (paso 7), esto generaba un desface de un paso hacia adelante incorrecto. El cálculo de segundosJuegoPasoActual debe estar lo más cerca posible del cálculo de progresoActual para que esa situación no suceda.
-            var progresoLeído = (int?)null;
-            var confianza = -2f;
-            if (progresoActual != null) progresoLeído = LeerProgreso((int)progresoActual, out confianza); 
-            if (progresoLeído == ÚltimoProgresoLeído) return; // Cuando el progresoLeído es igual al ÚltimoProgresoLeído, no se realiza ninguna acción. 
-   
-            if (progresoLeído != null) {
-
-                var confiable = confianza > 1 || (confianza > 0 && (progresoLeído == ÚltimoProgresoLeído + 1 || progresoLeído == ÚltimoProgresoLeído - 1));  // Cuando la confianza está entre 0 y 1 es una lectura dudosa que no está en el rango esperado y requiere comprobación con el ÚltimoProgresoLeído para verificar que el último progreso leído era un progreso inmediatamente anterior al progreso actual y confirmar así que la lectura actual es confiable. Esto sucede por ejemplo en el caso de tener 15 aldeanos y en el mismo segundo perder 3 aldeanos (improbable, pero podría suceder), la siguiente lectura serían 11 aldeanos que sería descartada por no estar en el rango esperado 13-14-15-16-17, el RTS Helper pasaría al paso con progreso 16 y la siguente lectura sería 12 que tampoco estaría en el rango 14-15-16-17-18, pero si sería un consecutivo desde el último progreso leído 11, entonces se considerará que es confiable. Se agrega también el consecutivo hacia atrás para considerar el caso de 3 aldeanos muertos seguidos por uno más muerto.      
-                var cambioMáximo = 15;
-                var cambioGrande = ÚltimoProgresoLeído != null && Math.Abs((int)progresoLeído - (int)ÚltimoProgresoLeído) > cambioMáximo; 
-                if (cambioGrande) confiable = false; // No acepta cambios de más de cambioMáximo pasos. Podría suceder en lecturas erroneas donde confunde el número de las decenas con otro número y generar consecutivos falsos. Estaba sucediendo 8 por 78 y 9 por 79, pero podría funcionar con otros 2 números cualquiera, por ejemplo 15 y 75 o 33 y 83, etc. El cambioMáximo = 15 pasos es una cantidad máxima razonable considerando que se lee cada segundo. No se usa 10 porque se podría dar el caso de que no se puedan leer 10 progresos consecutivos (como el caso del 90 con AOE2 a 1080p) entonces cuando hiciera la lectura correcta no la aceptaría. 
-
-                if (confianza > 0 && !cambioGrande) {
-                    ÚltimoProgresoLeído = progresoLeído;
-                } else {
-                    ÚltimoProgresoLeído = null;
-                }
-
-                if (confiable) {
-  
-                    var desface = 0D;
-                    var direcciónBúsqueda = progresoLeído == progresoActual ? 0 : (progresoLeído > progresoActual ? 1 : -1); // Si se está más adelante, se busca en los pasos posteriores y el desface es negativo. Cuando el progresoLeído es igual al progresoActual, no se necesita revisar otros pasos para encontrar el valor de duraciónDesface.
-                    var encontradoPaso = direcciónBúsqueda == 0; 
-
-                    if (!encontradoPaso) { 
-
-                        var paso = pasoActual + direcciónBúsqueda;
-                        while (paso >= 0 && paso <= OrdenDeEjecución.Pasos.Count - 1) {
-          
-                            if (progresoLeído == OrdenDeEjecución.Pasos[paso].Comportamiento?.Progreso) {
-                                if (direcciónBúsqueda == -1) desface += -direcciónBúsqueda * ObtenerDuraciónPaso(paso); // Si la búsqueda es hacia atrás, tiene en cuenta el paso final. Por ejemplo, si se está en el inicio del paso de 7 aldeanos y se mueren 3 aldeanos, se debe sumar el largo del paso 6, 5 y 4 (que es el paso en el que se cumple la condición progresoLeído == OrdenDeEjecución.Pasos[paso].Comportamiento?.Progreso). Si la búsqueda es hacia adelante, no se suma el paso en el que se cumple la condición. Por ejemplo, si se tienen 4 aldeanos y se está en el final del paso y se convierten 3 en el mismo momento, se debe sumar la duración del paso de 5 aldeanos y de 6 aldeanos. El de 7 no se suma porque queda al inicio de este. Los ajustes de pasos incompletos para ambos casos se hacen en el condicional siguiente if (encontradoPaso).
-                                encontradoPaso = true;
-                                break;
-                            }
-                            desface += -direcciónBúsqueda * ObtenerDuraciónPaso(paso);
-                            paso += direcciónBúsqueda;
-
-                        }
-
-                    }
-
-                    if (encontradoPaso) { // Si no se pudo encontrar un paso con el progreso leído, no realiza ninguna acción.
-              
-                        if (direcciónBúsqueda <= 0) { // Si la dirección de búsqueda es -1 o 0, el desface es positivo y se debe retrasar/delay el RTS Helper una cantidad positiva igual al tiempo en el paso actual.
-                            desface += segundosJuegoPasoActual;
-                        } else { // Si la duración de búsqueda es 1, el desface es negativo y se debe avanzar/rush el RTS Helper para ponerlo al día con el juego. Esto es causado por ejemplo, por una conversión de un aldeano por un monje.
-                            desface -= (ObtenerDuraciónPaso(pasoActual) - segundosJuegoPasoActual);
-                        }
-
-                        if (desface > Preferencias.MinimumDelayToAutoAdjustIdleTime || desface < -Preferencias.MinimumDelayToAutoAdjustIdleTime) {
-
-                            LblDepuración.Content = $"Desface: {desface:##.0} s";
-                            Desfazar(desface * 1000, desfazarReloj: false);
-                            
-                        } else {
-                            LblDepuración.Content = $"No Desface";
-                        }
-
-                    } else {
-                        LblDepuración.Content = $"No Encontrado Paso";
-                    }
-
-                } else {
-
-                    if (confianza < 0) {
-                        LblDepuración.Content = $"No Confiable";
-                    } else {
-                        LblDepuración.Content = $"No Consecutivo";
-                    }
-                    
-                }
-
-                LblDepuración.Content += $"{Environment.NewLine}Progreso Leído: {(confianza < 0 ? "x" : progresoLeído.ToString())}{Environment.NewLine}Progreso: {progresoActual}";
-
-            } else {
-                ÚltimoProgresoLeído = null;
-                LblDepuración.Content = $"No Leído{Environment.NewLine}Progreso Leído: {(confianza < 0 ? "x" : progresoLeído.ToString())}{Environment.NewLine}Progreso: {progresoActual}";
-            }
-    
-        } // TimerDetecciónProgreso_Tick>
+        private void TimerDetecciónProgreso_Tick(object? sender, EventArgs e) => DetectarProgreso(forzarAplicación: false);
 
 
         private void TimerDetecciónPausa_Tick(object? sender, EventArgs e) { // En mi computador tarda alrededor de 50 ms cuando está en juego  y alrededor de 70 ms cuando está en pausa.
@@ -619,16 +523,53 @@ namespace RTSHelper {
         } // MniLastStep_Click>
 
 
-        private void MniReloadBuildOrder_Click(object sender, RoutedEventArgs e) {
+        private void MniRecargarBuildOrder_Click(object sender, RoutedEventArgs e) {
 
             if (!Inició || EditandoComboBoxEnCódigo) return;
             CargarBuildOrder();
 
-        } // MniReloadBuildOrder_Click>
+        } // MniRecargarBuildOrder_Click>
 
 
-        private void BtnAlert_Click(object sender, RoutedEventArgs e) =>
-            MostrarInformación((string)Application.Current.Resources["AlertContentMoreHeightThanWindow"]);
+        private void MniEditarBuildOrder_Click(object sender, RoutedEventArgs e) {
+
+            var rutaBuildOrder = Path.Combine(Preferencias.BuildOrdersDirectory, $"{Preferencias.CurrentBuildOrder}.txt");
+            if (File.Exists(rutaBuildOrder)) {
+
+                if (ModoDesarrollo) rutaBuildOrder = rutaBuildOrder.Replace(@"bin\Debug\netcoreapp3.1\", "").Replace(@"bin\Release\netcoreapp3.1\", ""); // Para que en modo desarrollo se abra la build order de la carpea Código que es la que se sube a GitHub.
+                AbrirArchivo(rutaBuildOrder);
+
+            }
+
+        } // MniEditarBuildOrder_Click>
+
+
+        private void MniAdicionarEliminarDeFavoritos_Click(object sender, RoutedEventArgs e) {
+
+            if (EsFavorita(Preferencias.Game, Preferencias.CurrentBuildOrder)) {
+                EliminarDeFavoritos(Preferencias.Game, Preferencias.CurrentBuildOrder);
+            } else {
+                AgregarAFavoritos(Preferencias.Game, Preferencias.CurrentBuildOrder);
+            }
+            if (Preferencias.ShowOnlyFavoriteBuildOrders) LeerBuildOrders(mostrarMensajeNoFavoritas: true);
+            CargarBuildOrder();
+
+        } // MniAdicionarEliminarDeFavoritos_Click>
+
+
+        private void MniAlternarVerSoloFavoritos_Click(object sender, RoutedEventArgs e) {
+
+            Preferencias.ShowOnlyFavoriteBuildOrders = !Preferencias.ShowOnlyFavoriteBuildOrders;
+            LeerBuildOrders(mostrarMensajeNoFavoritas: true);
+            CargarBuildOrder();
+
+        } // MniAlternarVerSoloFavoritos_Click>
+
+
+        private void MniSynchronizeProgress_Click(object sender, RoutedEventArgs e) => DetectarProgreso(forzarAplicación: true);
+
+
+        private void BtnAlert_Click(object sender, RoutedEventArgs e) => MostrarInformación((string)BtnAlert.ToolTip);
 
 
         private void BtnAlternarVistaPasoSiguienteAnterior_Click(object sender, RoutedEventArgs e) {
@@ -1008,21 +949,135 @@ namespace RTSHelper {
         } // ActualizarVistaPasoSiguienteAnterior>
 
 
-        public void LeerBuildOrders() {
+        public void LeerBuildOrders(bool mostrarMensajeNoFavoritas = false) {
 
             EditandoComboBoxEnCódigo = true;
             CmbBuildOrders.Items.Clear();
-            CmbBuildOrders.Items.Add("Default");
+            if (RequiereAgregarÓrdenDeEjecución(Preferencias.Game, "Tutorial", out bool juegoSinFavoritas)) CmbBuildOrders.Items.Add("Tutorial");
             CmbBuildOrders.SelectedIndex = 0;
             EditandoComboBoxEnCódigo = false;
 
             var archivosBuildOrders = Directory.GetFiles(Preferencias.BuildOrdersDirectory, "*.txt");
             foreach (var archivoBuildOrder in archivosBuildOrders) {
+
                 var nombreBuildOrder = Path.GetFileNameWithoutExtension(archivoBuildOrder);
-                if (nombreBuildOrder.ToLower() != "default") CmbBuildOrders.Items.Add(nombreBuildOrder);
+                if (nombreBuildOrder.ToLower() != "tutorial" && RequiereAgregarÓrdenDeEjecución(Preferencias.Game, nombreBuildOrder, out _)) 
+                    CmbBuildOrders.Items.Add(nombreBuildOrder);
+
+            }
+
+            if (Preferencias.ShowOnlyFavoriteBuildOrders) {
+                if (juegoSinFavoritas && mostrarMensajeNoFavoritas) MostrarInformación($"You don't have favorite build orders for {Preferencias.Game}. All build orders will be shown.");
+                MniAlternarVerSoloFavoritos.Header = "👁   Show All";
+            } else {
+                MniAlternarVerSoloFavoritos.Header = "👁   Show Only Favorites";
             }
 
         } // LeerBuildOrders>
+
+
+        private void DetectarProgreso(bool forzarAplicación) { // En mi computador tarda alrededor de 50 ms. La verificación de aldeanos es casi siempre un solo ensayo.
+
+            if (ModoDesarrolloOCR) {
+                var progresoLeído2 = LeerProgreso(50, out float confianza2, rangoValoresEsperados: 0); // No se usa rango de valores esperados para no contaminar las pruebas OCR con un dato de progreso actual. Se debe usar un número cualquiera de una cifra, de dos y de tres para probar el funcionamiento de la extracción de texto en cada uno de los segmentos.
+                //var progresoLeído3 = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, new List<string>(), out float confianza3,
+                //        extraConfianzaRequerida: 0.3f) ?? "";
+                LblDepuración.Content = $"Progreso Leído: {progresoLeído2.ToString()}{Environment.NewLine}Confianza: {confianza2}";
+                return; // En este modo se desactiva el ajuste de progreso automático para facilitar realizar los ensayos.
+            }
+            if (!Preferencias.AutoAdjustIdleTime) return;
+            if (!forzarAplicación && !Jugando()) return;
+            if (!forzarAplicación && Estado != EEstado.Running) return;
+
+            var pasoActual = OrdenDeEjecución.NúmeroPaso;
+            var progresoActual = (int?)null;
+            if (pasoActual <= OrdenDeEjecución.Pasos.Count - 1) progresoActual = OrdenDeEjecución.Pasos[pasoActual].Comportamiento?.Progreso;
+            var segundosJuegoPasoActual = ObtenerSegundosJuegoPasoActual(); // Debe obtenerse este valor justo antes de leer el progreso con OCR porque ese procedimiento se tarda decenas de milisegundos. Cuando se asignaba segundosJuegoPasoActual después de él, mientras se hacía la lectura del progreso, por ejemplo la lectura del 8 en el juego y estaba en 7 casi finalizando en el programa, el temporizador pasaba al siguiente paso iniciando (paso 8) y se tomaba como si tuviera segundosJuegoPasoActual casi 0 iniciando el paso anterior (paso 7), esto generaba un desface de un paso hacia adelante incorrecto. El cálculo de segundosJuegoPasoActual debe estar lo más cerca posible del cálculo de progresoActual para que esa situación no suceda.
+            var progresoLeído = (int?)null;
+            var confianza = -2f;
+            if (forzarAplicación || progresoActual != null) progresoLeído = LeerProgreso(forzarAplicación ? 20 : (int)(progresoActual ?? 0), out confianza); // Si se está forzando la aplicación del progreso, no se está teniendo en cuenta el consecutivo, entonces para abarcar la mayor cantidad de casos se usa un progreso actual de 20 que es un número arbitrario de 2 cifras para que la lectura OCR siempre coincida con 2 cifras. No se soporta la lectura de progreso de 3 cifras en esta función. progresoActual nunca sería cero porque solo es nulo cuando forzarAplicación es verdadero y si forzarAplicación es verdadero el valor que se usa es 20.
+            if (!forzarAplicación && progresoLeído == ÚltimoProgresoLeído) return; // Cuando el progresoLeído es igual al ÚltimoProgresoLeído, no se realiza ninguna acción. 
+
+            if (progresoLeído != null) {
+
+                var confiable = confianza > 1 || (confianza > 0 && (progresoLeído == ÚltimoProgresoLeído + 1 || progresoLeído == ÚltimoProgresoLeído - 1));  // Cuando la confianza está entre 0 y 1 es una lectura dudosa que no está en el rango esperado y requiere comprobación con el ÚltimoProgresoLeído para verificar que el último progreso leído era un progreso inmediatamente anterior al progreso actual y confirmar así que la lectura actual es confiable. Esto sucede por ejemplo en el caso de tener 15 aldeanos y en el mismo segundo perder 3 aldeanos (improbable, pero podría suceder), la siguiente lectura serían 11 aldeanos que sería descartada por no estar en el rango esperado 13-14-15-16-17, el RTS Helper pasaría al paso con progreso 16 y la siguente lectura sería 12 que tampoco estaría en el rango 14-15-16-17-18, pero si sería un consecutivo desde el último progreso leído 11, entonces se considerará que es confiable. Se agrega también el consecutivo hacia atrás para considerar el caso de 3 aldeanos muertos seguidos por uno más muerto.      
+                var cambioMáximo = 15;
+                var cambioGrande = ÚltimoProgresoLeído != null && Math.Abs((int)progresoLeído - (int)ÚltimoProgresoLeído) > cambioMáximo;
+                if (cambioGrande) confiable = false; // No acepta cambios de más de cambioMáximo pasos. Podría suceder en lecturas erroneas donde confunde el número de las decenas con otro número y generar consecutivos falsos. Estaba sucediendo 8 por 78 y 9 por 79, pero podría funcionar con otros 2 números cualquiera, por ejemplo 15 y 75 o 33 y 83, etc. El cambioMáximo = 15 pasos es una cantidad máxima razonable considerando que se lee cada segundo. No se usa 10 porque se podría dar el caso de que no se puedan leer 10 progresos consecutivos (como el caso del 90 con AOE2 a 1080p) entonces cuando hiciera la lectura correcta no la aceptaría. 
+
+                if (confianza > 0 && !cambioGrande) {
+                    ÚltimoProgresoLeído = progresoLeído;
+                } else {
+                    ÚltimoProgresoLeído = null;
+                }
+
+                if (confiable || (confianza > 0 && forzarAplicación)) { // Cuando se quiere forzar la aplicación del progreso actual no se tiene en cuenta si es consecutivo o no. Solo se considera si la confianza es mayor que cero para garantizar que haya alta probabilidad que sea el número correcto.
+
+                    var desface = 0D;
+                    var direcciónBúsqueda = progresoLeído == progresoActual ? 0 : (progresoLeído > progresoActual ? 1 : -1); // Si se está más adelante, se busca en los pasos posteriores y el desface es negativo. Cuando el progresoLeído es igual al progresoActual, no se necesita revisar otros pasos para encontrar el valor de duraciónDesface.
+                    var encontradoPaso = direcciónBúsqueda == 0;
+
+                    if (!encontradoPaso) {
+
+                        var paso = pasoActual + direcciónBúsqueda;
+                        if (direcciónBúsqueda == -1 && paso > OrdenDeEjecución.Pasos.Count - 1) {
+                            desface = (paso - (OrdenDeEjecución.Pasos.Count - 1)) * ObtenerDuraciónPaso(OrdenDeEjecución.Pasos.Count); // Inicia el desface con la duración de los pasos extra después del fin de la build order. Se usa la cuenta como el parámetro para ObtenerDuraciónPaso porque así esta función devuelve el valor predeterminado en preferencias que es el que siempre se usa para estos pasos extra.
+                            paso = OrdenDeEjecución.Pasos.Count - 1; // Cuando está en pasos superiores al último, se inicia la búsqueda hacia atrás en el último paso.
+                        }
+
+                        while (paso >= 0 && paso <= OrdenDeEjecución.Pasos.Count - 1) {
+
+                            if (progresoLeído == OrdenDeEjecución.Pasos[paso].Comportamiento?.Progreso) {
+                                if (direcciónBúsqueda == -1) desface += -direcciónBúsqueda * ObtenerDuraciónPaso(paso); // Si la búsqueda es hacia atrás, tiene en cuenta el paso final. Por ejemplo, si se está en el inicio del paso de 7 aldeanos y se mueren 3 aldeanos, se debe sumar el largo del paso 6, 5 y 4 (que es el paso en el que se cumple la condición progresoLeído == OrdenDeEjecución.Pasos[paso].Comportamiento?.Progreso). Si la búsqueda es hacia adelante, no se suma el paso en el que se cumple la condición. Por ejemplo, si se tienen 4 aldeanos y se está en el final del paso y se convierten 3 en el mismo momento, se debe sumar la duración del paso de 5 aldeanos y de 6 aldeanos. El de 7 no se suma porque queda al inicio de este. Los ajustes de pasos incompletos para ambos casos se hacen en el condicional siguiente if (encontradoPaso).
+                                encontradoPaso = true;
+                                break;
+                            }
+                            desface += -direcciónBúsqueda * ObtenerDuraciónPaso(paso);
+                            paso += direcciónBúsqueda;
+
+                        }
+
+                    }
+
+                    if (encontradoPaso) { // Si no se pudo encontrar un paso con el progreso leído, no realiza ninguna acción.
+
+                        if (direcciónBúsqueda <= 0) { // Si la dirección de búsqueda es -1 o 0, el desface es positivo y se debe retrasar/delay el RTS Helper una cantidad positiva igual al tiempo en el paso actual.
+                            desface += segundosJuegoPasoActual;
+                        } else { // Si la duración de búsqueda es 1, el desface es negativo y se debe avanzar/rush el RTS Helper para ponerlo al día con el juego. Esto es causado por ejemplo, por una conversión de un aldeano por un monje.
+                            desface -= (ObtenerDuraciónPaso(pasoActual) - segundosJuegoPasoActual);
+                        }
+
+                        if (desface > Preferencias.MinimumDelayToAutoAdjustIdleTime || desface < -Preferencias.MinimumDelayToAutoAdjustIdleTime) {
+
+                            LblDepuración.Content = $"Desface: {desface:##.0} s";
+                            Desfazar(desface * 1000, desfazarReloj: false);
+
+                        } else {
+                            LblDepuración.Content = $"No Desface";
+                        }
+
+                    } else {
+                        LblDepuración.Content = $"No Encontrado Paso";
+                    }
+
+                } else {
+
+                    if (confianza < 0) {
+                        LblDepuración.Content = $"No Confiable";
+                    } else {
+                        LblDepuración.Content = $"No Consecutivo";
+                    }
+
+                }
+
+                LblDepuración.Content += $"{Environment.NewLine}Progreso Leído: {(confianza < 0 ? "x" : progresoLeído.ToString())}{Environment.NewLine}Progreso: {progresoActual}";
+
+            } else {
+                ÚltimoProgresoLeído = null;
+                LblDepuración.Content = $"No Leído{Environment.NewLine}Progreso Leído: {(confianza < 0 ? "x" : progresoLeído.ToString())}{Environment.NewLine}Progreso: {progresoActual}";
+            }
+
+        } // DetectarProgreso>
 
 
         private void ActualizarUI(bool forzar = false) {
@@ -1412,14 +1467,16 @@ namespace RTSHelper {
     
             OrdenDeEjecución.MostrarPaso(númeroPaso, formatoPaso, SpnPaso, mostrarSiempreÚltimoPaso: true, 
                 this.Height - Preferencias.BottomMargenSteps - Preferencias.TopMarginCurrentStep, HorizontalAlignment.Left,
-                Preferencias.BottomMargenSteps, out bool superóAltoPasoActual);
+                Preferencias.BottomMargenSteps, out bool superóAltoPasoActual, out string? errores);
 
             var superóAltoSiguientePaso = false;
+            var erroresSiguientePaso = (string?)null;
             if (númeroPaso != null && ((!ForzarMostrarPasoAnterior && ObtenerMostrarSiguientePaso((int)númeroPaso)) || ForzarMostrarPasoSiguiente)) {
 
                 OrdenDeEjecución.MostrarPaso(númeroPaso + 1, formatoSiguientePaso, SpnPasoSiguienteAnterior, mostrarSiempreÚltimoPaso: false,
                     this.Height - (SpnInferior.ActualHeight == 0 ? 42 : SpnInferior.ActualHeight) - Preferencias.BottomMargenSteps 
-                    - Preferencias.TopMarginNextStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoSiguientePaso); // ActualHeight es cero al iniciar antes de cargar la interface, entonces se usa un valor fijo aproximado de 42.
+                    - Preferencias.TopMarginNextStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoSiguientePaso, 
+                    out erroresSiguientePaso); // ActualHeight es cero al iniciar antes de cargar la interface, entonces se usa un valor fijo aproximado de 42.
                 Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Visible;
 
             } else {
@@ -1427,12 +1484,14 @@ namespace RTSHelper {
             }
 
             var superóAltoAnteriorPaso = false;
+            var erroresAnteriorPaso = (string?)null;
             if (númeroPaso != null && númeroPaso > 0 && !OrdenDeEjecución.EsPasoDespuésDeÚltimo && (!ForzarMostrarPasoSiguiente && (ObtenerMostrarAnteriorPaso((int)númeroPaso)) 
                 || ForzarMostrarPasoAnterior)) {
 
                 OrdenDeEjecución.MostrarPaso(númeroPaso - 1, formatoSiguientePaso, SpnPasoAnterior, mostrarSiempreÚltimoPaso: false,
                     this.Height - (SpnInferior.ActualHeight == 0 ? 42 : SpnInferior.ActualHeight) - Preferencias.BottomMargenSteps
-                    - Preferencias.TopMarginNextStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoAnteriorPaso);
+                    - Preferencias.TopMarginNextStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoAnteriorPaso, 
+                    out erroresAnteriorPaso);
                 Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Visible;
                 Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Collapsed;
 
@@ -1440,8 +1499,19 @@ namespace RTSHelper {
                 Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Collapsed;
             }
 
-            if (this.WindowState == WindowState.Normal) 
-                BtnAlert.Visibility = (superóAltoPasoActual || superóAltoSiguientePaso || superóAltoAnteriorPaso) ? Visibility.Visible : Visibility.Collapsed;
+            if (this.WindowState == WindowState.Normal) {
+
+                BtnAlert.ToolTip = "";
+                var altoSuperado = (superóAltoPasoActual || superóAltoSiguientePaso || superóAltoAnteriorPaso);
+                var algúnError = errores != null || erroresAnteriorPaso != null || erroresSiguientePaso != null;
+                if (altoSuperado) BtnAlert.ToolTip = (string)BtnAlert.ToolTip + Application.Current.Resources["AlertContentMoreHeightThanWindow"];
+                if (algúnError) {
+                    BtnAlert.ToolTip = (string)BtnAlert.ToolTip + (altoSuperado ? Environment.NewLine : "") 
+                        + $"{errores}{erroresAnteriorPaso}{erroresSiguientePaso}".Trim();
+                }    
+                BtnAlert.Visibility = (altoSuperado || algúnError) ? Visibility.Visible : Visibility.Collapsed;
+
+            }
 
         } // ActualizarContenidoPaso>
 
@@ -1456,6 +1526,11 @@ namespace RTSHelper {
 
             OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder);
             if (!iniciando) ActualizarPaso(stop: Estado == EEstado.Stoped, cargandoBuildOrder: true);
+            if (EsFavorita(Preferencias.Game, Preferencias.CurrentBuildOrder)) {
+                MniAdicionarEliminarDeFavoritos.Header = " ★    Remove from Favorites";
+            } else {
+                MniAdicionarEliminarDeFavoritos.Header = " ☆    Add to Favorites";
+            }
 
         } // CargarBuildOrder>
 

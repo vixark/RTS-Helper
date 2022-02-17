@@ -2811,6 +2811,37 @@ namespace RTSHelper {
         public static bool Jugando() => NombresVentanasJuegos.Contains(ObtenerNombreVentanaActual());
 
 
+        public static bool EsFavorita(string juego, string nombreÓrdenDeEjecución) => Preferencias.FavoriteBuildOrders.ContainsKey(Preferencias.Game) 
+            && Preferencias.FavoriteBuildOrders[juego].Contains(nombreÓrdenDeEjecución.ToLower());
+
+
+        public static void AgregarAFavoritos(string juego, string nombreÓrdenDeEjecución) {
+
+            if (!EsFavorita(juego, nombreÓrdenDeEjecución)) { 
+                if (!Preferencias.FavoriteBuildOrders.ContainsKey(juego)) Preferencias.FavoriteBuildOrders.Add(juego, new List<string>());
+                Preferencias.FavoriteBuildOrders[juego].Add(nombreÓrdenDeEjecución.ToLower()); 
+            }
+            Settings.Guardar(Preferencias, RutaPreferencias);
+
+        } // AgregarAFavoritos>
+
+
+        public static void EliminarDeFavoritos(string juego, string nombreÓrdenDeEjecución) {
+
+            if (EsFavorita(juego, nombreÓrdenDeEjecución)) Preferencias.FavoriteBuildOrders[juego].Remove(nombreÓrdenDeEjecución.ToLower());
+            Settings.Guardar(Preferencias, RutaPreferencias);
+
+        } // EliminarDeFavoritos>
+
+
+        public static bool RequiereAgregarÓrdenDeEjecución(string juego, string nombreÓrdenDeEjecución, out bool juegoSinFavoritas) {
+
+            juegoSinFavoritas = !Preferencias.FavoriteBuildOrders.ContainsKey(juego) || Preferencias.FavoriteBuildOrders[juego].Count == 0;
+            return juegoSinFavoritas || !Preferencias.ShowOnlyFavoriteBuildOrders || EsFavorita(juego, nombreÓrdenDeEjecución);
+
+        } // RequiereAgregarÓrdenDeEjecución>
+
+
         #endregion Procedimientos y Funciones>
 
 

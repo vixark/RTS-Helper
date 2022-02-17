@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -16,7 +17,7 @@ using System.Threading;
 
 
 
-// Algunas funciones copiadas textualmente desde Vixark.cs.
+// Funciones copiadas textualmente desde Vixark.cs.
 namespace Vixark {
 
 
@@ -82,6 +83,18 @@ namespace Vixark {
         /// </summary>
         public static string? AMinúscula(this string? texto) => texto?.ToLowerInvariant();
 
+
+        /// <summary>
+        /// Abre un archivo en Windows.
+        /// </summary>
+        /// <param name="rutaArchivo"></param>
+        public static bool AbrirArchivo(string? rutaArchivo) {
+
+            if (rutaArchivo == null || !File.Exists(rutaArchivo)) return false;
+            Process.Start(new ProcessStartInfo(rutaArchivo) { UseShellExecute = true });
+            return true;
+
+        } // AbrirArchivo>
 
 
         public static System.Windows.Media.Color? ObtenerMediaColor(string textoColor) {

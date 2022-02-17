@@ -31,7 +31,7 @@ namespace RTSHelper {
 
         public double StepDuration { get; set; } = StepDurationPredeterminado;
 
-        public string CurrentBuildOrder { get; set; } = "Default";
+        public string CurrentBuildOrder { get; set; } = "Tutorial";
 
         public bool ShowNextStep { get; set; } = ShowNextStepPredeterminado;
 
@@ -254,6 +254,15 @@ namespace RTSHelper {
         public int BackMultipleSteps { get; set; } = 5;
 
         #endregion Control>
+
+
+        #region Órdenes de Ejecución Favoritas
+
+        public Dictionary<string, List<string>> FavoriteBuildOrders { get; set; } = new Dictionary<string, List<string>>(); // La clave es el nombre del juego y
+
+        public bool ShowOnlyFavoriteBuildOrders { get; set; } = false;
+
+        #endregion Órdenes de Ejecución Favoritas>
 
 
         #region Nombres

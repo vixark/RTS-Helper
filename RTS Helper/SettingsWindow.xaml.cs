@@ -491,7 +491,7 @@ namespace RTSHelper {
             CmbEndSound.Text = NoneSoundString;
             var extensionesAudio = new List<string> { ".mp3", ".wav", ".wma", ".ogg", ".acc", ".flac" };
 
-            var rutasSonidosCortos = Directory.GetFiles(DirectorioSonidosCortos);
+            var rutasSonidosCortos = Directory.GetFiles(DirectorioSonidosCortos); // Si saca error aquí, posiblemente es que se olvidó reactivar ModoDesarrollo.
             foreach (var rutaSonidoCorto in rutasSonidosCortos) {
                 var extensión = Path.GetExtension(rutaSonidoCorto).ToLower();
                 if (extensionesAudio.Contains(extensión) || string.IsNullOrEmpty(extensión)) 

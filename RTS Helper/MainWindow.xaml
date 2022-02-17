@@ -125,8 +125,7 @@
             <local:HoverButton Click="BtnAlert_Click" x:Name="BtnAlert" BorderThickness="0" Foreground="Red" Visibility="Collapsed"
                                FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}" 
                                Width="{Binding ActualHeight, ElementName=BtnSettings, Mode=OneWay}" Style="{StaticResource customButton}" 
-                               bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
-                               ToolTip="{DynamicResource AlertContentMoreHeightThanWindow}">⚠</local:HoverButton>
+                               bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205">⚠</local:HoverButton>
 
             <local:HoverButton x:Name="BtnStats" Click="BtnStats_Click" Visibility="{DynamicResource VisibilidadBotónStats}" 
                                BorderThickness="0" Foreground="{DynamicResource BrushFuente}" 
@@ -212,7 +211,6 @@
                         <local:HoverButton.ContextMenu>
                             <ContextMenu>
                                 <MenuItem x:Name="MniResetIdleTime" Click="MniResetIdleTime_Click" Header="🗙      Reset Idle Time" />
-                                <Separator BorderBrush="#BBB" BorderThickness="0 2 0 0" Margin="0 5 0 5" />
                                 <MenuItem x:Name="MniAddIdleTime" Click="MniAddIdleTime_Click" Header="➕     Add Idle Time" />
                                 <Separator BorderBrush="#BBB" BorderThickness="0 2 0 0" Margin="0 5 0 5" />
                                 <MenuItem x:Name="MniBackMultipleSteps" Click="MniBackMultipleSteps_Click" Header="|◁      Back X Steps" />
@@ -234,6 +232,7 @@
                                 <MenuItem x:Name="MniLastStep" Click="MniLastStep_Click"  Header="➤      Go to Last Step" />
                                 <Separator BorderBrush="#BBB" BorderThickness="0 2 0 0" Margin="0 5 0 5" />
                                 <MenuItem x:Name="MniRemoveIdleTime" Click="MniRemoveIdleTime_Click" Header="➖     Remove Idle Time" />
+                                <MenuItem x:Name="MniSynchronizeProgress" Click="MniSynchronizeProgress_Click" Header=" ⇄      Synchronize Progress" />
                                 <Separator BorderBrush="#BBB" BorderThickness="0 2 0 0" Margin="0 5 0 5" />
                                 <MenuItem x:Name="MniNextMultipleSteps" Click="MniNextMultipleSteps_Click" Header="▷|      Next X Steps" />
                                 <MenuItem x:Name="MniFordward" Click="MniFordward_Click" Header="▷▷    Fordward X Seconds" />
@@ -290,10 +289,13 @@
                       Style="{StaticResource ComboBoxColor}" Margin="{DynamicResource MargenBotones}" Foreground="{DynamicResource BrushFuente}" 
                       Width="{DynamicResource AnchoSelectorBuildOrder}" FontSize="{DynamicResource FuenteNormal}" VerticalAlignment="Center">
                     
-                    <ComboBoxItem>Default</ComboBoxItem>
+                    <ComboBoxItem>Tutorial</ComboBoxItem>
                     <ComboBox.ContextMenu>
                         <ContextMenu>
-                            <MenuItem x:Name="MniReloadBuildOrder" Click="MniReloadBuildOrder_Click"  Header="Reload" />
+                            <MenuItem x:Name="MniEditarBuildOrder" Click="MniEditarBuildOrder_Click"  Header="✎   Edit" />
+                            <MenuItem x:Name="MniRecargarBuildOrder" Click="MniRecargarBuildOrder_Click"  Header="⟳     Reload" />
+                            <MenuItem x:Name="MniAdicionarEliminarDeFavoritos" Click="MniAdicionarEliminarDeFavoritos_Click"  Header="★" />
+                            <MenuItem x:Name="MniAlternarVerSoloFavoritos" Click="MniAlternarVerSoloFavoritos_Click"  Header="👁  Show Only Favorites" />
                         </ContextMenu>
                     </ComboBox.ContextMenu>
 
