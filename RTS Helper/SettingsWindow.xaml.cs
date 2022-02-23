@@ -583,7 +583,7 @@ namespace RTSHelper {
 
             if (!Activado) return;
             Preferencias.Game = ObtenerSeleccionadoEnCombobox(e); 
-            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game);
+            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false);
             TxtStepDuration.Text = Preferencias.StepDuration.ToString(); // Es el único valor que se actualiza en la interface de preferencias después de haber cambiado el juego. No es lo más óptimo, pero de todas maneras lo ideal es que cada archivo de txt de build orders traiga su propio StepDuration.
             VentanaPrincipal.AplicarPreferencias();
             CrearEntidadesYNombres();
@@ -611,7 +611,7 @@ namespace RTSHelper {
 
             if (!Activado) return;
             Preferencias.ScreenResolution = ObtenerSeleccionadoEnCombobox(e);
-            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game);
+            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: true);
             VentanaPrincipal.AplicarPreferencias();
 
         } //CmbResolution_SelectionChanged>

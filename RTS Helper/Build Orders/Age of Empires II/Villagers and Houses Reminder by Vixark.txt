@@ -1,0 +1,209 @@
+|| Author: Vixark, Date: 18/02/2022, Description: Not a build order, reminds you to keep creating villagers and building houses. ||
+
+{{t=25 empty={fc="none" s="none"}}}
+
+<<r=<b xs is100> x=<sub>>>
+
+[[<b>Villagers and Houses Reminder<>   Helps you to keep creating [v] and building [hs]   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy]]
+
+|| 0 || + 4[v]   + 2 [hs]
+
+|| 1 || {empty} [1s]
+
+|| 2 || {empty} [1s]
+
+|| 3 || +[v]
+
+|| 4 || +[v]
+
+|| 5 || +[v]
+
+|| 6 || +[v]
+
+|| 7 || +[v]
+
+|| 8 || +[v]
+
+|| 9 || +[v]   + [hs]
+
+|| 10 || +[v]
+
+|| 11 || +[v]
+
+|| 12 || +[v]
+
+|| 13 || +[v]
+
+|| 14 || +[v]   + [hs]
+
+|| 15 || +[v]
+
+|| 16 || +[v]
+
+|| 17 || +[v]
+
+|| 18 || +[v]
+
+|| 19 || +[v]   + [hs]
+
+|| 20 || +[v]
+
+|| 21 || +[v]
+
+|| 22 || +[v]
+
+|| 23 || +[v]
+
+|| 24 || + 2 [v]   + 2 [hs]
+
+|| 25 || {empty} [1s]
+
+|| 26 || + 2 [v]
+
+|| 27 || {empty} [1s]
+
+|| 28 || + 2 [v]   + 2 [hs]
+
+|| 29 || {empty} [1s]
+
+|| 30 || + 2 [v]
+
+|| 31 || {empty} [1s]
+
+|| 32 || + 2 [v]   + 2 [hs]
+
+|| 33 || {empty} [1s]
+
+|| 34 || + 2 [v]
+
+|| 35 || {empty} [1s]
+
+|| 36 || + 2 [v]   + 2 [hs]
+
+|| 37 || {empty} [1s]
+
+|| 38 || + 2 [v]
+
+|| 39 || {empty} [1s]
+
+|| 40 || + 2 [v]   + 2 [hs]
+
+|| 41 || {empty} [1s]
+
+|| 42 || + 2 [v]
+
+|| 43 || {empty} [1s]
+
+|| 44 || + 2 [v]   + 2 [hs]
+
+|| 45 || {empty} [1s]
+
+|| 46 || + 2 [v]
+
+|| 47 || {empty} [1s]
+
+|| 48 || + 2 [v]   + 2 [hs]
+
+|| 49 || {empty} [1s]
+
+|| 50 || + 2 [v]
+
+|| 51 || {empty} [1s]
+
+|| 52 || + 2 [v]   + 4 [hs]
+
+|| 53 || {empty} [1s]
+
+|| 54 || + 2 [v]
+
+|| 55 || {empty} [1s]
+
+|| 56 || + 2 [v]   + 4 [hs]
+
+|| 57 || {empty} [1s]
+
+|| 58 || + 2 [v]
+
+|| 59 || {empty} [1s]
+
+|| 60 || + 2 [v]   + 4 [hs]
+
+|| 61 || {empty} [1s]
+
+|| 62 || + 2 [v]
+
+|| 63 || {empty} [1s]
+
+|| 64 || + 2 [v]   + 4 [hs]
+
+|| 65 || {empty} [1s]
+
+|| 66 || + 2 [v]
+
+|| 67 || {empty} [1s]
+
+|| 68 || + 2 [v]   + 4 [hs]
+
+|| 69 || {empty} [1s]
+
+|| 70 || + 2 [v]
+
+|| 71 || {empty} [1s]
+
+|| 72 || + 2 [v]   + 4 [hs]
+
+|| 73 || {empty} [1s]
+
+|| 74 || + 2 [v]
+
+|| 75 || {empty} [1s]
+
+|| 76 || + 2 [v]
+
+|| 77 || {empty} [1s]
+
+|| 78 || + 2 [v]
+
+|| 79 || {empty} [1s]
+
+|| 80 || + 2 [v]
+
+|| 81 || {empty} [1s]
+
+|| 82 || + 2 [v]
+
+|| 83 || {empty} [1s]
+
+|| 84 || + 2 [v]
+
+|| 85 || {empty} [1s]
+
+|| 86 || + 2 [v]
+
+|| 87 || {empty} [1s]
+
+|| 88 || + 2 [v]
+
+|| 89 || {empty} [1s]
+
+|| 90 || + 2 [v]
+
+|| 91 || {empty} [1s]
+
+|| 92 || + 2 [v]
+
+|| 93 || {empty} [1s]
+
+|| 94 || + 2 [v]
+
+|| 95 || {empty} [1s]
+
+|| 96 || + 2 [v]
+
+|| 97 || {empty} [1s]
+
+|| 98 || + 2 [v]
+
+|| 99 || {empty} [1s]
+
+|| 100 || + 2 [v]

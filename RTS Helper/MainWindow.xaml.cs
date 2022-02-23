@@ -140,10 +140,12 @@ namespace RTSHelper {
             SupervisorOrdenDeEjecuciónActual.EnableRaisingEvents = true;
 
             if (ModoDesarrollo) {
+
                 SupervisorOrdenDeEjecuciónActualEnCódigo = new FileSystemWatcher { NotifyFilter = NotifyFilters.LastWrite };
                 ActualizarSupervisorOrdenDeEjecuciónEnCódigo();
                 SupervisorOrdenDeEjecuciónActualEnCódigo.Changed += OrdenDeEjecuciónActualEnCódigo_Changed;
                 SupervisorOrdenDeEjecuciónActualEnCódigo.EnableRaisingEvents = true;
+
             }
 
             CrearEntidadesYNombres();
@@ -979,11 +981,11 @@ namespace RTSHelper {
         private void DetectarProgreso(bool forzarAplicación) { // En mi computador tarda alrededor de 50 ms. La verificación de aldeanos es casi siempre un solo ensayo.
 
             if (ModoDesarrolloOCR) {
+
                 var progresoLeído2 = LeerProgreso(50, out float confianza2, rangoValoresEsperados: 0); // No se usa rango de valores esperados para no contaminar las pruebas OCR con un dato de progreso actual. Se debe usar un número cualquiera de una cifra, de dos y de tres para probar el funcionamiento de la extracción de texto en cada uno de los segmentos.
-                //var progresoLeído3 = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, new List<string>(), out float confianza3,
-                //        extraConfianzaRequerida: 0.3f) ?? "";
                 LblDepuración.Content = $"Progreso Leído: {progresoLeído2.ToString()}{Environment.NewLine}Confianza: {confianza2}";
                 return; // En este modo se desactiva el ajuste de progreso automático para facilitar realizar los ensayos.
+
             }
             if (!Preferencias.AutoAdjustIdleTime) return;
             if (!forzarAplicación && !Jugando()) return;
@@ -1284,7 +1286,7 @@ namespace RTSHelper {
                 Preferencias = new Settings();
                 var resoluciónRecomendada = ObtenerResoluciónRecomendada();
                 var juegoRecomendado = AOE2Name;
-                Preferencias.EstablecerValoresRecomendados(resoluciónRecomendada, juegoRecomendado);
+                Preferencias.EstablecerValoresRecomendados(resoluciónRecomendada, juegoRecomendado, cambióResolución: false);
                 var winSettings = new SettingsWindow(primerInicio: true, this);
                 winSettings.ShowDialog();
 
@@ -1292,7 +1294,7 @@ namespace RTSHelper {
             if (Preferencias.StepEndSoundDuration == 0) Preferencias.StepEndSoundDuration = ObtenerDuraciónEndStepSound(ObtenerPresonido(-1));
 
             AplicarPreferencias(iniciando: true);
-            CrearOCompletarScreenCaptureRectangles(); // Se debe hacer siempre después de finalizar la lectura de preferencias para agregar los nuevos rectángulos generales (los que no tiene el usuario).
+            CrearOCompletarScreenCaptureRectangles(cambióResolución: false); // Se debe hacer siempre después de finalizar la lectura de preferencias para agregar los nuevos rectángulos generales (los que no tiene el usuario).
 
         } // LeerPreferencias>
 
@@ -1559,7 +1561,7 @@ namespace RTSHelper {
             if (this.Top > SystemParameters.PrimaryScreenHeight || this.Left > SystemParameters.PrimaryScreenWidth) {
 
                 Preferencias.ScreenResolution = ObtenerResoluciónRecomendada();
-                Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game);
+                Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false);
                 AplicarPreferencias();
 
             }

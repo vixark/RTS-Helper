@@ -112,7 +112,7 @@ namespace RTSHelper {
                                 if (Preferencias.OverrideStepStartSound) {
                                     Sonido = valor;
                                     if (Sonido == "default") Sonido = Preferencias.StepStartSound;
-                                    if (Sonido != "none" && !File.Exists(Path.Combine(DirectorioSonidosCortos, Sonido))) {
+                                    if (Sonido.ToLower() != NoneSoundString.ToLower() && !File.Exists(Path.Combine(DirectorioSonidosCortos, Sonido))) {
                                         MostrarError($"{Sonido} sound file doesn't exists in {DirectorioSonidosCortos}.");
                                         Sonido = null;
                                     }
@@ -124,7 +124,7 @@ namespace RTSHelper {
                                 if (Preferencias.OverrideStepEndSound) {
                                     Presonido = valor;
                                     if (Presonido == "default") Presonido = Preferencias.StepEndSound;
-                                    if (Presonido != "none" && !File.Exists(Path.Combine(DirectorioSonidosLargos, Presonido))) {
+                                    if (Presonido.ToLower() != NoneSoundString.ToLower() && !File.Exists(Path.Combine(DirectorioSonidosLargos, Presonido))) {
                                         MostrarError($"{Presonido} sound file doesn't exists in {DirectorioSonidosLargos}.");
                                         Presonido = null;
                                     }
@@ -133,7 +133,7 @@ namespace RTSHelper {
 
                             case "fc":
 
-                                if (valor == "none") {
+                                if (valor.ToLower() == NoneSoundString.ToLower()) {
                                     if (Preferencias.OverrideFlashOnStepChange) Flash = false;
                                 } else {
 

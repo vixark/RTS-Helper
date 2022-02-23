@@ -216,9 +216,9 @@ namespace RTSHelper {
 
         public static bool StopFlashingOnCompletePredeterminado = true;
 
-        public static string StepStartSoundPredeterminado = "Ticket Machine 2.mp3";
+        public static string StepStartSoundPredeterminado = NoneSoundString; // Antes se tenía "Ticket Machine 2.mp3", pero se consideró que por defecto el programa funciona suficientemente bien con el color flash sin sonidos, aunque se podrían especificar un sonido por defecto según el juego/aplicación que se le vaya a dar.
 
-        public static string StepEndSoundPredeterminado = "Stopwatch.mp3";
+        public static string StepEndSoundPredeterminado = NoneSoundString; // Antes se tenía "Stopwatch.mp3", ver explicación de decisión en StepStartSoundPredeterminado.
 
         public static int StepStartSoundVolumePredeterminado = 50;
 
@@ -2455,11 +2455,12 @@ namespace RTSHelper {
                     
                 } else if (progresoActual > 10 && progresoActual < 99) {
 
-                    var extraConfianzaRequerida 
-                        = progresoActual >= 90 && progresoActual <= 99 && Preferencias.ScreenResolution != "2560x1440" ? 0.2f : 0f; // Con la nueva fuente Sans Serif de 2022 el intervalo de 90 a 99 es muy inexacto y puede producir números consecutivos incorrectos en 98 y 99 que pueden ser leídos como 8 y 9. Para evitar, este problema se sube la confianza para que el 98 que se lee como 8 con confianza 0,61, no se lea.
+                    var extraConfianzaRequerida = 0F;
+                    if (progresoActual >= 74 && progresoActual <= 78 && Preferencias.ScreenResolution == "2560x1440") extraConfianzaRequerida = 0.25F; // Con el 76 el OCR se enloquece y devuelve 716 sin razón alguna. Esta extra confianza hace que no se acepte ese 716 y se obtenga una lectura correcta con otros parámetros.
+                    if (progresoActual >= 90 && progresoActual <= 99 && Preferencias.ScreenResolution == "1920x1080") extraConfianzaRequerida = 0.2F; // Con la nueva fuente Smooth Serif de 2022 para la resolución 1920x1080 el intervalo de 90 a 99 es muy inexacto y puede producir números consecutivos incorrectos en 98 y 99 que pueden ser leídos como 8 y 9. Para evitar, este problema se sube la confianza para que el 98 que se lee como 8 con confianza 0,61, no se lea.
                     texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, valoresEsperados, out confianza, 
-                        extraConfianzaRequerida);
-
+                        extraConfianzaRequerida: extraConfianzaRequerida);
+            
                 } else if (progresoActual == 99 || progresoActual == 100) {
 
                     var texto3n = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, valoresEsperados, out float c3n);
@@ -2492,7 +2493,7 @@ namespace RTSHelper {
 
         public static SDrw.RectangleF ObtenerRectánguloTextoEnPantalla(ScreenCaptureText tipo) {
 
-            if (Preferencias.ScreenCaptureRectangles == null) CrearOCompletarScreenCaptureRectangles();
+            if (Preferencias.ScreenCaptureRectangles == null) CrearOCompletarScreenCaptureRectangles(cambióResolución: false);
             if (Preferencias.ScreenCaptureRectangles!.ContainsKey(tipo)) { // Después de CrearOCompletarScreenCaptureRectangles() se asegura que Preferencias.ScreenCaptureRectangles no es nulo.
                 return Preferencias.ScreenCaptureRectangles![tipo]; 
             } else {
@@ -2502,7 +2503,7 @@ namespace RTSHelper {
         } // ObtenerRectánguloTextoEnPantalla>
 
 
-        public static void CrearOCompletarScreenCaptureRectangles() {
+        public static void CrearOCompletarScreenCaptureRectangles(bool cambióResolución) {
 
             var cambió = false;
             if (Preferencias.ScreenCaptureRectangles == null) {
@@ -2516,16 +2517,43 @@ namespace RTSHelper {
                     new SDrw.RectangleF(582F / 2560, 49F / 1440, 13F / 2560, 17F / 1440)); // El algoritmo de OCR es inestable, cambia con el recorte realizado. Se debe procurar hacer siempre el mismo recorte. Si se cambia el rectángulo de recorte, se deben verificar la estabilidad del algoritmo con todos los números del rango aplicable.
             }
 
-            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99)) {
+            if (cambióResolución || !Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99)) {
+
                 cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99,
-                     new SDrw.RectangleF(571F / 2560, 48F / 1440, 23F / 2560, 17F / 1440));
+                var xSerif = 573F / 2560;
+                var xSmoothSerif = 571F / 2560;
+                var x = Preferencias.ScreenResolution == "1920x1080" ? xSmoothSerif : xSerif; // La resolución 1920x1080 fuerza la fuente Smooth Serif, entonces se requiere un recorte diferente.
+                var rectángulo = new SDrw.RectangleF(x, 48F / 1440, 23F / 2560, 17F / 1440);
+
+                if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99)) {
+                    Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, rectángulo);
+                } else {
+
+                    var xActual = Preferencias.ScreenCaptureRectangles[ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99].X;
+                    if (xActual == xSerif || xActual == xSmoothSerif) 
+                        Preferencias.ScreenCaptureRectangles[ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99] = rectángulo; // Evita cambiarlo para los usuarios que lo tengan personalizado. La manera más fácil de reconocer que no lo tienen personalizado es que el x sea uno de los predeterminados.
+
+                }
+                
             }          
 
-            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999)) {
+            if (cambióResolución || !Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999)) {
+                
                 cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999,
-                     new SDrw.RectangleF(563F / 2560, 49F / 1440, 30F / 2560, 17F / 1440));
+                var xSerif = 565F / 2560;
+                var xSmoothSerif = 563F / 2560;
+                var x = Preferencias.ScreenResolution == "1920x1080" ? xSmoothSerif : xSerif; // La resolución 1920x1080 fuerza la fuente Smooth Serif, entonces se requiere un recorte diferente.
+                var rectángulo = new SDrw.RectangleF(x, 49F / 1440, 30F / 2560, 17F / 1440);
+                if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999)) {
+                    Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, rectángulo);
+                } else {
+
+                    var xActual = Preferencias.ScreenCaptureRectangles[ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999].X;
+                    if (xActual == xSerif || xActual == xSmoothSerif)
+                        Preferencias.ScreenCaptureRectangles[ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999] = rectángulo; // Evita cambiarlo para los usuarios que lo tengan personalizado. La manera más fácil de reconocer que no lo tienen personalizado es que el x sea uno de los predeterminados.
+
+                }
+
             }
             
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseM)) {
@@ -2585,7 +2613,7 @@ namespace RTSHelper {
                 case ScreenCaptureText.Age_of_Empires_II_PauseF3M:
                 case ScreenCaptureText.Age_of_Empires_II_PauseF3L:
                 case ScreenCaptureText.Age_of_Empires_II_PauseF3XL:
-                    return AlfaNumNegByNL1_5C2;
+                    return AlfaNumNegByNL2C2; // Para Smooth Serif: AlfaNumNegByNL1_5C2. El cambio de fuente a Smooth Serif en 1920x1080 solo aplica para los números de recursos y la cantidad de aldeanos, no aplica para la fuente del texto de pausa.
                 case ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9:
 
                     switch (númeroRecomendado) {
@@ -2593,33 +2621,36 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                    return HQBCL1_5C2x16; // Smooth Serif.
                                 case "1366x768":
-                                    return HQBCL1_5C2x16;
+                                    return NNL1C2x2; // Para Smooth Serif: HQBCL1_5C2x16.
                                 case "2560x1440":
                                 default:
-                                    return NNL2C2x2;
+                                    return NNL2C2x2; // Para Smooth Serif: NNL2C2x2.
                             }
 
                         case 2:
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                    return HQBCL2C2x16; // Smooth Serif.
                                 case "1366x768":
-                                    return HQBCL2C2x16;
+                                    return HQBCL1C2x4; // Para Smooth Serif: HQBCL2C2x16.
                                 case "2560x1440":
                                 default:
-                                    return HQBCL2C2x4;
+                                    return HQBCL2C2x4; // Para Smooth Serif: HQBCL2C2x4.
                             }
 
                         case 3:
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                    return NNL1C2x1; // Smooth Serif.
                                 case "1366x768":
-                                    return NNL1C2x1;
+                                    return NNL1C2x1; // Para Smooth Serif: NNL1C2x1.
                                 case "2560x1440":
                                 default:
-                                    return NNL2C2x1;
+                                    return NNL2C2x1; // Para Smooth Serif: NNL2C2x1.
                             }
                             
                     }
@@ -2632,33 +2663,36 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                    return HQBCL1_5C2x16; // Smooth Serif.
                                 case "1366x768":
-                                    return HQBCL1_5C2x16;
+                                    return HQBCL1C2x16; // Para Smooth Serif: HQBCL1_5C2x16.
                                 case "2560x1440":
                                 default:
-                                    return HQBCL1_5C2x16; // Extrañamente se requiere establecer la variable unCarácter en verdadero para que coincida adecuadamente números de 2 cifras. Parece ser un bug del algorítmo de Tesseract.
+                                    return HQBCL2C2x16; // Para Smooth Serif: HQBCL1_5C2x16. Extrañamente se requiere establecer la variable unCarácter en verdadero para que coincida adecuadamente números de 2 cifras. Parece ser un bug del algorítmo de Tesseract.
                             }
 
                         case 2:
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                    return HQBCL2C2x16; // Smooth Serif.
                                 case "1366x768":
-                                    return HQBCL2C2x16;
+                                    return HQBCL2C6x4; // Para Smooth Serif: HQBCL2C2x16.
                                 case "2560x1440":
                                 default:
-                                    return HQBCL4C6x4;
+                                    return HQBCL4C6x4; // Para Smooth Serif: HQBCL4C6x4.
                             }
 
                         case 3:
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                    return NNL1C2x1; // Smooth Serif.
                                 case "1366x768":
-                                    return NNL1C2x1;
+                                    return NNL1C2x1; // Para Smooth Serif: NNL1C2x1.
                                 case "2560x1440":
                                 default:
-                                    return NNL2C2x1;
+                                    return NNL2C2x1; // Para Smooth Serif: NNL2C2x1.
                             }
                             
                     }
@@ -2671,33 +2705,36 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                    return HQBCL1_5C2x16; // Smooth Serif.
                                 case "1366x768":
-                                    return HQBCL1_5C2x16;
+                                    return HQBCL2C6x4; // Para Smooth Serif: HQBCL1_5C2x16.
                                 case "2560x1440":
                                 default:
-                                    return HQBCL1_5C2x16;
+                                    return HQBCL4C6x4; // Para Smooth Serif: HQBCL1_5C2x16.
                             }
 
                         case 2:
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                    return HQBCL2C2x16; // Smooth Serif.
                                 case "1366x768":
-                                    return HQBCL2C2x16;
+                                    return NNL1C2x1; // Para Smooth Serif: HQBCL2C2x16.
                                 case "2560x1440":
                                 default:
-                                    return HQBCL4C6x4;
+                                    return NNL2C2x1; // Para Smooth Serif: HQBCL4C6x4.
                             }
 
                         case 3:
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                    return NNL1C2x1; // Smooth Serif.
                                 case "1366x768":
-                                    return NNL1C2x1;
+                                    return HQBCL1C2x16; // Para Smooth Serif: NNL1C2x1.
                                 case "2560x1440":
                                 default:
-                                    return NNL2C2x1; 
+                                    return HQBCL2C2x16; // Para Smooth Serif: NNL2C2x1.
                             }
 
                     }

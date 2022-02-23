@@ -452,7 +452,7 @@ namespace RTSHelper {
         } // EstablecerValoresRecomendadosAOE2>
 
 
-        public void EstablecerValoresRecomendados(string resolución, string juego) {
+        public void EstablecerValoresRecomendados(string resolución, string juego, bool cambióResolución) {
 
             Game = juego;
             ScreenResolution = resolución;
@@ -460,6 +460,7 @@ namespace RTSHelper {
             if (juego == AOE2Name) {
 
                 EstablecerValoresRecomendadosAOE2(resolución);
+                if (cambióResolución) CrearOCompletarScreenCaptureRectangles(cambióResolución: true);
 
             } else if (juego == AOE4Name) {
 

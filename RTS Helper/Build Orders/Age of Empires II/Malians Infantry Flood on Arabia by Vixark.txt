@@ -1,6 +1,7 @@
-|| Author: Vixark, Date: 12/02/2022, Description: A sample build order for RTS Helper. Good vs. archer openings. It can beat Extreme AI. ||
+|| Author: Vixark, Date: 12/02/2022, Description: A sample build order for RTS Helper. Good vs. archers if you can wall up without receiving much damage. ||
 
 {{t=25 empty={fc="none" s="none"}}}
+
 <<r=<b xs is100> x=<sub>>>
 
 [[<b>6 [maa] [->] [longsword]@ 3[rax] [->] [champion]@ 5[rax]<>   for <xl>[Malians]<> on <xl>[green arabia]<> [1s] <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy]]
