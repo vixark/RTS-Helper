@@ -63,8 +63,10 @@ namespace RTSHelper {
         public Comportamiento() { }
 
 
-        public Comportamiento(string texto, out Dictionary<string, Comportamiento> clasesLeídas, Dictionary<string, Comportamiento>? clases) {
+        public Comportamiento(string texto, out Dictionary<string, Comportamiento> clasesLeídas, Dictionary<string, Comportamiento>? clases, 
+            out string? errores) {
 
+            errores = null;
             clasesLeídas = new Dictionary<string, Comportamiento>();
             if (string.IsNullOrEmpty(texto)) return; // Si el texto es vacío, no contiene ni comportamientos ni clases.
 
@@ -81,14 +83,17 @@ namespace RTSHelper {
                         var nombreClase = coincidenciasClase.Groups[1].Value;
                         var textoComportamientosClase = coincidenciasClase.Groups[2].Value;
                         if (palabrasClave.Contains(nombreClase)) {
-                            MostrarError($"The behavior class name {nombreClase} is not allowed because it can't have the same name as a keyword.");
+                            AgregarErrores(ref errores, $"The behavior class name {nombreClase} is not allowed because it can't have the same name as a keyword.");
                         } else {
 
                             if (clasesLeídas.ContainsKey(nombreClase)) {
-                                MostrarError($"The behavior class name {nombreClase} is not allowed because it was already added.");
+                                AgregarErrores(ref errores, $"The behavior class name {nombreClase} is not allowed because it was already added.");
                             } else {
-                                clasesLeídas.Add(nombreClase, new Comportamiento(textoComportamientosClase, out _, null));
+
+                                clasesLeídas.Add(nombreClase, new Comportamiento(textoComportamientosClase, out _, null, out string? erroresInternos));
                                 textoMinúscula = textoMinúscula.Replace(coincidenciasClase.Groups[0].Value, "");
+                                AgregarErrores(ref errores, erroresInternos);
+
                             }
 
                         }
@@ -113,7 +118,7 @@ namespace RTSHelper {
                                     Sonido = valor;
                                     if (Sonido == "default") Sonido = Preferencias.StepStartSound;
                                     if (Sonido.ToLower() != NoneSoundString.ToLower() && !File.Exists(Path.Combine(DirectorioSonidosCortos, Sonido))) {
-                                        MostrarError($"{Sonido} sound file doesn't exists in {DirectorioSonidosCortos}.");
+                                        AgregarErrores(ref errores, $"{Sonido} sound file doesn't exists in {DirectorioSonidosCortos}.");
                                         Sonido = null;
                                     }
                                 }
@@ -125,7 +130,7 @@ namespace RTSHelper {
                                     Presonido = valor;
                                     if (Presonido == "default") Presonido = Preferencias.StepEndSound;
                                     if (Presonido.ToLower() != NoneSoundString.ToLower() && !File.Exists(Path.Combine(DirectorioSonidosLargos, Presonido))) {
-                                        MostrarError($"{Presonido} sound file doesn't exists in {DirectorioSonidosLargos}.");
+                                        AgregarErrores(ref errores, $"{Presonido} sound file doesn't exists in {DirectorioSonidosLargos}.");
                                         Presonido = null;
                                     }
                                 }
@@ -143,7 +148,7 @@ namespace RTSHelper {
                                         ColorFlash = valor;
                                         var mediaColorFlash = ObtenerMediaColor(ColorFlash);
                                         if (mediaColorFlash == null) {
-                                            MessageBox.Show($"The value {valor} for fc is invalid.");
+                                            AgregarErrores(ref errores, $"The value {valor} for fc is invalid.");
                                             if (Preferencias.OverrideFlashOnStepChange) Flash = false;
                                         }
 
@@ -161,7 +166,7 @@ namespace RTSHelper {
                                     } else if (valor == "no" || valor == "false") {
                                         MostrarSiguientePaso = false;
                                     } else {
-                                        MessageBox.Show($"The value {valor} for sns is invalid.");
+                                        AgregarErrores(ref errores, $"The value {valor} for sns is invalid.");
                                     }
 
                                 }
@@ -176,14 +181,14 @@ namespace RTSHelper {
                                     } else if (valor == "no" || valor == "false") {
                                         MostrarAnteriorPaso = false;
                                     } else {
-                                        MessageBox.Show($"The value {valor} for sps is invalid.");
+                                        AgregarErrores(ref errores, $"The value {valor} for sps is invalid.");
                                     }
 
                                 }
                                 break;
 
                             default:
-                                MessageBox.Show($"The value {comportamientoId} as a behavior wasn't expected.");
+                                AgregarErrores(ref errores, $"The value {comportamientoId} as a behavior wasn't expected.");
                                 break;
                         }
 
@@ -209,13 +214,13 @@ namespace RTSHelper {
 
                                     int número;
                                     if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número)) {
-                                        MostrarError("t value should be an integer.");
+                                        AgregarErrores(ref errores, "t value should be an integer.");
                                     } else {
 
                                         if (número > 0 && número <= 86400) {
                                             Duración = número;
                                         } else {
-                                            MostrarError("t value should be between 1 and 86400.");
+                                            AgregarErrores(ref errores, "t value should be between 1 and 86400.");
                                         }
 
                                     }
@@ -230,7 +235,7 @@ namespace RTSHelper {
                                     OpacidadFlash = double.Parse(ObtenerTextoNúmeroLocal(valor));
                                     if (OpacidadFlash > 1 || OpacidadFlash < 0) {
                                         OpacidadFlash = null;
-                                        MostrarError("fo value should be between 0 and 1.");
+                                        AgregarErrores(ref errores, "fo value should be between 0 and 1.");
                                     }
 
                                 }
@@ -242,13 +247,13 @@ namespace RTSHelper {
 
                                     int número2;
                                     if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número2)) {
-                                        MostrarError("sv value should be an integer.");
+                                        AgregarErrores(ref errores, "sv value should be an integer.");
                                     } else {
 
                                         if (número2 >= 0 && número2 <= 100) {
                                             VolumenSonido = número2;
                                         } else {
-                                            MostrarError("sv value should be between 0 and 100.");
+                                            AgregarErrores(ref errores, "sv value should be between 0 and 100.");
                                         }
 
                                     }
@@ -262,13 +267,13 @@ namespace RTSHelper {
 
                                     int número3;
                                     if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número3)) {
-                                        MostrarError("esv value should be an integer.");
+                                        AgregarErrores(ref errores, "esv value should be an integer.");
                                     } else {
 
                                         if (número3 >= 0 && número3 <= 100) {
                                             VolumenPresonido = número3;
                                         } else {
-                                            MostrarError("esv value should be between 0 and 100.");
+                                            AgregarErrores(ref errores, "esv value should be between 0 and 100.");
                                         }
 
                                     }
@@ -280,14 +285,14 @@ namespace RTSHelper {
 
                                 int número4;
                                 if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número4)) {
-                                    MostrarError("p value should be an integer.");
+                                    AgregarErrores(ref errores, "p value should be an integer.");
                                 } else {
                                     Progreso = número4;
                                 }
                                 break;
 
                             default:
-                                MostrarError($"To Developer: The value {comportamientoId} as a behavior wasn't expected.");
+                                AgregarErrores(ref errores, $"To Developer: The value {comportamientoId} as a behavior wasn't expected.");
                                 break;
                         }
 

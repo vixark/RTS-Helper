@@ -90,7 +90,7 @@ namespace RTSHelper {
             TxtOpacity.Text = Preferencias.Opacity.ToString();
             TxtBuildOrderPath.Text = Preferencias.BuildOrderCustomDirectory;    
             TxtStepFontSize.Text = Preferencias.CurrentStepFontSize.ToString();
-            TxtNextStepFontSize.Text = Preferencias.NextStepFontSize.ToString();
+            TxtNextPreviousStepFontSize.Text = Preferencias.NextPreviousStepFontSize.ToString();
             ChkShowNextStep.IsChecked = Preferencias.ShowNextStep;
             ChkShowPreviousStep.IsChecked = Preferencias.ShowPreviousStep;
 
@@ -112,7 +112,7 @@ namespace RTSHelper {
 
             CmbFontName.Text = Preferencias.FontName;
             ChkCurrentStepFontBold.IsChecked = Preferencias.CurrentStepFontBold;
-            ChkNextStepFontBold.IsChecked = Preferencias.NextStepFontBold;
+            ChkNextPreviousStepFontBold.IsChecked = Preferencias.NextPreviousStepFontBold;
 
             TxtLineSpacing.Text = Preferencias.LineSpacing.ToString();
             TxtImageSize.Text = Preferencias.ImageSize.ToString();
@@ -553,16 +553,16 @@ namespace RTSHelper {
         } // BtnStepFontColor_Click>
 
 
-        private void BtnNextStepFontColor_Click(object sender, RoutedEventArgs e) {
+        private void BtnNextPreviousStepFontColor_Click(object sender, RoutedEventArgs e) {
 
             var colorDialog = new ColorDialog();
-            colorDialog.Color = ObtenerDrawingColor(BtnNextStepFontColor.Foreground);
+            colorDialog.Color = ObtenerDrawingColor(BtnNextPreviousStepFontColor.Foreground);
             if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                Preferencias.NextStepFontColor = ToHexString(colorDialog.Color);
+                Preferencias.NextPreviousStepFontColor = ToHexString(colorDialog.Color);
                 VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en el botón.
             }
 
-        } // BtnNextStepFontColor_Click>
+        } // BtnNextPreviousStepFontColor_Click>
 
 
         private void BtnSave_Click(object sender, RoutedEventArgs e) 
@@ -639,15 +639,15 @@ namespace RTSHelper {
         } // TxtStepFontSize_TextChanged>
 
 
-        private void TxtNextStepFontSize_TextChanged(object sender, TextChangedEventArgs e) {
+        private void TxtNextPreviousStepFontSize_TextChanged(object sender, TextChangedEventArgs e) {
 
             if (!Activado) return;
-            if (double.TryParse(TxtNextStepFontSize.Text, out double nextStepFontSize)) {
-                Preferencias.NextStepFontSize = nextStepFontSize;
+            if (double.TryParse(TxtNextPreviousStepFontSize.Text, out double nextStepFontSize)) {
+                Preferencias.NextPreviousStepFontSize = nextStepFontSize;
                 VentanaPrincipal.AplicarPreferencias();
             }
 
-        } // TxtNextStepFontSize_TextChanged>
+        } // TxtNextPreviousStepFontSize_TextChanged>
 
 
         private void ChkShowNextStep_Checked(object sender, RoutedEventArgs e) {
@@ -839,13 +839,13 @@ namespace RTSHelper {
         } // ChkCurrentStepFontBold_Checked>
 
 
-        private void ChkNextStepFontBold_Checked(object sender, RoutedEventArgs e) {
+        private void ChkNextPreviousStepFontBold_Checked(object sender, RoutedEventArgs e) {
 
             if (!Activado) return;
-            Preferencias.NextStepFontBold = ChkNextStepFontBold.IsChecked ?? false;
+            Preferencias.NextPreviousStepFontBold = ChkNextPreviousStepFontBold.IsChecked ?? false;
             VentanaPrincipal.AplicarPreferencias();
 
-        } // ChkNextStepFontBold_Checked>
+        } // ChkNextPreviousStepFontBold_Checked>
 
 
         private void CmbFontName_SelectionChanged(object sender, SelectionChangedEventArgs e) {

@@ -26,8 +26,9 @@ namespace RTSHelper {
         #region Constructores
 
         public Instrucción(string textoInstrucción, Formato? formatoInicial, Formato formatoPadre, Dictionary<string, Formato>? clasesDeFormatos, 
-            out Formato? últimoFormato) { // últimoFormato es el último formato que fue aplicado en la instrucción. Este formato se usa para el inicio de la próxima instrucción. El formato se mantiene para todo el paso.
+            out Formato? últimoFormato, out string? errores) { // últimoFormato es el último formato que fue aplicado en la instrucción. Este formato se usa para el inicio de la próxima instrucción. El formato se mantiene para todo el paso.
 
+            errores = null;
             var finalizaConEtiquetaFormato = textoInstrucción.EndsWith(">");
             var coincidencias = Regex.Matches(textoInstrucción, @"<(.*?)>([^<]+)", RegexOptions.IgnoreCase);
 
@@ -37,12 +38,19 @@ namespace RTSHelper {
 
                     últimoFormato = null; // Se establece al final del procedimiento.
                     if (textoInstrucción.Contains("<")) {
-                        Segmentos.AddRange(ExtraerSegmentos(textoInstrucción[0..(textoInstrucción.IndexOf("<"))], formatoInicial, formatoPadre));
+
+                        Segmentos.AddRange(ExtraerSegmentos(textoInstrucción[0..(textoInstrucción.IndexOf("<"))], formatoInicial, formatoPadre, 
+                            out string? erroresInternos));
+                        AgregarErrores(ref errores, erroresInternos);
+
                     } // Si no contiene "<", es un formato mal formado, entonces no se agrega el texto.{
                     
                 } else {
-                    Segmentos.AddRange(ExtraerSegmentos(textoInstrucción, formatoInicial, formatoPadre));
+
+                    Segmentos.AddRange(ExtraerSegmentos(textoInstrucción, formatoInicial, formatoPadre, out string? erroresInternos));
+                    AgregarErrores(ref errores, erroresInternos);
                     últimoFormato = formatoInicial;
+
                 }
 
             } else { // coincidencias.Count > 0.
@@ -52,7 +60,8 @@ namespace RTSHelper {
                 if (coincidencias[0].Index > 0) { // La instrucción no empieza por una etiqueta de formato <. Al primer segmento se le aplica el formato inicial.
 
                     var texto = textoInstrucción.Substring(0, índicePrimerFormato);
-                    Segmentos.AddRange(ExtraerSegmentos(texto, formatoInicial, formatoPadre));
+                    Segmentos.AddRange(ExtraerSegmentos(texto, formatoInicial, formatoPadre, out string? erroresInternos));
+                    AgregarErrores(ref errores, erroresInternos);
 
                 }
 
@@ -62,8 +71,10 @@ namespace RTSHelper {
 
                         var textoFormato = coincidencia.Groups[1].Value.ToLowerInvariant();
                         var texto = coincidencia.Groups[2].Value;
-                        var formato = new Formato(textoFormato, out _, clasesDeFormatos);
-                        Segmentos.AddRange(ExtraerSegmentos(texto, formato, formatoPadre));
+                        var formato = new Formato(textoFormato, out _, clasesDeFormatos, out string? erroresInternos);
+                        AgregarErrores(ref errores, erroresInternos);
+                        Segmentos.AddRange(ExtraerSegmentos(texto, formato, formatoPadre, out string? erroresInternos2));
+                        AgregarErrores(ref errores, erroresInternos2);
                         últimoFormato = formato;
        
                     }
@@ -73,16 +84,20 @@ namespace RTSHelper {
             }
 
             if (finalizaConEtiquetaFormato) { // La instrucción finaliza con una etiqueta de formato. Esta no afecta ningún texto de la instrucción, pero si establece un formato inicial para la siguiente instrucción. Su uso más común es para cerrar un formato asignado a la instrucción actual con <>..
+                
                 var índiceInicioFormato = textoInstrucción.LastIndexOf("<");
                 var textoFormato = textoInstrucción[(índiceInicioFormato + 1)..^1];
-                últimoFormato = new Formato(textoFormato, out _, clasesDeFormatos);
+                últimoFormato = new Formato(textoFormato, out _, clasesDeFormatos, out string? erroresInternos);
+                AgregarErrores(ref errores, erroresInternos);
+
             }
 
         } // Instrucción>
 
 
-        public static List<Segmento> ExtraerSegmentos(string textoPresegmento, Formato? formato, Formato formatoPadre) { // Separa los segmentos de imágenes de los de texto.
+        public static List<Segmento> ExtraerSegmentos(string textoPresegmento, Formato? formato, Formato formatoPadre, out string? errores) { // Separa los segmentos de imágenes de los de texto.
 
+            errores = null;
             var segmentos = new List<Segmento>();
             var tipoActual = TipoSegmento.Texto;
             var textoActual = new StringBuilder();
@@ -92,7 +107,10 @@ namespace RTSHelper {
                 if (c == '[' || c == ']') {
 
                     var texto = textoActual.ToString();
-                    if (!string.IsNullOrEmpty(texto)) segmentos.Add(new Segmento(texto, formato, tipoActual, formatoPadre));
+                    if (!string.IsNullOrEmpty(texto)) {
+                        segmentos.Add(new Segmento(texto, formato, tipoActual, formatoPadre, out string? erroresInternos));
+                        AgregarErrores(ref errores, erroresInternos);
+                    }        
                     textoActual.Clear();
 
                 }
@@ -112,9 +130,16 @@ namespace RTSHelper {
             }
 
             var textoFinal = textoActual.ToString();
-            if (!string.IsNullOrEmpty(textoFinal)) segmentos.Add(new Segmento(textoFinal, formato, tipoActual, formatoPadre));
-            if (textoPresegmento == "") segmentos.Add(new Segmento("", formato, TipoSegmento.Texto, formatoPadre)); // Para poder soportar múltiples líneas.
-
+            if (!string.IsNullOrEmpty(textoFinal)) {
+                segmentos.Add(new Segmento(textoFinal, formato, tipoActual, formatoPadre, out string? erroresInternos));
+                AgregarErrores(ref errores, erroresInternos);
+            }     
+                
+            if (textoPresegmento == "") {
+                segmentos.Add(new Segmento("", formato, TipoSegmento.Texto, formatoPadre, out string? erroresInternos)); // Para poder soportar múltiples líneas.
+                AgregarErrores(ref errores, erroresInternos);
+            }
+                
             return segmentos;
 
         } // ExtraerSegmentos>

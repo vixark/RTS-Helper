@@ -68,8 +68,9 @@ namespace RTSHelper {
         #region Funciones y Procedimientos
 
 
-        public void CargarPasos(string directorioBuildOrders, string nombreBuildOrder) {
+        public void CargarPasos(string directorioBuildOrders, string nombreBuildOrder, out string? errores) {
 
+            errores = null;
             var pasos = new List<Paso>();
             var rutaBuildOrder = Path.Combine(directorioBuildOrders, $"{nombreBuildOrder}.txt");
             if (!Directory.Exists(directorioBuildOrders)) Directory.CreateDirectory(directorioBuildOrders);
@@ -89,27 +90,38 @@ namespace RTSHelper {
 
                 if (textoPasoTrimmed.StartsWith("<<") && textoPasoTrimmed.EndsWith(">>")) { // Es necesario hacerlo así y no con Regex por facilidad y para que no entre en conflicto con las clases de comportamientos que van entre <>.
 
-                    formatoGlobal = new Formato(textoPasoTrimmed[2..^2], out Dictionary<string, Formato> clasesLeídas, null);
+                    formatoGlobal = new Formato(textoPasoTrimmed[2..^2], out Dictionary<string, Formato> clasesLeídas, null, out string? erroresInternos);
+                    AgregarErrores(ref errores, erroresInternos);
                     ClasesDeFormatos = clasesLeídas;
 
                 } else if (textoPasoTrimmed.StartsWith("{{") && textoPasoTrimmed.EndsWith("}}")) { // Es necesario hacerlo así y no con Regex por facilidad y para que no entre en conflicto con las clases de comportamientos que van entre {}.
 
-                    comportamientoGlobal = new Comportamiento(textoPasoTrimmed[2..^2], out Dictionary<string, Comportamiento> clasesLeídas, null);
+                    comportamientoGlobal = new Comportamiento(textoPasoTrimmed[2..^2], out Dictionary<string, Comportamiento> clasesLeídas, null, 
+                        out string? erroresInternos);
+                    AgregarErrores(ref errores, erroresInternos);
                     ClasesDeComportamientos = clasesLeídas;
 
                 } else if (textoPasoTrimmed.StartsWith("[[") && textoPasoTrimmed.EndsWith("]]")) { // Es necesario hacerlo así y no con Regex por facilidad y para que no entre en conflicto con las entidades que van entre [].
 
-                    Introducción = new Paso(textoPasoTrimmed[2..^2], comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos);
+                    Introducción = new Paso(textoPasoTrimmed[2..^2], comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos, 
+                        out string? erroresInternos);
+                    AgregarErrores(ref errores, erroresInternos);
 
                 } else if (!string.IsNullOrWhiteSpace(textoPasoTrimmed)) { // No se agrega el paso si es un espacio en la build order. Estos espacios son útiles para tener más orden de edición.
 
-                    pasos.Add(new Paso(textoPasoTrimmed, comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos));
+                    pasos.Add(new Paso(textoPasoTrimmed, comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos, 
+                        out string? erroresInternos));
+                    AgregarErrores(ref errores, erroresInternos);
 
                 }
 
             }
-            if (pasos.Count == 0) pasos.Add(new Paso("", null, null, null, null)); // Para poder almacenar la duración de los pasos, debe haber como mínimo un paso.
 
+            if (pasos.Count == 0) {
+                pasos.Add(new Paso("", null, null, null, null, out string? erroresInternos)); // Para poder almacenar la duración de los pasos, debe haber como mínimo un paso.
+                AgregarErrores(ref errores, erroresInternos);
+            }
+                
             if (NúmeroPaso > 0) { // Si se carga una build order en la mitad de la ejecución, debe copiar las duraciones de los pasos de la ejecución actual.
                 for (int i = 0; i < NúmeroPaso; i++) {
                     if (i <= pasos.Count - 1 && i <= Pasos.Count - 1) pasos[i].DuraciónEnJuego = Pasos[i].DuraciónEnJuego;
@@ -183,11 +195,13 @@ namespace RTSHelper {
 
                     foreach (var segmento in instrucción.Segmentos) {
 
-                        var formato = Formato.ObtenerFormatoEfectivo(segmento.Formato, formatoPredeterminado);
+                        var formato = Formato.ObtenerFormatoEfectivo(segmento.Formato, formatoPredeterminado, out string? erroresInternos);
+                        AgregarErrores(ref errores, erroresInternos);
+
                         if (formato.Negrita == null || formato.Cursiva == null || formato.NombreFuente == null || formato.Subrayado == null
                             || formato.TamañoFuenteEfectiva == null || formato.Color == null || formato.ColorHexadecimal == null ||
                             formato.TamañoImagen == null || formato.ObtenerTamañoImagenEfectiva((double)formato.TamañoImagen) == null) {
-                            errores += "To Developer: Unespected null value in formato in MostrarPaso()." + Environment.NewLine;
+                            AgregarErrores(ref errores, "To Developer: Unespected null value in formato in MostrarPaso().");
                             continue;
                         }
 
@@ -204,19 +218,26 @@ namespace RTSHelper {
                             var entidad = ObtenerEntidad(segmento.Texto);
                             if (entidad == null) {
 
-                                errores += $"The name {segmento.Texto} wasn't found." + Environment.NewLine;
-                                segmentoEfectivo = segmento.Clonar();
+                                AgregarErrores(ref errores, $"The name {segmento.Texto} wasn't found.");
+                                segmentoEfectivo = segmento.Clonar(out string? erroresInternos2);
+                                AgregarErrores(ref errores, erroresInternos2);
                                 segmentoEfectivo.Tipo = TipoSegmento.Texto;
                                 margenEnTexto = false;
 
                             } else {
-                                segmentoEfectivo = ObtenerSegmentoEfectivo(entidad);
+
+                                segmentoEfectivo = ObtenerSegmentoEfectivo(entidad, out string? erroresInternos2);
                                 margenEnTexto = segmentoEfectivo.Tipo != TipoSegmento.Imagen; // Cuando se usa el marcado con corchetes cuadrados por ejemplo, [attack][town center] se espera que las entidades no sean adjuntas si están en texto, es decir, se espera que no se muestre ATTKTC, si no ATT TC. Por esto se debe agregar este margen adicional cuando la entidad no se vaya a mostrar como imagen.
+                                AgregarErrores(ref errores, erroresInternos2);
+
                             }
 
                         } else {
-                            segmentoEfectivo = segmento.Clonar();
+
+                            segmentoEfectivo = segmento.Clonar(out string? erroresInternos2);
+                            AgregarErrores(ref errores, erroresInternos2);
                             margenEnTexto = false; // El texto normal no lleva margen.
+
                         }
 
                         if (segmentoEfectivo.Tipo == TipoSegmento.Texto) {
@@ -235,10 +256,13 @@ namespace RTSHelper {
                             if ((bool)formato.Subrayado) textBlock.TextDecorations = TextDecorations.Underline;
 
                             if (formato.Posición != PosiciónTexto.Normal) {
+
                                 textBlock.FontFamily = Formato.ObtenerFuentePosiciónEspecial(formato.Posición, segmentoEfectivo.Texto,
-                                    formato.NombreFuente);
+                                    formato.NombreFuente, out string? erroresInternos2);
                                 if (formato.Posición == PosiciónTexto.Superíndice) textBlock.Typography.Variants = FontVariants.Superscript;
                                 if (formato.Posición == PosiciónTexto.Subíndice) textBlock.Typography.Variants = FontVariants.Subscript;
+                                AgregarErrores(ref errores, erroresInternos2);
+
                             }
 
                             spnHorizontal.Children.Add(textBlock);

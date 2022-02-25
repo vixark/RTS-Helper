@@ -206,7 +206,7 @@ namespace RTSHelper {
 
         public static string CurrentStepFontColorPredeterminado = Color.FromRgb(220, 220, 220).ToString();
 
-        public static string NextStepFontColorPredeterminado = Color.FromRgb(150, 150, 150).ToString();
+        public static string NextPreviousStepFontColorPredeterminado = Color.FromRgb(150, 150, 150).ToString();
 
         public static bool FlashOnStepChangePredeterminado = true;
 
@@ -2285,8 +2285,9 @@ namespace RTSHelper {
         /// </summary>
         /// <param name="entidad"></param>
         /// <returns></returns>
-        public static Segmento ObtenerSegmentoEfectivo(Entidad entidad) {
+        public static Segmento ObtenerSegmentoEfectivo(Entidad entidad, out string? errores) {
 
+            errores = null;
             foreach (var prioridad in Preferencias.ObtenerDisplayPriorityOrdenadas()) {
 
                 var tipoNombre = prioridad.Key;
@@ -2302,21 +2303,36 @@ namespace RTSHelper {
                 }
 
                 if (tipoNombre == NameType.Image) {
+
                     var rutaImagen = ObtenerRutaImagen(entidad, out string imagen);
-                    if (rutaImagen != null) return new Segmento(imagen, null, TipoSegmento.Imagen, null);
+                    if (rutaImagen != null) {
+
+                        var segmento = new Segmento(imagen, null, TipoSegmento.Imagen, null, out string? erroresInternos);
+                        AgregarErrores(ref errores, erroresInternos);
+                        return segmento;
+
+                    }
+
                 } else {
 
                     if (entidad.Nombres.ContainsKey(tipoNombre)) {
+
                         var textoSegmento = entidad.Nombres[tipoNombre];
-                        return new Segmento(Preferencias.CapitalizeNames ? textoSegmento.ToUpper() : textoSegmento , null, TipoSegmento.Texto, null);
+                        var segmento = new Segmento(Preferencias.CapitalizeNames ? textoSegmento.ToUpper() : textoSegmento , null, TipoSegmento.Texto, null, 
+                            out string? erroresInternos);
+                        AgregarErrores(ref errores, erroresInternos);
+                        return segmento;
+
                     }
                         
                 }
 
             }
 
-            MostrarError($"To Developer: ObtenerSegmentoEfectivo() didn't found any match for {entidad.NombreCompleto}.");
-            return new Segmento("", null, TipoSegmento.Texto, null);
+            AgregarErrores(ref errores, $"To Developer: ObtenerSegmentoEfectivo() didn't found any match for {entidad.NombreCompleto}.");
+            var segmento2 = new Segmento("", null, TipoSegmento.Texto, null, out string? erroresInternos2);
+            AgregarErrores(ref errores, erroresInternos2);
+            return segmento2;
 
         } //  ObtenerSegmentoEfectivo>
 
@@ -2326,6 +2342,11 @@ namespace RTSHelper {
 
 
         public static MessageBoxResult MostrarError(string mensaje) => MessageBox.Show(mensaje, "Error");
+
+        public static void AgregarErrores(ref string? errores, string? nuevosErrores) { // Solo se puede usar this ref para estructuras https://stackoverflow.com/questions/2618597/impossible-to-use-ref-and-out-for-first-this-parameter-in-extension-methods y https://stackoverflow.com/questions/46748334/extension-method-not-setting-value.
+            if (!string.IsNullOrEmpty(nuevosErrores)) 
+                errores += nuevosErrores + (nuevosErrores.EndsWith(Environment.NewLine) ? "" : Environment.NewLine);
+        } // AgregarErrores>
 
         public static MessageBoxResult MostrarInformación(string mensaje) => MessageBox.Show(mensaje, "Info");
 

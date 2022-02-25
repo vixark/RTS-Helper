@@ -87,7 +87,7 @@ namespace RTSHelper {
 
         public string CurrentStepFontColor { get; set; } = CurrentStepFontColorPredeterminado;
 
-        public string NextStepFontColor { get; set; } = NextStepFontColorPredeterminado;
+        public string NextPreviousStepFontColor { get; set; } = NextPreviousStepFontColorPredeterminado;
 
         public bool FlashOnStepChange { get; set; } = FlashOnStepChangePredeterminado;
 
@@ -107,7 +107,7 @@ namespace RTSHelper {
 
         public bool CurrentStepFontBold { get; set; } = CurrentStepFontBoldPredeterminado;
 
-        public bool NextStepFontBold { get; set; } = false;
+        public bool NextPreviousStepFontBold { get; set; } = false;
 
         #endregion Fuentes>
 
@@ -126,7 +126,7 @@ namespace RTSHelper {
 
         public double CurrentStepFontSize { get; set; }
 
-        public double NextStepFontSize { get; set; }
+        public double NextPreviousStepFontSize { get; set; }
 
         public double ButtonsSize { get; set; }
 
@@ -142,9 +142,9 @@ namespace RTSHelper {
 
         public double TopMarginCurrentStep { get; set; }
 
-        public double RightMarginNextStep { get; set; }
+        public double RightMarginNextPreviousStep { get; set; }
 
-        public double TopMarginNextStep { get; set; }
+        public double TopMarginNextPreviousStep { get; set; }
 
         public double BottomMargenSteps { get; set; }
 
@@ -380,7 +380,7 @@ namespace RTSHelper {
                     Top = 718 * CorrecciónEscala;
                     Left = 722 * CorrecciónEscala;
                     CurrentStepFontSize = 18.5 * CorrecciónEscala;
-                    NextStepFontSize = 11.5 * CorrecciónEscala;
+                    NextPreviousStepFontSize = 11.5 * CorrecciónEscala;
                     ButtonsSize = 24 * CorrecciónEscala;
                     ButtonsMargin = 2 * CorrecciónEscala;
                     ButtonsPadding = 2 * CorrecciónEscala;
@@ -388,9 +388,9 @@ namespace RTSHelper {
                     MediumFontSize = 14 * CorrecciónEscala;
                     LeftMarginCurrentStep = 15 * CorrecciónEscala;
                     TopMarginCurrentStep = 3 * CorrecciónEscala;
-                    TopMarginNextStep = 27 * CorrecciónEscala;
+                    TopMarginNextPreviousStep = 27 * CorrecciónEscala;
                     BottomMargenSteps = 3 * CorrecciónEscala;
-                    RightMarginNextStep = 67 * CorrecciónEscala;
+                    RightMarginNextPreviousStep = 67 * CorrecciónEscala;
                     BuildOrderSelectorWidth = 145 * CorrecciónEscala;
                     ExecutionSpeedSelectorWidth = 55 * CorrecciónEscala;
                     ThicknessCircularProgressBar = 6 * CorrecciónEscala;
@@ -404,7 +404,7 @@ namespace RTSHelper {
                     Top = 957 * CorrecciónEscala;
                     Left = 962 * CorrecciónEscala;
                     CurrentStepFontSize = 24.7 * CorrecciónEscala;
-                    NextStepFontSize = 16 * CorrecciónEscala;
+                    NextPreviousStepFontSize = 16 * CorrecciónEscala;
                     ButtonsSize = 33 * CorrecciónEscala;
                     ButtonsMargin = 3 * CorrecciónEscala;
                     ButtonsPadding = 2 * CorrecciónEscala;
@@ -412,9 +412,9 @@ namespace RTSHelper {
                     MediumFontSize = 18 * CorrecciónEscala;
                     LeftMarginCurrentStep = 17 * CorrecciónEscala;
                     TopMarginCurrentStep = 5 * CorrecciónEscala;
-                    TopMarginNextStep = 31 * CorrecciónEscala;
+                    TopMarginNextPreviousStep = 31 * CorrecciónEscala;
                     BottomMargenSteps = 5 * CorrecciónEscala;
-                    RightMarginNextStep = 90 * CorrecciónEscala;
+                    RightMarginNextPreviousStep = 90 * CorrecciónEscala;
                     BuildOrderSelectorWidth = 200 * CorrecciónEscala;
                     ExecutionSpeedSelectorWidth = 75 * CorrecciónEscala;
                     ThicknessCircularProgressBar = 8 * CorrecciónEscala;
@@ -428,7 +428,7 @@ namespace RTSHelper {
                     Top = 510 * CorrecciónEscala;
                     Left = 513 * CorrecciónEscala;
                     CurrentStepFontSize = 13.5 * CorrecciónEscala;
-                    NextStepFontSize = 8.3 * CorrecciónEscala;
+                    NextPreviousStepFontSize = 8.3 * CorrecciónEscala;
                     ButtonsSize = 17 * CorrecciónEscala;
                     ButtonsMargin = 1 * CorrecciónEscala;
                     ButtonsPadding = 1 * CorrecciónEscala;
@@ -436,9 +436,9 @@ namespace RTSHelper {
                     MediumFontSize = 10 * CorrecciónEscala;
                     LeftMarginCurrentStep = 8 * CorrecciónEscala;
                     TopMarginCurrentStep = 2 * CorrecciónEscala;
-                    TopMarginNextStep = 15 * CorrecciónEscala;
+                    TopMarginNextPreviousStep = 15 * CorrecciónEscala;
                     BottomMargenSteps = 2 * CorrecciónEscala;
-                    RightMarginNextStep = 45 * CorrecciónEscala;
+                    RightMarginNextPreviousStep = 45 * CorrecciónEscala;
                     BuildOrderSelectorWidth = 110 * CorrecciónEscala;
                     ExecutionSpeedSelectorWidth = 40 * CorrecciónEscala;
                     ThicknessCircularProgressBar = 4 * CorrecciónEscala;

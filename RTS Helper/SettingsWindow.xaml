@@ -205,13 +205,13 @@
                                               x:Name="ChkShowNextStep">Next</CheckBox>
                                 </StackPanel>
 
-                                <TextBox TextChanged="TxtNextStepFontSize_TextChanged" x:Name="TxtNextStepFontSize" Margin="4 0 4 0" Height="25" 
+                                <TextBox TextChanged="TxtNextPreviousStepFontSize_TextChanged" x:Name="TxtNextPreviousStepFontSize" Margin="4 0 4 0" Height="25" 
                                          VerticalContentAlignment="Center" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
 
-                                <Button Click="BtnNextStepFontColor_Click" x:Name="BtnNextStepFontColor" Margin="4" Height="22" 
+                                <Button Click="BtnNextPreviousStepFontColor_Click" x:Name="BtnNextPreviousStepFontColor" Margin="4" Height="22" 
                                     Foreground="{DynamicResource BrushPasoSiguiente}" Background="{DynamicResource BrushFondo}">Change</Button>
 
-                                <CheckBox Checked="ChkNextStepFontBold_Checked" Unchecked="ChkNextStepFontBold_Checked" x:Name="ChkNextStepFontBold" 
+                                <CheckBox Checked="ChkNextPreviousStepFontBold_Checked" Unchecked="ChkNextPreviousStepFontBold_Checked" x:Name="ChkNextPreviousStepFontBold" 
                                           Margin="4 9 0 9" />
 
                                 <Label Margin="0 10 0 0"/>

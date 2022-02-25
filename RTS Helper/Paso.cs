@@ -40,9 +40,13 @@ namespace RTSHelper {
         #region Constructores
 
         public Paso(string? texto, Comportamiento? comportamientoPadre, Formato? formatoPadre, Dictionary<string, Formato>? clasesDeFormatos, 
-            Dictionary<string, Comportamiento>? clasesDeComportamientos) 
-                => ProcesarPaso(texto, comportamientoPadre ?? new Comportamiento(), formatoPadre ?? new Formato(), clasesDeFormatos, 
-                    clasesDeComportamientos);
+            Dictionary<string, Comportamiento>? clasesDeComportamientos, out string? errores) {
+
+            errores = null;
+            ProcesarPaso(texto, comportamientoPadre ?? new Comportamiento(), formatoPadre ?? new Formato(), clasesDeFormatos,
+                    clasesDeComportamientos, out errores);
+
+        } // Paso>
 
         #endregion Constructores>
 
@@ -51,8 +55,9 @@ namespace RTSHelper {
 
 
         public void ProcesarPaso(string? texto, Comportamiento comportamientoPadre, Formato formatoPadre, Dictionary<string, Formato>? clasesDeFormatos, 
-            Dictionary<string, Comportamiento>? clasesDeComportamientos) {
+            Dictionary<string, Comportamiento>? clasesDeComportamientos, out string? errores) {
 
+            errores = null;
             var textoProcesado = texto?.TrimEnd().TrimStart() ?? "";
             if (textoProcesado.StartsWith("{")) { // Contiene comportamientos propios para el paso.
 
@@ -62,7 +67,8 @@ namespace RTSHelper {
                     textoProcesado = textoProcesado.Replace(coincidenciasComportamientos.Groups[0].Value, "").TrimStart();
                     var textoComportamientos = coincidenciasComportamientos.Groups[1].Value;
                     Comportamiento = Comportamiento.ObtenerComportamientoEfectivo(new Comportamiento(textoComportamientos, out _, 
-                        clasesDeComportamientos), comportamientoPadre);
+                        clasesDeComportamientos, out string? erroresInternos), comportamientoPadre);
+                    AgregarErrores(ref errores, erroresInternos);
 
                 } 
 
@@ -78,7 +84,7 @@ namespace RTSHelper {
 
             var instruccionesTexto = textoProcesado.Split(NuevaLíneaId).ToList();
             if (instruccionesTexto.Take(instruccionesTexto.Count - 1).Any(it => it.Contains(AlinearInferiormenteId)))
-                MostrarError($"Incorrect use of \\f. It should go only before the last line.");
+                AgregarErrores(ref errores, $"Incorrect use of \\f. It should go only before the last line.");
             var alinearÚltimaInstrucciónInferiormente = instruccionesTexto.Last().Contains(AlinearInferiormenteId);
             if (alinearÚltimaInstrucciónInferiormente) {
                 instruccionesTexto.AddRange(instruccionesTexto.Last().Split(AlinearInferiormenteId).ToList());
@@ -87,7 +93,11 @@ namespace RTSHelper {
 
             var formatoActual = new Formato();
             foreach (var instrucciónTexto in instruccionesTexto) {
-                Instrucciones.Add(new Instrucción(instrucciónTexto, formatoActual, formatoPadre, clasesDeFormatos, out formatoActual));
+
+                Instrucciones.Add(new Instrucción(instrucciónTexto, formatoActual, formatoPadre, clasesDeFormatos, out formatoActual, 
+                    out string? erroresInternos));
+                AgregarErrores(ref errores, erroresInternos);
+
             }
             Instrucciones.Last().AlinearInferiormente = alinearÚltimaInstrucciónInferiormente;
 

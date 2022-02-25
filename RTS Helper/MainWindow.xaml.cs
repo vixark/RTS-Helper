@@ -130,7 +130,8 @@ namespace RTSHelper {
 
             LeerPreferencias();
             OrdenDeEjecución.EnCambioNúmeroPaso = () => EnCambioNúmeroPaso();
-            OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder);
+            OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder, out string? erroresInternos);
+            ActualizarAlertaDeErrores(erroresInternos, altoSuperado: false, limpiarErroresAnteriores: false);
             LeerBuildOrders();
             CargarBuildOrder(iniciando: true);
 
@@ -1196,7 +1197,7 @@ namespace RTSHelper {
             Application.Current.Resources["FuenteNormal"] = Preferencias.MediumFontSize;
             Application.Current.Resources["FuenteGrande"] = Preferencias.LargeFontSize;
             Application.Current.Resources["FuentePaso"] = Preferencias.CurrentStepFontSize;
-            Application.Current.Resources["FuenteSiguientePaso"] = Preferencias.NextStepFontSize;
+            Application.Current.Resources["FuenteSiguientePaso"] = Preferencias.NextPreviousStepFontSize;
             Application.Current.Resources["MargenBotones"] = new Thickness(Preferencias.ButtonsMargin);
             Application.Current.Resources["PaddingBotones"] = new Thickness(Preferencias.ButtonsPadding);
             Application.Current.Resources["TamañoBotones"] = Preferencias.ButtonsSize;
@@ -1204,10 +1205,10 @@ namespace RTSHelper {
             Application.Current.Resources["BrushFondo"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.BackColor);
             Application.Current.Resources["ColorFondo"] = ObtenerMediaColor(Preferencias.BackColor) ?? Color.FromRgb(0, 0, 0);
             Application.Current.Resources["BrushPaso"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.CurrentStepFontColor);
-            Application.Current.Resources["BrushPasoSiguiente"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.NextStepFontColor);
+            Application.Current.Resources["BrushPasoSiguiente"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.NextPreviousStepFontColor);
             Application.Current.Resources["Opacidad"] = Preferencias.Opacity;
             Application.Current.Resources["MargenPaso"] = new Thickness(Preferencias.LeftMarginCurrentStep, Preferencias.TopMarginCurrentStep, 0, 0);
-            Application.Current.Resources["MargenPasoSiguiente"] = new Thickness(0, Preferencias.TopMarginNextStep, Preferencias.RightMarginNextStep, 0);
+            Application.Current.Resources["MargenPasoSiguiente"] = new Thickness(0, Preferencias.TopMarginNextPreviousStep, Preferencias.RightMarginNextPreviousStep, 0);
             Application.Current.Resources["Alto"] = Preferencias.Height;
             Application.Current.Resources["Ancho"] = Preferencias.Width;
             Application.Current.Resources["PosiciónY"] = Preferencias.Top;
@@ -1349,9 +1350,9 @@ namespace RTSHelper {
         private void ActualizarIntervaloTimer(TimeSpan duración) {
 
             if (duración.TotalSeconds < 0) {
-                if (ModoDesarrollo) MessageBox.Show("Error. Revisar caso. duración.TotalSeconds < 0 && ModoDesarrollo @ ActualizarIntervaloTimer().");  // Puede pasar en modo desarrollo. En modo de producción nunca debería pasar y si sucede debe ser un error.
-                return;
-            }
+                if (ModoDesarrollo && duración.TotalSeconds < -2) MessageBox.Show($"Error. Revisar caso. duración.TotalSeconds = {duración.TotalSeconds} @ ActualizarIntervaloTimer()."); // Puede pasar en modo desarrollo. En modo de producción nunca debería pasar y si sucede debe ser un error. Solo se muestra el error cuando es menor que 1 segundo, porque en algunas ocasiones se puede presentar un valor menor que cero pequeño cuando se pausa y se reanuda justo en el límite de cambio de paso.
+                duración = new TimeSpan(0, 0, 0, 0, 200);// Un valor muy pequeño hacia adelante que no sea cero.
+            } 
 
             if (Timer is null) return; // No debería pasar.
             Timer.Interval = duración;
@@ -1455,67 +1456,81 @@ namespace RTSHelper {
 
         private void ActualizarContenidoPaso(int? númeroPaso) {
 
+            var errores = (string?)null;
             SpnPaso.Children.Clear();
             SpnPasoSiguienteAnterior.Children.Clear();
             SpnPasoAnterior.Children.Clear();
 
             var formatoPaso = new Formato($"{Preferencias.CurrentStepFontColor} {(Preferencias.CurrentStepFontBold ? "b" : "")} " +
-                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null) { TamañoBaseFuente = Preferencias.CurrentStepFontSize,
-                TamañoImagen = Preferencias.ImageSize };
-            var formatoSiguientePaso = new Formato($"{Preferencias.NextStepFontColor} {(Preferencias.NextStepFontBold ? "b" : "")} " +
-                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null) { TamañoBaseFuente = Preferencias.NextStepFontSize,
-                TamañoImagen = Preferencias.ImageSize
-            };
-    
+                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null, out string? erroresInternos) 
+                { TamañoBaseFuente = Preferencias.CurrentStepFontSize, TamañoImagen = Preferencias.ImageSize };
+            AgregarErrores(ref errores, erroresInternos);
+
+            var formatoSiguienteAnteriorPaso = new Formato($"{Preferencias.NextPreviousStepFontColor} {(Preferencias.NextPreviousStepFontBold ? "b" : "")} " +
+                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null, out string? erroresInternos2) 
+                { TamañoBaseFuente = Preferencias.NextPreviousStepFontSize, TamañoImagen = Preferencias.ImageSize };
+            AgregarErrores(ref errores, erroresInternos2);
+
             OrdenDeEjecución.MostrarPaso(númeroPaso, formatoPaso, SpnPaso, mostrarSiempreÚltimoPaso: true, 
                 this.Height - Preferencias.BottomMargenSteps - Preferencias.TopMarginCurrentStep, HorizontalAlignment.Left,
-                Preferencias.BottomMargenSteps, out bool superóAltoPasoActual, out string? errores);
+                Preferencias.BottomMargenSteps, out bool superóAltoPasoActual, out string? erroresInternos3);
+            AgregarErrores(ref errores, erroresInternos3);
 
             var superóAltoSiguientePaso = false;
-            var erroresSiguientePaso = (string?)null;
             if (númeroPaso != null && ((!ForzarMostrarPasoAnterior && ObtenerMostrarSiguientePaso((int)númeroPaso)) || ForzarMostrarPasoSiguiente)) {
 
-                OrdenDeEjecución.MostrarPaso(númeroPaso + 1, formatoSiguientePaso, SpnPasoSiguienteAnterior, mostrarSiempreÚltimoPaso: false,
+                OrdenDeEjecución.MostrarPaso(númeroPaso + 1, formatoSiguienteAnteriorPaso, SpnPasoSiguienteAnterior, mostrarSiempreÚltimoPaso: false,
                     this.Height - (SpnInferior.ActualHeight == 0 ? 42 : SpnInferior.ActualHeight) - Preferencias.BottomMargenSteps 
-                    - Preferencias.TopMarginNextStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoSiguientePaso, 
-                    out erroresSiguientePaso); // ActualHeight es cero al iniciar antes de cargar la interface, entonces se usa un valor fijo aproximado de 42.
+                    - Preferencias.TopMarginNextPreviousStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoSiguientePaso, 
+                    out string? erroresInternos4); // ActualHeight es cero al iniciar antes de cargar la interface, entonces se usa un valor fijo aproximado de 42.
                 Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Visible;
+                AgregarErrores(ref errores, erroresInternos4);
 
             } else {
                 Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Collapsed;
             }
 
             var superóAltoAnteriorPaso = false;
-            var erroresAnteriorPaso = (string?)null;
-            if (númeroPaso != null && númeroPaso > 0 && !OrdenDeEjecución.EsPasoDespuésDeÚltimo && (!ForzarMostrarPasoSiguiente && (ObtenerMostrarAnteriorPaso((int)númeroPaso)) 
-                || ForzarMostrarPasoAnterior)) {
+            if (númeroPaso != null && númeroPaso > 0 && !OrdenDeEjecución.EsPasoDespuésDeÚltimo && (!ForzarMostrarPasoSiguiente 
+                && (ObtenerMostrarAnteriorPaso((int)númeroPaso)) || ForzarMostrarPasoAnterior)) {
 
-                OrdenDeEjecución.MostrarPaso(númeroPaso - 1, formatoSiguientePaso, SpnPasoAnterior, mostrarSiempreÚltimoPaso: false,
+                OrdenDeEjecución.MostrarPaso(númeroPaso - 1, formatoSiguienteAnteriorPaso, SpnPasoAnterior, mostrarSiempreÚltimoPaso: false,
                     this.Height - (SpnInferior.ActualHeight == 0 ? 42 : SpnInferior.ActualHeight) - Preferencias.BottomMargenSteps
-                    - Preferencias.TopMarginNextStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoAnteriorPaso, 
-                    out erroresAnteriorPaso);
+                    - Preferencias.TopMarginNextPreviousStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoAnteriorPaso,
+                    out string? erroresInternos5);
                 Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Visible;
                 Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Collapsed;
+                AgregarErrores(ref errores, erroresInternos5);
 
             } else {
                 Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Collapsed;
             }
 
-            if (this.WindowState == WindowState.Normal) {
-
-                BtnAlert.ToolTip = "";
-                var altoSuperado = (superóAltoPasoActual || superóAltoSiguientePaso || superóAltoAnteriorPaso);
-                var algúnError = errores != null || erroresAnteriorPaso != null || erroresSiguientePaso != null;
-                if (altoSuperado) BtnAlert.ToolTip = (string)BtnAlert.ToolTip + Application.Current.Resources["AlertContentMoreHeightThanWindow"];
-                if (algúnError) {
-                    BtnAlert.ToolTip = (string)BtnAlert.ToolTip + (altoSuperado ? Environment.NewLine : "") 
-                        + $"{errores}{erroresAnteriorPaso}{erroresSiguientePaso}".Trim();
-                }    
-                BtnAlert.Visibility = (altoSuperado || algúnError) ? Visibility.Visible : Visibility.Collapsed;
-
-            }
+            if (this.WindowState == WindowState.Normal) 
+                ActualizarAlertaDeErrores(errores, superóAltoPasoActual || superóAltoSiguientePaso || superóAltoAnteriorPaso, 
+                    limpiarErroresAnteriores: false);
 
         } // ActualizarContenidoPaso>
+
+
+        public void ActualizarAlertaDeErrores(string? errores, bool altoSuperado, bool limpiarErroresAnteriores) {
+
+            var códigoAnterior = BtnAlert.Tag?.ToString();
+            var código = Preferencias.CurrentBuildOrder + "|" + OrdenDeEjecución.NúmeroPaso;
+            BtnAlert.Tag = código;
+            if (códigoAnterior == código && !string.IsNullOrEmpty(BtnAlert.ToolTip.ToString())) {
+                 BtnAlert.ToolTip = BtnAlert.ToolTip + Environment.NewLine;
+            } else {
+                BtnAlert.ToolTip = "";
+            }
+            if (limpiarErroresAnteriores) BtnAlert.ToolTip = "";
+                
+            var algúnError = !string.IsNullOrWhiteSpace(errores);
+            if (altoSuperado) BtnAlert.ToolTip = (string)BtnAlert.ToolTip + Application.Current.Resources["AlertContentMoreHeightThanWindow"];
+            if (algúnError) BtnAlert.ToolTip = (string)BtnAlert.ToolTip + (altoSuperado ? Environment.NewLine : "") + $"{errores}".Trim();
+            BtnAlert.Visibility = (!string.IsNullOrEmpty(BtnAlert.ToolTip.ToString())) ? Visibility.Visible : Visibility.Collapsed;
+
+        } // ActualizarAlertaDeErrores>
 
 
         public void CargarBuildOrder(bool iniciando = false) {
@@ -1526,7 +1541,8 @@ namespace RTSHelper {
                 EditandoComboBoxEnCódigo = false;
             }
 
-            OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder);
+            OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder, out string? erroresInternos);
+            ActualizarAlertaDeErrores(erroresInternos, altoSuperado: false, limpiarErroresAnteriores: true);
             if (!iniciando) ActualizarPaso(stop: Estado == EEstado.Stoped, cargandoBuildOrder: true);
             if (EsFavorita(Preferencias.Game, Preferencias.CurrentBuildOrder)) {
                 MniAdicionarEliminarDeFavoritos.Header = " ★    Remove from Favorites";

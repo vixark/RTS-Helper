@@ -27,9 +27,13 @@ namespace RTSHelper {
 
         #region Constructores
 
-        public Segmento(string texto, Formato? formato, TipoSegmento tipo, Formato? formatoPadre) {
+        public Segmento(string texto, Formato? formato, TipoSegmento tipo, Formato? formatoPadre, out string? errores) {
+            
+            errores = null;
             Texto = (tipo == TipoSegmento.Entidad || tipo == TipoSegmento.Imagen) ? texto.ToLowerInvariant() : texto;
-            (Formato, Tipo) = (Formato.ObtenerFormatoEfectivo(formato, formatoPadre ?? new Formato()), tipo);
+            (Formato, Tipo) = (Formato.ObtenerFormatoEfectivo(formato, formatoPadre ?? new Formato(), out string? erroresInternos), tipo);
+            AgregarErrores(ref errores, erroresInternos);
+
         } // Segmento>
 
         #endregion Constructores>
@@ -37,7 +41,7 @@ namespace RTSHelper {
 
         #region Procedimientos y Funciones
 
-        public Segmento Clonar() => new Segmento(Texto, Formato, Tipo, new Formato());
+        public Segmento Clonar(out string? errores) => new Segmento(Texto, Formato, Tipo, new Formato(), out errores);
 
         #endregion Procedimientos y Funciones>
 
