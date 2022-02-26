@@ -42,23 +42,23 @@
 
 || 17 ||  {p=20} [v]<x>[2][1]<> [->] [mill]<x>[berries]<>   [feudal age]  /f  <r>5[w]  14[f]  1[mc]  20[pop]
  
-|| 18 ||  {p=21 t=40} 4[v]<x>[shp]<> [->] [drop food] [->] [mill]<x>[deer]<x xs>[1][-][3]<>    3[v]<x>[shp]<> [->] [gold mine]<x>[flag]<>   + [mil] [3s] 7[v]<x>[shp]<> [->] [berries]<x>[flag]<>  /f  <r>5[w]  7[f]  4[gold]  5[mill]  21[pop] 
+|| 18 ||  {p=21 t=40 sns="no" sps="no"} 4[v]<x>[shp]<sup>[drop food]<> [->] [mill]<x>[deer]<x xs>[1][-][3]<> [->] 3[deer]<x>[flag]<> [->] [tree]<x>[flag]<>    3[v]<x>[shp]<> [->] [gold mine]<x>[flag]<>   + [mil] [3s] 7[v]<x>[shp]<> [->] [berries]<x>[flag]<>  /f  <r>5[w]  7[f]  4[gold]  5[mill]  21[pop] 
 
-|| 19 ||  {p=21 t=40} [v]<x>[gold mine]<> [->] 2 [hs] [->] [gold mine]<x>[flag]<>   + [mil]    If [arabia] [->] + [mil]  /f  <r>5[w]  12[f]  3[g]  1[hs]  21[pop]
+|| 19 ||  {p=21 t=40 sps="no"} [v]<x>[gold mine]<> [->] 2 [hs] [->] [gold mine]<x>[flag]<>   + [mil]    If [arabia] [->] + [mil]  /f  <r>5[w]  12[f]  3[g]  1[hs]  21[pop]
 
-|| 20 ||  {p=21 t=50} [loom]   [v]<x>[2][2][-][2][5]<> [->] [berries]   + [mil]  /f  <r>5[w]  12[f]  4[g]  21[pop]
+|| 20 ||  {p=21 t=50 sps="no" sns="no"} [v]<x>[2][2][-][2][5]<> [->] [berries]   [loom] [3s] + [mil]   4[v]<x>[berries]<sup>[drop food]<> [->] [mill]<x>[deer]<x xs>[4][-][6]<> [->] 3[deer]<x>[flag]<> [->] [gold mine]<x>[flag]<>  /f  <r>5[w]  8[f]  4[g]  4[mill]  21[pop]
 
-|| 21 ||  {p=21} 4[v]<x>[berries]<> [->] [drop food] [->] [mill]<x>[deer]<x xs>[4][-][6]<>   +[v] [3s] [Upgrade to Man-at-Arms]   3 [mil] [sc] [->] [attack][opponent v]<x>[gold mine]<>  /f  <r>5[w]  8[f]  4[g]  4[mill]  21[pop]
+|| 21 ||  {p=21 sps="no"} [Upgrade to Man-at-Arms]   +[v]   3 [mil] [sc] [->] [attack][opponent v]<x>[gold mine]<>  /f  <r>5[w]  8[f]  4[g]  4[mill]  21[pop]
 
-|| 22 ||  {p=21} +[v]   2[v]<x>[gold mine]<> [->] [drop gold] [->] [stone wall]  /f  <r>5[w]  8[f]  2[g]  4[mill]  2[stone wall]  21[pop]
+|| 22 ||  {p=21} +[v]   2[v]<x>[gold mine]<sup>[drop gold]<> [->] [stone wall]  /f  <r>5[w]  8[f]  2[g]  4[mill]  2[stone wall]  21[pop]
 
-|| 23 ||  {p=22} +[v]  /f  <r>5[w]  9[f]  2[g]  4[mill]  2[stone wall]  22[pop]
+|| 23 ||  {p=22} +[v]  /f  <r>5[w]  13[f]  2[g]  2[stone wall]  22[pop]
 
 || 24 ||  {p=23} +[v]  /f  <r>5[w]  14[f]  2[g]  2[stone wall]  23[pop]
 
 || 25 ||  {p=24} +[v]   + [maa]   1[v]<x>[tree]<> [->] 2 [hs] [->] [tree]<x>[flag]<>  /f  <r>4[w]  15[f]  2[g]  1[hs]  2[stone wall]  24[pop]
 
-|| 26 ||  {p=25} +[v]   4[v]<x>[deer]<x xs>[3]<> [->] [tree]<x>[lc]<sup>[flag]<>   [v]<x>[2][6][-][2][7]<> [->] [stone wall]  /f  <r>4[w]  16[f]  2[g]  2[stone wall]  1[hs]  25[pop]
+|| 26 ||  {p=25} +[v]   [v]<x>[2][6][-][2][7]<> [->] [stone wall]  /f  <r>4[w]  16[f]  2[g]  2[stone wall]  1[hs]  25[pop]
 
 || 27 ||  {p=26} +[v]   If [green arabia] [->] + [maa]  /f <r>5[w]  16[f]  2[g]  3[stone wall]  26[pop]
 
@@ -74,7 +74,7 @@
 
 || 33 ||  {p=32} + 2[v]   3[v]<x>[tree]<x xs>[tc]<x xxs>[1]<> [->] 3 [farm]<x>[tc]<>   /f  <r>11[w]  12[f]  1[g]  5[stone wall]  3[farm]  32[pop]
 
-|| 34 ||  {p=33}  [v]<x>[3][4][-][3][5]<> [->] [tree]<x>[tc]<x xs>[3]<>   4[v]<x>[deer]<x xs>[6]<> [->] [gold mine]<x>[flag]<>  /f  <r>14[w]  15[f]  1[g]  3[stone wall]  33[pop]
+|| 34 ||  {p=33}  [v]<x>[3][4][-][3][5]<> [->] [tree]<x>[tc]<x xs>[3]<>   /f  <r>14[w]  15[f]  1[g]  3[stone wall]  33[pop]
 
 || 35 ||  {p=34} + 2[v]   3[v]<x>[tree]<x xs>[tc]<> [->] 3 [farm]<x>[tc]<>  /f  <r>15[w]  11[f]  5[g]  3[farm]  34[pop]
 
@@ -96,7 +96,7 @@
 
 || 44 ||  {p=41} [upgrade to long swordsman] [3s] [bow saw] [3s] [chain mail armor]   [v]<x>[4][2][-][6][3]<> [->] [tree]<x>[lc]<x xs>[2]<>   Max [maa]  /f  <r>13[w]  16[f]  8[g]  4[farm]  41[pop]
 
-|| 45 ||  {p=42} + 2[v]   [v]<x>[tree]<> [->] [drop wood] [->] 4 [hs]  /f  <r>13[w]  20[f]  8[g]  1[hs]  42[pop]
+|| 45 ||  {p=42} + 2[v]   [v]<x>[tree]<sup>[drop wood]<> [->] 4 [hs]  /f  <r>13[w]  20[f]  8[g]  1[hs]  42[pop]
 
 || 46 ||  {p=43} Start [longsword] Production @ 3 [rax]   Cancel [longsword] in queue to afford   tecnologies.  /f  <r>14[w]  20[f]  8[g]  1[hs]  43[pop]
 

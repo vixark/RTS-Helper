@@ -176,7 +176,11 @@ namespace RTSHelper {
             var rutaOrigen 
                 = Path.Combine(Settings.ObtenerDirectorioÓrdenesDeEjecución(Global.DirectorioÓrdenesDeEjecuciónCódigo, Preferencias.Game), nombreArchivo);
             var rutaDestino = Path.Combine(Preferencias.BuildOrdersDirectory, nombreArchivo);
-            File.Copy(rutaOrigen, rutaDestino, overwrite: true); // Copia la orden de ejecución recién modificada en D:\Programas\RTS Helper\Código\RTS Helper\RTS Helper\Build Orders\[Juego] a la ruta de compilación donde el cambio del archivo es detectado por OrdenDeEjecuciónActual_Changed();
+            try { // En algunas ocasiones saca error.
+                File.Copy(rutaOrigen, rutaDestino, overwrite: true); // Copia la orden de ejecución recién modificada en D:\Programas\RTS Helper\Código\RTS Helper\RTS Helper\Build Orders\[Juego] a la ruta de compilación donde el cambio del archivo es detectado por OrdenDeEjecuciónActual_Changed();
+            } catch {
+                MostrarError($"File copy from {rutaOrigen} to {rutaDestino} failed.");
+            }
 
         } // OrdenDeEjecuciónActual_Changed>
 
