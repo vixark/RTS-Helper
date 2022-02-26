@@ -1239,6 +1239,9 @@ namespace RTSHelper {
                 types["Type"].Add("10s", "Other");
                 types["Type"].Add("Green Arabia", "Map");
                 types["Type"].Add("Opponent Villager", "Unit");
+                types["Type"].Add("Less Than", "Other");
+                types["Type"].Add("Open Square Bracket", "Other");
+                types["Type"].Add("Close Square Bracket", "Other");
 
             }
 
@@ -2175,6 +2178,9 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("400057", "10s"); names[NameType.Common].Add("400057", "          ");
                 names[NameType.Complete].Add("400058", "Green Arabia");
                 names[NameType.Complete].Add("400059", "Opponent Villager"); names[NameType.Abbreviation].Add("400059", "Opponent Vil|Opponent Vill"); names[NameType.Acronym].Add("400059", "Opponent V"); names[NameType.CommonPlural].Add("400059", "Opponent Villagers"); names[NameType.AbbreviationPlural].Add("400059", "Opponent Vils|Opponent Vills");
+                names[NameType.Complete].Add("400060", "Less Than"); names[NameType.Common].Add("400060", "<");
+                names[NameType.Complete].Add("400061", "Open Square Bracket"); names[NameType.Common].Add("400061", "[");
+                names[NameType.Complete].Add("400062", "Close Square Bracket"); names[NameType.Common].Add("400062", "]");
 
                 string elite(string original) => "Elite " + original.Replace("|", $"|Elite ");
 

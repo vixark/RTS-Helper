@@ -6,25 +6,25 @@
 
 [[<b>6 [maa] [->] [longsword] @ 3[rax] [->] [champion]@ 5[rax]<>   for <xl>[Malians]<> on <xl>[green arabia]<> [1s] <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy]]
 
-|| 0 ||  {p=3} + 4[v] [3s] 2[v] [->] [hs]   [sc] [->] [shp] [3s] [v] [->] 2 [hs]   [shp]<x>[1][-][2]<> [->] [tc] [3s] [v]<x>[4][-][6]<> [->] [shp]<x>[1]<>   3[v]<x>[hs]<> [->] [shp]<x>[2][flag]<> [3s] <r>3[hs]  3[pop]
+|| 0 ||  {p=3} + 4[v] [1s] 2[v] [->] [hs] [1s] [v] [->] 2 [hs]   [shp]<x>[1]<> [->] [tc]   3[v]<x>[hs]<> + [v]<x>[4][-][6]<> [->] [shp]<x>[1][flag]<> /f <r>3[hs]  3[pop]
 
-|| 1 ||  {p=4} [scout] [->] [explore]   [shp]<x>[3]<>[->] [explore]  /f  <r>3[f]  1[house]  4[pop]
+|| 1 ||  {p=4 sps="no"} [scout] [->] [shp] [->] [explore]<x>[flag]<>  /f  <r>3[f]  1[house]  4[pop]
 
-|| 2 ||  {p=5} [shp]<x>[4]<>[->] [explore] /f  <r>5[f]  5[pop]
+|| 2 ||  {p=5} [shp]<x>[2]<>[->] [tc]   [shp]<x>[3]<> + [shp]<x>[4]<> [->] [explore]  /f  <r>5[f]  5[pop]
 
 || 3 ||  {p=6} [v]<x>[7][-][8]<> [->] [boar]<x>[1]<>   +[v]  /f  <r>6[f]  6[pop]
 
-|| 4 ||  {p=7} +[v]   6[v]<x>[shp]<x xs>[1][-][2]<> [->] [boar]<x>[1]<>  /f  <r>7[f]  7[pop]
+|| 4 ||  {p=7} +[v]   6[v]<x>[shp]<x xs>[2]<> [->] [boar]<x>[1][flag]<>  /f  <r>7[f]  7[pop]
 
 || 5 ||  {p=8} +[v]   [v]<x>[9][-][1][3]<> [->] [tree]  /f  <r>8[f]  8[pop]
 
 || 6 ||  {p=9} [v]<x>[tree]<> [->] [LC]   8[v]<x>[boar]<sup>[f]=14<> [->] [drop food]   + 2[v]  /f  <r>8[f]  1[lc]  9[pop]
 
-|| 7 ||  {p=10} 1[v]<x>[boar]<> [->] [boar]<x>[2]<>  /f  <r>1[w]  8[f]  1[lc]  10[pop]
+|| 7 ||  {p=10} [food]<x>[boar]<> [less than] 160 [->]   [3s] 1[v]<x>[boar]<> [->] [boar]<x>[2]<>  /f  <r>1[w]  8[f]  1[lc]  10[pop]
 
-|| 8 ||  {p=11} 7[v]<x>[boar]<> [->] [drop food]   + 2[v]  /f  <r>3[w]  8[f]  11[pop]
+|| 8 ||  {p=11} 7[v]<x>[boar]<sup>[f]=14<> [->] [drop food] [->] [boar]<x>[2][flag]<>   + 2[v]  /f  <r>3[w]  8[f]  11[pop]
 
-|| 9 ||  {p=12} 7[v]<x>[boar]<x xs>[1]<> [->] [boar]<x>[2]<>   6[shp] [->] [tc]  /f  <r>4[w]  8[f]  12[pop]
+|| 9 ||  {p=12} 6[shp] [->] [tc]  /f  <r>4[w]  8[f]  12[pop]
 
 || 10 ||  {p=13} + 2[v]   [v]<x>[1][4][-][1][9]<> [->] [shp]<x>[3]<>   /f  <r>5[w]  8[f]  13[pop]
 
@@ -36,7 +36,7 @@
 
 || 14 ||  {p=17} + 3[v]  /f  <r>4[w]  12[f]  1[rax]  17[pop]
 
-|| 15 ||  {p=18} [sc] [->] [explore] Opponent  /f  <r>4[w]  13[f]  1[rax]  18[pop]
+|| 15 ||  {p=18} If Found [deer]<x>[1][-][6]<> [->]   [3s] [sc] [->] [explore] Opponent  /f  <r>4[w]  13[f]  1[rax]  18[pop]
 
 || 16 ||  {p=19} [v]<x>[2][0]<> [->] [mc]<x>[gold mine]<>  /f  <r>5[w]  14[f]  19[pop]
 
@@ -94,7 +94,7 @@
 
 || 43 ||  {p=41 t=80 sns="no" sps="no"} + 2[v] [3s] [forging] [3s] + 3 [maa]   [v]<x>[tree]<> [->] [lumber camp]<x>[2]<>   [w] > 325 [->] 4[v]<x>[tree]<> [->] [mill]<x>[3]<> + 4 [farm]  /f  <r>12[w]  16[f]  7[g]  4[farm]  1[lc]  1[rax]  41[pop]
 
-|| 44 ||  {p=41} [upgrade to long swordsman] [3s] [chain mail armor]   [v]<x>[4][2][-][6][3]<> [->] [tree]<x>[lc]<x xs>[2]<>   Max [maa]  /f  <r>13[w]  16[f]  8[g]  4[farm]  41[pop]
+|| 44 ||  {p=41} [upgrade to long swordsman] [3s] [bow saw] [3s] [chain mail armor]   [v]<x>[4][2][-][6][3]<> [->] [tree]<x>[lc]<x xs>[2]<>   Max [maa]  /f  <r>13[w]  16[f]  8[g]  4[farm]  41[pop]
 
 || 45 ||  {p=42} + 2[v]   [v]<x>[tree]<> [->] [drop wood] [->] 4 [hs]  /f  <r>13[w]  20[f]  8[g]  1[hs]  42[pop]
 
@@ -130,44 +130,40 @@
 
 || 61 ||  {p=58} + 2[v]   [v]<x>[hs]<> [->] [uni] [->] [hs]<x>[flag]<>  /f  <r>17[w]  32[f]  8[g]  1[uni]  58[pop]
 
-|| 62 ||  {p=59 empty} /f  <r>18[w]  32[f]  8[g]  1[uni]  59[pop]
+|| 62 ||  {p=59} 9[v]<x>[tree]<> [->] [mc]<x>[2]<sup>[gold mine]<>   1[v]<x>[tree]<> [->] [monastery] [->] [tree]<x>[flag]<>  /f  <r>8[w]  32[f]  8[g]  1[uni]  1[monastery]  9[mc]  59[pop]
 
-|| 63 ||  {p=60} + 2[v]  /f  <r>19[w]  32[f]  8[g]  1[uni]  60[pop]
+|| 63 ||  {p=60} [wb]   [gold mining]  /f  <r>9[w]  32[f]  8[g]  1[uni]  1[monastery]  9[mc]  60[pop]
 
-|| 64 ||  {p=61} 9[v]<x>[tree]<> [->] [mc]<x>[2]<sup>[gold mine]<>   1[v]<x>[tree]<> [->] [monastery] [->] [tree]<x>[flag]<>  /f  <r>10[w]  32[f]  8[g]  1[uni]  1[monastery]  9[mc]  61[pop]
+|| 64 ||  {p=61} Cancel [longsword] Queue and   Stop Production    [v]<x>[hs]<> [->] 4 [hs]<x>[flag]<>  /f  <r>11[w]  32[f]  17[g]  1[hs]  61[pop]
 
-|| 65 ||  {p=62} [wb]   Cancel [longsword] Queue and   Stop Production  /f  <r>12[w]  32[f]  17[g]  1[hs]  62[pop]
+|| 65 ||  {p=61} /f  <r>11[w]  32[f]  17[g]  1[hs]  61[pop]
 
-|| 66 ||  {p=63} [gold mining]   [v]<x>[hs]<> [->] 4 [hs]<x>[flag]<>  /f  <r>13[w]  32[f]  17[g]  1[hs]  63[pop]
+|| 66 ||  {p=61} [imperial age]  /f  <r>11[w]  32[f]  17[g]  1[hs]  61[pop]
 
-|| 67 ||  {p=63 empty} /f  <r>13[w]  32[f]  17[g]  1[hs]  63[pop]
+|| 67 ||  {p=61 t=65} Start [longsword] Production   [v]<x>[6][2][-][6][3]<> [->] [stone mine]<x>[1]<>   [v]<x>[hs]<> [->] [rax]<x>[4]<> + [rax]<x>[5]<> [->] [hs]<x>[flag]<>  /f  <r>11[w]  32[f]  17[g]  1[hs]  61[pop]
 
-|| 68 ||  {p=63} [imperial age]  /f  <r>13[w]  32[f]  17[g]  1[rax]  63[pop]
+|| 68 ||  {p=61 t=65 empty} /f  <r>11[w]  32[f]  17[g]  1[hs]  61[pop]
 
-|| 69 ||  {p=63 t=65} Start [longsword] Production @ 3 [rax] [->] 5 [rax]   [v]<x>[6][4][-][6][5]<> [->] [stone mine]<x>[1]<>   [v]<x>[hs]<> [->] [rax]<x>[4]<> + [rax]<x>[5]<> [->] [hs]<x>[flag]<>  /f  <r>13[w]  32[f]  17[g]  1[hs]  63[pop]
+|| 69 ||  {p=61 t=60} + 2[v]   [v]<x>[hs]<> [->] 4 [hs]<x>[flag]<>  /f  <r>11[w]  32[f]  17[g]  1[hs]  61[pop]
 
-|| 70 ||  {p=63 t=65 empty} /f  <r>13[w]  32[f]  17[g]  1[rax]  63[pop]
+|| 70 ||  {p=61} [upgrade to two-handed swordsman] [3s] [plate mail armor]   4[v]<x>[gold mine]<> [->] [mc]<sup>[stone mine]<x>[1]<>  /f  <r>11[w]  32[f]  13[g]  1[hs]  4[mc]  61[pop]
 
-|| 71 ||  {p=63 t=60} + 2[v]   [v]<x>[hs]<> [->] 4 [hs]<x>[flag]<>  /f  <r>13[w]  32[f]  17[g]  1[hs]  63[pop]
+|| 71 ||  {p=62} Stop [longsword] Production   + 2[v]  /f  <r>11[w]  32[f]  13[g]  1[s]  1[hs]  4[mc]  62[pop]
 
-|| 72 ||  {p=63} [upgrade to two-handed swordsman] [3s] [plate mail armor]   4[v]<x>[gold mine]<> [->] [mc]<sup>[stone mine]<x>[1]<>  /f  <r>13[w]  32[f]  13[g]  1[hs]  4[mc]  63[pop]
+|| 72 ||  {p=63} [v]<x>[6][4][-][7][0]<> [->] [stone mine]<x>[2]<>   [v]<x>[tree]<> [->] [mc]<sup>[stone mine]<x>[2]<>  /f  <r>10[w]  32[f]  13[g]  2[s]  1[hs]  5[mc]  63[pop]
 
-|| 73 ||  {p=64} Stop [longsword] Production   + 2[v]  /f  <r>13[w]  32[f]  13[g]  1[s]  1[hs]  4[mc]  64[pop]
+|| 73 ||  {p=64} [champion upgrade]   + 2[v]   Start [2hs] Production @ 5 [rax]  /f  <r>10[w]  32[f]  13[g]  7[s]  1[hs]  1[mc]  64[pop]
 
-|| 74 ||  {p=65} [v]<x>[6][6][-][7][2]<> [->] [stone mine]<x>[2]<>   [v]<x>[tree]<> [->] [mc]<sup>[stone mine]<x>[2]<>  /f  <r>12[w]  32[f]  13[g]  6[s]  1[hs]  1[mc]  65[pop]
+|| 74 ||  {p=65} [v]<x>[hs]<> [->] 4 [hs]<x>[flag]<> [->] [tree]<x>[flag]<>  /f  <r>10[w]  32[f]  13[g]  9[s]  1[hs]  65[pop]
 
-|| 75 ||  {p=66} [champion upgrade]   + 2[v]   Start [2hs] Production @ 5 [rax]  /f  <r>12[w]  32[f]  13[g]  7[s]  1[hs]  1[mc]  66[pop]
+|| 75 ||  {p=66} + 2[v]  /f  <r>11[w]  32[f]  13[g]  10[s]  66[pop]
 
-|| 76 ||  {p=67} [v]<x>[hs]<> [->] [tree]<x>[flag]<>  /f  <r>12[w]  32[f]  13[g]  9[s]  1[hs]  67[pop]
+|| 76 ||  {p=67 empty} /f  <r>11[w]  32[f]  13[g]  11[s]  67[pop]
 
-|| 77 ||  {p=68} + 2[v]  /f  <r>13[w]  32[f]  13[g]  10[s]  68[pop]
+|| 77 ||  {p=68} + 2[v]  /f  <r>11[w]  32[f]  13[g]  12[s]  68[pop]
 
-|| 78 ||  {p=69 empty} /f  <r>13[w]  32[f]  13[g]  11[s]  69[pop]
+|| 78 ||  {p=69 empty} /f  <r>11[w]  32[f]  13[g]  13[s]  69[pop]
 
-|| 79 ||  {p=70} + 2[v]  /f  <r>13[w]  32[f]  13[g]  12[s]  70[pop]
+|| 79 ||  {p=70 sns="no"} + 2[v]   6[v]<x>[tree]<> [->] [tc]<x>[2]<sup>[tree]<>   [v]<x>[7][1][-]...<> [->] [tree]<x>[tc]<x xs>[2]<>  /f  <r>5[w]  32[f]  13[g]  14[s]  6[tc]  70[pop]
 
-|| 80 ||  {p=71 empty} /f  <r>13[w]  32[f]  13[g]  13[s]  71[pop]
-
-|| 81 ||  {p=72 sns="no"} + 2[v]   6[v]<x>[tree]<> [->] [tc]<x>[2]<sup>[tree]<>   [v]<x>[7][3][-]...<> [->] [tree]<x>[tc]<x xs>[2]<>  /f  <r>7[w]  32[f]  13[g]  14[s]  6[tc]  72[pop]
-
-|| 82 ||  {sps="no"} [champ]@ 5 [rax] [3s] [v]@ 2 [tc]   [v]<x>[stone mine]<> [->] [castle] [->] [conscription] [1s] [trebuchet] [1s] [elite gbeto]   [crop rotation] [1s] [hand cart] [1s] [fortified wall]  /f  <r>9+[w]  40+[f]  13+[g]  6+[s]  72+[pop]
+|| 80 ||  {sps="no"} [champ]@ 5 [rax] [3s] [v]@ 2 [tc]   [v]<x>[stone mine]<> [->] [castle] [->] [conscription] [1s] [trebuchet] [1s] [elite gbeto]   [crop rotation] [1s] [hand cart] [1s] [fortified wall]  /f  <r>8+[w]  40+[f]  13+[g]  6+[s]  71+[pop]

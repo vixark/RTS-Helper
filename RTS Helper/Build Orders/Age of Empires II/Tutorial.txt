@@ -17,7 +17,7 @@
 
 || 6 || {s="Ticket Machine 1.mp3"}<title>Images<>   <longtext>To load them you can use their names between squared   brackets. Use abbreviations, common names and acronyms;   in plural or singular and even names in other supported   languages. See examples in next step.
 
-|| 7 || {long}Vil: [Vil]  F: [F]  MAA: [MAA]  Knights: [Knights]   Pike: [Pike]  Bodkin Arrow: [Bodkin Arrow]  Arena: [Arena]   Tirailleur d'élite: [Tirailleur d'élite]  Castle Age: [Castle Age]   Malians: [Malians]
+|| 7 || {long}[open square bracket]Vil[close square bracket]: [Vil] [1s] [open square bracket]F[close square bracket]: [F] [1s] [open square bracket]MAA[close square bracket]: [MAA]   [open square bracket]Pike[close square bracket]: [Pike] [1s] [open square bracket]Bodkin[close square bracket]: [Bodkin] [1s] [open square bracket]Arena[close square bracket]: [Arena]   [open square bracket]Tirailleur d'élite[close square bracket]: [Tirailleur d'élite] [1s] [open square bracket]Castle Age[close square bracket]: [Castle Age]   [open square bracket]KTS[close square bracket]: [Knights] [1s] [open square bracket]Malians[close square bracket]: [Malians]
 
 || 8 || {short}Make steps with very short   duration, like this one,   or as long as you want.
 
