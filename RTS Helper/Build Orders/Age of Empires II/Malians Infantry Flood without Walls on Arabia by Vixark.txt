@@ -20,7 +20,7 @@
 
 || 6 ||  {p=9} [v]<x>[tree]<> [->] [LC]   8[v]<x>[boar]<sup>[f]=14<> [->] [drop food]   + 2[v]  /f  <r>8[f]  1[lc]  9[pop]
 
-|| 7 ||  {p=10} [food]<x>[boar]<> [less than] 160 [->]   [3s] 1[v]<x>[boar]<> [->] [boar]<x>[2]<>  /f  <r>1[w]  8[f]  1[lc]  10[pop]
+|| 7 ||  {p=10} [food]<x>[boar]<> [less than] 150 [->]   [3s] 1[v]<x>[boar]<> [->] [boar]<x>[2]<>  /f  <r>1[w]  8[f]  1[lc]  10[pop]
 
 || 8 ||  {p=11} 7[v]<x>[boar]<sup>[f]=14<> [->] [drop food] [->] [boar]<x>[2][flag]<>   + 2[v]  /f  <r>3[w]  8[f]  11[pop]
 

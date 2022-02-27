@@ -20,7 +20,7 @@
 
 || 6 ||  {p=9} [v]<x>[tree]<> [->] [LC]   8[v]<x>[boar]<sup>[f]=14<> [->] [drop food]   + 2[v]  /f  <r>8[f]  1[lc]  9[pop]
 
-|| 7 ||  {p=10} [food]<x>[boar]<> [less than] 160 [->]   [3s] 1[v]<x>[boar]<> [->] [boar]<x>[2]<>  /f  <r>1[w]  8[f]  1[lc]  10[pop]
+|| 7 ||  {p=10} [food]<x>[boar]<> [less than] 150 [->]   [3s] 1[v]<x>[boar]<> [->] [boar]<x>[2]<>  /f  <r>1[w]  8[f]  1[lc]  10[pop]
 
 || 8 ||  {p=11} 7[v]<x>[boar]<sup>[f]=14<> [->] [drop food] [->] [boar]<x>[2][flag]<>   + 2[v]  /f  <r>3[w]  8[f]  11[pop]
 
@@ -42,7 +42,7 @@
 
 || 17 ||  {p=20} [v]<x>[2][1]<> [->] [mill]<x>[berries]<>   [feudal age]  /f  <r>5[w]  14[f]  1[mc]  20[pop]
  
-|| 18 ||  {p=21 t=40 sns="no" sps="no"} 4[v]<x>[shp]<sup>[drop food]<> [->] [mill]<x>[deer]<x xs>[1][-][3]<> [->] 3[deer]<x>[flag]<> [->] [tree]<x>[flag]<>    3[v]<x>[shp]<> [->] [gold mine]<x>[flag]<>   + [mil] [3s] 7[v]<x>[shp]<> [->] [berries]<x>[flag]<>  /f  <r>5[w]  7[f]  4[gold]  5[mill]  21[pop] 
+|| 18 ||  {p=21 t=40 sns="no" sps="no"} 4[v]<x>[shp]<sup>[drop food]<> [->] [mill]<x>[deer]<x xs>[1][-][3]<> [->] 3[deer]<x>[flag]<> [->] [tree]<x>[flag]<>    3[v]<x>[shp]<> [->] [gold mine]   + [mil] [3s] 7[v]<x>[shp]<> [->] [berries]  /f  <r>5[w]  7[f]  4[gold]  5[mill]  21[pop] 
 
 || 19 ||  {p=21 t=40 sps="no"} [v]<x>[gold mine]<> [->] 2 [hs] [->] [gold mine]<x>[flag]<>   + [mil]    If [arabia] [->] + [mil]  /f  <r>5[w]  12[f]  3[g]  1[hs]  21[pop]
 
