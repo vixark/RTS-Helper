@@ -34,7 +34,7 @@ namespace RTSHelper {
 
         public static Settings Preferencias = new Settings();
 
-        public static bool ModoDesarrollo = true;
+        public static bool ModoDesarrollo = false;
 
         public static bool ModoDesarrolloOCR = false;
 

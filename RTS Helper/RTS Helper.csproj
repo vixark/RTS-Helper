@@ -6,7 +6,7 @@
     <RootNamespace>RTSHelper</RootNamespace>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <Version>1.3.5</Version>
+    <Version>1.3.9</Version>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>nullable</WarningsAsErrors>
     <Authors>David</Authors>
