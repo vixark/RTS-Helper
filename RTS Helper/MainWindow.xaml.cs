@@ -58,6 +58,8 @@ namespace RTSHelper {
 
         private DispatcherTimer TimerDetecciónProgreso = new DispatcherTimer();
 
+        private DispatcherTimer TimerDetecciónInicioJuego = new DispatcherTimer();
+
         private Stopwatch MedidorTimer = new Stopwatch(); // Temporizador medidor del tiempo.
 
         private bool Inició = false;
@@ -98,6 +100,10 @@ namespace RTSHelper {
 
         private static DateTime ÚltimaEjecuciónDeOrdenDeEjecuciónActualChanged = DateTime.Now;
 
+        private int ContadorPantallaCarga = 0;
+
+        private bool EnPantallaCarga = false;
+
         #endregion Propiedades y Variables>
 
 
@@ -127,6 +133,10 @@ namespace RTSHelper {
 
             TimerDetecciónProgreso.Interval = TimeSpan.FromMilliseconds(1000); // Cada ejecución tarda en mi computador alrededor de 50 ms. 
             TimerDetecciónProgreso.Tick += new EventHandler(TimerDetecciónProgreso_Tick);
+
+            TimerDetecciónInicioJuego.Interval = TimeSpan.FromMilliseconds(1000);
+            TimerDetecciónInicioJuego.Tick += new EventHandler(TimerDetecciónInicioJuego_Tick);
+            TimerDetecciónInicioJuego.Start();
 
             LeerPreferencias();
             OrdenDeEjecución.EnCambioNúmeroPaso = () => EnCambioNúmeroPaso();
@@ -195,17 +205,7 @@ namespace RTSHelper {
             switch (Estado) {
                 case EEstado.Stoped: // Start.
 
-                    EstablecerRunningUI(EEstado.Stoped);
-                    Estado = EEstado.Running;
-                    OrdenDeEjecución.NúmeroPaso = 0;
-                    ReiniciarPasoActual();
-                    SuspenderBlinkingTiempoJuego();
-                    BtnNext.IsEnabled = true;
-                    BtnBack.IsEnabled = true;
-                    BtnRemoveIdleTime.IsEnabled = true;
-                    BtnAddIdleTime.IsEnabled = true;
-                    TimerDetecciónPausa.Start();
-                    TimerDetecciónProgreso.Start();
+                    Start();
                     break;
 
                 case EEstado.Running: // Pause.
@@ -225,25 +225,13 @@ namespace RTSHelper {
         } // BtnStart_Click>
 
 
-        private void BtnRestart_Click(object sender, RoutedEventArgs e) {
+        private void BtnStop_Click(object sender, RoutedEventArgs e) {
 
             switch (Estado) {
                 case EEstado.Stoped: // Stop otra vez. No pasa nada.
                     break;
-                case EEstado.Running: // Restart.
-
-                    Estado = EEstado.Running;
-                    ReiniciarVariables();
-                    ReiniciarPasoActual();
-                    if (Preferencias.MuteOnComplete && SilenciadoAlCompletar) {
-                        Preferencias.Muted = false;
-                        SilenciadoAlCompletar = false;
-                        AplicarPreferenciasMuted(iniciando: false);
-                    }    
-                    SuspenderBlinkingTiempoJuego();
-                    break;
-
-                case EEstado.Paused: // Stop.
+                case EEstado.Running: // Stop. Independiente si está ejecutando o en pausa, siempre hace Stop. Esto se cambió del comportamiento anterior porque ahora el inicio es automático cuando inicia el juego.
+                case EEstado.Paused: 
 
                     Estado = EEstado.Stoped;
                     ReiniciarVariables();
@@ -256,6 +244,7 @@ namespace RTSHelper {
                     TimerStepEndSound?.Stop();
                     TimerDetecciónPausa.Stop();
                     TimerDetecciónProgreso.Stop();
+                    TimerDetecciónInicioJuego.Start();
                     ActualizarUI(forzar: true);  
                     BtnNext.IsEnabled = false;
                     BtnBack.IsEnabled = false;
@@ -268,7 +257,7 @@ namespace RTSHelper {
                     break;
             }
 
-        } // BtnRestart_Click>
+        } // BtnStop_Click>
 
 
         private void MniRestartStep_Click(object sender, RoutedEventArgs e) {
@@ -287,17 +276,6 @@ namespace RTSHelper {
             if (estadoActual == EEstado.Paused) Pause();
 
         } // MniStartNextStep_Click>
-
-
-        public void Flash() {
-
-            TimerFlash.Start();
-            if (!(Preferencias.StopFlashingOnComplete && OrdenDeEjecución.EsDespuésDeÚltimoPaso) && ObtenerFlash(OrdenDeEjecución.NúmeroPaso)) {
-                Application.Current.Resources["ColorFondo"] = ObtenerMediaColor(ObtenerColorFlash(OrdenDeEjecución.NúmeroPaso)) ?? Color.FromRgb(0, 0, 0);
-                Application.Current.Resources["Opacidad"] = ObtenerOpacidadFlash(OrdenDeEjecución.NúmeroPaso);
-            }
-
-        } // Flash>
 
 
         private void Timer_Tick(object? sender, EventArgs e) {
@@ -406,12 +384,39 @@ namespace RTSHelper {
 
         private void TimerDetecciónProgreso_Tick(object? sender, EventArgs e) => DetectarProgreso(forzarAplicación: false);
 
+        
+        private void TimerDetecciónInicioJuego_Tick(object? sender, EventArgs e) {
+
+            if (!Jugando()) return;
+            if (Preferencias.Game == AOE2Name) {
+
+                var colorFondoEsquinaInferior = ExtraerColorFondo(ScreenCaptureText.Age_of_Empires_II_InicioJuego);
+                if (colorFondoEsquinaInferior.R < 10 && colorFondoEsquinaInferior.G < 10 && colorFondoEsquinaInferior.B < 10) { // 14-14-14 puede ser el color cuando se está en la página principal y se le da clic a 'Single Player'.
+
+                    ContadorPantallaCarga++;
+                    if (ContadorPantallaCarga == 2) {
+                        EnPantallaCarga = true;
+                        if (Preferencias.OCRTestMode) LblDepuración.Content = "Loading Screen Detected";
+                    }
+                        
+                } else {
+   
+                    if (EnPantallaCarga) Start();
+                    EnPantallaCarga = false;
+                    ContadorPantallaCarga = 0;
+
+                }
+
+            }
+            
+        } // TimerDetecciónInicioJuego_Tick>
+
 
         private void TimerDetecciónPausa_Tick(object? sender, EventArgs e) { // En mi computador tarda alrededor de 50 ms cuando está en juego  y alrededor de 70 ms cuando está en pausa.
 
             if (!Preferencias.PauseDetection) return;
             if (!Jugando()) return;
-            if (ModoDesarrolloOCR) LblDepuración.Visibility = Visibility.Visible;
+            LblDepuración.Visibility = Preferencias.OCRTestMode ? Visibility.Visible: Visibility.Collapsed;
 
             var juegoPausado = false;
             var textoPausa = LeerPausa(out float confianzaPausa);
@@ -513,6 +518,16 @@ namespace RTSHelper {
             AplicarPreferencias();
 
         } // BtnMute_Click>
+
+
+        private void MniFirstStep_Click(object sender, RoutedEventArgs e) {
+
+            var cantidadPasos = OrdenDeEjecución.NúmeroPaso;
+            for (int i = 0; i < cantidadPasos; i++) {
+                Back(proporcional: true);
+            }
+
+        } // MniFirstStep_Click>
 
 
         private void MniLastStep_Click(object sender, RoutedEventArgs e) {
@@ -843,8 +858,6 @@ namespace RTSHelper {
             }
             BtnStart.Content = "❚❚";
             BtnStart.ToolTip = "Pause";
-            BtnRestart.ToolTip = "Restart";
-            BtnRestart.Content = "⟳";
             TxtPaso.IsEnabled = true;
 
         } // EstablecerRunningUI>
@@ -870,13 +883,26 @@ namespace RTSHelper {
         } // Restart>
 
 
+        private void RestartIfRunning() { // No se usa en el momento. Era la antigua función de reiniciar la reproducción desde el primer paso que reemplazaba al botón Stop cuando estaba reproduciendo.
+
+            Estado = EEstado.Running;
+            ReiniciarVariables();
+            ReiniciarPasoActual();
+            if (Preferencias.MuteOnComplete && SilenciadoAlCompletar) {
+                Preferencias.Muted = false;
+                SilenciadoAlCompletar = false;
+                AplicarPreferenciasMuted(iniciando: false);
+            }
+            SuspenderBlinkingTiempoJuego();
+
+        } // RestartIfRunning>
+
+
         private void Pause() {
 
             Estado = EEstado.Paused;
             BtnStart.Content = "▷";
-            BtnStart.ToolTip = "Restart";
-            BtnRestart.ToolTip = "Stop";
-            BtnRestart.Content = "■";         
+            BtnStart.ToolTip = "Restart";     
             MedidorTimer.Stop(); // Lo suspende, pero mantiene el valor de la duración actual.
             Timer?.Stop(); // Lo suspende completamente.
             TimerFlash.Stop(); // Lo suspende completamente.
@@ -885,6 +911,36 @@ namespace RTSHelper {
             RestablecerColor(); // Para que no se quede el color de flashing activo durante la pausa.
 
         } // Pause>
+
+
+        public void Flash() {
+
+            TimerFlash.Start();
+            if (!(Preferencias.StopFlashingOnComplete && OrdenDeEjecución.EsDespuésDeÚltimoPaso) && ObtenerFlash(OrdenDeEjecución.NúmeroPaso)) {
+                Application.Current.Resources["ColorFondo"] = ObtenerMediaColor(ObtenerColorFlash(OrdenDeEjecución.NúmeroPaso)) ?? Color.FromRgb(0, 0, 0);
+                Application.Current.Resources["Opacidad"] = ObtenerOpacidadFlash(OrdenDeEjecución.NúmeroPaso);
+            }
+
+        } // Flash>
+
+
+        private void Start() {
+
+            EstablecerRunningUI(EEstado.Stoped);
+            Estado = EEstado.Running;
+            OrdenDeEjecución.NúmeroPaso = 0;
+            ReiniciarPasoActual();
+            SuspenderBlinkingTiempoJuego();
+            BtnNext.IsEnabled = true;
+            BtnBack.IsEnabled = true;
+            BtnRemoveIdleTime.IsEnabled = true;
+            BtnAddIdleTime.IsEnabled = true;
+            TimerDetecciónPausa.Start();
+            TimerDetecciónProgreso.Start();
+            TimerDetecciónInicioJuego.Stop();
+            PlaySonidoInicio();
+
+        } // Start>
 
 
         public void RestaurarVistaPasoSiguienteAnterior() 
@@ -985,10 +1041,10 @@ namespace RTSHelper {
 
         private void DetectarProgreso(bool forzarAplicación) { // En mi computador tarda alrededor de 50 ms. La verificación de aldeanos es casi siempre un solo ensayo.
 
-            if (ModoDesarrolloOCR) {
+            if (Preferencias.OCRTestMode) {
 
                 var progresoLeído2 = LeerProgreso(50, out float confianza2, rangoValoresEsperados: 0); // No se usa rango de valores esperados para no contaminar las pruebas OCR con un dato de progreso actual. Se debe usar un número cualquiera de una cifra, de dos y de tres para probar el funcionamiento de la extracción de texto en cada uno de los segmentos.
-                LblDepuración.Content = $"Progreso Leído: {progresoLeído2.ToString()}{Environment.NewLine}Confianza: {confianza2}";
+                LblDepuración.Content = $"Progress Read: {progresoLeído2.ToString()}{Environment.NewLine}Confidence: {confianza2}";
                 return; // En este modo se desactiva el ajuste de progreso automático para facilitar realizar los ensayos.
 
             }

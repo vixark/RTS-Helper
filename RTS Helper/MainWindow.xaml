@@ -174,7 +174,7 @@
                         Style="{StaticResource customButton}" bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205" 
                         Width="{DynamicResource TamañoBotones}" Height="{DynamicResource TamañoBotones}" ToolTip="Start">▷</local:HoverButton>
 
-                    <local:HoverButton x:Name="BtnRestart" Click="BtnRestart_Click" Foreground="{DynamicResource BrushFuente}"         
+                    <local:HoverButton x:Name="BtnStop" Click="BtnStop_Click" Foreground="{DynamicResource BrushFuente}"         
                         FontSize="{DynamicResource FuenteNormal}" FontWeight="Bold" Padding="{DynamicResource PaddingBotones}"                
                         BorderBrush="{DynamicResource BrushFuente}" BorderThickness="1" Margin="{DynamicResource MargenBotones}" 
                         Style="{StaticResource customButton}" bgColor="{DynamicResource BrushFondoControles}" hoverColor="#498205"
@@ -210,6 +210,8 @@
 
                         <local:HoverButton.ContextMenu>
                             <ContextMenu>
+                                <MenuItem x:Name="MniFirstStep" Click="MniFirstStep_Click"  Header="⮜       Go to First Step" />
+                                <Separator BorderBrush="#BBB" BorderThickness="0 2 0 0" Margin="0 5 0 5" />
                                 <MenuItem x:Name="MniResetIdleTime" Click="MniResetIdleTime_Click" Header="🗙      Reset Idle Time" />
                                 <MenuItem x:Name="MniAddIdleTime" Click="MniAddIdleTime_Click" Header="➕     Add Idle Time" />
                                 <Separator BorderBrush="#BBB" BorderThickness="0 2 0 0" Margin="0 5 0 5" />

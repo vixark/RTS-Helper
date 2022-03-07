@@ -25,6 +25,8 @@ namespace RTSHelper {
 
         public string ScreenResolution { get; set; } = "1920x1080"; // Es una pseudopreferencia porque no se usa por si sola si no para establecer otros valores.
 
+        public float GameInterfaceScale { get; set; } = 100;
+
         public double GameSpeed { get; set; } = 1;
 
         public double ExecutionSpeed { get; set; } = 1; // 1 es la máxima velocidad. En esta velocidad cada conjunto de comandos corresponde a un minuto en el juego.
@@ -278,6 +280,13 @@ namespace RTSHelper {
         #endregion Nombres>
 
 
+        #region OCR
+
+        public bool OCRTestMode { get; set; } = false;
+
+        #endregion OCR>
+
+
         #region Propiedades Autocalculadas
 
         public string BuildOrdersDirectory {
@@ -398,6 +407,7 @@ namespace RTSHelper {
                     break;
 
                 case "2560x1440":
+                case "3840x2160":
 
                     Height = 195 * CorrecciónEscala;
                     Width = 662 * CorrecciónEscala; // No cambiar, normalmente uso el minimapa 25% más grande y el valor mi valor sería 635.
@@ -484,6 +494,7 @@ namespace RTSHelper {
                         break;
 
                     case "2560x1440":
+                    case "3840x2160":
 
                         BottomMargenSteps += 40 * CorrecciónEscala;
                         Width = 355 * CorrecciónEscala;

@@ -66,8 +66,8 @@ namespace RTSHelper {
                 TbiCustomNames.Visibility = Visibility.Collapsed;
                 TbiOverrides.Visibility = Visibility.Collapsed;
                 TbiControl.Visibility = Visibility.Collapsed;
-                Height = 300;
-                TbcPreferencias.Height = 190;
+                Height = 320;
+                TbcPreferencias.Height = 210;
                 Width = 350;
                 LblStepDuration.Visibility = Visibility.Collapsed;
                 TxtStepDuration.Visibility = Visibility.Collapsed;
@@ -159,9 +159,11 @@ namespace RTSHelper {
             TxtBackwardSeconds.Text = Preferencias.BackwardSeconds.ToString();
             ChkShowAlwaysStatsButton.IsChecked = Preferencias.ShowAlwaysStatsButton;
             ChkShowAlternateNextPreviousStepButton.IsChecked = Preferencias.ShowAlternateNextPreviousStepButton;
+            ChkOCRTestMode.IsChecked = Preferencias.OCRTestMode;
 
             AgregarIdiomas(CmbGameLanguage, Preferencias.GameLanguage, IdiomasJuego);
             CargarVelocidadEjecución();
+            CargarEscalaInterface();
 
             if (!primerInicio) VentanaPrincipal.AplicarPreferencias(); // Se requiere aplicarlas para que se haga visible el cambio de color en los botones.
 
@@ -1001,6 +1003,19 @@ namespace RTSHelper {
 
         } // CargarVelocidadEjecución>
 
+
+        private void CargarEscalaInterface() {
+
+            var textoEscalaInterface = Preferencias.GameInterfaceScale.ToString() + "%";
+            if (CmbGameInterfaceScale.Text != textoEscalaInterface) {
+                VentanaPrincipal.EditandoComboBoxEnCódigo = true;
+                CmbGameInterfaceScale.Text = textoEscalaInterface;
+                VentanaPrincipal.EditandoComboBoxEnCódigo = false;
+            }
+
+        } // CargarEscalaInterface>
+
+
         private void ChkAutoadjustIdleTime_Checked(object sender, RoutedEventArgs e) {
 
             if (!Activado) return;
@@ -1160,6 +1175,25 @@ namespace RTSHelper {
             VentanaPrincipal.AplicarPreferencias();
 
         } // ChkShowAlternateNextPreviousStepButton_Checked>
+
+
+        private void CmbGameInterfaceScale_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            if (!Activado) return;
+            var cbi = e.AddedItems[0] as ComboBoxItem;
+            if (cbi is null) return;
+            Preferencias.GameInterfaceScale = Convert.ToInt32(cbi.Tag);
+
+        } // CmbGameInterfaceScale_SelectionChanged>
+
+
+        private void ChkOCRTestMode_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.OCRTestMode = ChkOCRTestMode.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // ChkOCRTestMode_Checked>
 
 
     } // SettingsWindow>

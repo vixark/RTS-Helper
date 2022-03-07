@@ -15,9 +15,9 @@
 
 || 5 || That's all you need to know to use   RTS Helper for following build orders.      Keep reading if you want to learn how to create   your own build order files.
 
-|| 6 || {s="Ticket Machine 1.mp3"}<title>Images<>   <longtext>To load them you can use their names between squared   brackets. Use abbreviations, common names and acronyms;   in plural or singular and even names in other supported   languages. See examples in next step.
+|| 6 || {s="Ticket Machine 1.mp3"}<title>Images<>   <longtext>To load them you can use their names between squared   brackets. Use abbreviations, common names and acronyms;   in plural or singular and even names in other supported   languages. See examples in next step.   See all avaliables names https://docs.google.com/spreadsheets/d/1N98XMYNNlUOlA45B3NKTJ54Fhuo53PFYSsnt_F2S7nU:here.
 
-|| 7 || {long}[open square bracket]Vil[close square bracket]: [Vil] [1s] [open square bracket]F[close square bracket]: [F] [1s] [open square bracket]MAA[close square bracket]: [MAA]   [open square bracket]Pike[close square bracket]: [Pike] [1s] [open square bracket]Bodkin[close square bracket]: [Bodkin] [1s] [open square bracket]Arena[close square bracket]: [Arena]   [open square bracket]Tirailleur d'élite[close square bracket]: [Tirailleur d'élite] [1s] [open square bracket]Castle Age[close square bracket]: [Castle Age]   [open square bracket]KTS[close square bracket]: [Knights] [1s] [open square bracket]Malians[close square bracket]: [Malians]
+|| 7 || {long}[open square bracket]Vil[close square bracket]: [Vil] [1s] [open square bracket]F[close square bracket]: [F] [1s] [open square bracket]MAA[close square bracket]: [MAA]   [open square bracket]Pike[close square bracket]: [Pike] [1s] [open square bracket]Bodkin[close square bracket]: [Bodkin] [1s] [open square bracket]竞技场[close square bracket]: [竞技场]   [open square bracket]Tirailleur d'élite[close square bracket]: [Tirailleur d'élite] [1s] [open square bracket]Castle Age[close square bracket]: [Castle Age]   [open square bracket]KTS[close square bracket]: [Knights] [1s] [open square bracket]Malians[close square bracket]: [Malians]
 
 || 8 || {short}Make steps with very short   duration, like this one,   or as long as you want.
 
@@ -29,20 +29,18 @@
 
 || 12 || Keep reading if you   want to see other examples.
 
-|| 13 || [v]<sub>[1][8]<>[->][gold mine]   [v]<sup>[sheep]<sub>[goat]<> [->] [drop food] [->] [boar]<sub>[1]<>   [V]<sub>[W][G][berries]<>[->][rax][->][HS][->][Hs]  /f  <footnote>12[w]  5[f]  3[g]  2[s]
+|| 13 || {s="AOE2 Gold.mp3"} [v]<sub>[1][8]<> [->] [gold mine]   [v]<sup>[sheep]<sub>[goat]<> [->] [drop food] [->] [boar]<sub>[1]<>   [V]<sub>[w][g][berries]<> [->] [rax] [->] [h] [->] [h]  /f  <footnote>12[w]  5[f]  3[g]  2[s]  22[pop]
 
-|| 14 || [double-bit axe] + [horse collar] + [wheelbarrow]     5[militia][->][attack]   20[Geno][->][attack][knights]
+|| 14 || {s="AOE2 Attack an Enemy Now.mp3"} [double-bit axe] + [horse collar] + [wheelbarrow]     5 [militia] [->] [attack]   20 [Geno] [->] [attack][knights]  /f  <footnote>12[w]  15[f]  7[g]  1[h]  34[pop]
 
-|| 15 || [arbalester upgrade]   10[arb][->][attack]   30 [longsword][delete]
+|| 15 || {s="AOE2 The Wonder, The Wonder, The... No!.mp3|AOE2 You Played Two Hours to Die Like This.mp3|AOE2 (Herb Laugh).mp3"} [imperial age] [1s] [arbalester upgrade]   20[arb] + [trebuchet] [->] [attack] [wonder]   30 [champion] + [wonder] [->] [delete]  /f  <footnote>20[w]  40[f]  15[g]  6[s]  81[pop]
 
-|| 16 || 10[v]<sub>[s]<>[->][Castle]   /f  <footnote>11[w]  15[f]  6[g]  4[s]
+|| 16 || <title>Font Sizes: <xxxl>Size XXXL,   <xxl>Size XXL, <xl>Size XL, <l>Size L, <m>Size M,   <s>Size S, <xs>Size XS, <xxs>Size XXS and <xxxs>Size XXXS.
 
-|| 17 || <title>Font Sizes: <xxxl>Size XXXL,   <xxl>Size XXL, <xl>Size XL, <l>Size L, <m>Size M,   <s>Size S, <xs>Size XS, <xxs>Size XXS and <xxxs>Size XXXS.
+|| 17 || <title m>Font Styles:   <b>Bold   <u>Underline   <i>Italics
 
-|| 18 || <title m>Font Styles:   <b>Bold   <u>Underline   <i>Italics
+|| 18 || <title>Fonts, Subscripts and Superscripts   <arial s>Arial<arial sub s>ABC123  <impact s>Impact<impact sub s>123  <timesnewroman s>Times New Roman<sub timesnewroman s>123<> <cambria s>Cambria<cambria sup s>ABC123   <arialblack s>Arial Black<arialblack sup s>123  <Constantia s>Constantia<Constantia sup s>123  <couriernew s>courier new<couriernew sub s>ABC123   <calibri s>Calibri<calibri sub s>123  <palatinoLinotype s>Palatino Linotype<palatinoLinotype sub s>ABC123   <MVBoli s>MV Boli<MVBoli sub s>123  <gabriola s>Gabriola<gabriola sup s>ABC123
 
-|| 19 || <title>Fonts, Subscripts and Superscripts   <arial s>Arial<arial sub s>ABC123  <impact s>Impact<impact sub s>123  <timesnewroman s>Times New Roman<sub timesnewroman s>123<> <cambria s>Cambria<cambria sup s>ABC123   <arialblack s>Arial Black<arialblack sup s>123  <Constantia s>Constantia<Constantia sup s>123  <couriernew s>courier new<couriernew sub s>ABC123   <calibri s>Calibri<calibri sub s>123  <palatinoLinotype s>Palatino Linotype<palatinoLinotype sub s>ABC123   <MVBoli s>MV Boli<MVBoli sub s>123  <gabriola s>Gabriola<gabriola sup s>ABC123
+|| 19 || <title m>Colors:   <brown>Brown   <aqua>Aqua   <seagreen>Sea Green   <#B5B>Any custom color.
 
-|| 20 || <title m>Colors:   <brown>Brown   <aqua>Aqua   <seagreen>Sea Green   <#B5B>Any custom color.
-
-|| 21 || End of tutorial.   To learn more visit:   http://vixark.com/age-of-empires-ii/rts-helper:Vixark.com
+|| 20 || End of tutorial.      To learn more visit: http://vixark.com/age-of-empires-ii/rts-helper:Vixark.com

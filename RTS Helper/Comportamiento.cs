@@ -115,12 +115,49 @@ namespace RTSHelper {
                             case "s":
 
                                 if (Preferencias.OverrideStepStartSound) {
+
                                     Sonido = valor;
                                     if (Sonido == "default") Sonido = Preferencias.StepStartSound;
                                     if (Sonido.ToLower() != NoneSoundString.ToLower() && !File.Exists(Path.Combine(DirectorioSonidosCortos, Sonido))) {
-                                        AgregarErrores(ref errores, $"{Sonido} sound file doesn't exists in {DirectorioSonidosCortos}.");
-                                        Sonido = null;
+
+                                        if (Sonido.Contains("|")) {
+                                            
+                                            var sonidos = Sonido.Split("|");
+                                            var rutaRelativaM3u = @$"Playlists\0x{Sonido.GetHashCode(StringComparison.OrdinalIgnoreCase):X8}.m3u";
+                                            var rutaM3u = Path.Combine(DirectorioSonidosCortos, rutaRelativaM3u);
+                                            if (File.Exists(rutaM3u)) {
+                                                Sonido = rutaRelativaM3u;
+                                            } else { // Si aún no existe, debe crear la lista.
+
+                                                var textoM3u = "#EXTM3U" + Environment.NewLine;
+                                                foreach (var sonidoInterno in sonidos) {
+
+                                                    if (!File.Exists(Path.Combine(DirectorioSonidosCortos, sonidoInterno))) {
+
+                                                        AgregarErrores(ref errores, 
+                                                            $"{sonidoInterno} sound file doesn't exists in {DirectorioSonidosCortos}.");
+                                                        Sonido = null;
+                                                        break;
+
+                                                    } else {
+                                                        textoM3u += @$"#EXTINF:-1,{Environment.NewLine}..\{sonidoInterno}{Environment.NewLine}";
+                                                    }
+
+                                                }
+                                                File.WriteAllText(rutaM3u, textoM3u);
+                                                Sonido = rutaRelativaM3u;
+
+                                            }
+
+                                        } else {
+
+                                            AgregarErrores(ref errores, $"{Sonido} sound file doesn't exists in {DirectorioSonidosCortos}.");
+                                            Sonido = null;
+
+                                        }
+
                                     }
+
                                 }
                                 break;
 

@@ -118,6 +118,25 @@ namespace Vixark {
         } // ObtenerColor>
 
 
+        public static Color ObtenerColorPromedio(List<Color> colores) {
+
+            double R = 0;
+            double G = 0;
+            double B = 0;
+            foreach (var color in colores) {
+                R += color.R;
+                G += color.G;
+                B += color.B;
+            }
+            var cantidadColores = colores.Count;
+            return Color.FromArgb(RedondearAEntero(R / cantidadColores), RedondearAEntero(G / cantidadColores), RedondearAEntero(B / cantidadColores));
+
+        } // ObtenerColorPromedio>
+
+
+        public static int RedondearAEntero(double d) => (int)Math.Round(d, 0);
+
+
         /// <summary>
         /// Obtiene el valor del atributo Display del valor de la enumeración. Es útil para usar un texto personalizado para cada elemento en una enumeración.
         /// </summary>

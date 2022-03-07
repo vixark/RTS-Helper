@@ -34,9 +34,7 @@ namespace RTSHelper {
 
         public static Settings Preferencias = new Settings();
 
-        public static bool ModoDesarrollo = false;
-
-        public static bool ModoDesarrolloOCR = false;
+        public static bool ModoDesarrollo = true;
 
         public const string AOE2Name = "Age of Empires II";
 
@@ -295,8 +293,17 @@ namespace RTSHelper {
             Age_of_Empires_II_Wood, Age_of_Empires_II_Food, Age_of_Empires_II_Gold, Age_of_Empires_II_Stone, Age_of_Empires_II_Population,
             Age_of_Empires_II_Maximum_Population, Age_of_Empires_II_Villagers_on_Wood, Age_of_Empires_II_Villagers_on_Food, 
             Age_of_Empires_II_Villagers_on_Gold, Age_of_Empires_II_Villagers_on_Stone, Age_of_Empires_II_Timer, Age_of_Empires_II_Speed, 
-            Age_of_Empires_II_Age,
+            Age_of_Empires_II_Age, Age_of_Empires_II_InicioJuego
         }
+
+        public static List<ScreenCaptureText> RectángulosAfectadosPorEscalaInterface = new List<ScreenCaptureText> {
+            ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99,
+            ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, ScreenCaptureText.Age_of_Empires_II_Wood, ScreenCaptureText.Age_of_Empires_II_Food,
+            ScreenCaptureText.Age_of_Empires_II_Gold, ScreenCaptureText.Age_of_Empires_II_Stone, ScreenCaptureText.Age_of_Empires_II_Population,
+            ScreenCaptureText.Age_of_Empires_II_Maximum_Population, ScreenCaptureText.Age_of_Empires_II_Villagers_on_Wood,
+            ScreenCaptureText.Age_of_Empires_II_Villagers_on_Food, ScreenCaptureText.Age_of_Empires_II_Villagers_on_Gold,
+            ScreenCaptureText.Age_of_Empires_II_Villagers_on_Stone, ScreenCaptureText.Age_of_Empires_II_Timer, ScreenCaptureText.Age_of_Empires_II_Speed,
+            ScreenCaptureText.Age_of_Empires_II_Age, ScreenCaptureText.Age_of_Empires_II_InicioJuego };
 
         public static float ConfianzaOCRAceptable = 0.50f;
 
@@ -364,6 +371,10 @@ namespace RTSHelper {
                 resolución = "2560x1440";
             } else if (anchoPantalla == 1366 && altoPantalla == 768) {
                 resolución = "1366x768";
+            } else if (anchoPantalla == 3840 && altoPantalla == 2160) {
+                resolución = "3840x2160";
+            } else if (altoPantalla >= 2160) {
+                resolución = "3840x2160";
             } else if (altoPantalla >= 1440) {
                 resolución = "2560x1440";
             } else if (altoPantalla >= 1080) {
@@ -1242,6 +1253,7 @@ namespace RTSHelper {
                 types["Type"].Add("Less Than", "Other");
                 types["Type"].Add("Open Square Bracket", "Other");
                 types["Type"].Add("Close Square Bracket", "Other");
+                types["Type"].Add("Random Civilization", "Civilization");
 
             }
 
@@ -1809,7 +1821,7 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("19329", "Krepost"); names[NameType.CommonPlural].Add("19329", "Kreposts");
                 names[NameType.Complete].Add("19138", "Donjon"); names[NameType.CommonPlural].Add("19138", "Donjons");
                 names[NameType.Complete].Add("5138", "Monastery"); names[NameType.CommonPlural].Add("5138", "Monasteries");
-                names[NameType.Complete].Add("5344", "House"); names[NameType.CommonPlural].Add("5344", "Houses");
+                names[NameType.Complete].Add("5344", "House"); names[NameType.Acronym].Add("5344", "H"); names[NameType.CommonPlural].Add("5344", "Houses");
                 names[NameType.Complete].Add("5164", "Town Center"); names[NameType.Acronym].Add("5164", "TC"); names[NameType.CommonPlural].Add("5164", "Town Centers");
                 names[NameType.Complete].Add("5159", "Feitoria");
                 names[NameType.Complete].Add("5487", "Mining Camp"); names[NameType.Acronym].Add("5487", "MC"); names[NameType.CommonPlural].Add("5487", "Mining Camps");
@@ -2181,6 +2193,7 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("400060", "Less Than"); names[NameType.Common].Add("400060", "<");
                 names[NameType.Complete].Add("400061", "Open Square Bracket"); names[NameType.Common].Add("400061", "[");
                 names[NameType.Complete].Add("400062", "Close Square Bracket"); names[NameType.Common].Add("400062", "]");
+                names[NameType.Complete].Add("400063", "Random Civilization");
 
                 string elite(string original) => "Elite " + original.Replace("|", $"|Elite ");
 
@@ -2363,7 +2376,7 @@ namespace RTSHelper {
                 parámetros.Escala, parámetros.Luminosidad, parámetros.Contraste, parámetros.ModoInterpolación, parámetros.FormatoPixeles);
             var texto = OCR.ObtenerTexto(bmp, parámetros.SoloNúmeros, parámetros.PermitirUnCarácter, out confianza);
 
-            if (ModoDesarrolloOCR) {
+            if (Preferencias.OCRTestMode) {
 
                 if (!Directory.Exists(DirectorioPruebasOCR)) Directory.CreateDirectory(DirectorioPruebasOCR);
                 try {
@@ -2377,6 +2390,20 @@ namespace RTSHelper {
             return texto;
 
         } // ExtraerTextoDePantalla>
+
+
+        public static SDrw.Color ExtraerColorFondo(ScreenCaptureText tipo) {
+
+            using var bmp = CapturaDePantalla.ObtenerBitmap(ObtenerRectánguloTextoEnPantalla(tipo), negativo: false, blancoYNegro: false, escala: 1, 
+                luminosidad: 1, contraste: 1, InterpolationMode.Low, DImg.PixelFormat.Format32bppArgb);
+            var coloresEsquinas = new List<SDrw.Color>();
+            coloresEsquinas.Add(bmp.GetPixel(0, 0));
+            coloresEsquinas.Add(bmp.GetPixel(0, bmp.Height - 1));
+            coloresEsquinas.Add(bmp.GetPixel(bmp.Width - 1, bmp.Height - 1));
+            coloresEsquinas.Add(bmp.GetPixel(bmp.Width - 1, 0));
+            return ObtenerColorPromedio(coloresEsquinas);
+
+        } // ExtraerColorPromedioEsquinas>
 
 
         public static string? LeerPausa(out float confianza) {
@@ -2483,7 +2510,8 @@ namespace RTSHelper {
                 } else if (progresoActual > 10 && progresoActual < 99) {
 
                     var extraConfianzaRequerida = 0F;
-                    if (progresoActual >= 74 && progresoActual <= 78 && Preferencias.ScreenResolution == "2560x1440") extraConfianzaRequerida = 0.25F; // Con el 76 el OCR se enloquece y devuelve 716 sin razón alguna. Esta extra confianza hace que no se acepte ese 716 y se obtenga una lectura correcta con otros parámetros.
+                    if (progresoActual >= 74 && progresoActual <= 78 && (Preferencias.ScreenResolution == "2560x1440" 
+                        || Preferencias.ScreenResolution == "3840x2160")) extraConfianzaRequerida = 0.25F; // Con el 76 el OCR se enloquece y devuelve 716 sin razón alguna. Esta extra confianza hace que no se acepte ese 716 y se obtenga una lectura correcta con otros parámetros.
                     if (progresoActual >= 90 && progresoActual <= 99 && Preferencias.ScreenResolution == "1920x1080") extraConfianzaRequerida = 0.2F; // Con la nueva fuente Smooth Serif de 2022 para la resolución 1920x1080 el intervalo de 90 a 99 es muy inexacto y puede producir números consecutivos incorrectos en 98 y 99 que pueden ser leídos como 8 y 9. Para evitar, este problema se sube la confianza para que el 98 que se lee como 8 con confianza 0,61, no se lea.
                     texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, valoresEsperados, out confianza, 
                         extraConfianzaRequerida: extraConfianzaRequerida);
@@ -2522,7 +2550,11 @@ namespace RTSHelper {
 
             if (Preferencias.ScreenCaptureRectangles == null) CrearOCompletarScreenCaptureRectangles(cambióResolución: false);
             if (Preferencias.ScreenCaptureRectangles!.ContainsKey(tipo)) { // Después de CrearOCompletarScreenCaptureRectangles() se asegura que Preferencias.ScreenCaptureRectangles no es nulo.
-                return Preferencias.ScreenCaptureRectangles![tipo]; 
+               
+                var r = Preferencias.ScreenCaptureRectangles![tipo];
+                var e = RectángulosAfectadosPorEscalaInterface.Contains(tipo) ? Preferencias.GameInterfaceScale / 100 : 1;
+                return new SDrw.RectangleF(r.X * e, r.Y * e, r.Width * e, r.Height * e);
+
             } else {
                 return new SDrw.RectangleF(0, 0, 0.1f, 0.1f); // Un rectángulo cualquiera para que no saque error.
             }
@@ -2537,7 +2569,13 @@ namespace RTSHelper {
                 cambió = true;
                 Preferencias.ScreenCaptureRectangles = new Dictionary<ScreenCaptureText, SDrw.RectangleF>();    
             }
-                     
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_InicioJuego)) {
+                cambió = true;
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_InicioJuego,
+                    new SDrw.RectangleF(2F / 2560, 1416F / 1440, 22F / 2560, 22F / 1440));
+            }
+
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9)) {
                 cambió = true;
                 Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, 
@@ -2652,6 +2690,7 @@ namespace RTSHelper {
                                 case "1366x768":
                                     return NNL1C2x2; // Para Smooth Serif: HQBCL1_5C2x16.
                                 case "2560x1440":
+                                case "3840x2160":
                                 default:
                                     return NNL2C2x2; // Para Smooth Serif: NNL2C2x2.
                             }
@@ -2664,6 +2703,7 @@ namespace RTSHelper {
                                 case "1366x768":
                                     return HQBCL1C2x4; // Para Smooth Serif: HQBCL2C2x16.
                                 case "2560x1440":
+                                case "3840x2160":
                                 default:
                                     return HQBCL2C2x4; // Para Smooth Serif: HQBCL2C2x4.
                             }
@@ -2676,6 +2716,7 @@ namespace RTSHelper {
                                 case "1366x768":
                                     return NNL1C2x1; // Para Smooth Serif: NNL1C2x1.
                                 case "2560x1440":
+                                case "3840x2160":
                                 default:
                                     return NNL2C2x1; // Para Smooth Serif: NNL2C2x1.
                             }
@@ -2694,6 +2735,7 @@ namespace RTSHelper {
                                 case "1366x768":
                                     return HQBCL1C2x16; // Para Smooth Serif: HQBCL1_5C2x16.
                                 case "2560x1440":
+                                case "3840x2160":
                                 default:
                                     return HQBCL2C2x16; // Para Smooth Serif: HQBCL1_5C2x16. Extrañamente se requiere establecer la variable unCarácter en verdadero para que coincida adecuadamente números de 2 cifras. Parece ser un bug del algorítmo de Tesseract.
                             }
@@ -2706,6 +2748,7 @@ namespace RTSHelper {
                                 case "1366x768":
                                     return HQBCL2C6x4; // Para Smooth Serif: HQBCL2C2x16.
                                 case "2560x1440":
+                                case "3840x2160":
                                 default:
                                     return HQBCL4C6x4; // Para Smooth Serif: HQBCL4C6x4.
                             }
@@ -2718,6 +2761,7 @@ namespace RTSHelper {
                                 case "1366x768":
                                     return NNL1C2x1; // Para Smooth Serif: NNL1C2x1.
                                 case "2560x1440":
+                                case "3840x2160":
                                 default:
                                     return NNL2C2x1; // Para Smooth Serif: NNL2C2x1.
                             }
@@ -2736,6 +2780,7 @@ namespace RTSHelper {
                                 case "1366x768":
                                     return HQBCL2C6x4; // Para Smooth Serif: HQBCL1_5C2x16.
                                 case "2560x1440":
+                                case "3840x2160":
                                 default:
                                     return HQBCL4C6x4; // Para Smooth Serif: HQBCL1_5C2x16.
                             }
@@ -2748,6 +2793,7 @@ namespace RTSHelper {
                                 case "1366x768":
                                     return NNL1C2x1; // Para Smooth Serif: HQBCL2C2x16.
                                 case "2560x1440":
+                                case "3840x2160":
                                 default:
                                     return NNL2C2x1; // Para Smooth Serif: HQBCL4C6x4.
                             }
@@ -2760,6 +2806,7 @@ namespace RTSHelper {
                                 case "1366x768":
                                     return HQBCL1C2x16; // Para Smooth Serif: NNL1C2x1.
                                 case "2560x1440":
+                                case "3840x2160":
                                 default:
                                     return HQBCL2C2x16; // Para Smooth Serif: NNL2C2x1.
                             }

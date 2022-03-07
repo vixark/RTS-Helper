@@ -4,9 +4,9 @@
 
 <<r=<b xs is100> x=<sub>>>
 
-[[<b>Villagers and Houses Reminder<>   Helps you to keep creating [v] and building [hs]   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy]]
+[[<b>Villagers and Houses Reminder<>   Helps you to keep creating [v] and building [h]   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy]]
 
-|| 0 || + 4[v]   + 2 [hs]
+|| 0 || + 4[v]   + 2 [h]
 
 || 1 || {empty} [1s]
 
@@ -24,7 +24,7 @@
 
 || 8 || +[v]
 
-|| 9 || +[v]   + [hs]
+|| 9 || +[v]   + [h]
 
 || 10 || +[v]
 
@@ -34,7 +34,7 @@
 
 || 13 || +[v]
 
-|| 14 || +[v]   + [hs]
+|| 14 || +[v]   + [h]
 
 || 15 || +[v]
 
@@ -44,7 +44,7 @@
 
 || 18 || +[v]
 
-|| 19 || +[v]   + [hs]
+|| 19 || +[v]   + [h]
 
 || 20 || +[v]
 
@@ -54,7 +54,7 @@
 
 || 23 || +[v]
 
-|| 24 || + 2 [v]   + 2 [hs]
+|| 24 || + 2 [v]   + 2 [h]
 
 || 25 || {empty} [1s]
 
@@ -62,7 +62,7 @@
 
 || 27 || {empty} [1s]
 
-|| 28 || + 2 [v]   + 2 [hs]
+|| 28 || + 2 [v]   + 2 [h]
 
 || 29 || {empty} [1s]
 
@@ -70,7 +70,7 @@
 
 || 31 || {empty} [1s]
 
-|| 32 || + 2 [v]   + 2 [hs]
+|| 32 || + 2 [v]   + 2 [h]
 
 || 33 || {empty} [1s]
 
@@ -78,7 +78,7 @@
 
 || 35 || {empty} [1s]
 
-|| 36 || + 2 [v]   + 2 [hs]
+|| 36 || + 2 [v]   + 2 [h]
 
 || 37 || {empty} [1s]
 
@@ -86,7 +86,7 @@
 
 || 39 || {empty} [1s]
 
-|| 40 || + 2 [v]   + 2 [hs]
+|| 40 || + 2 [v]   + 2 [h]
 
 || 41 || {empty} [1s]
 
@@ -94,7 +94,7 @@
 
 || 43 || {empty} [1s]
 
-|| 44 || + 2 [v]   + 2 [hs]
+|| 44 || + 2 [v]   + 2 [h]
 
 || 45 || {empty} [1s]
 
@@ -102,7 +102,7 @@
 
 || 47 || {empty} [1s]
 
-|| 48 || + 2 [v]   + 2 [hs]
+|| 48 || + 2 [v]   + 2 [h]
 
 || 49 || {empty} [1s]
 
@@ -110,7 +110,7 @@
 
 || 51 || {empty} [1s]
 
-|| 52 || + 2 [v]   + 4 [hs]
+|| 52 || + 2 [v]   + 4 [h]
 
 || 53 || {empty} [1s]
 
@@ -118,7 +118,7 @@
 
 || 55 || {empty} [1s]
 
-|| 56 || + 2 [v]   + 4 [hs]
+|| 56 || + 2 [v]   + 4 [h]
 
 || 57 || {empty} [1s]
 
@@ -126,7 +126,7 @@
 
 || 59 || {empty} [1s]
 
-|| 60 || + 2 [v]   + 4 [hs]
+|| 60 || + 2 [v]   + 4 [h]
 
 || 61 || {empty} [1s]
 
@@ -134,7 +134,7 @@
 
 || 63 || {empty} [1s]
 
-|| 64 || + 2 [v]   + 4 [hs]
+|| 64 || + 2 [v]   + 4 [h]
 
 || 65 || {empty} [1s]
 
@@ -142,7 +142,7 @@
 
 || 67 || {empty} [1s]
 
-|| 68 || + 2 [v]   + 4 [hs]
+|| 68 || + 2 [v]   + 4 [h]
 
 || 69 || {empty} [1s]
 
@@ -150,7 +150,7 @@
 
 || 71 || {empty} [1s]
 
-|| 72 || + 2 [v]   + 4 [hs]
+|| 72 || + 2 [v]   + 4 [h]
 
 || 73 || {empty} [1s]
 

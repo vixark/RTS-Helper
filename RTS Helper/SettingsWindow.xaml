@@ -19,6 +19,7 @@
                                 <Label Margin="2">Game:</Label>
                                 <Label Margin="2">Game Speed:</Label>
                                 <Label Margin="2">Screen Resolution:</Label>
+                                <Label Margin="2">Game Interface Scale:</Label>
                                 <Label Margin="2">Game Language:</Label>
                                 <Label x:Name="LblStepDuration" Margin="2">Step Duration:</Label>
                                 <Label x:Name="LblShowProgress" Margin="2">Show Progress:</Label>
@@ -44,8 +45,63 @@
                                     <ComboBoxItem>1920x1080</ComboBoxItem>
                                     <ComboBoxItem>2560x1440</ComboBoxItem>
                                     <ComboBoxItem>1366x768</ComboBoxItem>
+                                    <ComboBoxItem>3840x2160</ComboBoxItem>
                                 </ComboBox>
 
+                                <ComboBox SelectionChanged="CmbGameInterfaceScale_SelectionChanged" x:Name="CmbGameInterfaceScale" Margin="4">
+                                    <ComboBoxItem Tag="75">75%</ComboBoxItem>
+                                    <ComboBoxItem Tag="76">76%</ComboBoxItem>
+                                    <ComboBoxItem Tag="77">77%</ComboBoxItem>
+                                    <ComboBoxItem Tag="78">78%</ComboBoxItem>
+                                    <ComboBoxItem Tag="79">79%</ComboBoxItem>
+                                    <ComboBoxItem Tag="80">80%</ComboBoxItem>
+                                    <ComboBoxItem Tag="81">81%</ComboBoxItem>
+                                    <ComboBoxItem Tag="82">82%</ComboBoxItem>
+                                    <ComboBoxItem Tag="83">83%</ComboBoxItem>
+                                    <ComboBoxItem Tag="84">84%</ComboBoxItem>
+                                    <ComboBoxItem Tag="85">85%</ComboBoxItem>
+                                    <ComboBoxItem Tag="86">86%</ComboBoxItem>
+                                    <ComboBoxItem Tag="87">87%</ComboBoxItem>
+                                    <ComboBoxItem Tag="88">88%</ComboBoxItem>
+                                    <ComboBoxItem Tag="89">89%</ComboBoxItem>
+                                    <ComboBoxItem Tag="90">90%</ComboBoxItem>
+                                    <ComboBoxItem Tag="91">91%</ComboBoxItem>
+                                    <ComboBoxItem Tag="92">92%</ComboBoxItem>
+                                    <ComboBoxItem Tag="93">93%</ComboBoxItem>
+                                    <ComboBoxItem Tag="94">94%</ComboBoxItem>
+                                    <ComboBoxItem Tag="95">95%</ComboBoxItem>
+                                    <ComboBoxItem Tag="96">96%</ComboBoxItem>
+                                    <ComboBoxItem Tag="97">97%</ComboBoxItem>
+                                    <ComboBoxItem Tag="98">98%</ComboBoxItem>
+                                    <ComboBoxItem Tag="99">99%</ComboBoxItem>
+                                    <ComboBoxItem Tag="100">100%</ComboBoxItem>
+                                    <ComboBoxItem Tag="101">101%</ComboBoxItem>
+                                    <ComboBoxItem Tag="102">102%</ComboBoxItem>
+                                    <ComboBoxItem Tag="103">103%</ComboBoxItem>
+                                    <ComboBoxItem Tag="104">104%</ComboBoxItem>
+                                    <ComboBoxItem Tag="105">105%</ComboBoxItem>
+                                    <ComboBoxItem Tag="106">106%</ComboBoxItem>
+                                    <ComboBoxItem Tag="107">107%</ComboBoxItem>
+                                    <ComboBoxItem Tag="108">108%</ComboBoxItem>
+                                    <ComboBoxItem Tag="109">109%</ComboBoxItem>
+                                    <ComboBoxItem Tag="110">110%</ComboBoxItem>
+                                    <ComboBoxItem Tag="111">111%</ComboBoxItem>
+                                    <ComboBoxItem Tag="112">112%</ComboBoxItem>
+                                    <ComboBoxItem Tag="113">113%</ComboBoxItem>
+                                    <ComboBoxItem Tag="114">114%</ComboBoxItem>
+                                    <ComboBoxItem Tag="115">115%</ComboBoxItem>
+                                    <ComboBoxItem Tag="116">116%</ComboBoxItem>
+                                    <ComboBoxItem Tag="117">117%</ComboBoxItem>
+                                    <ComboBoxItem Tag="118">118%</ComboBoxItem>
+                                    <ComboBoxItem Tag="119">119%</ComboBoxItem>
+                                    <ComboBoxItem Tag="120">120%</ComboBoxItem>
+                                    <ComboBoxItem Tag="121">121%</ComboBoxItem>
+                                    <ComboBoxItem Tag="122">122%</ComboBoxItem>
+                                    <ComboBoxItem Tag="123">123%</ComboBoxItem>
+                                    <ComboBoxItem Tag="124">124%</ComboBoxItem>
+                                    <ComboBoxItem Tag="125">125%</ComboBoxItem>
+                                </ComboBox>
+                                
                                 <ComboBox SelectionChanged="CmbGameLanguage_SelectionChanged" x:Name="CmbGameLanguage" Margin="4">
                                     
                                 </ComboBox>
@@ -69,7 +125,7 @@
                         <StackPanel x:Name="SpnBuildOrderPath" Orientation="Horizontal" Margin="2 5 20 0">
                             <Label>Build Order Folder:</Label>
                             <TextBox TextChanged="TxtBuildOrderPath_TextChanged" Width="280" Height="25" 
-                                 x:Name="TxtBuildOrderPath" Margin="3.5 0 0 0" VerticalContentAlignment="Center"></TextBox>
+                                 x:Name="TxtBuildOrderPath" Margin="20 0 0 0" VerticalContentAlignment="Center"></TextBox>
                             <Button Margin="5 0 0 0" Padding="3 0 3 0" Click="BtnBuildOrderPath_Click" x:Name="BtnBuildOrderPath">Change</Button>
                         </StackPanel>
 
@@ -546,6 +602,22 @@
                             </StackPanel>
                         </StackPanel>
 
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="OCR" x:Name="TbiOCR">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="20 20 20 0" Orientation="Vertical" x:Name="SpnOCR">
+
+                        <TextBlock TextWrapping="Wrap">
+                            RTS Helper uses Optical Character Recognition (OCR) to synchronize your progress with the game. So it needs to know
+                            the position in your screen of some game data.
+                        </TextBlock>
+
+                        <CheckBox Checked="ChkOCRTestMode_Checked" Unchecked="ChkOCRTestMode_Checked" x:Name="ChkOCRTestMode" 
+                                      Margin="0 20 0 5">OCR Test Mode</CheckBox>
+                        
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
