@@ -428,7 +428,7 @@ namespace RTSHelper {
 
                     foreach (var tPausa in TextosPausa[Preferencias.Game]) {
 
-                        var distanciaAPausa = ObtenerDistanciaLevenshtein(textoPausa.ToLower(), $"{tPausa} (F3)"); // Se usa F3 como la tecla por defecto.
+                        var distanciaAPausa = ObtenerDistanciaLevenshtein(textoPausa.ToLower(), tPausa);
                         if (distanciaAPausa < 5) {
                             juegoPausado = true;
                             break;

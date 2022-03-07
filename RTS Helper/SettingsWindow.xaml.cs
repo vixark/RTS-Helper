@@ -66,6 +66,7 @@ namespace RTSHelper {
                 TbiCustomNames.Visibility = Visibility.Collapsed;
                 TbiOverrides.Visibility = Visibility.Collapsed;
                 TbiControl.Visibility = Visibility.Collapsed;
+                TbiOCR.Visibility = Visibility.Collapsed;
                 Height = 320;
                 TbcPreferencias.Height = 210;
                 Width = 350;

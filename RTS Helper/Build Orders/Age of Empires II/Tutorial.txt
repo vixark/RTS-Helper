@@ -7,7 +7,7 @@
 
 || 1 || Use the control buttons: ▷ ❚❚ ■ ⟳ |◁  ▷|   to navigate the build order.   Right click the  |◁  and  ▷|  buttons to get access   to more control options.
 
-|| 2 || You don't need to control anything while   playing. It automatically detects game pauses   and autoadjusts the step shown to the current   villager count. Useful when you have town center   idle time.
+|| 2 || You don't need to control anything while   playing. It automatically starts after the loading   screen, detects game pauses and autoadjusts the   step shown to the current villager count (useful   when you have town center idle time).
 
 || 3 || After you finish the game, use the   stats button 📊 to check how much idle time   you had in each step.
 

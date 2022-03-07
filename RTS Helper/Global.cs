@@ -2409,6 +2409,7 @@ namespace RTSHelper {
         public static string? LeerPausa(out float confianza) {
 
             var tipo = ScreenCaptureText.Age_of_Empires_II_PauseM;
+            var textoPausa = "";
             if (Preferencias.Game == Global.AOE2Name) {
 
                 switch (Preferencias.GameLanguage) {
@@ -2447,10 +2448,14 @@ namespace RTSHelper {
                     default:
                         break;
                 }
+                textoPausa = ExtraerTextoDePantalla(tipo, new List<string>(), out confianza);
+                if (textoPausa != null && textoPausa.Contains("(")) textoPausa = textoPausa.Substring(0, textoPausa.IndexOf("(")).TrimEnd(); // Se elimina el texto leído que esté después de un paréntesis de apertura porque ese texto puede ser diferente para cada usuario dependiendo de la tecla que tenga asignada para pausa.
 
+            } else {
+                textoPausa = ExtraerTextoDePantalla(tipo, new List<string>(), out confianza);
             }
 
-            return ExtraerTextoDePantalla(tipo, new List<string>(), out confianza);
+            return textoPausa;
 
         } // LeerPausa>
 
