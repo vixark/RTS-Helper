@@ -429,7 +429,7 @@ namespace RTSHelper {
                     foreach (var tPausa in TextosPausa[Preferencias.Game]) {
 
                         var distanciaAPausa = ObtenerDistanciaLevenshtein(textoPausa.ToLower(), tPausa);
-                        if (distanciaAPausa < 5) {
+                        if (distanciaAPausa < 6) {
                             juegoPausado = true;
                             break;
                         }

@@ -4,7 +4,7 @@
 
 <<r=<b xs is100> x=<sub>>>
 
-[[<b>[maa] @ 1 [rax] + 2 [towers] [->] [longswords] @ 3 [rax]   for <xl>[Malians]<> on <xl>[green arabia]<> [1s] <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Medium]]
+((<b>[maa] @ 1 [rax] + 2 [towers] [->] [longswords] @ 3 [rax]   for <xl>[Malians]<> on <xl>[green arabia]<> [1s] <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Medium))
 
 || 0 ||  {p=3} + 4[v] [1s] 2[v] [->] [h] [1s] [v] [->] 2 [h]   [shp]<x>[1]<> [->] [tc]   3[v]<x>[h]<> + [v]<x>[4][-][6]<> [->] [shp]<x>[1][flag]<> /f <r>3[h]  3[pop]
 

@@ -2,42 +2,116 @@
 
 {{t=25 empty={fc="none" s="none"}}}
 
-<<r=<b xs is100> x=<sub>>>
+<<r=<b xs is100> x=<sub> p=<sup>>>
 
-[[[archers] @ 2[ranges] on <xl>[green arabia]<>   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy]]
+[[farm@tc=[[farm]<x>[tc]<>] farm@mill=[[farm]<x>[mill]<>] ->berries=[[->] [berries]<x>[flag]<>] ->tree=[[->] [tree]<x>[flag]<>] ->g=[[->] [gold mine]<x>[flag]<>] ->s=[[->] [stone mine]<x>[flag]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@g=[[v]<x>[gold mine]<>] v@s=[[v]<x>[stone mine]<>] v@berries=[[v]<x>[berries]<>] v@deer=[[v]<x>[deer]<>] v@tree=[[v]<x>[tree]<>] v@str=[[v]<x>[tree]<x xs>[tc]<>] b2h=[[v]<x>[h]<> [->] 2 [h]<x>[flag]<>] b3h=[[v]<x>[h]<> [->] 3 [h]<x>[flag]<>] b4h=[[v]<x>[h]<> [->] 4 [h]<x>[flag]<>] vdboar=[[v]<x>[boar]<> [->] [drop food]] vddeer=[[v]<x>[deer]<> [->] [drop food]] vdwood=[[v]<x>[tree]<> [->] [drop wood]] vdshp=[[v]<x>[shp]<> [->] [drop food]] vdgold=[[v]<x>[gold mine]<> [->] [drop gold]] vdstone=[[v]<x>[stone mine]<> [->] [drop stone]]]]
 
-|| 0 ||  {p=3} + 4[v] [3s] 2[v] [->] [h] [3s] [v] [->] [h]   [shp]<x>[1]<> [->] [tc] [3s] [scout] [->] [shp]<x>[2]<>   3[v]<x>[h]<> [->] [shp]<x>[1][flag]<> [3s] [v]<x>[4][-][6]<> [->] [shp]<x>[1]<>  /f <r>3[h]  3[pop]
+(([archers] @ 2[ranges] [->] [crossbowmen] @ 3[ranges] on <xl>[green arabia]<>   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy))
 
-|| 1 ||  {p=4 sps="no"} [sc] [->] [explore]  /f  <r>4[f]  4[pop]
+|| 0 - 0:00 ||  {p=3} + 4[v] [3s] 2[v] [->] [h] [3s] [v] [->] [h]   [shp]<x>[1]<> [->] [tc] [3s] [scout] [->] [shp]<x>[2][-][4]<>   3[v]<x>[h]<> [->] [shp]<p>[flag]<x>[1]<> [3s] [v]<x>[4][-][6]<> [->] [shp]<x>[1]<>  /f <r>3[h]  3[pop]
 
-|| 2 ||  {p=5} [shp]<x>[2]<>[->] [tc]   [shp]<x>[3]<> + [shp]<x>[4]<> [->] [explore]  /f  <r>5[f]  5[pop]
+|| 1 - 0:25 ||  {p=4 sps="no"} [sc] [->] [explore]  /f  <r>4[f]  4[pop]
 
-|| 3 ||  {p=6} +[v]   [v]<x>[7][-][8]<> [->] [boar]<x>[1]<>  /f  <r>6[f]  6[pop]
+|| 2 - 0:50 ||  {p=5} [shp]<x>[2]<> [->] [tc]   [shp]<x>[3]<> + [shp]<x>[4]<> [->] [explore]  /f  <r>5[f]  5[pop]
 
-|| 4 ||  {p=7} +[v]   6[v]<x>[shp]<x xs>[2]<> [->] [boar]<x>[1][flag]<>  /f  <r>7[f]  7[pop]
+|| 3 - 1:15 ||  {p=6} +[v]   [v]<x>[7][-][8]<> [->] [boar]<x>[1]<>  /f  <r>6[f]  6[pop]
 
-|| 5 ||  {p=8} +[v]   [v]<x>[9]<> [->] [lc]  /f  <r>8[f]  8[pop]
+|| 4 - 1:40 ||  {p=7} +[v]   6[v@shp] [->] [boar]<p>[flag]<x>[1]<>  /f  <r>7[f]  7[pop]
 
-|| 6 ||  {p=9} [v]<x>[1][0]<> [->] [h]   8[v]<x>[boar]<sup>[f]=14<> [->] [drop food]   + 2[v]  /f  <r>8[f]  1[lc]  9[pop]
+|| 5 - 2:05 ||  {p=8} +[v]   [v]<x>[9]<> [->] [lc]  /f  <r>8[f]  8[pop] || Se consideró hacer el LC 1 cuadro antes del bosque, pero no mejoró significativamente la w al llegar a feudal (solo 10+) y retrasó apróximadamente un paso la construcción de la herrería y hacía apretado la construcción de granjas. Conclusión: Es mejor adjunto al bosque, incluso si se tienen 10 leñadores.
 
-|| 7 ||  {p=10} [v]<x>[1][1][-][1][5]<> [->] [boar]<x>[2]<>   [v]<x>[h]<> [->] [tree]<x>[flag]<>  /f <r>8[f]  1[h]  1[lc]  10[pop]
+|| 6 - 2:30 ||  {p=9} [v]<x>[1][0]<> [->] [h]   8[v]<x>[boar]<p>[f]=14<> [->] [drop food]   + 2[v]  /f  <r>8[f]  1[lc]  9[pop]
 
-|| 8 ||  {p=11} 8[v]<x>[boar]<> [->] [drop food]   + 2[v]  /f <r>9[f]  2[w]  11[pop]
+|| 7 - 2:55 ||  {p=10} [v]<x>[1][1][-][1][5]<> [->] [boar]<x>[2]<>   [v@h] [->tree]  /f <r>8[f]  1[h]  1[lc]  10[pop]
 
-|| 9 ||  {p=12} 8[v]<x>[boar]<> [->] [boar]<x>[2][flag]<>   3[v]<x>[boar]<> [->] [drop food] [->] [deer]<x>[1]<>   3[v]<x>[boar]<> [->] [drop food] [->] [deer]<x>[2]<>  /f <r>10[f]  2[w]  12[pop]
+|| 8 - 3:20 ||  {p=11} 8[vdboar]   + 2[v]   8[v@boar] [->] [boar]<p>[flag]<x>[2]<>  /f <r>2[w]  9[f]  11[pop]
 
-|| 10 ||  {p=13} + 2[v]   6 [shp] [->] [tc]   [sc] [->] [deer]<x>[3]<>  /f <r>11[f]  2[w]  13[pop]
+|| 9 - 3:45 ||  {p=12} 6 [shp] [->] [tc]  /f <r>2[w]  10[f]  12[pop]
 
-|| 11 ||  {p=14} /f <r>12[f]  2[w]  14[pop]
+|| 10 - 4:10 ||  {p=13} + 2[v]   3[vdboar] [->] [deer]<x>[1]<>   3[vdboar] [->] [deer]<x>[2]<>  /f <r>2[w]  11[f]  13[pop]
 
-|| 12 ||  {p=15} 7[v]<x>[boar]<> [->] [drop food]   + 2[v]   [v]<x>[1][6][-][1][8]<> [->] [tree]  /f <r>13[f]  2[w]  15[pop]
+|| 11 - 4:35 ||  {p=14} If [deer]<x>[4][-][6]<> Found [->]   [3s] [sc] [->] [explore] Opponent  /f <r>2[w]  12[f]  14[pop]
 
-|| 13 ||  {p=16} 7[v]<x>[boar]<> [->] [shp]<x>[3][flag]<>   [sc] [follow] [deer]<x>[3]<> [->] [tc]  /f <r>13[f]  3[w]  16[pop]
+|| 12 - 5:00 ||  {p=15} +[v]   [v]<x>[1][6][-][1][7]<> [->] [tree]  /f <r>2[w]  13[f]  15[pop]
 
-|| 14 ||  {p=17}
+|| 13 - 5:25 ||  {p=16} + 2[v]   7[v@boar] [->] [shp]<p>[flag]<x>[3]<>  /f <r>3[w]  13[f]  16[pop]
 
-|| 15 ||  {p=18}
+|| 14 - 5:50 ||  {p=17} [loom]   7[v@shp] [->] [shp]<p>[flag]<x>[4]<>   [v]<x>[1][8][-][2][2]<> [->] [gold mine]<>  /f <r>4[w]  13[f]  17[pop]
 
-|| 16 ||  {p=19}
+|| 15 - 6:15 ||  {p=18} [v@g] [->] [mc]<x>[gold mine]<>   3[vddeer]<x>[tc]<> [->tree]   3[vddeer]<x>[tc]<> [->] [deer]<sup>[flag]<x>[3]<>  /f <r>4[w]  13[f]  1[mc]  18[pop]
 
-|| 17 ||  {p=20}
+|| 16 - 6:40 ||  {p=19} 3[vdshp] [->] [tree]   [feudal age]  /f <r>10[w]  7[f]  2[g]  19[pop]
+
+|| 17 - 7:05 ||  {p=19 t=65} 4[v@shp] [->] [shp]<p>[flag]<x>[5]<> [->] [shp]<p>[flag]<x>[6]<>   1[v@g] [->] [rax] [->g]  /f <r>10[w]  7[f]  1[g]  1[rax]  19[pop]
+
+|| 18 - 8:10 ||  {p=19 t=65 sps="no"} 1[v@g] [->] 2 [h]   + 2[v]   3[v@deer] + 4[v@shp] [->] [shp]<x>[6]<> [->] [shp]<p>[flag]<x>[7]<> [->] [shp]<p>[flag]<x>[8]<>  /f <r>10[w]  7[f]  1[g]  1[h]  19[pop]
+
+|| 19 - 9:15 ||  {p=19 sps="no"} [v@h] [->] [archery]<x>[1]<> [->g]    [v@g] [->] [archery]<x>[2]<> [->g]  /f <r>10[w]  7[f]  2[archery]  19[pop]
+
+|| 20 - 9:40 ||  {p=20} + 2[v]   [double-bit axe]  /f <r>10[w]  7[f]  1[g]  2[archery]  20[pop]
+
+|| 21 - 10:05 ||  {p=21} Start [archer] Production at 2 [archeries]    Cancel queue to afford farms and houses.   3[vdshp] [->] [gold mine]  /f <r>10[w]  4[f]  7[g]  21[pop]
+
+|| 22 - 10:30 ||  {p=22 sps="no"} + 2[v] [3s] [v]<x>[2][3][-][2][8]<> [->] [berries]   1[v@tree] [->] [mill]<x>[berries]<>   1[vdwood] [->berries]  /f <r>8[w]  5[f]  8[g]  1[mill]  22[pop]
+
+|| 23 - 10:55 ||  {p=23} 4[v@shp] [->] [deer]<p>[flag]<x>[4]<>   1[v@g] [->] 3 [h] [->g]  /f <r>8[w]  6[f]  7[g]  1[h]  1[mill]  23[pop]
+
+|| 24 - 11:20 ||  {p=24} + 2[v]  /f <r>8[w]  8[f]  7[g]  1[h]  24[pop]
+
+|| 25 - 11:45 ||  {p=25} /f <r>8[w]  9[f]  7[g]  1[h]  25[pop]
+
+|| 26 - 12:10 ||  {p=26} +[v]  /f <r>8[w]  10[f]  8[g]  26[pop]
+
+|| 27 - 12:35 ||  {p=27} +[v]  /f <r>8[w]  11[f]  8[g]  27[pop]
+
+|| 28 - 13:00 ||  {p=28} +[v]   [v]<x>[2][9][-][3][2]<> [->] [tree]<x>[tc]<>   1[v@g] [->] 2 [h] [->g]  /f <r>8[w]  12[f]  7[g]  1[h]  28[pop]
+
+|| 29 - 13:25 ||  {p=29 sps="no"} 4[v]<x>[deer]<x xs>[4]<> [->] [mill]<p>[flag]<x>[deer]<x xxs>[5][-][6]<> [->]   [3s] [deer]<sup>[flag]<x>[5]<> [->] [deer]<sup>[flag]<x>[6]<> [->] [tree]<p>[flag]<x>[tc]<>   +[v]  /f <r>9[w]  8[f]  7[g]  4[mill]  1[h]  29[pop]
+
+|| 30 - 13:50 ||  {p=30 sps="no"} +[v]   2[vdgold] [->] [blacksmith]<x>[flag]<> [->g]  /f <r>10[w]  12[f]  8[g]  30[pop]
+
+|| 31 - 14:15 ||  {p=31} + 2[v]  /f <r>11[w]  12[f]  6[g]  2[blacksmith]  31[pop]
+
+|| 32 - 14:40 ||  {p=32} [v]<x>[3][3][-][5][0]<> [->] [tree][tree]<x>[2]<>   [fletching]  /f <r>12[w]  12[f]  6[g]  2[blacksmith]  32[pop]
+
+|| 33 - 15:05 ||  {p=33} + 2[v]   [v]<x>[tree][tree]<x xs>[2]<> [->] [lc]<x>[2]<>  /f <r>12[w]  12[f]  8[g]  1[lc]  33[pop]
+
+|| 34 - 15:30 ||  {p=34} [v@g] [->] 2 [h] [->g]  /f <r>13[w]  12[f]  7[g]  1[h]  1[lc]  34[pop]
+
+|| 35 - 15:55 ||  {p=35} + 2[v]  /f <r>15[w]  12[f]  7[g]  1[h]  35[pop]
+
+|| 36 - 16:20 ||  {p=36} [horse collar]  /f <r>16[w]  12[f]  8[g]  36[pop]
+
+|| 37 - 16:45 ||  {p=37} + 2[v]   4[v@berries] [->] 4 [farm@mill]   [v@g] [->] 2[h] [->g]  /f <r>21[w]  4[f]  8[g]  4[farm]  37[pop]
+
+|| 38 - 17:10 ||  {p=38} 2[v@str] [->] 2 [farm@tc]  /f <r>20[w]  8[f]  8[g]  2[farm]  38[pop]
+
+|| 39 - 17:35 ||  {p=39} + 2[v]   2[v@str] [->] 2 [farm@tc]  /f <r>19[w]  10[f]  8[g]  2[farm]  39[pop]
+
+|| 40 - 18:00 ||  {p=40} 2[v@str] [->] 2 [farm@tc]  /f <r>18[w]  12[f]  8[g]  2[farm]  40[pop]
+
+|| 41 - 18:25 ||  {p=41} + 2[v]   2[v@berries] [->] 2 [farm@mill]  /f <r>19[w]  12[f]  8[g]  2[farm]  41[pop]
+
+|| 42 - 18:50 ||  {p=42} 2[v@str] [->] 2 [farm@tc]   [v@tree] [->] 2 [h]  /f <r>18[w]  14[f]  8[g]  2[farm]  42[pop]
+
+|| 43 - 19:15 ||  {p=43} + 2[v]   2[v@berries] [->] 2 [farm@mill]  /f <r>18[w]  14[f]  8[g]  1[h]  2[farm]  43[pop]
+
+|| 44 - 19:40 ||  {p=44} [b2h]  /f <r>19[w]  16[f]  8[g]  1[h]  44[pop]
+
+|| 45 - 20:05 ||  {p=45} + 2[v]  /f <r>20[w]  16[f]  8[g]  1[h]  45[pop]
+
+|| 46 - 20:30 ||  {p=46}  5[v@tree] [->] [mc]<x>[2]<p>[gold]<>   Produce [archer] Leaving 200 [g]   [b4h]  /f <r>16[w]  16[f]  8[g]  1[h]  5[mc]  46[pop]
+
+|| 47 - 20:55 ||  {p=47}  [castle age]  /f <r>17[w]  16[f]  8[g]  1[h]  5[mc]  47[pop]
+
+|| 48 - 21:20 ||  {p=48 t=50 sps="no"}  1[v@tree] [->] [archery]<x>[3]<> [->tree]   [padded archer armor]   [gold mining]  /f <r>17[w]  16[f]  13[g]  1[h]  1[archery]  48[pop]
+
+|| 49 - 22:10 ||  {p=48 t=55}  Start [archer] Production at 3 [archeries]   [b4h]  /f <r>18[w]  16[f]  13[g]  1[h]  48[pop]
+
+|| 50 - 23:05 ||  {p=48 t=55}  + 2[v]  /f <r>18[w]  16[f]  13[g]  1[h]  48[pop]
+
+|| 51 - 24:00 ||  {p=48}  [bodkin] [1s] [upgrade to crossbowman] [1s] [bow saw]   3[v@tree] [->] [tc]<x>[tree]<>   4[v@tree] [->] [tc]<x>[stone mine]  /f <r>11[w]  16[f]  13[g]  1[h]  7[tc]  48[pop]
+
+|| 52 - 24:25 ||  {p=49}  + 2[v]   [b4h]  /f <r>12[w]  16[f]  13[g]  1[h]  7[tc]  49[pop]
+
+|| 53 - 24:50 ||  {p=50}  [crossbowmen] @ 3[archeries] [3s] [v]@ 3 [tc]   [university] [->] [ballistics] [3s] [siege workshop] [->] [mangonel]   [leather archer armor] [1s] [thumb ring] [1s] [wheelbarrow] [1s] [stone mining] [1s] [castle]  /f <r>16+[w]  19+[f]  13+[g]  4+[s]  1[h]  50+[pop]

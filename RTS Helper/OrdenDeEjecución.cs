@@ -82,7 +82,8 @@ namespace RTSHelper {
             var textosPasos = File.ReadAllLines(rutaBuildOrder);
             Formato? formatoGlobal = null;
             Comportamiento? comportamientoGlobal = null;
-
+            var grupos = new Dictionary<string, string>(); // Almacena el nombre de un nombre grupo y su contenido. El contenido será reemplazado directamente en el lugar que se use el nombre del grupo.
+            
             foreach (var textoPaso in textosPasos) {
 
                 var textoPasoSinComentarios = EliminarComentarios(textoPaso) ?? "";
@@ -101,15 +102,73 @@ namespace RTSHelper {
                     AgregarErrores(ref errores, erroresInternos);
                     ClasesDeComportamientos = clasesLeídas;
 
-                } else if (textoPasoTrimmed.StartsWith("[[") && textoPasoTrimmed.EndsWith("]]")) { // Es necesario hacerlo así y no con Regex por facilidad y para que no entre en conflicto con las entidades que van entre [].
+                } else if (textoPasoTrimmed.StartsWith("((") && textoPasoTrimmed.EndsWith("))")) { // Es necesario hacerlo así y no con Regex por facilidad.
 
-                    Introducción = new Paso(textoPasoTrimmed[2..^2], comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos, 
-                        out string? erroresInternos);
+                    Introducción = new Paso(textoPasoTrimmed[2..^2], comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos,
+                        grupos, out string ? erroresInternos);
                     AgregarErrores(ref errores, erroresInternos);
+
+                } else if (textoPasoTrimmed.StartsWith("[[") && textoPasoTrimmed.EndsWith("]]")) { // Es necesario hacerlo así y no con Regex por facilidad y para que no entre en conflicto con las clases de comportamientos que van entre [].
+
+                    var textoGrupos = textoPasoTrimmed[2..^1]; // No recorta el último corchete porque este se ignorará cuando se agregue el contenido del último grupo.
+                    var estado = "n"; // Puede ser n: en nombre, c: contenido.
+                    var profundidadCorchetes = 0;
+                    var nombreGrupoActual = new StringBuilder();
+                    var contenidoGrupoActual = new StringBuilder();
+                    var cuentaCarácteres = 0;
+
+                    foreach (var carácter in textoGrupos) { // Se hace de esta manera y no con regex porque regex no es capaz de controlar adecuadamente los múltiples [] dentro de estos textos.
+
+                        if (carácter == '=') {
+                            estado = "c";
+                        } else if ((carácter == ' ' && profundidadCorchetes == 0) || cuentaCarácteres == textoGrupos.Length - 1) {
+
+                            estado = "n";
+                            var nombre = nombreGrupoActual.ToString();
+                            if (!string.IsNullOrWhiteSpace(nombre)) {
+
+                                if (ObtenerEntidad(nombre) != null) {
+                                    AgregarErrores(ref errores, $"{nombre} can't be used as a group name because it's already an entity name.");
+                                } else {
+
+                                    if (grupos.ContainsKey(nombre)) {
+                                        AgregarErrores(ref errores, $"You can't add two groups with the same name: {nombre}.");
+                                    } else {
+                                        grupos.Add(nombre, contenidoGrupoActual.ToString());
+                                    }
+                                
+                                }
+
+                            }
+
+                            nombreGrupoActual = new StringBuilder();
+                            contenidoGrupoActual = new StringBuilder();
+
+                        } else {
+
+                            var agregarContenido = true; // Evita que se agreguen los corchetes de inicio y del final.
+                            if (carácter == '[') {
+                                agregarContenido = profundidadCorchetes != 0;
+                                profundidadCorchetes++;
+                            } else if (carácter == ']') {
+                                profundidadCorchetes--;
+                                agregarContenido = profundidadCorchetes != 0;
+                            }
+
+                            if (estado == "c" && agregarContenido) {
+                                contenidoGrupoActual.Append(carácter);
+                            } else if (estado == "n") {
+                                nombreGrupoActual.Append(carácter);
+                            }
+
+                        }
+                        cuentaCarácteres++;
+
+                    }
 
                 } else if (!string.IsNullOrWhiteSpace(textoPasoTrimmed)) { // No se agrega el paso si es un espacio en la build order. Estos espacios son útiles para tener más orden de edición.
 
-                    pasos.Add(new Paso(textoPasoTrimmed, comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos, 
+                    pasos.Add(new Paso(textoPasoTrimmed, comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos, grupos, 
                         out string? erroresInternos));
                     AgregarErrores(ref errores, erroresInternos);
 
@@ -118,7 +177,7 @@ namespace RTSHelper {
             }
 
             if (pasos.Count == 0) {
-                pasos.Add(new Paso("", null, null, null, null, out string? erroresInternos)); // Para poder almacenar la duración de los pasos, debe haber como mínimo un paso.
+                pasos.Add(new Paso("", null, null, null, null, new Dictionary<string, string>(), out string? erroresInternos)); // Para poder almacenar la duración de los pasos, debe haber como mínimo un paso.
                 AgregarErrores(ref errores, erroresInternos);
             }
                 

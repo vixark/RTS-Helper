@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 using static RTSHelper.Global;
+using static Vixark.General;
 
 
 
@@ -40,11 +41,11 @@ namespace RTSHelper {
         #region Constructores
 
         public Paso(string? texto, Comportamiento? comportamientoPadre, Formato? formatoPadre, Dictionary<string, Formato>? clasesDeFormatos, 
-            Dictionary<string, Comportamiento>? clasesDeComportamientos, out string? errores) {
+            Dictionary<string, Comportamiento>? clasesDeComportamientos, Dictionary<string,string> grupos, out string? errores) {
 
             errores = null;
             ProcesarPaso(texto, comportamientoPadre ?? new Comportamiento(), formatoPadre ?? new Formato(), clasesDeFormatos,
-                    clasesDeComportamientos, out errores);
+                    clasesDeComportamientos, grupos, out errores);
 
         } // Paso>
 
@@ -55,10 +56,15 @@ namespace RTSHelper {
 
 
         public void ProcesarPaso(string? texto, Comportamiento comportamientoPadre, Formato formatoPadre, Dictionary<string, Formato>? clasesDeFormatos, 
-            Dictionary<string, Comportamiento>? clasesDeComportamientos, out string? errores) {
+            Dictionary<string, Comportamiento>? clasesDeComportamientos, Dictionary<string, string> grupos, out string? errores) {
 
             errores = null;
-            var textoProcesado = texto?.TrimEnd().TrimStart() ?? "";
+            string textoProcesado = texto?.TrimEnd().TrimStart() ?? "";
+
+            foreach (var kv in grupos) {
+                if (textoProcesado.Contiene(kv.Key)) textoProcesado = textoProcesado.Reemplazar($"[{kv.Key}]", kv.Value); // Se hace el reemplazo directo por facilidad y porque no se espera que se generen colisiones. Cuando hay un texto entre [] siempre se estará refiriendo a un nombre de una entidad o de un grupo y se considera primero que sea de grupo reemplazando el el nombre del grupo por el contenido. No se usa la función ReemplazarVarios porque su rendimiento es casi igual (500 esta función vs 300 de ReemplazarVarios) y se restringen los posibles carácteres que se pueden usar para los nombres de los grupos pues la función ReemplazarVarios usaría los nombres de los grupos dentro de una expresión regular.
+            }
+
             if (textoProcesado.StartsWith("{")) { // Contiene comportamientos propios para el paso.
 
                 var coincidenciasComportamientos = Regex.Match(textoProcesado, "{(.+?)}");

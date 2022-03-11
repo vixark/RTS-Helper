@@ -1,10 +1,10 @@
-|| Author: Vixark, Date: 18/02/2022, Description: Not a build order, reminds you to keep creating villagers and building houses. ||
+|| Author: Vixark, Date: 18/02/2022, Description: Not a build order. Reminds you to keep creating villagers and building houses. ||
 
 {{t=25 empty={fc="none" s="none"}}}
 
 <<r=<b xs is100> x=<sub>>>
 
-[[<b>Villagers and Houses Reminder<>   Helps you to keep creating [v] and building [h]   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy]]
+((<b>Villagers and Houses Reminder<>   Helps you to keep creating [v] and building [h]   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy))
 
 || 0 || + 4[v]   + 2 [h]
 

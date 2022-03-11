@@ -171,6 +171,28 @@ namespace Vixark {
             => texto.Contains(textoContenido, ignorarCapitalización ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
 
 
+        /// <summary>
+        /// Encapsulación de rápido de Replace() usando StringComparison.Ordinal. Es útil para omitir la advertencia CA1307 sin saturar el código.
+        /// </summary>
+        public static string Reemplazar(this string texto, string anteriorTexto, string? nuevoTexto, bool ignorarCapitalización = true)
+            => texto.Replace(anteriorTexto, nuevoTexto, ignorarCapitalización ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
+
+
+        /// <summary>
+        /// Bajo ciertas circunstancias esta función podría dar mejor rendimiento que foreach (var kv in reemplazos) { if (texto.Contiene(kv.Key)) texto = texto.Reemplazar(kv.Key, kv.Value); }.
+        /// Se debe probar el rendimiento en cada caso porque cualquiera de los dos puede ser más rápido.
+        /// Si no se necesita alto rendimiento, ReemplazarVarios() es suficientemente rápida, pero tiene inconvenientes con los carácteres
+        /// que puede aceptar para los textos a reemplazar, pues estos se usan dentro de una expresión regular.
+        /// </summary>
+        /// <param name="texto"></param>
+        /// <param name="reemplazos"></param>
+        /// <param name="ignorarCapitalización"></param>
+        /// <returns></returns>
+        public static string ReemplazarVarios(this string texto, Dictionary<string, string> reemplazos, bool ignorarCapitalización = true) // Ver https://stackoverflow.com/questions/1321331/replace-multiple-string-elements-in-c-sharp.
+            => Regex.Replace(texto, "(" + String.Join("|", reemplazos.Keys.ToArray()) + ")", delegate (Match m) { return reemplazos[m.Value]; },
+                ignorarCapitalización ? RegexOptions.IgnoreCase : RegexOptions.None);
+
+
         public static int ObtenerDistanciaLevenshtein(string texto1, string texto2) {
 
             int[,] d = new int[texto1.Length + 1, texto2.Length + 1];
