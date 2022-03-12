@@ -114,7 +114,7 @@
 
 || 53 ||  {p=49} + 2[v]   1[v]<x>[gold mine]<sup>[drop gold]<> [->] 4 [h]  /f  <r>15[w]  24[f]  9[g]  1[h]  49[pop]
 
-|| 54 ||  {p=50} Start [longsword] Production @ 3 [rax]   Cancel [longsword] in queue to afford   tecnologies.  /f  <r>16[w]  24[f]  9[g]  1[h]  50[pop]
+|| 54 ||  {p=50} Start [longsword] Production at 3 [rax]   Cancel [longsword] in queue to afford   tecnologies.  /f  <r>16[w]  24[f]  9[g]  1[h]  50[pop]
 
 || 55 ||  {p=51} + 2[v]   [iron casting]  /f  <r>17[w]  24[f]  9[g]  1[h]  51[pop]
 
@@ -136,7 +136,7 @@
 
 || 64 ||  {p=60} [v]<x>[tree]<> [->] [uni] [->] [tree]<x>[flag]<>   [v]<x>[tree]<> [->] [monastery] [->] [tree]<x>[flag]<>  /f  <r>16[w]  32[f]  9[g]  1[h]  1[uni]  1[monastery]  60[pop]
 
-|| 65 ||  {p=61} + [v]   8[v]<x>[tree]<> [->] [mc]<x>[2]<sup>[gold mine]<>   [gold mining]  /f  <r>9[w]  32[f]  9[g]  1[h]  1[uni]  1[monastery]  8[mc]  61[pop]
+|| 65 ||  {p=61} + [v]   8[v]<x>[tree]<> [->] [mc]<sup>[gold mine]<x>[2]<>   [gold mining]  /f  <r>9[w]  32[f]  9[g]  1[h]  1[uni]  1[monastery]  8[mc]  61[pop]
 
 || 66 ||  {p=62}  [wb]   [v]<x>[h]<> [->] 4 [h]<x>[flag]<>  /f  <r>12[w]  32[f]  9[g]  1[h]  8[mc]  62[pop]
 

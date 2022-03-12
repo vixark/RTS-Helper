@@ -98,7 +98,7 @@
 
 || 45 ||  {p=42} + 2[v]   [v]<x>[tree]<sup>[drop wood]<> [->] 4 [h]  /f  <r>13[w]  20[f]  8[g]  1[h]  42[pop]
 
-|| 46 ||  {p=43} Start [longsword] Production @ 3 [rax]   Cancel [longsword] in queue to afford   tecnologies.  /f  <r>14[w]  20[f]  8[g]  1[h]  43[pop]
+|| 46 ||  {p=43} Start [longsword] Production at 3 [rax]   Cancel [longsword] in queue to afford   tecnologies.  /f  <r>14[w]  20[f]  8[g]  1[h]  43[pop]
 
 || 47 ||  {p=44} + 2[v]  /f  <r>15[w]  20[f]  8[g]  1[h]  44[pop]
 
@@ -152,7 +152,7 @@
 
 || 72 ||  {p=63} [v]<x>[6][4][-][7][0]<> [->] [stone mine]<x>[2]<>   [v]<x>[tree]<> [->] [mc]<sup>[stone mine]<x>[2]<>  /f  <r>10[w]  32[f]  13[g]  2[s]  1[h]  5[mc]  63[pop]
 
-|| 73 ||  {p=64} [champion upgrade]   + 2[v]   Start [2hs] Production @ 5 [rax]  /f  <r>10[w]  32[f]  13[g]  7[s]  1[h]  1[mc]  64[pop]
+|| 73 ||  {p=64} [champion upgrade]   + 2[v]   Start [2hs] Production at 5 [rax]  /f  <r>10[w]  32[f]  13[g]  7[s]  1[h]  1[mc]  64[pop]
 
 || 74 ||  {p=65} [v]<x>[h]<> [->] 4 [h]<x>[flag]<> [->] [tree]<x>[flag]<>  /f  <r>10[w]  32[f]  13[g]  9[s]  1[h]  65[pop]
 
@@ -164,6 +164,6 @@
 
 || 78 ||  {p=69 empty} /f  <r>11[w]  32[f]  13[g]  13[s]  69[pop]
 
-|| 79 ||  {p=70 sns="no"} + 2[v]   6[v]<x>[tree]<> [->] [tc]<x>[2]<sup>[tree]<>   [v]<x>[7][1][-]...<> [->] [tree]<x>[tc]<x xs>[2]<>  /f  <r>5[w]  32[f]  13[g]  14[s]  6[tc]  70[pop]
+|| 79 ||  {p=70 sns="no"} + 2[v]   6[v]<x>[tree]<> [->] [tc]<sup>[tree]<x>[2]<>   [v]<x>[7][1][-]...<> [->] [tree]<x>[tc]<x xs>[2]<>  /f  <r>5[w]  32[f]  13[g]  14[s]  6[tc]  70[pop]
 
 || 80 ||  {sps="no"} [champ]@ 5 [rax] [3s] [v]@ 2 [tc]   [v]<x>[stone mine]<> [->] [castle] [->] [conscription] [1s] [trebuchet] [1s] [elite gbeto]   [crop rotation] [1s] [hand cart] [1s] [fortified wall]  /f  <r>8+[w]  40+[f]  13+[g]  6+[s]  71+[pop]
