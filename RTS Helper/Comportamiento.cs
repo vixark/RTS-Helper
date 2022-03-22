@@ -64,7 +64,7 @@ namespace RTSHelper {
 
 
         public Comportamiento(string texto, out Dictionary<string, Comportamiento> clasesLeídas, Dictionary<string, Comportamiento>? clases, 
-            out string? errores) {
+            out string? errores, int? númeroPaso) {
 
             errores = null;
             clasesLeídas = new Dictionary<string, Comportamiento>();
@@ -83,16 +83,19 @@ namespace RTSHelper {
                         var nombreClase = coincidenciasClase.Groups[1].Value;
                         var textoComportamientosClase = coincidenciasClase.Groups[2].Value;
                         if (palabrasClave.Contains(nombreClase)) {
-                            AgregarErrores(ref errores, $"The behavior class name {nombreClase} is not allowed because it can't have the same name as a keyword.");
+                            AgregarErrores(ref errores, $"The behavior class name {nombreClase} is not allowed because it can't have the same name as a " +
+                                $"keyword.", númeroPaso);
                         } else {
 
                             if (clasesLeídas.ContainsKey(nombreClase)) {
-                                AgregarErrores(ref errores, $"The behavior class name {nombreClase} is not allowed because it was already added.");
+                                AgregarErrores(ref errores, $"The behavior class name {nombreClase} is not allowed because it was already added."
+                                    , númeroPaso);
                             } else {
 
-                                clasesLeídas.Add(nombreClase, new Comportamiento(textoComportamientosClase, out _, null, out string? erroresInternos));
+                                clasesLeídas.Add(nombreClase, new Comportamiento(textoComportamientosClase, out _, null, out string? erroresInternos
+                                    , númeroPaso));
                                 textoMinúscula = textoMinúscula.Replace(coincidenciasClase.Groups[0].Value, "");
-                                AgregarErrores(ref errores, erroresInternos);
+                                AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
 
                             }
 
@@ -135,7 +138,7 @@ namespace RTSHelper {
                                                     if (!File.Exists(Path.Combine(DirectorioSonidosCortos, sonidoInterno))) {
 
                                                         AgregarErrores(ref errores, 
-                                                            $"{sonidoInterno} sound file doesn't exists in {DirectorioSonidosCortos}.");
+                                                            $"{sonidoInterno} sound file doesn't exists in {DirectorioSonidosCortos}.", númeroPaso);
                                                         Sonido = null;
                                                         break;
 
@@ -151,7 +154,7 @@ namespace RTSHelper {
 
                                         } else {
 
-                                            AgregarErrores(ref errores, $"{Sonido} sound file doesn't exists in {DirectorioSonidosCortos}.");
+                                            AgregarErrores(ref errores, $"{Sonido} sound file doesn't exists in {DirectorioSonidosCortos}.", númeroPaso);
                                             Sonido = null;
 
                                         }
@@ -167,7 +170,7 @@ namespace RTSHelper {
                                     Presonido = valor;
                                     if (Presonido == "default") Presonido = Preferencias.StepEndSound;
                                     if (Presonido.ToLower() != NoneSoundString.ToLower() && !File.Exists(Path.Combine(DirectorioSonidosLargos, Presonido))) {
-                                        AgregarErrores(ref errores, $"{Presonido} sound file doesn't exists in {DirectorioSonidosLargos}.");
+                                        AgregarErrores(ref errores, $"{Presonido} sound file doesn't exists in {DirectorioSonidosLargos}.", númeroPaso);
                                         Presonido = null;
                                     }
                                 }
@@ -185,7 +188,7 @@ namespace RTSHelper {
                                         ColorFlash = valor;
                                         var mediaColorFlash = ObtenerMediaColor(ColorFlash);
                                         if (mediaColorFlash == null) {
-                                            AgregarErrores(ref errores, $"The value {valor} for fc is invalid.");
+                                            AgregarErrores(ref errores, $"The value {valor} for fc is invalid.", númeroPaso);
                                             if (Preferencias.OverrideFlashOnStepChange) Flash = false;
                                         }
 
@@ -203,7 +206,7 @@ namespace RTSHelper {
                                     } else if (valor == "no" || valor == "false") {
                                         MostrarSiguientePaso = false;
                                     } else {
-                                        AgregarErrores(ref errores, $"The value {valor} for sns is invalid.");
+                                        AgregarErrores(ref errores, $"The value {valor} for sns is invalid.", númeroPaso);
                                     }
 
                                 }
@@ -218,14 +221,14 @@ namespace RTSHelper {
                                     } else if (valor == "no" || valor == "false") {
                                         MostrarAnteriorPaso = false;
                                     } else {
-                                        AgregarErrores(ref errores, $"The value {valor} for sps is invalid.");
+                                        AgregarErrores(ref errores, $"The value {valor} for sps is invalid.", númeroPaso);
                                     }
 
                                 }
                                 break;
 
                             default:
-                                AgregarErrores(ref errores, $"The value {comportamientoId} as a behavior wasn't expected.");
+                                AgregarErrores(ref errores, $"The value {comportamientoId} as a behavior wasn't expected.", númeroPaso);
                                 break;
                         }
 
@@ -251,13 +254,13 @@ namespace RTSHelper {
 
                                     int número;
                                     if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número)) {
-                                        AgregarErrores(ref errores, "t value should be an integer.");
+                                        AgregarErrores(ref errores, "t value should be an integer.", númeroPaso);
                                     } else {
 
                                         if (número > 0 && número <= 86400) {
                                             Duración = número;
                                         } else {
-                                            AgregarErrores(ref errores, "t value should be between 1 and 86400.");
+                                            AgregarErrores(ref errores, "t value should be between 1 and 86400.", númeroPaso);
                                         }
 
                                     }
@@ -272,7 +275,7 @@ namespace RTSHelper {
                                     OpacidadFlash = double.Parse(ObtenerTextoNúmeroLocal(valor));
                                     if (OpacidadFlash > 1 || OpacidadFlash < 0) {
                                         OpacidadFlash = null;
-                                        AgregarErrores(ref errores, "fo value should be between 0 and 1.");
+                                        AgregarErrores(ref errores, "fo value should be between 0 and 1.", númeroPaso);
                                     }
 
                                 }
@@ -284,13 +287,13 @@ namespace RTSHelper {
 
                                     int número2;
                                     if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número2)) {
-                                        AgregarErrores(ref errores, "sv value should be an integer.");
+                                        AgregarErrores(ref errores, "sv value should be an integer.", númeroPaso);
                                     } else {
 
                                         if (número2 >= 0 && número2 <= 100) {
                                             VolumenSonido = número2;
                                         } else {
-                                            AgregarErrores(ref errores, "sv value should be between 0 and 100.");
+                                            AgregarErrores(ref errores, "sv value should be between 0 and 100.", númeroPaso);
                                         }
 
                                     }
@@ -304,13 +307,13 @@ namespace RTSHelper {
 
                                     int número3;
                                     if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número3)) {
-                                        AgregarErrores(ref errores, "esv value should be an integer.");
+                                        AgregarErrores(ref errores, "esv value should be an integer.", númeroPaso);
                                     } else {
 
                                         if (número3 >= 0 && número3 <= 100) {
                                             VolumenPresonido = número3;
                                         } else {
-                                            AgregarErrores(ref errores, "esv value should be between 0 and 100.");
+                                            AgregarErrores(ref errores, "esv value should be between 0 and 100.", númeroPaso);
                                         }
 
                                     }
@@ -322,14 +325,14 @@ namespace RTSHelper {
 
                                 int número4;
                                 if (!int.TryParse(ObtenerTextoNúmeroLocal(valor), out número4)) {
-                                    AgregarErrores(ref errores, "p value should be an integer.");
+                                    AgregarErrores(ref errores, "p value should be an integer.", númeroPaso);
                                 } else {
                                     Progreso = número4;
                                 }
                                 break;
 
                             default:
-                                AgregarErrores(ref errores, $"To Developer: The value {comportamientoId} as a behavior wasn't expected.");
+                                AgregarErrores(ref errores, $"To Developer: The value {comportamientoId} as a behavior wasn't expected.", númeroPaso);
                                 break;
                         }
 

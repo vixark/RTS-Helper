@@ -83,6 +83,7 @@ namespace RTSHelper {
             Formato? formatoGlobal = null;
             Comportamiento? comportamientoGlobal = null;
             var grupos = new Dictionary<string, string>(); // Almacena el nombre de un nombre grupo y su contenido. El contenido será reemplazado directamente en el lugar que se use el nombre del grupo.
+            var númeroPaso = 0;
             
             foreach (var textoPaso in textosPasos) {
 
@@ -91,22 +92,23 @@ namespace RTSHelper {
 
                 if (textoPasoTrimmed.StartsWith("<<") && textoPasoTrimmed.EndsWith(">>")) { // Es necesario hacerlo así y no con Regex por facilidad y para que no entre en conflicto con las clases de comportamientos que van entre <>.
 
-                    formatoGlobal = new Formato(textoPasoTrimmed[2..^2], out Dictionary<string, Formato> clasesLeídas, null, out string? erroresInternos);
-                    AgregarErrores(ref errores, erroresInternos);
+                    formatoGlobal = new Formato(textoPasoTrimmed[2..^2], out Dictionary<string, Formato> clasesLeídas, null, out string? erroresInternos
+                        , -4);
+                    AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
                     ClasesDeFormatos = clasesLeídas;
 
                 } else if (textoPasoTrimmed.StartsWith("{{") && textoPasoTrimmed.EndsWith("}}")) { // Es necesario hacerlo así y no con Regex por facilidad y para que no entre en conflicto con las clases de comportamientos que van entre {}.
 
                     comportamientoGlobal = new Comportamiento(textoPasoTrimmed[2..^2], out Dictionary<string, Comportamiento> clasesLeídas, null, 
-                        out string? erroresInternos);
-                    AgregarErrores(ref errores, erroresInternos);
+                        out string? erroresInternos, -3);
+                    AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
                     ClasesDeComportamientos = clasesLeídas;
 
                 } else if (textoPasoTrimmed.StartsWith("((") && textoPasoTrimmed.EndsWith("))")) { // Es necesario hacerlo así y no con Regex por facilidad.
 
                     Introducción = new Paso(textoPasoTrimmed[2..^2], comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos,
-                        grupos, out string ? erroresInternos);
-                    AgregarErrores(ref errores, erroresInternos);
+                        grupos, out string ? erroresInternos, -2);
+                    AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
 
                 } else if (textoPasoTrimmed.StartsWith("[[") && textoPasoTrimmed.EndsWith("]]")) { // Es necesario hacerlo así y no con Regex por facilidad y para que no entre en conflicto con las clases de comportamientos que van entre [].
 
@@ -128,11 +130,11 @@ namespace RTSHelper {
                             if (!string.IsNullOrWhiteSpace(nombre)) {
 
                                 if (ObtenerEntidad(nombre) != null) {
-                                    AgregarErrores(ref errores, $"{nombre} can't be used as a group name because it's already an entity name.");
+                                    AgregarErrores(ref errores, $"{nombre} can't be used as a group name because it's already an entity name.", -1);
                                 } else {
 
                                     if (grupos.ContainsKey(nombre)) {
-                                        AgregarErrores(ref errores, $"You can't add two groups with the same name: {nombre}.");
+                                        AgregarErrores(ref errores, $"You can't add two groups with the same name: {nombre}.", -1);
                                     } else {
                                         grupos.Add(nombre, contenidoGrupoActual.ToString());
                                     }
@@ -169,16 +171,17 @@ namespace RTSHelper {
                 } else if (!string.IsNullOrWhiteSpace(textoPasoTrimmed)) { // No se agrega el paso si es un espacio en la build order. Estos espacios son útiles para tener más orden de edición.
 
                     pasos.Add(new Paso(textoPasoTrimmed, comportamientoGlobal, formatoGlobal, ClasesDeFormatos, ClasesDeComportamientos, grupos, 
-                        out string? erroresInternos));
-                    AgregarErrores(ref errores, erroresInternos);
+                        out string? erroresInternos, númeroPaso));
+                    AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
+                    númeroPaso++;
 
                 }
 
             }
 
             if (pasos.Count == 0) {
-                pasos.Add(new Paso("", null, null, null, null, new Dictionary<string, string>(), out string? erroresInternos)); // Para poder almacenar la duración de los pasos, debe haber como mínimo un paso.
-                AgregarErrores(ref errores, erroresInternos);
+                pasos.Add(new Paso("", null, null, null, null, new Dictionary<string, string>(), out string? erroresInternos, 0)); // Para poder almacenar la duración de los pasos, debe haber como mínimo un paso.
+                AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
             }
                 
             if (NúmeroPaso > 0) { // Si se carga una build order en la mitad de la ejecución, debe copiar las duraciones de los pasos de la ejecución actual.
@@ -254,13 +257,13 @@ namespace RTSHelper {
 
                     foreach (var segmento in instrucción.Segmentos) {
 
-                        var formato = Formato.ObtenerFormatoEfectivo(segmento.Formato, formatoPredeterminado, out string? erroresInternos);
-                        AgregarErrores(ref errores, erroresInternos);
+                        var formato = Formato.ObtenerFormatoEfectivo(segmento.Formato, formatoPredeterminado, out string? erroresInternos, númeroPaso);
+                        AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
 
                         if (formato.Negrita == null || formato.Cursiva == null || formato.NombreFuente == null || formato.Subrayado == null
                             || formato.TamañoFuenteEfectiva == null || formato.Color == null || formato.ColorHexadecimal == null ||
                             formato.TamañoImagen == null || formato.ObtenerTamañoImagenEfectiva((double)formato.TamañoImagen) == null) {
-                            AgregarErrores(ref errores, "To Developer: Unespected null value in formato in MostrarPaso().");
+                            AgregarErrores(ref errores, "To Developer: Unespected null value in formato in MostrarPaso().", númeroPaso);
                             continue;
                         }
 
@@ -277,24 +280,24 @@ namespace RTSHelper {
                             var entidad = ObtenerEntidad(segmento.Texto);
                             if (entidad == null) {
 
-                                AgregarErrores(ref errores, $"The name {segmento.Texto} wasn't found.");
-                                segmentoEfectivo = segmento.Clonar(out string? erroresInternos2);
-                                AgregarErrores(ref errores, erroresInternos2);
+                                AgregarErrores(ref errores, $"The name {segmento.Texto} wasn't found.", númeroPaso);
+                                segmentoEfectivo = segmento.Clonar(out string? erroresInternos2, númeroPaso);
+                                AgregarErrores(ref errores, erroresInternos2, númeroPaso: null);
                                 segmentoEfectivo.Tipo = TipoSegmento.Texto;
                                 margenEnTexto = false;
 
                             } else {
 
-                                segmentoEfectivo = ObtenerSegmentoEfectivo(entidad, out string? erroresInternos2);
+                                segmentoEfectivo = ObtenerSegmentoEfectivo(entidad, out string? erroresInternos2, númeroPaso);
                                 margenEnTexto = segmentoEfectivo.Tipo != TipoSegmento.Imagen; // Cuando se usa el marcado con corchetes cuadrados por ejemplo, [attack][town center] se espera que las entidades no sean adjuntas si están en texto, es decir, se espera que no se muestre ATTKTC, si no ATT TC. Por esto se debe agregar este margen adicional cuando la entidad no se vaya a mostrar como imagen.
-                                AgregarErrores(ref errores, erroresInternos2);
+                                AgregarErrores(ref errores, erroresInternos2, númeroPaso: null);
 
                             }
 
                         } else {
 
-                            segmentoEfectivo = segmento.Clonar(out string? erroresInternos2);
-                            AgregarErrores(ref errores, erroresInternos2);
+                            segmentoEfectivo = segmento.Clonar(out string? erroresInternos2, númeroPaso);
+                            AgregarErrores(ref errores, erroresInternos2, númeroPaso: null);
                             margenEnTexto = false; // El texto normal no lleva margen.
 
                         }
@@ -317,10 +320,10 @@ namespace RTSHelper {
                             if (formato.Posición != PosiciónTexto.Normal) {
 
                                 textBlock.FontFamily = Formato.ObtenerFuentePosiciónEspecial(formato.Posición, segmentoEfectivo.Texto,
-                                    formato.NombreFuente, out string? erroresInternos2);
+                                    formato.NombreFuente, out string? erroresInternos2, númeroPaso);
                                 if (formato.Posición == PosiciónTexto.Superíndice) textBlock.Typography.Variants = FontVariants.Superscript;
                                 if (formato.Posición == PosiciónTexto.Subíndice) textBlock.Typography.Variants = FontVariants.Subscript;
-                                AgregarErrores(ref errores, erroresInternos2);
+                                AgregarErrores(ref errores, erroresInternos2, númeroPaso: null);
 
                             }
 

@@ -28,6 +28,8 @@ namespace RTSHelper {
 
         public double? DesfaceAcumulado { get; set; } = null; // El desface acumulado generado hasta este paso. En el caso de Age of Empires II equivale al tiempo desocupado que estuvo el centro de pueblo durante desde el inico del juego hasta el final de este paso.
 
+        public int Número { get; set; } = 0;
+
         #endregion Propiedades>
 
 
@@ -41,9 +43,10 @@ namespace RTSHelper {
         #region Constructores
 
         public Paso(string? texto, Comportamiento? comportamientoPadre, Formato? formatoPadre, Dictionary<string, Formato>? clasesDeFormatos, 
-            Dictionary<string, Comportamiento>? clasesDeComportamientos, Dictionary<string,string> grupos, out string? errores) {
+            Dictionary<string, Comportamiento>? clasesDeComportamientos, Dictionary<string,string> grupos, out string? errores, int número) {
 
             errores = null;
+            Número = número;
             ProcesarPaso(texto, comportamientoPadre ?? new Comportamiento(), formatoPadre ?? new Formato(), clasesDeFormatos,
                     clasesDeComportamientos, grupos, out errores);
 
@@ -73,8 +76,8 @@ namespace RTSHelper {
                     textoProcesado = textoProcesado.Replace(coincidenciasComportamientos.Groups[0].Value, "").TrimStart();
                     var textoComportamientos = coincidenciasComportamientos.Groups[1].Value;
                     Comportamiento = Comportamiento.ObtenerComportamientoEfectivo(new Comportamiento(textoComportamientos, out _, 
-                        clasesDeComportamientos, out string? erroresInternos), comportamientoPadre);
-                    AgregarErrores(ref errores, erroresInternos);
+                        clasesDeComportamientos, out string? erroresInternos, Número), comportamientoPadre);
+                    AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
 
                 } 
 
@@ -90,7 +93,7 @@ namespace RTSHelper {
 
             var instruccionesTexto = textoProcesado.Split(NuevaLíneaId).ToList();
             if (instruccionesTexto.Take(instruccionesTexto.Count - 1).Any(it => it.Contains(AlinearInferiormenteId)))
-                AgregarErrores(ref errores, $"Incorrect use of \\f. It should go only before the last line.");
+                AgregarErrores(ref errores, $"Incorrect use of \\f. It should go only before the last line.", Número);
             var alinearÚltimaInstrucciónInferiormente = instruccionesTexto.Last().Contains(AlinearInferiormenteId);
             if (alinearÚltimaInstrucciónInferiormente) {
                 instruccionesTexto.AddRange(instruccionesTexto.Last().Split(AlinearInferiormenteId).ToList());
@@ -101,8 +104,8 @@ namespace RTSHelper {
             foreach (var instrucciónTexto in instruccionesTexto) {
 
                 Instrucciones.Add(new Instrucción(instrucciónTexto, formatoActual, formatoPadre, clasesDeFormatos, out formatoActual, 
-                    out string? erroresInternos));
-                AgregarErrores(ref errores, erroresInternos);
+                    out string? erroresInternos, Número));
+                AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
 
             }
             Instrucciones.Last().AlinearInferiormente = alinearÚltimaInstrucciónInferiormente;

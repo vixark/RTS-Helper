@@ -34,7 +34,7 @@ namespace RTSHelper {
 
         public static Settings Preferencias = new Settings();
 
-        public static bool ModoDesarrollo = true;
+        public static bool ModoDesarrollo = false;
 
         public const string AOE2Name = "Age of Empires II";
 
@@ -2304,7 +2304,7 @@ namespace RTSHelper {
         /// </summary>
         /// <param name="entidad"></param>
         /// <returns></returns>
-        public static Segmento ObtenerSegmentoEfectivo(Entidad entidad, out string? errores) {
+        public static Segmento ObtenerSegmentoEfectivo(Entidad entidad, out string? errores, int? númeroPaso) {
 
             errores = null;
             foreach (var prioridad in Preferencias.ObtenerDisplayPriorityOrdenadas()) {
@@ -2326,8 +2326,8 @@ namespace RTSHelper {
                     var rutaImagen = ObtenerRutaImagen(entidad, out string imagen);
                     if (rutaImagen != null) {
 
-                        var segmento = new Segmento(imagen, null, TipoSegmento.Imagen, null, out string? erroresInternos);
-                        AgregarErrores(ref errores, erroresInternos);
+                        var segmento = new Segmento(imagen, null, TipoSegmento.Imagen, null, out string? erroresInternos, númeroPaso);
+                        AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
                         return segmento;
 
                     }
@@ -2337,9 +2337,9 @@ namespace RTSHelper {
                     if (entidad.Nombres.ContainsKey(tipoNombre)) {
 
                         var textoSegmento = entidad.Nombres[tipoNombre];
-                        var segmento = new Segmento(Preferencias.CapitalizeNames ? textoSegmento.ToUpper() : textoSegmento , null, TipoSegmento.Texto, null, 
-                            out string? erroresInternos);
-                        AgregarErrores(ref errores, erroresInternos);
+                        var segmento = new Segmento(Preferencias.CapitalizeNames ? textoSegmento.ToUpper() : textoSegmento , null, TipoSegmento.Texto, 
+                            null, out string? erroresInternos, númeroPaso);
+                        AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
                         return segmento;
 
                     }
@@ -2348,9 +2348,9 @@ namespace RTSHelper {
 
             }
 
-            AgregarErrores(ref errores, $"To Developer: ObtenerSegmentoEfectivo() didn't found any match for {entidad.NombreCompleto}.");
-            var segmento2 = new Segmento("", null, TipoSegmento.Texto, null, out string? erroresInternos2);
-            AgregarErrores(ref errores, erroresInternos2);
+            AgregarErrores(ref errores, $"To Developer: ObtenerSegmentoEfectivo() didn't found any match for {entidad.NombreCompleto}.", númeroPaso);
+            var segmento2 = new Segmento("", null, TipoSegmento.Texto, null, out string? erroresInternos2, númeroPaso);
+            AgregarErrores(ref errores, erroresInternos2, númeroPaso: null);
             return segmento2;
 
         } //  ObtenerSegmentoEfectivo>
@@ -2362,10 +2362,12 @@ namespace RTSHelper {
 
         public static MessageBoxResult MostrarError(string mensaje) => MessageBox.Show(mensaje, "Error");
 
-        public static void AgregarErrores(ref string? errores, string? nuevosErrores) { // Solo se puede usar this ref para estructuras https://stackoverflow.com/questions/2618597/impossible-to-use-ref-and-out-for-first-this-parameter-in-extension-methods y https://stackoverflow.com/questions/46748334/extension-method-not-setting-value.
+
+        public static void AgregarErrores(ref string? errores, string? nuevosErrores, int? númeroPaso) { // Solo se puede usar this ref para estructuras https://stackoverflow.com/questions/2618597/impossible-to-use-ref-and-out-for-first-this-parameter-in-extension-methods y https://stackoverflow.com/questions/46748334/extension-method-not-setting-value.
             if (!string.IsNullOrEmpty(nuevosErrores)) 
-                errores += nuevosErrores + (nuevosErrores.EndsWith(Environment.NewLine) ? "" : Environment.NewLine);
+                errores += (númeroPaso != null ? $"Step {númeroPaso}: " : "") + nuevosErrores + (nuevosErrores.EndsWith(Environment.NewLine) ? "" : Environment.NewLine);
         } // AgregarErrores>
+
 
         public static MessageBoxResult MostrarInformación(string mensaje) => MessageBox.Show(mensaje, "Info");
 

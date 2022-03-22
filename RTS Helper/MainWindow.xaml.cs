@@ -234,6 +234,8 @@ namespace RTSHelper {
                 case EEstado.Paused: 
 
                     Estado = EEstado.Stoped;
+                    BtnStart.Content = "▷";
+                    BtnStart.ToolTip = "Start";
                     ReiniciarVariables();
                     ActualizarPaso(stop: true);
                     TxtPaso.Text = "";
@@ -1522,19 +1524,19 @@ namespace RTSHelper {
             SpnPasoAnterior.Children.Clear();
 
             var formatoPaso = new Formato($"{Preferencias.CurrentStepFontColor} {(Preferencias.CurrentStepFontBold ? "b" : "")} " +
-                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null, out string? erroresInternos) 
+                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null, out string? erroresInternos, númeroPaso) 
                 { TamañoBaseFuente = Preferencias.CurrentStepFontSize, TamañoImagen = Preferencias.ImageSize };
-            AgregarErrores(ref errores, erroresInternos);
+            AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
 
             var formatoSiguienteAnteriorPaso = new Formato($"{Preferencias.NextPreviousStepFontColor} {(Preferencias.NextPreviousStepFontBold ? "b" : "")} " +
-                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null, out string? erroresInternos2) 
+                $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null, out string? erroresInternos2, númeroPaso) 
                 { TamañoBaseFuente = Preferencias.NextPreviousStepFontSize, TamañoImagen = Preferencias.ImageSize };
-            AgregarErrores(ref errores, erroresInternos2);
+            AgregarErrores(ref errores, erroresInternos2, númeroPaso: null);
 
             OrdenDeEjecución.MostrarPaso(númeroPaso, formatoPaso, SpnPaso, mostrarSiempreÚltimoPaso: true, 
                 this.Height - Preferencias.BottomMargenSteps - Preferencias.TopMarginCurrentStep, HorizontalAlignment.Left,
                 Preferencias.BottomMargenSteps, out bool superóAltoPasoActual, out string? erroresInternos3);
-            AgregarErrores(ref errores, erroresInternos3);
+            AgregarErrores(ref errores, erroresInternos3, númeroPaso: null);
 
             var superóAltoSiguientePaso = false;
             if (númeroPaso != null && ((!ForzarMostrarPasoAnterior && ObtenerMostrarSiguientePaso((int)númeroPaso)) || ForzarMostrarPasoSiguiente)) {
@@ -1544,7 +1546,7 @@ namespace RTSHelper {
                     - Preferencias.TopMarginNextPreviousStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoSiguientePaso, 
                     out string? erroresInternos4); // ActualHeight es cero al iniciar antes de cargar la interface, entonces se usa un valor fijo aproximado de 42.
                 Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Visible;
-                AgregarErrores(ref errores, erroresInternos4);
+                AgregarErrores(ref errores, erroresInternos4, númeroPaso: null);
 
             } else {
                 Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Collapsed;
@@ -1560,7 +1562,7 @@ namespace RTSHelper {
                     out string? erroresInternos5);
                 Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Visible;
                 Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Collapsed;
-                AgregarErrores(ref errores, erroresInternos5);
+                AgregarErrores(ref errores, erroresInternos5, númeroPaso: null);
 
             } else {
                 Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Collapsed;

@@ -49,7 +49,7 @@ namespace RTSHelper {
         public Formato() { }
 
 
-        public Formato(string? texto, out Dictionary<string, Formato> clasesLeídas, Dictionary<string, Formato>? clases, out string? errores) {
+        public Formato(string? texto, out Dictionary<string, Formato> clasesLeídas, Dictionary<string, Formato>? clases, out string? errores, int? númeroPaso) {
 
             errores = null;
             clasesLeídas = new Dictionary<string, Formato>();
@@ -72,16 +72,17 @@ namespace RTSHelper {
                         var nombreClase = coincidenciasClase.Groups[1].Value;
                         var textoFormatosClase = coincidenciasClase.Groups[2].Value;
                         if (palabrasClave.Contains(nombreClase) || iniciosPalabrasClave.Any(i => nombreClase.StartsWith(i))) {
-                            AgregarErrores(ref errores, $"The format class name {nombreClase} is not allowed because it can't have the same name as a keyword.");
+                            AgregarErrores(ref errores, $"The format class name {nombreClase} is not allowed because it can't have the same name as a " +
+                                $"keyword.", númeroPaso);
                         } else {
 
                             if (clasesLeídas.ContainsKey(nombreClase)) {
-                                AgregarErrores(ref errores, $"The format class name {nombreClase} is not allowed because it was already added.");
+                                AgregarErrores(ref errores, $"The format class name {nombreClase} is not allowed because it was already added.", númeroPaso);
                             } else {
 
-                                clasesLeídas.Add(nombreClase, new Formato(textoFormatosClase, out _, null, out string? erroresInternos));
+                                clasesLeídas.Add(nombreClase, new Formato(textoFormatosClase, out _, null, out string? erroresInternos, númeroPaso));
                                 textoMinúscula = textoMinúscula.Replace(coincidenciasClase.Groups[0].Value, "");
-                                AgregarErrores(ref errores, erroresInternos);
+                                AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
 
                             }
 
@@ -115,7 +116,7 @@ namespace RTSHelper {
                             if (Preferencias.OverrideFontUnderline) Subrayado = true;
                             break;
                         default:
-                            AgregarErrores(ref errores, $"To Developer: The value '{valor}' wasn't expected in Formato().");
+                            AgregarErrores(ref errores, $"To Developer: The value '{valor}' wasn't expected in Formato().", númeroPaso);
                             break;
                     }
                     valorIdentificado = true;
@@ -152,7 +153,7 @@ namespace RTSHelper {
 
                     if (Preferencias.OverrideFontColor) {
                         Color = ObtenerMediaColor(valor);
-                        if (Color == null) AgregarErrores(ref errores, $"Color '{valor}' isn't valid.");
+                        if (Color == null) AgregarErrores(ref errores, $"Color '{valor}' isn't valid.", númeroPaso);
                     }
                     valorIdentificado = true;
 
@@ -172,7 +173,7 @@ namespace RTSHelper {
                         valorIdentificado = true;
 
                     } else {
-                        AgregarErrores(ref errores, $"The format keyword '{valor}' isn't supported.");
+                        AgregarErrores(ref errores, $"The format keyword '{valor}' isn't supported.", númeroPaso);
                     }
 
                 }
@@ -182,7 +183,7 @@ namespace RTSHelper {
                     valorIdentificado = true;
                 }  
 
-                if (!valorIdentificado) AgregarErrores(ref errores, $"The format keyword '{valor}' isn't supported.");
+                if (!valorIdentificado) AgregarErrores(ref errores, $"The format keyword '{valor}' isn't supported.", númeroPaso);
 
             }
 
@@ -215,7 +216,7 @@ namespace RTSHelper {
         } // CopiarPropiedadesEnNulas>
 
 
-        public static Formato ObtenerFormatoEfectivo(Formato? formatoHijo, Formato formatoPadre, out string? errores) {
+        public static Formato ObtenerFormatoEfectivo(Formato? formatoHijo, Formato formatoPadre, out string? errores, int? númeroPaso) {
 
             errores = null;
             var formato = new Formato();
@@ -232,7 +233,7 @@ namespace RTSHelper {
 
             if (formatoHijo?.TamañoBaseFuente != null && formatoPadre.TamañoBaseFuente != null
                 && formatoHijo.TamañoBaseFuente != formatoPadre.TamañoBaseFuente)
-                AgregarErrores(ref errores, "To Developer: TamañoBaseFuente can't be different in formatoHijo and formatoPadre.");
+                AgregarErrores(ref errores, "To Developer: TamañoBaseFuente can't be different in formatoHijo and formatoPadre.", númeroPaso);
 
             formato.TamañoBaseFuente = formatoPadre.TamañoBaseFuente ?? formatoHijo?.TamañoBaseFuente ?? null; // El TamañoBaseFuente es la única propiedad en la que se le da prioridad al formatoPadre porque es donde usualmente se asigna y el que dicta el tamaño general de todo el texto. Tener varios segmentos con diferentes tamaño fuente base no tiene mucho sentido porque se pierde la funcionalidad de los tamaños relativos.
    
@@ -263,7 +264,7 @@ namespace RTSHelper {
         public double? ObtenerTamañoImagenEfectiva(double imageSize) => TamañoTextoEfectivo * (imageSize / 100);
 
 
-        public static FontFamily ObtenerFuentePosiciónEspecial(PosiciónTexto posición, string texto, string nombreFuente, out string? errores) {
+        public static FontFamily ObtenerFuentePosiciónEspecial(PosiciónTexto posición, string texto, string nombreFuente, out string? errores, int? númeroPaso) {
 
             errores = null;
             var tipo = Regex.IsMatch(texto, "^[0-9 ]+$") ? "num" : "alfanum"; // En Global.cs se buscó false, .*, true, .* y no hubo resultados. Esto significa que no hay fuentes que tengan superíndice letras y que no tengan superíndice números. Es decir el superíndice es alfanumérico o solo numérico. Igual para el subíndice.
@@ -275,10 +276,10 @@ namespace RTSHelper {
 
             switch (posición) {
                 case PosiciónTexto.Indeterminado:
-                    AgregarErrores(ref errores, "To Developer: Indeterminado is unexpected in ObtenerFuentePosiciónEspecial()");
+                    AgregarErrores(ref errores, "To Developer: Indeterminado is unexpected in ObtenerFuentePosiciónEspecial()", númeroPaso);
                     break;
                 case PosiciónTexto.Normal:
-                    AgregarErrores(ref errores, "To Developer: Normal is unexpected in ObtenerFuentePosiciónEspecial()");
+                    AgregarErrores(ref errores, "To Developer: Normal is unexpected in ObtenerFuentePosiciónEspecial()", númeroPaso);
                     break;
                 case PosiciónTexto.Subíndice:
 
@@ -345,7 +346,7 @@ namespace RTSHelper {
                 case TipoFuente.Serif:
                     return palatinoLinotype;
                 default:
-                    AgregarErrores(ref errores, "To Developer: default is unexpected in ObtenerFuentePosiciónEspecial()");
+                    AgregarErrores(ref errores, "To Developer: default is unexpected in ObtenerFuentePosiciónEspecial()", númeroPaso);
                     break;
             }
 
