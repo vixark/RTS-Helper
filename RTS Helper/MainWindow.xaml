@@ -298,6 +298,7 @@
                             <MenuItem x:Name="MniRecargarBuildOrder" Click="MniRecargarBuildOrder_Click"  Header="⟳     Reload" />
                             <MenuItem x:Name="MniAdicionarEliminarDeFavoritos" Click="MniAdicionarEliminarDeFavoritos_Click"  Header="★" />
                             <MenuItem x:Name="MniAlternarVerSoloFavoritos" Click="MniAlternarVerSoloFavoritos_Click"  Header="👁  Show Only Favorites" />
+                            <MenuItem x:Name="MniAbrirCarpetaBuildOrders" Click="MniAbrirCarpetaBuildOrders_Click"  Header="🗁   Open Directory" />
                         </ContextMenu>
                     </ComboBox.ContextMenu>
 

@@ -4,13 +4,13 @@
 
 <<r=<b xs is100> x=<sub> p=<sup>>>
 
-[[xf=[<x>[flag]<>] mc@s=[[mc]<x>[stone mine]<>] mc@g=[[mc]<x>[gold mine]<>] 1hv@berries=[[v]<x>[berries]<> [->] [h] [->] [berries]<x>[flag]<>] 2hv@berries=[[v]<x>[berries]<> [->] 2 [h] [->] [berries]<x>[flag]<>] 1hv@g=[[v]<x>[gold mine]<> [->] [h] [->] [gold mine]<x>[flag]<>] 2hv@g=[[v]<x>[gold mine]<> [->] 2 [h] [->] [gold mine]<x>[flag]<>] 3hv@g=[[v]<x>[gold mine]<> [->] 3 [h] [->] [gold mine]<x>[flag]<>] 3hv@w=[[v]<x>[tree]<> [->] 3 [h] [->] [tree]<x>[flag]<>] 2hv@w=[[v]<x>[tree]<> [->] 2 [h] [->] [tree]<x>[flag]<>] 1hv@w=[[v]<x>[tree]<> [->] [h] [->] [tree]<x>[flag]<>] farm@tc=[[farm]<x>[tc]<>] farm@mill=[[farm]<x>[mill]<>] ->shp=[[->] [shp]<x>[flag]<>] ->berries=[[->] [berries]<x>[flag]<>] ->w=[[->] [tree]<x>[flag]<>] ->str=[[->] [tree]<p>[flag]<x>[tc]<>] ->g=[[->] [gold mine]<x>[flag]<>] ->s=[[->] [stone mine]<x>[flag]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@g=[[v]<x>[gold mine]<>] v@s=[[v]<x>[stone mine]<>] v@berries=[[v]<x>[berries]<>] v@deer=[[v]<x>[deer]<>] v@w=[[v]<x>[tree]<>] v@str=[[v]<x>[tree]<x xs>[tc]<>] +1h=[[v]<x>[h]<> [->] [h]<x>[flag]<>] +2h=[[v]<x>[h]<> [->] 2 [h]<x>[flag]<>] +3h=[[v]<x>[h]<> [->] 3 [h]<x>[flag]<>] +4h=[[v]<x>[h]<> [->] 4 [h]<x>[flag]<>] vdboar=[[v]<p>[drop food]<x>[boar]<>] vddeer=[[v]<p>[drop food]<x>[deer]<>] vdw=[[v]<p>[drop wood]<x>[tree]<>] vdshp=[[v]<p>[drop food]<x>[shp]<>] vdberries=[[v]<p>[drop food]<x>[berries]<>] vdg=[[v]<p>[drop gold]<x>[gold mine]<>] vds=[[v]<p>[drop stone]<x>[stone mine]<>]]]
+[[xf=[<x>[flag]<>] mc@s=[[mc]<x>[stone mine]<>] mc@g=[[mc]<x>[gold mine]<>] 1hv@berries=[[v]<x>[berries]<> [->] [h] [->] [berries]<x>[flag]<>] 2hv@berries=[[v]<x>[berries]<> [->] 2 [h] [->] [berries]<x>[flag]<>] 1hv@g=[[v]<x>[gold mine]<> [->] [h] [->] [gold mine]<x>[flag]<>] 2hv@g=[[v]<x>[gold mine]<> [->] 2 [h] [->] [gold mine]<x>[flag]<>] 3hv@g=[[v]<x>[gold mine]<> [->] 3 [h] [->] [gold mine]<x>[flag]<>] 4hv@w=[[v]<x>[tree]<> [->] 4 [h] [->] [tree]<x>[flag]<>]  3hv@w=[[v]<x>[tree]<> [->] 3 [h] [->] [tree]<x>[flag]<>] 2hv@w=[[v]<x>[tree]<> [->] 2 [h] [->] [tree]<x>[flag]<>] 1hv@str=[[v]<x>[tree]<x xs>[tc]<> [->] [h] [->] [tree]<p>[flag]<x>[tc]<>] 1hv@w=[[v]<x>[tree]<> [->] [h] [->] [tree]<x>[flag]<>] farm@tc=[[farm]<x>[tc]<>] farm@mill=[[farm]<x>[mill]<>] ->shp=[[->] [shp]<x>[flag]<>] ->berries=[[->] [berries]<x>[flag]<>] ->w=[[->] [tree]<x>[flag]<>] ->str=[[->] [tree]<p>[flag]<x>[tc]<>] ->g=[[->] [gold mine]<x>[flag]<>] ->s=[[->] [stone mine]<x>[flag]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@g=[[v]<x>[gold mine]<>] v@s=[[v]<x>[stone mine]<>] v@berries=[[v]<x>[berries]<>] v@deer=[[v]<x>[deer]<>] v@w=[[v]<x>[tree]<>] v@str=[[v]<x>[tree]<x xs>[tc]<>] +1h=[[v]<x>[h]<> [->] [h]<x>[flag]<>] +2h=[[v]<x>[h]<> [->] 2 [h]<x>[flag]<>] +3h=[[v]<x>[h]<> [->] 3 [h]<x>[flag]<>] +4h=[[v]<x>[h]<> [->] 4 [h]<x>[flag]<>] vdboar=[[v]<p>[drop food]<x>[boar]<>] vddeer=[[v]<p>[drop food]<x>[deer]<>] vdstr=[[v]<p>[drop wood]<x>[tree]<x xs>[tc]<>] vdw=[[v]<p>[drop wood]<x>[tree]<>] vdshp=[[v]<p>[drop food]<x>[shp]<>] vdberries=[[v]<p>[drop food]<x>[berries]<>] vdg=[[v]<p>[drop gold]<x>[gold mine]<>] vds=[[v]<p>[drop stone]<x>[stone mine]<>]]]
 
 ((<b>6 [maa] [->] [longsword] @ 3[rax] [->] [champion]@ 5[rax]<>   for <xl>[Malians]<> on <xl>[green arabia]<> [1s] <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy))
 
 || 0 - 0:00 ||  {p=3 sns="no"} + 4[v] [3s] 2[v] [->] [h] [3s] [v] [->] [h]   [shp]<x>[1]<> [->] [tc] [9s] 3[v]<x>[h]<> [->] [shp]<p>[flag]<x>[1]<>   [v]<x>[4][-][6]<> [->] [shp]<x>[1]<> [3s] [scout] [->] [shp]<x>[2][-][4]<> [->] [explore][xf]  /f <r>3[h]  3[pop]
 
-|| 1 - 0:25 ||  {p=4} /f  <r>4[f]  4[pop]
+|| 1 - 0:25 ||  {p=4 empty} /f  <r>4[f]  4[pop]
 
 || 2 - 0:50 ||  {p=5} [shp]<x>[2]<> [->] [tc]   [shp]<x>[3]<> <> [->] [explore]   [shp]<x>[4]<> <> [->] [explore]  /f  <r>5[f]  5[pop]
 
@@ -38,25 +38,25 @@
 
 || 14 - 5:50 ||  {p=17} 2[v]<x>[shp]<x xxs>[3]<> [->] [shp]<x>[4]<>   3[v]<x>[shp]<x xxs>[3]<> [->] [berries][xf]   2[v]<x>[shp]<x xxs>[3]<> [->] [shp]<p>[flag]<x>[4]<>  /f <r>2[w]  14[f]  1[mill]  17[pop]
 
-|| 15 - 6:15 ||  {p=18} +[v]   3[vddeer] [->w]   3[vddeer] [->] [deer]<sup>[flag]<x>[3]<>  /f <r>2[w]  15[f]  1[mill]  18[pop]
+|| 15 - 6:15 ||  {p=18} +[v]   3[vddeer] [->str]   3[vddeer] [->] [deer]<sup>[flag]<x>[3]<>  /f <r>2[w]  15[f]  1[mill]  18[pop]
 
-|| 16 - 6:40 ||  {p=19 sps="no"} [v]<x>[2][0]<> [->] [tree]   7[v]<x>[shp]<x xxs>[4]<> [->] [shp]<p>[flag]<x>[5]<>   [feudal age]  /f <r>5[w]  14[f]  19[pop]
+|| 16 - 6:40 ||  {p=19} [v]<x>[2][0]<> [->] [tree]<x>[tc]<>   7[v]<x>[shp]<x xxs>[4]<> [->] [shp]<p>[flag]<x>[5]<>   [feudal age]  /f <r>5[w]  14[f]  19[pop]
 
-|| 17 - 7:05 ||  {p=20 t=40 sps="no"} 7[v@shp] [->] [shp]<p>[flag]<x>[6][-][8]<>   [w] > 125 [->] 6[v@w] [->] [drop wood] [->w]   3[vdshp] [->] [rax]  /f <r>6[w]  11[f]  3[rax]  20[pop]
+|| 17 - 7:05 ||  {p=20 t=40 sps="no"} 2[vdshp] [->] Near [gold mine] [->] [rax] Before 7:30   5[v@shp] [->] [shp]<p>[flag]<x>[6][-][8]<>   2[v]<x>[rax]<> [->g]  /f <r>6[w]  12[f]  2[rax]  20[pop]
 
-|| 18 - 7:45 ||  {p=20 t=40} [v]<x>[rax]<> [->] [shp]<x>[flag]<>   2[v]<x>[rax]<> [->g]   + 3 [mil]  /f <r>6[w]  12[f]  2[g]  20[pop]
+|| 18 - 7:45 ||  {p=20 t=40 sns="no"} + 2 [mil]   2[v@g] [->] [mc@g]  /f <r>6[w]  12[f]  2[mc]  20[pop]
 
-|| 19 - 8:25 ||  {p=20 t=50 sps="no"} 2[v@g] [->] [mc@g] [3s] 4[vdw] [->] [deer]<x>[4]<>   [v@shp] [->] [h][xf] [5s] 3[vddeer] [->berries]   +[v]  /f <r>2[w]  15[f]  0[g]  1[h]  2[mc]  20[pop]
+|| 19 - 8:25 ||  {p=20 t=50 sps="no" sns="no"} 4[v]<p>[drop wood]<x>[tree]<x xs>[tc]<> [->] [deer]<x>[4]<>   + [mil] [3s] +[v]   3[vddeer] [->berries] [3s] [1hv@str]  /f <r>2[w]  15[f]  2[g]  1[h]  20[pop]
 
-|| 20 - 9:15 ||  {p=20 sps="no" sns="no"} [upgrade to man-at-arms] [3s] +[v]   [v]<x>[2][1][-][2][2]<> [->] [gold mine]   [+1h]  /f <r>2[w]  15[f]  2[g]  1[h]  20[pop]
+|| 20 - 9:15 ||  {p=20 sps="no"} [upgrade to man-at-arms] [3s] +[v]   [v]<x>[2][1][-][2][2]<> [->] [gold mine]   [vdshp] [->] 2 [h] [->] [stone wall][xf]  /f <r>2[w]  15[f]  2[g]  1[h]  20[pop]
 
-|| 21 - 9:40 ||  {p=21 sps="no"} [+1h] [->berries]   +[v]   + [mil]  /f <r>2[w]  15[f]  3[g]  1[h]  21[pop]
+|| 21 - 9:40 ||  {p=21} +[v]   + [mil]   3 [maa] [sc] [->] [attack][opponent villager]<x>[gold mine]<>  /f <r>2[w]  15[f]  3[g]  1[h]  21[pop]
 
-|| 22 - 10:05 ||  {p=22 sps="no"}  [v]<x>[2][3][-][3][0]<> [->] [tree]   4[v@shp] [->str]   +[v] [3s] + [maa]  /f <r>2[w]  15[f]  4[g]  1[h]  22[pop]
+|| 22 - 10:05 ||  {p=22}  [v]<x>[2][3][-][3][3]<> [->] [tree]   4[v@shp] [->str]   +[v] [3s] + [maa]  /f <r>2[w]  15[f]  4[g]  1[h]  22[pop]
 
-|| 23 - 10:30 ||  {p=23} 2[vdberries] [->] [stone wall]   Check [v@deer]   +[v] [3s] + [maa]  /f <r>3[w]  12[f]  4[g]  2[stone wall]  23[pop]
+|| 23 - 10:30 ||  {p=23} 1[vdberries] [->] [stone wall]   Check [v@deer]   +[v]  /f <r>3[w]  14[f]  4[g]  2[stone wall]  23[pop]
 
-|| 24 - 10:55 ||  {p=24} [loom]   4[v@deer] [->] [mill] [->]   [3s] [deer]<p>[flag]<x>[5][-][6]<> [->str]  /f <r>8[w]  6[f]  4[g]  4[mill]  2[stone wall]  24[pop]
+|| 24 - 10:55 ||  {p=24} + [maa] [3s] [loom]   4[v@deer] [->] [mill] [->]   [3s] [deer]<p>[flag]<x>[4][-][6]<> [->str]  /f <r>8[w]  6[f]  4[g]  4[mill]  2[stone wall]  24[pop]
 
 || 25 - 11:20 ||  {p=25} +[v]   /f <r>9[w]  10[f]  4[g]  2[stone wall]  25[pop]
 
@@ -70,9 +70,9 @@
 
 || 30 - 13:25 ||  {p=29} +[v]   2[v@berries] [->] 2 [farm]   /f <r>13[w]  8[f]  2[g]  1[h]  2[farm]  2[stone wall]  1[market]  29[pop]
 
-|| 31 - 13:50 ||  {p=30} + 2[v]   Buy 100 [s]   2[v]<x>[h]<> [->] [stone wall]  /f <r>18[w]  6[f]  2[g]  4[stone wall]  30[pop]
+|| 31 - 13:50 ||  {p=30} +[v]   Buy 100 [s]   2[v]<x>[h]<> [->] [stone wall]  /f <r>18[w]  6[f]  2[g]  4[stone wall]  30[pop]
 
-|| 32 - 14:15 ||  {p=31} 2[v@berries] [->] 2 [farm]   [v]<p>[idle]<x>[stone wall]<> [->] [tree]  /f <r>20[w]  4[f]  2[g]  2[farm]  3[stone wall]  31[pop]
+|| 32 - 14:15 ||  {p=31} +[v]   2[v@berries] [->] 2 [farm]   [v]<p>[idle]<x>[stone wall]<> [->] [tree]  /f <r>20[w]  4[f]  2[g]  2[farm]  3[stone wall]  31[pop]
 
 || 33 - 14:40 ||  {p=32} + 2[v]   4[v@str] [->] 4 [farm]  /f <r>17[w]  6[f]  2[g]  4[farm]  3[stone wall]  32[pop]
 
@@ -84,19 +84,19 @@
 
 || 37 - 16:20 ||  {p=36} + 2[v]   2 [v@berries] [->] 2 [farm@mill]  /f <r>15[w]  14[f]  3[g]  2[farm]  2[stone wall]  36[pop]
 
-|| 38 - 16:45 ||  {p=37} If [maa] Alive [->]   [3s] [1hv@g]  /f <r>15[w]  16[f]  4[g]  2[stone wall]  37[pop]
+|| 38 - 16:45 ||  {p=37} If [maa] Alive [->]   [3s] [1hv@g]  /f <r>15[w]  16[f]  3[g]  1[h]  2[stone wall]  37[pop]
 
 || 39 - 17:10 ||  {p=38} + 2[v]   [v@w] [->] [blacksmith] [->w]  /f <r>16[w]  16[f]  5[g]  1[blacksmith]  38[pop]
 
-|| 40 - 17:35 ||  {p=39} /f <r>16[w]  16[f]  6[g]  1[blacksmith]  39[pop]
+|| 40 - 17:35 ||  {p=39 empty} /f <r>16[w]  16[f]  6[g]  1[blacksmith]  39[pop]
 
 || 41 - 18:00 ||  {p=40} Sell 200 [w]   Buy 100 [f]   [castle age]  /f <r>17[w]  16[f]  7[g]  40[pop]
 
 || 42 - 18:25 ||  {p=41 t=80 sns="no"} [v@g] [->] [rax]<x>[2]<> [->] [rax]<p>[flag]<x>[3]<> [->g]   [2hv@g]   [scale mail armor] [3s] [supplies]  /f  <r>17[w]  16[f]  6[g]  1[h]  1[rax]  41[pop]
 
-|| 43 - 19:45 ||  {p=41 t=80 sns="no" sps="no"} [wb]    8[v@w] [->] [lumber camp]<x>[2]<>   [w] > 565 [->] 8[v@w] [->] [mill] + 8 [farm]  /f  <r>1[w]  16[f]  8[g]  8[mill]  8[lc]  41[pop]
+|| 43 - 19:45 ||  {p=41 t=80 sps="no" sns="no"} [wb]    [w] > 800 [->] 8[v@w] [->] [mill] + 8 [farm]   8[v@w] [->] [lc]<x>[2]<>  /f  <r>1[w]  16[f]  8[g]  8[mill]  8[lc]  41[pop] || Aunque solo se necesiten 650 de madera, se usa 800 como límite para no quedar muy apretado en madera para los próximos sembrados que se agotarán.
 
-|| 44 - 21:05 ||  {p=41} [upgrade to long swordsman] [3s] [bow saw] [3s] [chain mail armor]   [v]<x>[4][2][-][6][3]<> [->] [tree]<x>[lc]<x xs>[2]<>   Max [maa]  /f <r>9[w]  24[f]  8[g]  41[pop]
+|| 44 - 21:05 ||  {p=41 sps="no"} [upgrade to long swordsman] [3s] [bow saw] [3s] [chain mail armor]   [v]<x>[4][2][-][6][0]<> [->] [tree]<x>[lc]<x xs>[2]<>   Max [maa]  /f <r>9[w]  24[f]  8[g]  41[pop]
 
 || 45 - 21:30 ||  {p=41} +[v]   [vdw] [->] 4 [h]   Max [maa]  /f  <r>8[w]  24[f]  8[g]  1[h]  41[pop]
 
@@ -112,7 +112,7 @@
 
 || 51 - 24:00 ||  {p=45} [heavy plow]   + 2[v]  /f  <r>12[w]  24[f]  8[g]  1[h]  45[pop]
 
-|| 52 - 24:25 ||  {p=46} /f  <r>13[w]  24[f]  8[g]  1[h]  46[pop]
+|| 52 - 24:25 ||  {p=46 empty} /f  <r>13[w]  24[f]  8[g]  1[h]  46[pop]
 
 || 53 - 24:50 ||  {p=47} + 2[v]   [+4h]  /f  <r>14[w]  24[f]  8[g]  1[h]  47[pop]
 
@@ -120,23 +120,23 @@
 
 || 55 - 25:40 ||  {p=49} + 2[v]  /f  <r>16[w]  24[f]  8[g]  1[h]  49[pop]
 
-|| 56 - 26:05 ||  {p=50} /f  <r>17[w]  24[f]  8[g]  1[h]  50[pop]
+|| 56 - 26:05 ||  {p=50 empty} /f  <r>17[w]  24[f]  8[g]  1[h]  50[pop]
 
-|| 57 - 26:30 ||  {p=51} + 2[v]   [gold mining]   [v@h] [->] [uni] [->] [h][xf] [->w]  /f  <r>18[w]  24[f]  8[g]  1[uni]  51[pop]
+|| 57 - 26:30 ||  {p=51 sns="no"} + 2[v]   [gold mining]   [v@h] [->] [uni] [->] [h][xf] [->w]  /f  <r>18[w]  24[f]  8[g]  1[uni]  51[pop]
 
 || 58 - 26:55 ||  {p=52} 8[v@w] [->] [mill] + 8 [farm]  /f  <r>11[w]  24[f]  8[g]  8[mill]  1[uni]  52[pop]
 
-|| 59 - 27:20 ||  {p=53} + 2[v]   7[v@w] [->] [mc]<x>[2]<sup>[gold mine]<>   Deactivate [autofarm]  /f  <r>5[w]  32[f]  8[g]  7[mc]  1[h]  53[pop]
+|| 59 - 27:20 ||  {p=53} + 2[v]   7[v@w] [->] [mc]<x>[2]<sup>[gold mine]<>   Deactivate [autofarm]  /f  <r>5[w]  32[f]  8[g]  1[h]  7[mc]  53[pop]
 
-|| 60 - 27:45 ||  {p=54} /f  <r>6[w]  32[f]  8[g]  7[mc]  1[h]  54[pop]
+|| 60 - 27:45 ||  {p=54 empty} /f  <r>6[w]  32[f]  8[g]  1[h]  7[mc]  54[pop]
 
-|| 61 - 28:10 ||  {p=55} + 2[v]   [v@w] [->] [monastery] [->w]   Activate [autofarm]  /f  <r>7[w]  32[f]  15[g]  1[monastery]  55[pop]
+|| 61 - 28:10 ||  {p=55} + 2[v]  /f  <r>7[w]  32[f]  15[g]  1[monastery]  55[pop]
 
-|| 62 - 28:35 ||  {p=56} /f  <r>8[w]  32[f]  15[g]  1[monastery]  56[pop]
+|| 62 - 28:35 ||  {p=56} [v@w] [->] [monastery] [->w]   Activate [autofarm]  /f  <r>8[w]  32[f]  15[g]  1[monastery]  56[pop]
 
 || 63 - 29:00 ||  {p=57} + 2[v]   Cancel [longsword] Queue and   Stop Production  /f  <r>10[w]  32[f]  15[g]  57[pop]
 
-|| 64 - 29:25 ||  {p=58} /f  <r>11[w]  32[f]  15[g]  58[pop]
+|| 64 - 29:25 ||  {p=58 empty} /f  <r>11[w]  32[f]  15[g]  58[pop]
 
 || 65 - 29:50 ||  {p=59} [imperial age]  /f  <r>12[w]  32[f]  15[g]  59[pop]
 
@@ -144,7 +144,7 @@
 
 || 67 - 31:20 ||  {p=60 t=65} [v@w] [->] 2 [rax] [->w]  /f  <r>11[w]  32[f]  15[g]  1[h]  1[rax]  60[pop]
 
-|| 68 - 32:25 ||  {p=60 t=60} + 2[v]   [v]<x>[6][1][-][6][2]<> [->] [stone mine]   [+4h]  /f  <r>11[w]  32[f]  15[g]  1[h]  1[rax]  60[pop]
+|| 68 - 32:25 ||  {p=60 t=60} + 2[v]   [v]<x>[6][1][-][6][7]<> [->] [stone mine]   [+4h]  /f  <r>11[w]  32[f]  15[g]  1[h]  1[rax]  60[pop]
 
 || 69 - 33:25 ||  {p=60} [upgrade to two-handed swordsman]   [plate mail armor]  /f  <r>12[w]  32[f]  15[g]  1[h]  60[pop]
 
@@ -154,12 +154,12 @@
 
 || 72 - 34:40 ||  {p=63} [champion upgrade]   + 2[v]   Start [2hs] Production at 5 [rax]  /f  <r>12[w]  32[f]  15[g]  3[s]  1[h]  63[pop]
 
-|| 73 - 35:05 ||  {p=64} /f  <r>12[w]  32[f]  15[g]  4[s]  1[h]  64[pop]
+|| 73 - 35:05 ||  {p=64 empty} /f  <r>12[w]  32[f]  15[g]  4[s]  1[h]  64[pop]
 
 || 74 - 35:30 ||  {p=65} + 2[v]  /f  <r>12[w]  32[f]  15[g]  5[s]  1[h]  65[pop]
 
 || 75 - 35:55 ||  {p=66} [+4h] [->w]  /f  <r>12[w]  32[f]  15[g]  6[s]  1[h]  66[pop]
 
-|| 78 - 36:20 ||  {p=67 sns="no"} + 2[v]   8[v@w] [->] [tc]<sup>[tree]<x>[2]<> + 8 [farm]   [v]<x>[6][8][-]...<> [->] [tree]<x>[tc]<x xs>[2]<>  /f  <r>4[w]  32[f]  15[g]  7[s]  1[h]  8[tc]  67[pop]
+|| 76 - 36:20 ||  {p=67 sns="no"} + 2[v]   8[v@w] [->] [tc]<sup>[tree]<x>[2]<> + 8 [farm]   [v]<x>[6][8][-]...<> [->] [tree]<x>[tc]<x xs>[2]<>  /f  <r>4[w]  32[f]  15[g]  7[s]  1[h]  8[tc]  67[pop]
 
-|| 79 - 36:45 ||  {sps="no"} [champ]@ 5 [rax] [3s] [v]@ 2 [tc]   [v]<x>[stone mine]<> [->] [castle] [->] [conscription] [1s] [trebuchet] [1s] [gbeto]   [crop rotation] [1s] [hand cart] [1s] [fortified wall]  /f  <r>6+[w]  40+[f]  15+[g]  7+[s]  68+[pop]
+|| 77 - 36:45 ||  {sps="no"} [champ]@ 5 [rax] [3s] [v]@ 2 [tc]   [v]<x>[stone mine]<> [->] [castle] [->] [conscription] [1s] [trebuchet] [1s] [gbeto]   [crop rotation] [1s] [hand cart] [1s] [fortified wall]  /f  <r>6+[w]  40+[f]  15+[g]  7+[s]  68+[pop]

@@ -1,16 +1,16 @@
-|| Author: Vixark, Date: 03/03/2022. Made for civilizations with Bloodlines, but can be used by others civilizations, you just keep creating scouts instead of researching Bloodlines. Use Portuguese as a test civilization because they don't have early game economic bonuses and they have Bloodlines, The gold discount for knights would mean to have more gold than expected in Castle Age, but it's ok because that's the end of the build order. The 14 villagers on gold at the end is required for civilizations without gold discount on knights. Using Portuguese you need to wait 6 seconds after Loom to advance to Feudal Age and 17 seconds after Wheelbarrow to create next villagers to keep the timings the same as other civilizations. ||
+|| Author: Vixark, Date: 03/03/2022. Made for civilizations with Bloodlines, but can be used by others civilizations, you just keep creating scouts instead of researching Bloodlines. Use Portuguese as a test civilization because they don't have early game economic bonuses and they have Bloodlines. With Portuguese the gold discount for knights would mean to have more gold than expected in Castle Age, but it's ok because that's the end of the build order. The 14 villagers on gold at the end is required for civilizations without gold discount on knights. Using Portuguese you need to wait 6 seconds after Loom to advance to Feudal Age and 17 seconds after Wheelbarrow to create next villagers to keep the timings the same as other civilizations. ||
 
 {{t=25 empty={fc="none" s="none"}}}
 
 <<r=<b xs is100> x=<sub> p=<sup>>>
 
-[[xf=[<x>[flag]<>] mc@s=[[mc]<x>[stone mine]<>] mc@g=[[mc]<x>[gold mine]<>] 1hv@berries=[[v]<x>[berries]<> [->] [h] [->] [berries]<x>[flag]<>] 2hv@berries=[[v]<x>[berries]<> [->] 2 [h] [->] [berries]<x>[flag]<>] 1hv@g=[[v]<x>[gold mine]<> [->] [h] [->] [gold mine]<x>[flag]<>] 2hv@g=[[v]<x>[gold mine]<> [->] 2 [h] [->] [gold mine]<x>[flag]<>] 3hv@g=[[v]<x>[gold mine]<> [->] 3 [h] [->] [gold mine]<x>[flag]<>] 3hv@w=[[v]<x>[tree]<> [->] 3 [h] [->] [tree]<x>[flag]<>] 2hv@w=[[v]<x>[tree]<> [->] 2 [h] [->] [tree]<x>[flag]<>] 1hv@w=[[v]<x>[tree]<> [->] [h] [->] [tree]<x>[flag]<>] farm@tc=[[farm]<x>[tc]<>] farm@mill=[[farm]<x>[mill]<>] ->shp=[[->] [shp]<x>[flag]<>] ->berries=[[->] [berries]<x>[flag]<>] ->w=[[->] [tree]<x>[flag]<>] ->str=[[->] [tree]<p>[flag]<x>[tc]<>] ->g=[[->] [gold mine]<x>[flag]<>] ->s=[[->] [stone mine]<x>[flag]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@g=[[v]<x>[gold mine]<>] v@s=[[v]<x>[stone mine]<>] v@berries=[[v]<x>[berries]<>] v@deer=[[v]<x>[deer]<>] v@w=[[v]<x>[tree]<>] v@str=[[v]<x>[tree]<x xs>[tc]<>] +1h=[[v]<x>[h]<> [->] [h]<x>[flag]<>] +2h=[[v]<x>[h]<> [->] 2 [h]<x>[flag]<>] +3h=[[v]<x>[h]<> [->] 3 [h]<x>[flag]<>] +4h=[[v]<x>[h]<> [->] 4 [h]<x>[flag]<>] vdboar=[[v]<p>[drop food]<x>[boar]<>] vddeer=[[v]<p>[drop food]<x>[deer]<>] vdw=[[v]<p>[drop wood]<x>[tree]<>] vdshp=[[v]<p>[drop food]<x>[shp]<>] vdg=[[v]<p>[drop gold]<x>[gold mine]<>] vds=[[v]<p>[drop stone]<x>[stone mine]<>]]]
+[[xf=[<x>[flag]<>] mc@s=[[mc]<x>[stone mine]<>] mc@g=[[mc]<x>[gold mine]<>] 1hv@berries=[[v]<x>[berries]<> [->] [h] [->] [berries]<x>[flag]<>] 2hv@berries=[[v]<x>[berries]<> [->] 2 [h] [->] [berries]<x>[flag]<>] 1hv@g=[[v]<x>[gold mine]<> [->] [h] [->] [gold mine]<x>[flag]<>] 2hv@g=[[v]<x>[gold mine]<> [->] 2 [h] [->] [gold mine]<x>[flag]<>] 3hv@g=[[v]<x>[gold mine]<> [->] 3 [h] [->] [gold mine]<x>[flag]<>] 4hv@w=[[v]<x>[tree]<> [->] 4 [h] [->] [tree]<x>[flag]<>]  3hv@w=[[v]<x>[tree]<> [->] 3 [h] [->] [tree]<x>[flag]<>] 2hv@w=[[v]<x>[tree]<> [->] 2 [h] [->] [tree]<x>[flag]<>] 1hv@str=[[v]<x>[tree]<x xs>[tc]<> [->] [h] [->] [tree]<p>[flag]<x>[tc]<>] 1hv@w=[[v]<x>[tree]<> [->] [h] [->] [tree]<x>[flag]<>] farm@tc=[[farm]<x>[tc]<>] farm@mill=[[farm]<x>[mill]<>] ->shp=[[->] [shp]<x>[flag]<>] ->berries=[[->] [berries]<x>[flag]<>] ->w=[[->] [tree]<x>[flag]<>] ->str=[[->] [tree]<p>[flag]<x>[tc]<>] ->g=[[->] [gold mine]<x>[flag]<>] ->s=[[->] [stone mine]<x>[flag]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@g=[[v]<x>[gold mine]<>] v@s=[[v]<x>[stone mine]<>] v@berries=[[v]<x>[berries]<>] v@deer=[[v]<x>[deer]<>] v@w=[[v]<x>[tree]<>] v@str=[[v]<x>[tree]<x xs>[tc]<>] +1h=[[v]<x>[h]<> [->] [h]<x>[flag]<>] +2h=[[v]<x>[h]<> [->] 2 [h]<x>[flag]<>] +3h=[[v]<x>[h]<> [->] 3 [h]<x>[flag]<>] +4h=[[v]<x>[h]<> [->] 4 [h]<x>[flag]<>] vdboar=[[v]<p>[drop food]<x>[boar]<>] vddeer=[[v]<p>[drop food]<x>[deer]<>] vdstr=[[v]<p>[drop wood]<x>[tree]<x xs>[tc]<>] vdw=[[v]<p>[drop wood]<x>[tree]<>] vdshp=[[v]<p>[drop food]<x>[shp]<>] vdberries=[[v]<p>[drop food]<x>[berries]<>] vdg=[[v]<p>[drop gold]<x>[gold mine]<>] vds=[[v]<p>[drop stone]<x>[stone mine]<>]]]
 
 (([scout] @ 1[stable] [->] [knights] @ 2[stables] on <xl>[green arabia]<>   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Medium))
 
 || 0 - 0:00 ||  {p=3 sns="no"} + 4[v] [3s] 2[v] [->] [h] [3s] [v] [->] [h]   [shp]<x>[1]<> [->] [tc] [9s] 3[v]<x>[h]<> [->] [shp]<p>[flag]<x>[1]<>   [v]<x>[4][-][6]<> [->] [shp]<x>[1]<> [3s] [scout] [->] [shp]<x>[2][-][4]<> [->] [explore][xf]  /f <r>3[h]  3[pop]
 
-|| 1 - 0:25 ||  {p=4} /f  <r>4[f]  4[pop]
+|| 1 - 0:25 ||  {p=4 empty} /f  <r>4[f]  4[pop]
 
 || 2 - 0:50 ||  {p=5} [shp]<x>[2]<> [->] [tc]   [shp]<x>[3]<> <> [->] [explore]   [shp]<x>[4]<> <> [->] [explore]  /f  <r>5[f]  5[pop]
 
@@ -38,15 +38,15 @@
 
 || 14 - 5:50 ||  {p=17} [loom]   7[v@shp] [->] [shp]<p>[flag]<x>[4][-][5]<>   [v]<x>[1][8][-][2][2]<> [->] [berries]<>  /f <r>4[w]  13[f]  17[pop]
 
-|| 15 - 6:15 ||  {p=18} [v@berries] [->] [mill]<x>[berries]<>   3[vddeer] [->w]   3[vddeer] [->] [deer]<sup>[flag]<x>[3]<>  /f <r>4[w]  13[f]  1[mill]  18[pop]
+|| 15 - 6:15 ||  {p=18} [v@berries] [->] [mill]<x>[berries]<>   3[vddeer] [->str]   3[vddeer] [->] [deer]<sup>[flag]<x>[3]<>  /f <r>4[w]  13[f]  1[mill]  18[pop]
 
 || 16 - 6:40 ||  {p=19} [feudal age]  /f <r>7[w]  12[f]  19[pop]
 
-|| 17 - 7:05 ||  {p=19 t=65} 2[vdshp] [->] [tree]    5[v@shp] [->] [shp]<p>[flag]<x>[6][-][8]<>   Optimize [v]<x>[tree]<>  /f <r>9[w]  10[f]  19[pop]
+|| 17 - 7:05 ||  {p=19 t=65} [vdshp] [->] [tree]   [vdshp] [->] [tree]<x>[tc]<>    5[v@shp] [->] [shp]<p>[flag]<x>[6][-][8]<>  /f <r>9[w]  10[f]  19[pop]
 
-|| 18 - 8:10 ||  {p=19 t=65 sns="no"} + 2[v] [3s] [v@w] [->] [rax]   [v@w] [->] 2 [h]   3[vddeer] [->berries]  /f <r>7[w]  10[f]  1[h]  1[rax]  19[pop]
+|| 18 - 8:10 ||  {p=19 t=65 sns="no"} + 2[v] [3s] [v@str] [->] [rax] [->str]   [v@str] [->] 2 [h] [->str]   3[vddeer] [->berries]  /f <r>7[w]  10[f]  1[h]  1[rax]  19[pop]
 
-|| 19 - 9:15 ||  {p=19 sps="no" sns="no"} [v@h] + [v]<x>[rax]<> [->] [stable] [->] [h][xf] [->w]   4[vdw] [->] [deer]<p>[flag]<x>[4]<>   [double-bit axe]  /f <r>3[w]  14[f]  2[stable]  19[pop]
+|| 19 - 9:15 ||  {p=19 sps="no" sns="no"} 2 [v@w] [->] [stable] [->w]   [double-bit axe]   4[vdstr] [->] [deer]<p>[flag]<x>[4]<>  /f <r>3[w]  14[f]  2[stable]  19[pop]
 
 || 20 - 9:40 ||  {p=20 sps="no"} +[v]   Start [scout] Production at 1[stable]  /f <r>3[w]  15[f]  2[stable]  20[pop]
 
@@ -54,11 +54,11 @@
 
 || 22 - 10:30 ||  {p=22} +[v]   [v]<x>[2][3][-][2][5]<> [->] [tree]   2[v@shp] [->] 2 [farm]  /f <r>5[w]  15[f]  2[farm]  22[pop]
 
-|| 23 - 10:55 ||  {p=23} +[v]   [2hv@w]  /f <r>8[w]  14[f]  1[h]  23[pop]
+|| 23 - 10:55 ||  {p=23} +[v]   [1hv@w]   Check [v@deer]  /f <r>8[w]  14[f]  1[h]  23[pop]
 
-|| 24 - 11:20 ||  {p=24} +[v]   4[v@deer] [->] [mill] [->]   [3s] [deer]<p>[flag]<x>[5][-][6]<> [->g]  /f <r>9[w]  10[f]  1[h]  4[mill]  24[pop]
+|| 24 - 11:20 ||  {p=24} +[v]   4[v@deer] [->] [mill] [->]   [3s] [deer]<p>[flag]<x>[4][-][6]<> [->g]  /f <r>9[w]  10[f]  1[h]  4[mill]  24[pop]
 
-|| 25 - 11:45 ||  {p=25} +[v]   [v]<x>[2][6][-][2][7]<> [->] [gold mine] Long Distance  /f <r>11[w]  10[f]  4[mill]  25[pop]
+|| 25 - 11:45 ||  {p=25} +[v]   [v]<x>[2][6][-][2][7]<> [->] [gold mine] Long Distance   [1hv@w]  /f <r>11[w]  10[f]  4[mill]  25[pop]
 
 || 26 - 12:10 ||  {p=26} +[v]   2[v@str] [->] 2 [farm]  /f <r>9[w]  14[f]  1[g]  2[farm]  26[pop]
 
@@ -70,7 +70,7 @@
 
 || 30 - 13:50 ||  {p=30} +[v]   /f <r>12[w]  16[f]  2[g]  30[pop]
 
-|| 31 - 14:15 ||  {p=31} +[v]   If [g] > 100 [->]   [3s] 2[v@g] [->] 2 [farm]<x>[tc]<>  /f <r>13[w]  16[f]  0[g]  2[farm]  31[pop]
+|| 31 - 14:15 ||  {p=31} +[v]   If [g] > 100 [->]   [3s] 2[v@g] [->] 2 [farm]<x>[tc]<>  /f <r>13[w]  16[f]  2[farm]  31[pop]
 
 || 32 - 14:40 ||  {p=32} [bloodlines]   3[v@berries] [->] 3 [farm]   +[v]  /f <r>14[w]  11[f]  4[g]  3[farm]  32[pop] || Se deberían tener alrededor de 9-10 Scouts creados y se estima que se hayan perdido 3 para un total de 6-7 vivos. 6 Scouts es el límite mínimo para que Bloodlines provea beneficio (+44% HP de Bloodlines que cuesta 250 Recursos vs. +50% HP de 3 Scouts adicionales de 6 a 9 que cuestan 240 Recursos). De todas maneras como se van a seguir produciendo Scouts y Bloodlines provee mejora inmediata a los Scouts que están al frente, incluso si hay 3 o 4 scouts, tiene sentido a muy corto plazo y a largo plazo.
 
@@ -78,7 +78,7 @@
 
 || 34 - 15:30 ||  {p=34} +[v]   [2hv@w]   2[v@berries] [->] 2 [farm]  /f <r>15[w]  12[f]  4[g]  1[h]  2[farm]  34[pop]
 
-|| 35 - 15:55 ||  {p=35} +[v]   4[v@g] [->] [mc@g]   2[v@str] [->] 2 [farm]  /f <r>14[w]  14[f]  0[g]  1[h]  2[farm]  4[mc]  35[pop]
+|| 35 - 15:55 ||  {p=35} +[v]   4[v@g] [->] [mc@g]   2[v@str] [->] 2 [farm]  /f <r>14[w]  14[f]  1[h]  2[farm]  4[mc]  35[pop]
 
 || 36 - 16:20 ||  {p=36} +[v]   [v]<x>[3][7][-][4][5]<> [->] [gold mine]  /f <r>16[w]  16[f]  4[g]  36[pop]
 
@@ -96,7 +96,7 @@
 
 || 43 - 19:15 ||  {p=43} Sell 200 [s]   Buy 300 [f]   [castle age]  /f <r>12[w]  20[f]  11[g]  43[pop]
 
-|| 44 - 19:40 ||  {p=44 t=50} Resume [scout] Production   [v@g] [->] [blacksmith] [->] [stable]<p>[flag]<x>[2]<>[->g]  /f <r>12[w]  20[f]  11[g]  1[blacksmith]  44[pop]
+|| 44 - 19:40 ||  {p=44 t=50} Resume [scout] Production   [v@g] [->] [blacksmith] [->] [stable]<p>[flag]<x>[2]<> [->g]  /f <r>12[w]  20[f]  11[g]  1[blacksmith]  44[pop]
 
 || 45 - 20:30 ||  {p=44 t=55} [scale barding armor]  /f <r>12[w]  20[f]  11[g]  1[stable]  44[pop]
 

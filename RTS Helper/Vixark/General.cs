@@ -97,6 +97,19 @@ namespace Vixark {
         } // AbrirArchivo>
 
 
+        /// <summary>
+        /// Abre un directorio en el explorador de Windows.
+        /// </summary>
+        /// <param name="rutaDirectorio"></param>
+        public static bool AbrirDirectorio(string? rutaDirectorio) {
+
+            if (rutaDirectorio == null || !Directory.Exists(rutaDirectorio)) return false;
+            Process.Start(new ProcessStartInfo(rutaDirectorio) { UseShellExecute = true });
+            return true;
+
+        } // AbrirDirectorio>
+
+
         public static System.Windows.Media.Color? ObtenerMediaColor(string textoColor) {
 
             try {

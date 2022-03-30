@@ -262,13 +262,7 @@ namespace RTSHelper {
         } // BtnStop_Click>
 
 
-        private void MniRestartStep_Click(object sender, RoutedEventArgs e) {
-
-            var estadoActual = Estado;
-            ReiniciarPasoActual();
-            if (estadoActual == EEstado.Paused) Pause();
-
-        } // MniRestartStep_Click>
+        private void MniRestartStep_Click(object sender, RoutedEventArgs e) => ReiniciarPasoActualGeneral();
 
 
         private void MniStartNextStep_Click(object sender, RoutedEventArgs e) {
@@ -550,9 +544,13 @@ namespace RTSHelper {
         private void MniRecargarBuildOrder_Click(object sender, RoutedEventArgs e) {
 
             if (!Inició || EditandoComboBoxEnCódigo) return;
+            LeerBuildOrders();
             CargarBuildOrder();
 
         } // MniRecargarBuildOrder_Click>
+
+
+        private void MniAbrirCarpetaBuildOrders_Click(object sender, RoutedEventArgs e) => AbrirDirectorio(Preferencias.BuildOrdersDirectory);
 
 
         private void MniEditarBuildOrder_Click(object sender, RoutedEventArgs e) {
@@ -628,6 +626,7 @@ namespace RTSHelper {
                 paso.DesfaceAcumulado = null;
             }
             Desfazar(-MilisegundosJuegoDesface, desfazarReloj: false);
+            ReiniciarPasoActualGeneral(); // El uso principal del reseteo del tiempo muerto es sincronizar con un juego cargado, entonces si se mantiene la costumbre de guardar el juego siempre justo después que salga un aldeano, se puede considerar que el comportamiento más deseado es que se reinicie el paso actual después de eliminar el tiempo muerto. Estrictamente el menú debería decir 'Reset Idle Time and Restart Step', pero es demasiado largo.
 
         } // MniResetIdleTime_Click>
 
@@ -1376,6 +1375,15 @@ namespace RTSHelper {
             ReiniciarPasoActual();
 
         } // IniciarAnteriorPaso>
+
+
+        private void ReiniciarPasoActualGeneral() { // Soporta que el caso cuando está en pausa. El procedimiento ReiniciarPasoActual() no tiene en cuenta si está en pausa. 
+
+            var estadoActual = Estado;
+            ReiniciarPasoActual();
+            if (estadoActual == EEstado.Paused) Pause();
+
+        } // ReiniciarPasoActualGeneral>
 
 
         private void ReiniciarPasoActual() {
