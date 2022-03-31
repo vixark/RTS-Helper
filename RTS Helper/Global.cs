@@ -706,7 +706,7 @@ namespace RTSHelper {
                 types["Type"].Add("Heavy Cavalry Archer", "Unit");
                 types["Type"].Add("Genitour", "Unit");
                 types["Type"].Add("Elite Genitour", "Unit");
-                types["Type"].Add("Militia", "Unit");  
+                types["Type"].Add("Militia", "Unit");
                 types["Type"].Add("Man-at-Arms", "Unit");
                 types["Type"].Add("Long Swordsman", "Unit");
                 types["Type"].Add("Two-Handed Swordsman", "Unit");
@@ -1356,7 +1356,6 @@ namespace RTSHelper {
                 customImages[NameType.Image].Add("Range*", "Range");
                 customImages[NameType.Image].Add("Pierce Armor: ", "Pierce Armor");
                 customImages[NameType.Image].Add("Opponent Villager", "Opponent Male Villager|Opponent Female Villager");
-
 
             }
 
