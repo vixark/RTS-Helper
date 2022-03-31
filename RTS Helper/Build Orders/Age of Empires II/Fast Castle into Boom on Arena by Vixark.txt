@@ -62,7 +62,7 @@
 
 || 26 - 12:10 ||  {p=27 t=50 sps="no"} 4[vdberries] [->] [tree]    [g] > 50 [->] 2[vdg] [->] [tree]   [horse collar] [->] 4[v]<p>[idle]<x>[berries]<> [->] 4 [farm]  /f <r>23[w]  4[farm]  27[pop]
 
-|| 27 - 13:00 ||  {p=27 t=55} 6[v@str] [->] 6 [farm]   [double-bit axe]  /f <r>17[w]  4[f]  6[farm]  27[pop]
+|| 27 - 13:00 ||  {p=27 t=55} 6[v@str] [->] 6 [farm]   [dba]  /f <r>17[w]  4[f]  6[farm]  27[pop]
 
 || 28 - 13:55 ||  {p=27 t=55} Optimize [v@w]   [1hv@w]   + 2[v]  /f <r>16[w]  10[f]  1[h]  27[pop]
 

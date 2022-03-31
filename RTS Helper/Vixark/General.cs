@@ -185,6 +185,13 @@ namespace Vixark {
 
 
         /// <summary>
+        /// Encapsulación de rápido acceso de Contains() para IEnumerable para permitir fácilmente comparar ignorando la capitalización.
+        /// </summary>
+        public static bool Contiene(this IEnumerable<string> lista, string texto, bool ignorarCapitalización = true)
+            => lista.Any(x => string.Compare(x, texto, ignorarCapitalización ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal) == 0);
+
+
+        /// <summary>
         /// Encapsulación de rápido de Replace() usando StringComparison.Ordinal. Es útil para omitir la advertencia CA1307 sin saturar el código.
         /// </summary>
         public static string Reemplazar(this string texto, string anteriorTexto, string? nuevoTexto, bool ignorarCapitalización = true)

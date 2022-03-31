@@ -46,7 +46,7 @@
 
 || 18 - 8:10 ||  {p=19 t=65 sns="no"} + 2[v] [3s] [v@str] [->] [rax] [->str]   [v@str] [->] 2 [h] [->str]   3[vddeer] [->berries]  /f <r>7[w]  10[f]  1[h]  1[rax]  19[pop]
 
-|| 19 - 9:15 ||  {p=19 sps="no" sns="no"} 2 [v@w] [->] [stable] [->w]   [double-bit axe]   4[vdstr] [->] [deer]<p>[flag]<x>[4]<>  /f <r>3[w]  14[f]  2[stable]  19[pop]
+|| 19 - 9:15 ||  {p=19 sps="no" sns="no"} 2 [v@w] [->] [stable] [->w]   [dba]   4[vdstr] [->] [deer]<p>[flag]<x>[4]<>  /f <r>3[w]  14[f]  2[stable]  19[pop]
 
 || 20 - 9:40 ||  {p=20 sps="no"} +[v]   Start [scout] Production at 1[stable]  /f <r>3[w]  15[f]  2[stable]  20[pop]
 
@@ -98,11 +98,11 @@
 
 || 44 - 19:40 ||  {p=44 t=50} Resume [scout] Production   [v@g] [->] [blacksmith] [->] [stable]<p>[flag]<x>[2]<> [->g]  /f <r>12[w]  20[f]  11[g]  1[blacksmith]  44[pop]
 
-|| 45 - 20:30 ||  {p=44 t=55} [scale barding armor]  /f <r>12[w]  20[f]  11[g]  1[stable]  44[pop]
+|| 45 - 20:30 ||  {p=44 t=55} [sba]  /f <r>12[w]  20[f]  11[g]  1[stable]  44[pop]
 
-|| 46 - 21:25 ||  {p=44 t=55 sns="no"} Cancel [scout] Queue and   Stop Production   [wheelbarrow] [3s] [gold mining] [3s] [v@w] [->] [mc]<x> [2]<p>[gold mine]<xxxs>[1]<>  /f <r>11[w]  20[f]  12[g]  1[mc]  44[pop]
+|| 46 - 21:25 ||  {p=44 t=55 sns="no"} Cancel [scout] Queue and   Stop Production   [wb] [3s] [gold mining] [3s] [v@w] [->] [mc]<x> [2]<p>[gold mine]<xxxs>[1]<>  /f <r>11[w]  20[f]  12[g]  1[mc]  44[pop]
 
-|| 47 - 22:20 ||  {p=44 sps="no"} If [scouts] > 10 [->] [upgrade to light cavalry]   Start [knight] Production at 2[stables]   [chain barding armor]  /f <r>11[w]  20[f]  13[g]  44[pop] || Light Cavalry provee 23% más HP (solo se comparará HP) y cuesta lo que cuestan 2.5 light cavalry, entonces el límite serían apróximadamente 10. Debido a que la economía está diseñada para Knights, no se espera que se hagan más Light Cavalry, entonces no se debería mejorar si no se tienen al menos 10 en buenas condiciones de HP.
+|| 47 - 22:20 ||  {p=44 sps="no"} If [scouts] > 10 [->] [lcav u]   Start [knight] Production at 2[stables]   [cba]  /f <r>11[w]  20[f]  13[g]  44[pop] || Light Cavalry provee 23% más HP (solo se comparará HP) y cuesta lo que cuestan 2.5 light cavalry, entonces el límite serían apróximadamente 10. Debido a que la economía está diseñada para Knights, no se espera que se hagan más Light Cavalry, entonces no se debería mejorar si no se tienen al menos 10 en buenas condiciones de HP.
 
 || 48 - 22:45 ||  {p=44} 11 [v@w] [->] [lc]<x>[2]<>  /f <r>0[w]  20[f]  13[g]  11[lc]  44[pop] 
 

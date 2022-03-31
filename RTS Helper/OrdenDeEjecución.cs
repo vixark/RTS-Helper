@@ -257,7 +257,8 @@ namespace RTSHelper {
 
                     foreach (var segmento in instrucción.Segmentos) {
 
-                        var formato = Formato.ObtenerFormatoEfectivo(segmento.Formato, formatoPredeterminado, out string? erroresInternos, númeroPaso);
+                        var formato = Formato.ObtenerFormatoEfectivo(segmento.Formato, formatoPredeterminado, out string? erroresInternos, númeroPaso, 
+                            forzarValores: true);
                         AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
 
                         if (formato.Negrita == null || formato.Cursiva == null || formato.NombreFuente == null || formato.Subrayado == null

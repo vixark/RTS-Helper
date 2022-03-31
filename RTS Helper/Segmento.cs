@@ -31,7 +31,8 @@ namespace RTSHelper {
             
             errores = null;
             Texto = (tipo == TipoSegmento.Entidad || tipo == TipoSegmento.Imagen) ? texto.ToLowerInvariant() : texto;
-            (Formato, Tipo) = (Formato.ObtenerFormatoEfectivo(formato, formatoPadre ?? new Formato(), out string? erroresInternos, númeroPaso), tipo);
+            (Formato, Tipo) = (Formato.ObtenerFormatoEfectivo(formato, formatoPadre ?? new Formato(), out string? erroresInternos, númeroPaso, 
+                forzarValores: false), tipo);
             AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
 
         } // Segmento>

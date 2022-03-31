@@ -8,7 +8,7 @@
 
 (([archers] @ 2[ranges] [->] [xbow] @ 3[ranges] on <xl>[green arabia]<>   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy))
 
-|| 0 - 0:00 ||  {p=3 sns="no"} + 4[v] [3s] 2[v] [->] [h] [3s] [v] [->] [h]   [shp]<x>[1]<> [->] [tc] [9s] 3[v]<x>[h]<> [->] [shp]<p>[flag]<x>[1]<>   [v]<x>[4][-][6]<> [->] [shp]<x>[1]<> [3s] [scout] [->] [shp]<x>[2][-][4]<> [->] [explore][xf]  /f <r>3[h]  3[pop]
+|| 0 - 0:00 ||  {p=3 sns="no"} + 4[v] [3s] 2[v] [->] [h] [3s] [v] [->] [h]   [shp]<x>[1]<> [->] [tc] [9s] 3[v]<x>[h]<> [->] [shp]<p>[flag]<x>[1]<>   [v]<x>[4][-][6]<> [->] [shp]<x>[1]<> [3s] [sc] [->] [shp]<x>[2][-][4]<> [->] [explore][xf]  /f <r>3[h]  3[pop]
 
 || 1 - 0:25 ||  {p=4 empty} /f  <r>4[f]  4[pop]
 
@@ -48,7 +48,7 @@
 
 || 19 - 9:15 ||  {p=19 sps="no"} [v@h] [->] [archery]<x>[1]<> [->g]    [v@g] [->] [archery]<x>[2]<> [->g]  /f <r>10[w]  7[f]  2[archery]  19[pop]
 
-|| 20 - 9:40 ||  {p=20} + 2[v]   [double-bit axe]  /f <r>10[w]  7[f]  1[g]  2[archery]  20[pop]
+|| 20 - 9:40 ||  {p=20} + 2[v]   [dba]  /f <r>10[w]  7[f]  1[g]  2[archery]  20[pop]
 
 || 21 - 10:05 ||  {p=21} Start [archer] Production at 2 [archeries]   3[vdshp] [->] [gold mine]  /f <r>10[w]  4[f]  7[g]  21[pop]
 
@@ -104,14 +104,14 @@
 
 || 47 - 20:55 ||  {p=47} [castle age]  /f <r>17[w]  16[f]  8[g]  1[h]  5[mc]  47[pop]
 
-|| 48 - 21:20 ||  {p=48 t=50} [v@w] [->] [archery]<x>[3]<> [->w]   [padded archer armor]   [gold mining]  /f <r>17[w]  16[f]  13[g]  1[h]  1[archery]  48[pop]
+|| 48 - 21:20 ||  {p=48 t=50} [v@w] [->] [range]<x>[3]<> [->w]   [paa]   [gold mining]  /f <r>17[w]  16[f]  13[g]  1[h]  1[archery]  48[pop]
 
-|| 49 - 22:10 ||  {p=48 t=55} Start [archer] Production at 3 [archeries]   [+4h]  /f <r>18[w]  16[f]  13[g]  1[h]  48[pop]
+|| 49 - 22:10 ||  {p=48 t=55} Start [archer] Production at 3 [ranges]   [+4h]  /f <r>18[w]  16[f]  13[g]  1[h]  48[pop]
 
 || 50 - 23:05 ||  {p=48 t=55} + 2[v]  /f <r>18[w]  16[f]  13[g]  1[h]  48[pop]
 
-|| 51 - 24:00 ||  {p=48} [bodkin] [1s] [upgrade to crossbowman] [1s] [bow saw]   3[v@w] [->] [tc]<x>[tree]<>   4[v@w] [->] [tc]<x>[stone mine]  /f <r>11[w]  16[f]  13[g]  1[h]  7[tc]  48[pop]
+|| 51 - 24:00 ||  {p=48} [bodkin] [1s] [xbow u] [1s] [bow saw]   3[v@w] [->] [tc]<x>[tree]<>   4[v@w] [->] [tc]<x>[stone mine]  /f <r>11[w]  16[f]  13[g]  1[h]  7[tc]  48[pop]
 
 || 52 - 24:25 ||  {p=49} + 2[v]   [+4h]  /f <r>12[w]  16[f]  13[g]  1[h]  7[tc]  49[pop]
 
-|| 53 - 24:50 ||  {sps="no"} [xbow] @ 3[ranges] [3s] [v]@ 3 [tc]   [university] [->] [ballistics] [4s] [siege workshop] [->] [mangonel]   [leather archer armor] [1s] [thumb ring] [1s] [wheelbarrow] [1s] [stone mining] [1s] [heavy plow] [1s] [castle] [1s]/f <r>15+[w]  19+[f]  13+[g]  4+[s]  1[h]  52+[pop]
+|| 53 - 24:50 ||  {sps="no"} [xbow] @ 3[ranges] [3s] [v]@ 3 [tc]   [university] [->] [ballistics] [4s] [siege workshop] [->] [mangonel]   [laa] [1s] [thumb ring] [1s] [wb] [1s] [stone mining] [1s] [heavy plow] [1s] [castle] [1s]/f <r>15+[w]  19+[f]  13+[g]  4+[s]  1[h]  52+[pop]

@@ -216,27 +216,49 @@ namespace RTSHelper {
         } // CopiarPropiedadesEnNulas>
 
 
-        public static Formato ObtenerFormatoEfectivo(Formato? formatoHijo, Formato formatoPadre, out string? errores, int? númeroPaso) {
+        public static Formato ObtenerFormatoEfectivo(Formato? formatoHijo, Formato formatoPadre, out string? errores, int? númeroPaso, bool forzarValores) {
 
             errores = null;
             var formato = new Formato();
-            formato.Negrita = (formatoHijo?.Negrita ?? formatoPadre.Negrita) ?? CurrentStepFontBoldPredeterminado;
-            formato.Subrayado = (formatoHijo?.Subrayado ?? formatoPadre.Subrayado) ?? false;
-            formato.Cursiva = (formatoHijo?.Cursiva ?? formatoPadre.Cursiva) ?? false;
-            formato.NombreFuente = (formatoHijo?.NombreFuente ?? formatoPadre.NombreFuente) ?? NombreFuentePredeterminada;
-            formato.Color = (formatoHijo?.Color ?? formatoPadre.Color) ?? ObtenerMediaColor(CurrentStepFontColorPredeterminado);
-            formato.TamañoFuente = formatoHijo?.TamañoFuente == TamañosFuente.Indeterminado ? formatoPadre.TamañoFuente 
-                : (formatoHijo != null ? formatoHijo.TamañoFuente : TamañosFuente.M);
-            formato.Posición = formatoHijo?.Posición == PosiciónTexto.Indeterminado ? formatoPadre.Posición 
-                : (formatoHijo != null ? formatoHijo.Posición : PosiciónTexto.Normal);
-            formato.TamañoImagen = (formatoHijo?.TamañoImagen ?? formatoPadre.TamañoImagen) ?? ImageSizePredeterminado;
 
-            if (formatoHijo?.TamañoBaseFuente != null && formatoPadre.TamañoBaseFuente != null
-                && formatoHijo.TamañoBaseFuente != formatoPadre.TamañoBaseFuente)
-                AgregarErrores(ref errores, "To Developer: TamañoBaseFuente can't be different in formatoHijo and formatoPadre.", númeroPaso);
+            if (forzarValores) {
+
+                formato.Negrita = (formatoHijo?.Negrita ?? formatoPadre.Negrita) ?? CurrentStepFontBoldPredeterminado;
+                formato.Subrayado = (formatoHijo?.Subrayado ?? formatoPadre.Subrayado) ?? false;
+                formato.Cursiva = (formatoHijo?.Cursiva ?? formatoPadre.Cursiva) ?? false;
+                formato.NombreFuente = (formatoHijo?.NombreFuente ?? formatoPadre.NombreFuente) ?? NombreFuentePredeterminada;
+                formato.Color = (formatoHijo?.Color ?? formatoPadre.Color) ?? ObtenerMediaColor(CurrentStepFontColorPredeterminado);
+                formato.TamañoFuente = formatoHijo?.TamañoFuente == TamañosFuente.Indeterminado ? formatoPadre.TamañoFuente 
+                    : (formatoHijo != null ? formatoHijo.TamañoFuente : TamañosFuente.M);
+                formato.Posición = formatoHijo?.Posición == PosiciónTexto.Indeterminado ? formatoPadre.Posición 
+                    : (formatoHijo != null ? formatoHijo.Posición : PosiciónTexto.Normal);
+                formato.TamañoImagen = (formatoHijo?.TamañoImagen ?? formatoPadre.TamañoImagen) ?? ImageSizePredeterminado;
+
+                if (formatoHijo?.TamañoBaseFuente != null && formatoPadre.TamañoBaseFuente != null
+                    && formatoHijo.TamañoBaseFuente != formatoPadre.TamañoBaseFuente)
+                    AgregarErrores(ref errores, "To Developer: TamañoBaseFuente can't be different in formatoHijo and formatoPadre.", númeroPaso);
+
+            } else {
+
+                formato.Negrita = formatoHijo?.Negrita ?? formatoPadre.Negrita;
+                formato.Subrayado = formatoHijo?.Subrayado ?? formatoPadre.Subrayado;
+                formato.Cursiva = formatoHijo?.Cursiva ?? formatoPadre.Cursiva;
+                formato.NombreFuente = formatoHijo?.NombreFuente ?? formatoPadre.NombreFuente;
+                formato.Color = formatoHijo?.Color ?? formatoPadre.Color;
+                formato.TamañoFuente = formatoHijo?.TamañoFuente == TamañosFuente.Indeterminado ? formatoPadre.TamañoFuente
+                    : (formatoHijo != null ? formatoHijo.TamañoFuente : TamañosFuente.Indeterminado);
+                formato.Posición = formatoHijo?.Posición == PosiciónTexto.Indeterminado ? formatoPadre.Posición
+                    : (formatoHijo != null ? formatoHijo.Posición : PosiciónTexto.Indeterminado);
+                formato.TamañoImagen = formatoHijo?.TamañoImagen ?? formatoPadre.TamañoImagen;
+
+                if (formatoHijo?.TamañoBaseFuente != null && formatoPadre.TamañoBaseFuente != null
+                    && formatoHijo.TamañoBaseFuente != formatoPadre.TamañoBaseFuente)
+                    AgregarErrores(ref errores, "To Developer: TamañoBaseFuente can't be different in formatoHijo and formatoPadre.", númeroPaso);
+
+            }
 
             formato.TamañoBaseFuente = formatoPadre.TamañoBaseFuente ?? formatoHijo?.TamañoBaseFuente ?? null; // El TamañoBaseFuente es la única propiedad en la que se le da prioridad al formatoPadre porque es donde usualmente se asigna y el que dicta el tamaño general de todo el texto. Tener varios segmentos con diferentes tamaño fuente base no tiene mucho sentido porque se pierde la funcionalidad de los tamaños relativos.
-   
+
             return formato;
 
         } // ObtenerFormatoEfectivo>

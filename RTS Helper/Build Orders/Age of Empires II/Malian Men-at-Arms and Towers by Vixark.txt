@@ -48,7 +48,7 @@
 
 || 19 - 8:25 ||  {p=20 t=50 sps="no" sns="no"} + [mil] [3s] +[v]   [1hv@str] [3s] 3[vddeer] [->berries]   [vdshp] [->] [stone wall][tower][stone wall] in Opponent [gold mine]  /f <r>5[w]  11[f]  2[g]  1[h]  1[tower]  20[pop]
 
-|| 20 - 9:15 ||  {p=20 sps="no"} [upgrade to man-at-arms] [3s] [v]<x>[2][1][-][2][3]<> [->] [gold mine]   4[vdstr] [->] [deer]<x>[4]<>   +[v]  /f <r>2[w]  15[f]  2[g]  1[tower]  20[pop]
+|| 20 - 9:15 ||  {p=20 sps="no"} [maa u] [3s] [v]<x>[2][1][-][2][3]<> [->] [gold mine]   4[vdstr] [->] [deer]<x>[4]<>   +[v]  /f <r>2[w]  15[f]  2[g]  1[tower]  20[pop]
 
 || 21 - 9:40 ||  {p=21} +[v] [3s] + [mil]   [vdshp] [->] 2 [h] [->w]   3 [maa] [sc] [->] [attack][opponent villager]<x>[gold mine]<>  /f <r>2[w]  14[f]  3[g]  1[h]  1[tower]  21[pop]
 
@@ -66,7 +66,7 @@
 
 || 28 - 12:35 ||  {p=27} +[v]   After [supplies] [->]   [3s] Start [maa] Production at 1 [rax]  /f <r>10[w]  12[f]  4[g]  1[h]  27[pop]
 
-|| 29 - 13:00 ||  {p=28} +[v]   [double-bit axe]  /f <r>11[w]  12[f]  4[g]  1[h]  28[pop]
+|| 29 - 13:00 ||  {p=28} +[v]   [dba]  /f <r>11[w]  12[f]  4[g]  1[h]  28[pop]
 
 || 30 - 13:25 ||  {p=29} 2[v@berries] [->] 2 [farm]   +[v]  /f <r>12[w]  10[f]  4[g]  2[farm]  1[tower]  29[pop]
 
@@ -74,7 +74,7 @@
 
 || 32 - 14:15 ||  {p=31} 2[v@berries] [->] 2 [farm]   +[v]  /f <r>14[w]  10[f]  4[g]  2[farm]  1[blacksmith]  31[pop]
 
-|| 33 - 14:40 ||  {p=32} +[v]   [scale mail armor]   2[v@g] [->] 2 [farm]  /f <r>15[w]  12[f]  2[g]  2[farm]  1[tower]  32[pop] || Scale Mail Armor da un 50% más de durabilidad frente a arqueros con fletching y en este punto se han producido alrededor de 10 MAA, así que tiene un valor equivalente a 5 MAA más y vale 1.5 MAA. Contra arqueros sin fletching es 100% más de durabilidad. No se hace antes para dar prioridad Double-Bit Axe y tener una mejor economía y poder llegar más pronto y constante a castillos. También se sacrifica el mercado y la segunda torre.
+|| 33 - 14:40 ||  {p=32} +[v]   [sma]   2[v@g] [->] 2 [farm]  /f <r>15[w]  12[f]  2[g]  2[farm]  1[tower]  32[pop] || Scale Mail Armor da un 50% más de durabilidad frente a arqueros con fletching y en este punto se han producido alrededor de 10 MAA, así que tiene un valor equivalente a 5 MAA más y vale 1.5 MAA. Contra arqueros sin fletching es 100% más de durabilidad. No se hace antes para dar prioridad double-bit axe y tener una mejor economía y poder llegar más pronto y consistentemente a castillos. También se sacrifica el mercado y la segunda torre.
 
 || 34 - 15:05 ||  {p=33} +[v]   [v]<x>[tower]<> [->] 2 [h]   2[v@g] [->] 2 [farm]  /f <r>20[w]  10[f]  2[farm]  1[tower]  33[pop]
 
@@ -116,7 +116,7 @@
 
 || 53 - 23:50 ||  {p=47 t=55} + 2[v]   Start [maa] Production at 3 [rax]  /f <r>13[w]  26[f]  8[g]  47[pop]
 
-|| 54 - 24:45 ||  {p=47} [upgrade to long swordsman] [3s] [chain mail armor]    [arson] [3s] [squires]   [v]<x>[4][8][-]...<> [->] [tree][tree]<x>[2]<>  /f <r>13[w]  26[f]  8[g]  47[pop]
+|| 54 - 24:45 ||  {p=47} [ls u] [3s] [cma]    [arson] [3s] [squires]   [v]<x>[4][8][-]...<> [->] [tree][tree]<x>[2]<>  /f <r>13[w]  26[f]  8[g]  47[pop]
 
 || 55 - 25:10 ||  {p=48} + 2[v]   [v]<x>[tree][tree]<x xs>[2]<> [->] [lc]  /f <r>13[w]  26[f]  8[g]  1[lc]  48[pop]
 
@@ -136,7 +136,7 @@
 
 || 63 - 28:30 ||  {p=56} + 2[v]   [w] > 325 [->]   [3s] 4[v]<x>[tree]<> [->] [mill] + 4 [farm]  /f <r>17[w]  26[f]  8[g]  1[h]  4[mill]  56[pop]
 
-|| 64 - 28:55 ||  {p=57} [+4h]   8[v@w] [->] [mc]<sup>[gold mine]<x>[2]<>  /f <r>10[w]  26[f]  8[g]  1[h]  4[farm]  8[mc]  57[pop]
+|| 64 - 28:55 ||  {p=57} [+4h]   8[v@w] [->] [mc]<p>[gold mine]<x>[2]<>  /f <r>10[w]  26[f]  8[g]  1[h]  4[farm]  8[mc]  57[pop]
 
 || 65 - 29:20 ||  {p=58} + 2[v]   /f <r>11[w]  30[f]  8[g]  1[h]  8[mc]  58[pop]
 
@@ -150,4 +150,4 @@
 
 || 70 - 31:25 ||  {p=63 sns="no"} [imperial age] /f <r>16[w]  30[f]  16[g]  1[h]  63[pop]
 
-|| 71 - 31:50 ||  {sps="no"} [longsword] @ 5 [rax] [3s] [v]@ 2 [tc]   [plate mail armor] [1s] [upgrade to two-handed swordsman] [1s] [upgrade to champion]   [crop rotation] [1s] [hand cart]  /f <r>7+[w]  40+[f]  16+[g]  0+[s]  1[h]  64+[pop]
+|| 71 - 31:50 ||  {sps="no"} [longsword] @ 5 [rax] [3s] [v]@ 2 [tc]   [pma] [1s] [2hs u] [1s] [chmp u]   [crop rotation] [1s] [hc]  /f <r>7+[w]  40+[f]  16+[g]  0+[s]  1[h]  64+[pop]

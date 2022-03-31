@@ -144,8 +144,9 @@
 
                                 <StackPanel x:Name="SpnLabels2" Orientation="Vertical">
                                     <Label Margin="2" x:Name="LblBackColor">Color:</Label>
-                                    <Label Margin="2" x:Name="LblFontColor">Font Color:</Label>
+                                    <Label Margin="2" x:Name="LblFontColor">Fore Color:</Label>
                                     <Label Margin="2" x:Name="LblOpacity">Opacity:</Label>
+                                    <Label Margin="2" FontWeight="Bold">Current Step</Label>
                                     <Label Margin="2">Font Name:</Label>
                                     <Label Margin="2">Font Size:</Label>
                                     <Label Margin="2">Font Color:</Label>
@@ -166,8 +167,8 @@
 
                                     <TextBox TextChanged="TxtOpacity_TextChanged" x:Name="TxtOpacity" Margin="4 2 4 2" HorizontalAlignment="Left"
                                              HorizontalContentAlignment="Center" Height="25" Width="40" VerticalContentAlignment="Center"></TextBox>
-
-                                    <ComboBox SelectionChanged="CmbFontName_SelectionChanged" HorizontalAlignment="Stretch" Margin="4 4 4 7" x:Name="CmbFontName">
+                                      
+                                    <ComboBox SelectionChanged="CmbFontName_SelectionChanged" HorizontalAlignment="Stretch" Margin="4 34 4 7" x:Name="CmbFontName">
                                         <ComboBoxItem>Arial</ComboBoxItem>
                                         <ComboBoxItem>Arial Black</ComboBoxItem>
                                         <ComboBoxItem>Calibri</ComboBoxItem>
@@ -538,7 +539,7 @@
                      Selector.Unselected="TbiCustomNames_Unselected">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="0 20 0 0" Orientation="Vertical" x:Name="SpnCustomNames" HorizontalAlignment="Center" >
-                        
+
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>

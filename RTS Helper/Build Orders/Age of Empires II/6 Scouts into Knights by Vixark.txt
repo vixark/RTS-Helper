@@ -46,7 +46,7 @@
 
 || 18 - 8:10 ||  {p=19 t=65 sps="no" sns="no"} + 2[v] [3s] [v@str] [->] [rax] [->str]   [v@str] [->] 2 [h] [->str]   3[vddeer] [->berries]  /f <r>7[w]  10[f]  1[h]  1[rax]  19[pop]
 
-|| 19 - 9:15 ||  {p=19 sps="no"} 2 [v@w] [->] [stable] [->w]   [double-bit axe]   4[vdstr] [->] [deer]<p>[flag]<x>[4]<>  /f <r>3[w]  14[f]  2[stable]  19[pop]
+|| 19 - 9:15 ||  {p=19 sps="no"} 2 [v@w] [->] [stable] [->w]   [dba]   4[vdstr] [->] [deer]<p>[flag]<x>[4]<>  /f <r>3[w]  14[f]  2[stable]  19[pop]
 
 || 20 - 9:40 ||  {p=20} +[v]   + 2 [sc]  /f <r>3[w]  15[f]  2[stable]  20[pop]
 
@@ -86,13 +86,13 @@
 
 || 38 - 17:10 ||  {p=38} [castle age]  /f <r>12[w]  15[f]  11[g]  38[pop]
 
-|| 39 - 17:35 ||  {p=39 t=50} 2[v@berries] [->] 2 [farm][xf]   [scale barding armor]   [v@g] [->] [stable]<p>[flag]<x>[2]<> [->g]  /f <r>12[w]  13[f]  11[g]  2[farm]  1[stable]  39[pop]
+|| 39 - 17:35 ||  {p=39 t=50} 2[v@berries] [->] 2 [farm][xf]   [sba]   [v@g] [->] [stable]<p>[flag]<x>[2]<> [->g]  /f <r>12[w]  13[f]  11[g]  2[farm]  1[stable]  39[pop]
 
 || 40 - 18:25 ||  {p=39 t=55} [gold mining]   [v@w] [->] [mc]<p>[gold mine]<x>[2]<>   [bloodlines]  /f <r>11[w]  15[f]  12[g]  1[mc]  39[pop]
 
 || 41 - 19:20 ||  {p=39 t=55 sns="no"} [v]<x>[4][0][-][4][8]<> [->] [tree][tree]<x>[2]<> [3s] + 2[v]   [w] > 340 [->]   [3s] 4[v@w] [->] [mill] + 4 [farm] /f <r>7[w]  15[f]  13[g]  4[mill]  39[pop]
 
-|| 42 - 20:15 ||  {p=39 sps="no"} Start [knight] Production at 2[stables]   [chain barding armor]   [v@w] [->] 2 [h]  /f <r>6[w]  19[f]  13[g]  1[h]  39[pop]
+|| 42 - 20:15 ||  {p=39 sps="no"} Start [knight] Production at 2[stables]   [cba]   [v@w] [->] 2 [h]  /f <r>6[w]  19[f]  13[g]  1[h]  39[pop]
 
 || 43 - 20:40 ||  {p=40} + 2[v]  /f <r>7[w]  19[f]  13[g]  1[h]  40[pop] 
 

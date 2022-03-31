@@ -235,7 +235,25 @@ namespace RTSHelper {
             NombresPersonalizados = DeserializarNombres(Preferencias.CustomNamesPath);
             var nombresCompletosConPersonalizado = new List<string>();
 
-            foreach (var kv in NombresPersonalizados[NameType.Custom]) {
+            SpnCustomNames.Width = 530;
+
+            var tb = new Controles.TextBlock() { TextWrapping = TextWrapping.Wrap, HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                Margin = new Thickness(0, 0, 0, 10) };
+            var enlaceNombres = new Hyperlink();
+            if (Preferencias.Game == AOE2Name) {
+
+                enlaceNombres.NavigateUri = new Uri("https://docs.google.com/spreadsheets/d/1N98XMYNNlUOlA45B3NKTJ54Fhuo53PFYSsnt_F2S7nU");
+                enlaceNombres.RequestNavigate += Lnk_Click;
+                enlaceNombres.Inlines.Add($"See here the supported names for {Preferencias.Game}.");
+
+            }
+
+            tb.Inlines.Add("Most names that you'd need for your build orders are supported by default. ");
+            tb.Inlines.Add(enlaceNombres);
+            tb.Inlines.Add(" Custom names are extra names that you can use in your build orders, but they only work in your local computer. If you share your build order using those names with other people, it won't work in their computers.");
+            SpnCustomNames.Children.Add(tb);
+
+            foreach (var kv in NombresPersonalizados[NameType.Custom].ToList().OrderBy(kv => kv.Key)) {
 
                 var nombreCompleto = kv.Key;
                 var nombrePersonalizado = kv.Value;
@@ -282,8 +300,8 @@ namespace RTSHelper {
             SpnCustomNameNuevo.Children.Add(buttonNuevo);
             SpnCustomNames.Children.Add(SpnCustomNameNuevo);
 
-            SpnCustomNames.Children.Add(new Controles.Label() { Margin = new Thickness(0, 10, 0, 10),
-                Content = "To use them, in 'Display Priority' section move 'Custom Name' to the top."
+            SpnCustomNames.Children.Add(new Controles.TextBlock() { Margin = new Thickness(0, 10, 0, 10), TextWrapping = TextWrapping.Wrap,
+                Text = "To display them instead of images, go to 'Display Priority' section and move 'Custom Name' to the top. While displaying custom names, you can add special custom names between squared brackets and instead of a custom name it will display the name from that type. Supported values are: [Image], [Abbreviation], [Acronym], [Common], [Complete], [AbbreviationPlural], [AcronymPlural] and [CommonPlural]."
             });
 
         } // CargarNombresPersonalizados>
@@ -315,10 +333,16 @@ namespace RTSHelper {
             if (NombresPersonalizados != null && nuevoNombre != null && !string.IsNullOrEmpty(nombrePersonalizado) 
                 && !NombresPersonalizados[NameType.Custom].ContainsKey(nuevoNombre)) {
 
-                NombresPersonalizados[NameType.Custom].Add(nuevoNombre, nombrePersonalizado);
-                UnNombrePersonalizadoCambiado = true;
-                GuardarNombresPersonalizados(cerrando: false);
-                CargarNombresPersonalizados();
+                if (nombrePersonalizado.StartsWith("[") || !NombresPersonalizados[NameType.Custom].Values.Contiene(nombrePersonalizado)) {
+
+                    NombresPersonalizados[NameType.Custom].Add(nuevoNombre, nombrePersonalizado);
+                    UnNombrePersonalizadoCambiado = true;
+                    GuardarNombresPersonalizados(cerrando: false);
+                    CargarNombresPersonalizados();
+
+                } else {
+                    MostrarError($"Custom name {nombrePersonalizado} already exists.");
+                }
 
             }
 
