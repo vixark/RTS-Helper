@@ -1,4 +1,4 @@
-|| Author: Vixark, Date: 03/03/2022. Made for civilizations with Bloodlines, but can be used by others civilizations, you just keep creating scouts instead of researching Bloodlines. Use Portuguese as a test civilization because they don't have early game economic bonuses and they have Bloodlines. With Portuguese the gold discount for knights would mean to have more gold than expected in Castle Age, but it's ok because that's the end of the build order. The 14 villagers on gold at the end is required for civilizations without gold discount on knights. Using Portuguese you need to wait 6 seconds after Loom to advance to Feudal Age and 17 seconds after Wheelbarrow to create next villagers to keep the timings the same as other civilizations. ||
+|| Author: Vixark, Date: 03/03/2022. Good for civilizations with Bloodlines, but can be used for other civilizations too. Use Portuguese as a test civilization because they don't have early game economic bonuses and they have Bloodlines. With Portuguese the gold discount for knights would mean to have more gold than expected in Castle Age, but it's ok because that's the end of the build order. The 14 villagers on gold at the end is required for civilizations without gold discount on knights. Using Portuguese you need to wait 6 seconds after Loom to advance to Feudal Age and 17 seconds after Wheelbarrow to create next villagers to keep the timings the same as other civilizations. Read the documentation if you want to create your own build orders: http://vixark.com/age-of-empires-ii/rts-helper-documentation. ||
 
 {{t=25 empty={fc="none" s="none"}}}
 
@@ -6,7 +6,7 @@
 
 [[xf=[<x>[flag]<>] mc@s=[[mc]<x>[stone mine]<>] mc@g=[[mc]<x>[gold mine]<>] 1hv@berries=[[v]<x>[berries]<> [->] [h] [->] [berries]<x>[flag]<>] 2hv@berries=[[v]<x>[berries]<> [->] 2 [h] [->] [berries]<x>[flag]<>] 1hv@g=[[v]<x>[gold mine]<> [->] [h] [->] [gold mine]<x>[flag]<>] 2hv@g=[[v]<x>[gold mine]<> [->] 2 [h] [->] [gold mine]<x>[flag]<>] 3hv@g=[[v]<x>[gold mine]<> [->] 3 [h] [->] [gold mine]<x>[flag]<>] 4hv@w=[[v]<x>[tree]<> [->] 4 [h] [->] [tree]<x>[flag]<>]  3hv@w=[[v]<x>[tree]<> [->] 3 [h] [->] [tree]<x>[flag]<>] 2hv@w=[[v]<x>[tree]<> [->] 2 [h] [->] [tree]<x>[flag]<>] 1hv@str=[[v]<x>[str]<> [->] [h] [->] [str]<x>[flag]<>] 1hv@w=[[v]<x>[tree]<> [->] [h] [->] [tree]<x>[flag]<>] farm@tc=[[farm]<x>[tc]<>] farm@mill=[[farm]<x>[mill]<>] ->shp=[[->] [shp]<x>[flag]<>] ->berries=[[->] [berries]<x>[flag]<>] ->w=[[->] [tree]<x>[flag]<>] ->str=[[->] [str]<x>[flag]<>] ->g=[[->] [gold mine]<x>[flag]<>] ->s=[[->] [stone mine]<x>[flag]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@g=[[v]<x>[gold mine]<>] v@s=[[v]<x>[stone mine]<>] v@berries=[[v]<x>[berries]<>] v@deer=[[v]<x>[deer]<>] v@w=[[v]<x>[tree]<>] v@str=[[v]<x>[str]<>] +1h=[[v]<x>[h]<> [->] [h]<x>[flag]<>] +2h=[[v]<x>[h]<> [->] 2 [h]<x>[flag]<>] +3h=[[v]<x>[h]<> [->] 3 [h]<x>[flag]<>] +4h=[[v]<x>[h]<> [->] 4 [h]<x>[flag]<>] vdboar=[[v]<p>[drop food]<x>[boar]<>] vddeer=[[v]<p>[drop food]<x>[deer]<>] vdstr=[[v]<p>[drop wood]<x>[str]<>] vdw=[[v]<p>[drop wood]<x>[tree]<>] vdshp=[[v]<p>[drop food]<x>[shp]<>] vdberries=[[v]<p>[drop food]<x>[berries]<>] vdg=[[v]<p>[drop gold]<x>[gold mine]<>] vds=[[v]<p>[drop stone]<x>[stone mine]<>]]]
 
-(([scout] @ 1[stable] [->] [knights] @ 2[stables] on <xl>[green arabia]<>   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Medium))
+((6 [scout] [->] [knights] @ 2[stables] on <xl>[green arabia]<>   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW:Donate   <b>Difficulty:<> Easy))
 
 || 0 - 0:00 ||  {p=3 sns="no"} + 4[v] [3s] 2[v] [->] [h] [3s] [v] [->] [h]   [shp]<x>[1]<> [->] [tc] [9s] 3[v]<x>[h]<> [->] [shp]<p>[flag]<x>[1]<>   [v]<x>[4][-][6]<> [->] [shp]<x>[1]<> [3s] [scout] [->] [shp]<x>[2][-][4]<> [->] [explore][xf]  /f <r>3[h]  3[pop]
 
@@ -44,74 +44,72 @@
 
 || 17 - 7:05 ||  {p=19 t=65} [vdshp] [->] [tree]   [vdshp] [->] [str]    5[v@shp] [->] [shp]<p>[flag]<x>[6][-][8]<>  /f <r>9[w]  10[f]  19[pop]
 
-|| 18 - 8:10 ||  {p=19 t=65 sns="no"} + 2[v] [3s] [v@str] [->] [rax] [->str]   [v@str] [->] 2 [h] [->str]   3[vddeer] [->berries]  /f <r>7[w]  10[f]  1[h]  1[rax]  19[pop]
+|| 18 - 8:10 ||  {p=19 t=65 sps="no" sns="no"} + 2[v] [3s] [v@str] [->] [rax] [->str]   [v@str] [->] 2 [h] [->str]   3[vddeer] [->berries]  /f <r>7[w]  10[f]  1[h]  1[rax]  19[pop]
 
-|| 19 - 9:15 ||  {p=19 sps="no" sns="no"} 2 [v@w] [->] [stable] [->w]   [dba]   4[vdstr] [->] [deer]<p>[flag]<x>[4]<>  /f <r>3[w]  14[f]  2[stable]  19[pop]
+|| 19 - 9:15 ||  {p=19 sps="no"} 2 [v@w] [->] [stable] [->w]   [dba]   4[vdstr] [->] [deer]<p>[flag]<x>[4]<>  /f <r>3[w]  14[f]  2[stable]  19[pop]
 
-|| 20 - 9:40 ||  {p=20 sps="no"} +[v]   Start [scout] Production at 1[stable]  /f <r>3[w]  15[f]  2[stable]  20[pop]
+|| 20 - 9:40 ||  {p=20} +[v]   + 2 [sc]  /f <r>3[w]  15[f]  2[stable]  20[pop]
 
-|| 21 - 10:05 ||  {p=21} +[v]   5[v@shp] [->str]  /f <r>5[w]  16[f]  21[pop]
+|| 21 - 10:05 ||  {p=21} +[v]   5[v@shp] [->str]   + [sc] /f <r>5[w]  16[f]  21[pop]
 
-|| 22 - 10:30 ||  {p=22} +[v]   [v]<x>[2][3][-][2][5]<> [->] [tree]   2[v@shp] [->] 2 [farm]  /f <r>5[w]  15[f]  2[farm]  22[pop]
+|| 22 - 10:30 ||  {p=22} +[v]   [v]<x>[2][3][-][2][5]<> [->] [tree]  /f <r>5[w]  17[f]  22[pop]
 
-|| 23 - 10:55 ||  {p=23} +[v]   [1hv@w]   Check [v@deer]  /f <r>8[w]  14[f]  1[h]  23[pop]
+|| 23 - 10:55 ||  {p=23} [horse collar] [3s] +[v]    [2hv@w]   Check [v@deer]  /f <r>10[w]  12[f]  1[h]  23[pop]
 
-|| 24 - 11:20 ||  {p=24} +[v]   4[v@deer] [->] [mill] [->]   [3s] [deer]<p>[flag]<x>[4][-][6]<> [->g]  /f <r>9[w]  10[f]  1[h]  4[mill]  24[pop]
+|| 24 - 11:20 ||  {p=24} +[v]   4[v@deer] [->] [mill] [->]   [3s] [deer]<p>[flag]<x>[4][-][6]<> [->w]  /f <r>11[w]  8[f]  1[h]  4[mill]  24[pop]
 
-|| 25 - 11:45 ||  {p=25} +[v]   [v]<x>[2][6][-][2][7]<> [->] [gold mine] Long Distance   [1hv@w]  /f <r>11[w]  10[f]  4[mill]  25[pop]
+|| 25 - 11:45 ||  {p=25} +[sc] [3s] +[v]   [v]<x>[2][6][-][3][2]<> [->] [str]   4[vdstr] [->] [stone wall] + [palisade wall]  /f <r>9[w]  12[f]  4[stone wall]  25[pop]
 
-|| 26 - 12:10 ||  {p=26} +[v]   2[v@str] [->] 2 [farm]  /f <r>9[w]  14[f]  1[g]  2[farm]  26[pop]
+|| 26 - 12:10 ||  {p=26} +[v]   4[v@berries] [->] 4 [farm]   +[sc]  /f <r>10[w]  8[f]  4[farm]  4[stone wall]  26[pop]
 
-|| 27 - 12:35 ||  {p=27} +[v]   [v]<x>[2][8]<> [->] [str]  /f <r>9[w]  16[f]  2[g]  27[pop]
+|| 27 - 12:35 ||  {p=27} +[v]   [2hv@w]  /f <r>10[w]  12[f]  1[h]  4[stone wall]  27[pop]
 
-|| 28 - 13:00 ||  {p=28} +[v]   [v]<x>[2][9][-][3][6]<> [->] [tree]   [2hv@w]  /f <r>9[w]  16[f]  2[g]  1[h]  28[pop]
+|| 28 - 13:00 ||  {p=28} +[v]   2 [v@str] [->] 2 [farm] /f <r>9[w]  12[f]  1[h]  2[farm]  4[stone wall]  28[pop]
 
-|| 29 - 13:25 ||  {p=29} [horse collar]   2[v@berries] [->] 2 [farm]   +[v]  /f <r>10[w]  14[f]  2[g]  1[h]  2[farm]  29[pop]
+|| 29 - 13:25 ||  {p=29} + 2[v]   2[v@str] [->] 2 [farm]  /f <r>9[w]  14[f]  2[farm]  4[stone wall]  29[pop]
 
-|| 30 - 13:50 ||  {p=30} +[v]   /f <r>12[w]  16[f]  2[g]  30[pop]
+|| 30 - 13:50 ||  {p=30 empty} /f <r>10[w]  16[f]  4[stone wall]  30[pop]
 
-|| 31 - 14:15 ||  {p=31} +[v]   If [g] > 100 [->]   [3s] 2[v@g] [->] 2 [farm]<x>[tc]<>  /f <r>13[w]  16[f]  2[farm]  31[pop]
+|| 31 - 14:15 ||  {p=31} + 2[v]   2[v@str] [->] 2 [farm]  /f <r>9[w]  16[f]  2[farm]  4[stone wall]  31[pop]
 
-|| 32 - 14:40 ||  {p=32} [bloodlines]   3[v@berries] [->] 3 [farm]   +[v]  /f <r>14[w]  11[f]  4[g]  3[farm]  32[pop] || Se deberían tener alrededor de 9-10 Scouts creados y se estima que se hayan perdido 3 para un total de 6-7 vivos. 6 Scouts es el límite mínimo para que Bloodlines provea beneficio (+44% HP de Bloodlines que cuesta 250 Recursos vs. +50% HP de 3 Scouts adicionales de 6 a 9 que cuestan 240 Recursos). De todas maneras como se van a seguir produciendo Scouts y Bloodlines provee mejora inmediata a los Scouts que están al frente, incluso si hay 3 o 4 scouts, tiene sentido a muy corto plazo y a largo plazo.
+|| 32 - 14:40 ||  {p=32} [v@str] [->] [farm]   [v@str] [->] [mc@g]   [v]<x>[3][3][-][3][9]<> [->] [gold mine]  /f <r>8[w]  18[f]  1[farm]  1[mc]  4[stone wall]  32[pop]
 
-|| 33 - 15:05 ||  {p=33} +[v]   /f <r>15[w]  14[f]  4[g]  33[pop]
+|| 33 - 15:05 ||  {p=33} + 2[v]   [v]<p>[idle]<x>[stone wall]<> [->] [gold mine]  /f <r>12[w]  15[f]  2[g]  4[stone wall]  33[pop]
 
-|| 34 - 15:30 ||  {p=34} +[v]   [2hv@w]   2[v@berries] [->] 2 [farm]  /f <r>15[w]  12[f]  4[g]  1[h]  2[farm]  34[pop]
+|| 34 - 15:30 ||  {p=34 empty} /f <r>12[w]  15[f]  3[g]  4[stone wall]  34[pop]
 
-|| 35 - 15:55 ||  {p=35} +[v]   4[v@g] [->] [mc@g]   2[v@str] [->] 2 [farm]  /f <r>14[w]  14[f]  1[h]  2[farm]  4[mc]  35[pop]
+|| 35 - 15:55 ||  {p=35} + 3[v]   2[v@berries] [->] 2 [farm]  /f <r>12[w]  13[f]  6[g]  2[farm]  2[stone wall]  35[pop]
 
-|| 36 - 16:20 ||  {p=36} +[v]   [v]<x>[3][7][-][4][5]<> [->] [gold mine]  /f <r>16[w]  16[f]  4[g]  36[pop]
+|| 36 - 16:20 ||  {p=36 empty} /f <r>12[w]  15[f]  7[g]  2[stone wall]  36[pop]
 
-|| 37 - 16:45 ||  {p=37} +[v]   [v]<p>[idle]<x>[berries]<> [->] [farm]  /f <r>16[w]  15[f]  5[g]  1[farm]  37[pop]
+|| 37 - 16:45 ||  {p=37} 2 [v@w] [->] [blacksmith] [->w]  /f <r>10[w]  15[f]  10[g]  2[blacksmith]  37[pop]
 
-|| 38 - 17:10 ||  {p=38} +[v]   [w] > 340 [->]   [3s] 4[v@w] [->] [mill] + 4 [farm]  /f <r>12[w]  16[f]  6[g]  4[mill]  38[pop]
+|| 38 - 17:10 ||  {p=38} [castle age]  /f <r>12[w]  15[f]  11[g]  38[pop]
 
-|| 39 - 17:35 ||  {p=39} +[v]   [2hv@w]  /f <r>11[w]  16[f]  7[g]  1[h]  4[farm]  39[pop]
+|| 39 - 17:35 ||  {p=39 t=50} 2[v@berries] [->] 2 [farm][xf]   [sba]   [v@g] [->] [stable]<p>[flag]<x>[2]<> [->g]  /f <r>12[w]  13[f]  11[g]  2[farm]  1[stable]  39[pop]
 
-|| 40 - 18:00 ||  {p=40} +[v]   /f <r>11[w]  20[f]  8[g]  1[h]  40[pop]
+|| 40 - 18:25 ||  {p=39 t=55} [gold mining]   [v@w] [->] [mc]<p>[gold mine]<x>[2]<>   [bloodlines]  /f <r>11[w]  15[f]  12[g]  1[mc]  39[pop]
 
-|| 41 - 18:25 ||  {p=41} +[v]   2[v@w] [->] [market] [->w]  /f <r>10[w]  20[f]  9[g]  2[market]  41[pop]
+|| 41 - 19:20 ||  {p=39 t=55 sns="no"} [v]<x>[4][0][-][4][8]<> [->] [tree][tree]<x>[2]<> [3s] + 2[v]   [w] > 340 [->]   [3s] 4[v@w] [->] [mill] + 4 [farm] /f <r>7[w]  15[f]  13[g]  4[mill]  39[pop]
 
-|| 42 - 18:50 ||  {p=42} +[v]   Cancel [scout] Queue and   Stop Production  /f <r>10[w]  20[f]  10[g]  2[market]  42[pop]
+|| 42 - 20:15 ||  {p=39 sps="no"} Start [knight] Production at 2[stables]   [cba]   [v@w] [->] 2 [h]  /f <r>6[w]  19[f]  13[g]  1[h]  39[pop]
 
-|| 43 - 19:15 ||  {p=43} Sell 200 [s]   Buy 300 [f]   [castle age]  /f <r>12[w]  20[f]  11[g]  43[pop]
+|| 43 - 20:40 ||  {p=40} + 2[v]  /f <r>7[w]  19[f]  13[g]  1[h]  40[pop] 
 
-|| 44 - 19:40 ||  {p=44 t=50} Resume [scout] Production   [v@g] [->] [blacksmith] [->] [stable]<p>[flag]<x>[2]<> [->g]  /f <r>12[w]  20[f]  11[g]  1[blacksmith]  44[pop]
+|| 44 - 21:05 ||  {p=41} [v@w] [->] [lc]<x>[tree][tree]<x xxs>[2]<>   [v@h] [->] 2 [h] [->w]  /f <r>7[w]  19[f]  13[g]  1[h]  1[lc]  41[pop]
 
-|| 45 - 20:30 ||  {p=44 t=55} [sba]  /f <r>12[w]  20[f]  11[g]  1[stable]  44[pop]
+|| 45 - 21:30 ||  {p=42} + 2[v]  /f <r>8[w]  19[f]  13[g]  1[h]  1[lc]  42[pop]
 
-|| 46 - 21:25 ||  {p=44 t=55 sns="no"} Cancel [scout] Queue and   Stop Production   [wb] [3s] [gold mining] [3s] [v@w] [->] [mc]<x> [2]<p>[gold mine]<xxxs>[1]<>  /f <r>11[w]  20[f]  12[g]  1[mc]  44[pop]
+|| 46 - 21:55 ||  {p=43} /f <r>10[w]  19[f]  13[g]  1[h]  43[pop]
 
-|| 47 - 22:20 ||  {p=44 sps="no"} If [scouts] > 10 [->] [lcav u]   Start [knight] Production at 2[stables]   [cba]  /f <r>11[w]  20[f]  13[g]  44[pop] || Light Cavalry provee 23% más HP (solo se comparará HP) y cuesta lo que cuestan 2.5 light cavalry, entonces el límite serían apróximadamente 10. Debido a que la economía está diseñada para Knights, no se espera que se hagan más Light Cavalry, entonces no se debería mejorar si no se tienen al menos 10 en buenas condiciones de HP.
+|| 47 - 22:20 ||  {p=44} [bow saw]   +[v]  /f <r>12[w]  19[f]  13[g]  44[pop]
 
-|| 48 - 22:45 ||  {p=44} 11 [v@w] [->] [lc]<x>[2]<>  /f <r>0[w]  20[f]  13[g]  11[lc]  44[pop] 
+|| 48 - 22:45 ||  {p=45} +[v] /f <r>13[w]  19[f]  13[g]  45[pop]
 
-|| 49 - 23:10 ||  {p=44} + 2[v]   [v@w] [->] 4 [h]  /f <r>10[w]  20[f]  13[g]  1[h]  44[pop]
+|| 49 - 23:10 ||  {p=46} +[v]   4[v@w] [->] 4 [farm]   [vdw] [->g]  /f <r>9[w]  19[f]  14[g]  4[mill]  46[pop]
 
-|| 50 - 23:35 ||  {p=44} [forging]  /f <r>10[w]  20[f]  13[g]  1[h]  44[pop]
+|| 50 - 23:35 ||  {p=47} +[v]   [v@w] [->] 2 [h]  /f <r>9[w]  23[f]  14[g]  1[h]  47[pop]
 
-|| 51 - 24:00 ||  {p=45} + 2[v]   [v]<x>[4][6][-]...<> [->] [stone mine]   [v@w] [->] [mc@s]  /f <r>9[w]  20[f]  14[g]  1[h]  1[mc]  45[pop]
+|| 51 - 24:00 ||  {p=48 sns="no"} [wb]   [v]<x>[4][9][-]...<> [->] [stone mine]   [v@w] [->] [mc@s]  /f <r>9[w]  23[f]  14[g]  1[h]  1[mc]  48[pop]
 
-|| 52 - 24:25 ||  {p=46 sns="no"} [heavy plow]  /f <r>9[w]  20[f]  14[g]  1[h]  2[s]  46[pop]
-
-|| 53 - 24:50 ||  {sps="no"} [knights] @ 2[stables] [3s] [v] @ 1 [tc]   [iron casting] [3s] [husbandry] [4s] [siege workshop] [->] [scorpions] or [mangonel]   [castle] or [tc] [5s] [monastery] [->] [monks]  /f <r>9+[w]  20+[f]  14+[g]  3+[s]  1[h]  47+[pop]
+|| 52 - 24:25 ||  {sps="no"} [knights] @ 2[stables] [1s] [v] @ 1 [tc]   [forging] [3s] [heavy plow] [3s] [husbandry] [3s] [iron casting] [3s] [hand cart]   [castle] or [tc] [3s] [monastery] [->] [monks] [3s] [siege workshop] [->] [scorpions]  /f <r>9+[w]  23+[f]  14+[g]  2+[s]  1[h]  49+[pop]

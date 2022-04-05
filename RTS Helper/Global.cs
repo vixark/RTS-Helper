@@ -20,6 +20,7 @@ using DImg = System.Drawing.Imaging;
 using SDrw = System.Drawing;
 using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
+using Controles = System.Windows.Controls;
 
 
 
@@ -200,7 +201,7 @@ namespace RTSHelper {
 
         public static string FontColorPredeterminado = Color.FromRgb(150, 150, 150).ToString();
 
-        public static double OpacityPredeterminado = 0.7;
+        public static double OpacityPredeterminado = 0.8;
 
         public static string CurrentStepFontColorPredeterminado = Color.FromRgb(220, 220, 220).ToString();
 
@@ -293,7 +294,7 @@ namespace RTSHelper {
             Age_of_Empires_II_Wood, Age_of_Empires_II_Food, Age_of_Empires_II_Gold, Age_of_Empires_II_Stone, Age_of_Empires_II_Population,
             Age_of_Empires_II_Maximum_Population, Age_of_Empires_II_Villagers_on_Wood, Age_of_Empires_II_Villagers_on_Food, 
             Age_of_Empires_II_Villagers_on_Gold, Age_of_Empires_II_Villagers_on_Stone, Age_of_Empires_II_Timer, Age_of_Empires_II_Speed, 
-            Age_of_Empires_II_Age, Age_of_Empires_II_InicioJuego
+            Age_of_Empires_II_Age, Age_of_Empires_II_Game_Start
         }
 
         public static List<ScreenCaptureText> RectángulosAfectadosPorEscalaInterface = new List<ScreenCaptureText> {
@@ -303,9 +304,19 @@ namespace RTSHelper {
             ScreenCaptureText.Age_of_Empires_II_Maximum_Population, ScreenCaptureText.Age_of_Empires_II_Villagers_on_Wood,
             ScreenCaptureText.Age_of_Empires_II_Villagers_on_Food, ScreenCaptureText.Age_of_Empires_II_Villagers_on_Gold,
             ScreenCaptureText.Age_of_Empires_II_Villagers_on_Stone, ScreenCaptureText.Age_of_Empires_II_Timer, ScreenCaptureText.Age_of_Empires_II_Speed,
-            ScreenCaptureText.Age_of_Empires_II_Age, ScreenCaptureText.Age_of_Empires_II_InicioJuego };
+            ScreenCaptureText.Age_of_Empires_II_Age, ScreenCaptureText.Age_of_Empires_II_Game_Start };
+
+        public static List<ScreenCaptureText> RectángulosActivos = new List<ScreenCaptureText> { ScreenCaptureText.Age_of_Empires_II_PauseF3XS,
+            ScreenCaptureText.Age_of_Empires_II_PauseF3S, ScreenCaptureText.Age_of_Empires_II_PauseF3M, ScreenCaptureText.Age_of_Empires_II_PauseF3L,
+            ScreenCaptureText.Age_of_Empires_II_PauseF3XL, ScreenCaptureText.Age_of_Empires_II_PauseM, ScreenCaptureText.Age_of_Empires_II_PauseL,
+            ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, 
+            ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, ScreenCaptureText.Age_of_Empires_II_Game_Start }; // Los rectángulos que actualmente se están usando en el programa y deben mostrarse en los la sección de preferencias para ser poder ser personalizados por el usuario.
 
         public static float ConfianzaOCRAceptable = 0.50f;
+
+        public static bool MostrandoPreferenciasOCR = false;
+
+        public static Dictionary<ScreenCaptureText, Controles.Image> RectángulosImágenesPrueba = new Dictionary<ScreenCaptureText, Image>();
 
         #endregion Variables>
 
@@ -1428,6 +1439,7 @@ namespace RTSHelper {
                 customNames[NameType.Custom].Add("Stone", "[Image]");
                 customNames[NameType.Custom].Add("Gold", "[Image]");
                 customNames[NameType.Custom].Add("Pikeman", "Pointy Bois");
+                customNames[NameType.Custom].Add("Flemish Revolution", "The Button");
 
             }
 
@@ -2302,10 +2314,9 @@ namespace RTSHelper {
         } // ExtraerColorPromedioEsquinas>
 
 
-        public static string? LeerPausa(out float confianza) {
+        public static ScreenCaptureText ObtenerTipoPausa() {
 
             var tipo = ScreenCaptureText.Age_of_Empires_II_PauseM;
-            var textoPausa = "";
             if (Preferencias.Game == Global.AOE2Name) {
 
                 switch (Preferencias.GameLanguage) {
@@ -2344,6 +2355,19 @@ namespace RTSHelper {
                     default:
                         break;
                 }
+
+            }
+            return tipo;
+
+        } // ObtenerTipoPausa>
+
+
+        public static string? LeerPausa(out float confianza) {
+      
+            var textoPausa = "";
+            var tipo = ObtenerTipoPausa();
+            if (Preferencias.Game == Global.AOE2Name) {
+         
                 textoPausa = ExtraerTextoDePantalla(tipo, new List<string>(), out confianza);
                 if (textoPausa != null && textoPausa.Contains("(")) textoPausa = textoPausa.Substring(0, textoPausa.IndexOf("(")).TrimEnd(); // Se elimina el texto leído que esté después de un paréntesis de apertura porque ese texto puede ser diferente para cada usuario dependiendo de la tecla que tenga asignada para pausa.
 
@@ -2471,9 +2495,9 @@ namespace RTSHelper {
                 Preferencias.ScreenCaptureRectangles = new Dictionary<ScreenCaptureText, SDrw.RectangleF>();    
             }
 
-            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_InicioJuego)) {
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Game_Start)) {
                 cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_InicioJuego,
+                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Game_Start,
                     new SDrw.RectangleF(2F / 2560, 1416F / 1440, 22F / 2560, 22F / 1440));
             }
 

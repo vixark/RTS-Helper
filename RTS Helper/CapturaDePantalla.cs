@@ -34,8 +34,13 @@ namespace RTSHelper {
                 redondear(límites.Width * rectánguloFraccional.Width), redondear(límites.Height * rectánguloFraccional.Height));
 
             var bmp = new Bitmap(límitesAplicable.Width, límitesAplicable.Height);
-            using (var g = Graphics.FromImage(bmp)) {
-                g.CopyFromScreen(new Point(límitesAplicable.X, límitesAplicable.Y), Point.Empty, límitesAplicable.Size);
+            try {
+                using (var g = Graphics.FromImage(bmp)) {
+                    g.CopyFromScreen(new Point(límitesAplicable.X, límitesAplicable.Y), Point.Empty, límitesAplicable.Size);
+                }
+            } catch (Exception) {
+                return bmp; // En casos de errores de Windows (usualmente cuando está en la pantalla de Ctrl+Alt+Supr), devuelve el mapa de bits vacío.
+                throw;
             }
 
             Bitmap convertirA8Bits(Bitmap b) {

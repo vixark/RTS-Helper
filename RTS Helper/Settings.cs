@@ -227,8 +227,6 @@ namespace RTSHelper {
 
         #region Control
 
-        public Dictionary<ScreenCaptureText, System.Drawing.RectangleF>? ScreenCaptureRectangles { get; set; } = null;
-
         public bool AutoAdjustIdleTime { get; set; } = true;
 
         public bool PauseDetection { get; set; } = true;
@@ -281,6 +279,8 @@ namespace RTSHelper {
 
 
         #region OCR
+
+        public Dictionary<ScreenCaptureText, System.Drawing.RectangleF>? ScreenCaptureRectangles { get; set; } = null;
 
         public bool OCRTestMode { get; set; } = false;
 

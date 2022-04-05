@@ -17,8 +17,8 @@ using static Vixark.General;
 using System.Linq;
 using Controles = System.Windows.Controls;
 using System.Reflection;
-
-
+using System.Windows.Threading;
+using System.Drawing.Drawing2D;
 
 namespace RTSHelper {
 
@@ -38,6 +38,8 @@ namespace RTSHelper {
 
         public bool UnNombrePersonalizadoCambiado { get; set; } = false;
 
+        private DispatcherTimer TimerPruebasOCR = new DispatcherTimer();
+
 
         public SettingsWindow(bool primerInicio, MainWindow ventanaPrincipal) {
 
@@ -45,6 +47,8 @@ namespace RTSHelper {
             VentanaPrincipal = ventanaPrincipal;
             var versión = Assembly.GetEntryAssembly()?.GetName().Version;
             LblVersion.Content = $"{versión?.Major}.{versión?.Minor}{(versión?.Build == 0 ? "" : $".{versión?.Build.ToString()}")}";
+            TimerPruebasOCR.Interval = TimeSpan.FromMilliseconds(300); // Se hace un poco más frecuente para que se visualicen los cambios más rápidamente. En el modo Pruebas OCR no es tan importante el rendimiento.
+            TimerPruebasOCR.Tick += new EventHandler(TimerDetecciónPruebasOCR_Tick);
 
             CargarValores(primerInicio);
             if (primerInicio) {
@@ -171,10 +175,64 @@ namespace RTSHelper {
         } // CargarValores>
 
 
+        private void TimerDetecciónPruebasOCR_Tick(object? sender, EventArgs e) {
+
+            if (MostrandoPreferenciasOCR) {
+
+                if (Preferencias.Game == AOE2Name) {
+
+                    void obtenerBitmapYMostrar(ScreenCaptureText tipoRectángulo) {
+
+                        using var bmp = CapturaDePantalla.ObtenerBitmap(ObtenerRectánguloTextoEnPantalla(tipoRectángulo), false, false, 1, 1, 1, 
+                            InterpolationMode.HighQualityBicubic, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        if (RectángulosImágenesPrueba.ContainsKey(tipoRectángulo))
+                            RectángulosImágenesPrueba[tipoRectángulo].Source = ObtenerImageSource(bmp);
+
+                    } // obtenerBitmapYMostrar>
+
+                    obtenerBitmapYMostrar(ObtenerTipoPausa());
+                    obtenerBitmapYMostrar(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9);
+                    obtenerBitmapYMostrar(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99);
+                    obtenerBitmapYMostrar(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999);
+                    obtenerBitmapYMostrar(ScreenCaptureText.Age_of_Empires_II_Game_Start);
+
+                }
+                return;
+
+            }
+
+        } // TimerDetecciónPruebasOCR_Tick>
+
+
         private void TbiCustomNames_Selected(object sender, RoutedEventArgs e) => CargarNombresPersonalizados();
 
 
         private void TbiCustomNames_Unselected(object sender, RoutedEventArgs e) => GuardarNombresPersonalizados(cerrando: false);
+
+
+        private void TbiOCR_Selected(object sender, RoutedEventArgs e) => EntrarAPreferenciasOCR();
+
+
+        private void TbiOCR_Unselected(object sender, RoutedEventArgs e) => SalirDePreferenciasOCR(cerrando: false);
+
+
+        private void SalirDePreferenciasOCR(bool cerrando) {
+
+            TimerPruebasOCR.Stop();
+            MostrandoPreferenciasOCR = false;
+            RectángulosImágenesPrueba = new Dictionary<ScreenCaptureText, Controles.Image>();
+            GuardarRectángulosOCR(cerrando);
+
+        } // SalirDePreferenciasOCR>
+
+
+        private void EntrarAPreferenciasOCR() {
+
+            TimerPruebasOCR.Start();
+            MostrandoPreferenciasOCR = true;
+            CargarRectángulosOCR();
+
+        } // EntrarAPreferenciasOCR>
 
 
         private void GuardarNombresPersonalizados(bool cerrando) {
@@ -359,6 +417,130 @@ namespace RTSHelper {
         } // TxtCustomName_TextChanged>
 
 
+        private void CargarRectángulosOCR() {
+  
+            RectángulosImágenesPrueba.Clear();
+
+            void agregarControlesRectángulo(ScreenCaptureText rectángulo, string nombreRectángulo) {
+
+                if (Preferencias.ScreenCaptureRectangles == null) return;
+
+                var spnRect = new StackPanel() { Orientation = Controles.Orientation.Horizontal, Margin = new Thickness(0, 5, 0, 0), Tag = rectángulo };
+                var lblTítulo = new Controles.Label() { Content = $"{nombreRectángulo}: ", FontWeight = FontWeights.Bold, Width = 125,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                var lblX = new Controles.Label() { Content = "X:", VerticalAlignment = VerticalAlignment.Center };
+                var txtX = new Controles.TextBox() { Text = Preferencias.ScreenCaptureRectangles[rectángulo].X.ToString(), Width = 39, Height = 25,
+                    VerticalContentAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0), 
+                    VerticalAlignment = VerticalAlignment.Center, Tag = "X"
+                };
+                var lblY = new Controles.Label() { Content = "Y:", VerticalAlignment = VerticalAlignment.Center };
+                var txtY = new Controles.TextBox() { Text = Preferencias.ScreenCaptureRectangles[rectángulo].Y.ToString(), Width = 39, Height = 25,
+                    VerticalContentAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0), 
+                    VerticalAlignment = VerticalAlignment.Center, Tag = "Y"
+                };
+                var lblHeight = new Controles.Label() { Content = "H:", VerticalAlignment = VerticalAlignment.Center };
+                var txtHeight = new Controles.TextBox() { Text = Preferencias.ScreenCaptureRectangles[rectángulo].Height.ToString(), Width = 39, 
+                    Height = 25, VerticalContentAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0), 
+                    VerticalAlignment = VerticalAlignment.Center, Tag = "Height"
+                };
+                var lblWidth = new Controles.Label() { Content = "W:", VerticalAlignment = VerticalAlignment.Center };
+                var txtWidth = new Controles.TextBox() { Text = Preferencias.ScreenCaptureRectangles[rectángulo].Width.ToString(), Width = 39, 
+                    Height = 25, VerticalContentAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0), 
+                    VerticalAlignment = VerticalAlignment.Center, Tag = "Width"
+                };
+
+                var img = new Controles.Image() { Height = 60, Width = 120, MaxHeight = 60, MaxWidth = 120, MinHeight = 60, MinWidth = 120 };
+                spnRect.Children.Add(lblTítulo);
+                spnRect.Children.Add(lblX);
+                spnRect.Children.Add(txtX);
+                spnRect.Children.Add(lblY);
+                spnRect.Children.Add(txtY);
+                spnRect.Children.Add(lblHeight);
+                spnRect.Children.Add(txtHeight);
+                spnRect.Children.Add(lblWidth);
+                spnRect.Children.Add(txtWidth);
+                spnRect.Children.Add(img);
+                SpnRectangles.Children.Add(spnRect);
+                RectángulosImágenesPrueba.Add(rectángulo, img);
+                var manejadorEvento = new System.Windows.Controls.TextChangedEventHandler(CambióRectángulo);
+                txtHeight.TextChanged += manejadorEvento;
+                txtX.TextChanged += manejadorEvento;
+                txtY.TextChanged += manejadorEvento;
+                txtWidth.TextChanged += manejadorEvento;
+
+            } // agregarControlesRectángulo>
+
+            SpnRectangles.Children.Clear();
+            var rectánguloPausa = ObtenerTipoPausa(); // En el ciclo siguiente se ignoran todos los que tengan Pause en el nombre del tipo.
+            agregarControlesRectángulo(rectánguloPausa, "Pause");
+            foreach (var rectángulo in RectángulosActivos) {
+
+                var nombreRectángulo = rectángulo.ToString();
+                if (!nombreRectángulo.Contains("Pause") && nombreRectángulo.Contains(Preferencias.Game.Reemplazar(" ", "_"))) {
+                    agregarControlesRectángulo(rectángulo, nombreRectángulo.Reemplazar("_", " ").Reemplazar(Preferencias.Game, "").Trim());
+                }
+
+            }
+
+        } // CargarRectángulosOCR>
+
+
+        private void CambióRectángulo(object sender, TextChangedEventArgs e) 
+            => GuardarRectángulosOCR(cerrando: true);
+
+
+        private void GuardarRectángulosOCR(bool cerrando) {
+
+            if (Preferencias.ScreenCaptureRectangles == null) return;
+
+            foreach (var control in SpnRectangles.Children) {
+
+                var spnRect = control as StackPanel;
+                if (spnRect != null) {
+
+                    var tipoRectángulo = (ScreenCaptureText)spnRect.Tag;
+                    var rectángulo = Preferencias.ScreenCaptureRectangles[tipoRectángulo];
+                    foreach (var control2 in spnRect.Children) {
+
+                        var txt = control2 as Controles.TextBox;
+                        if (txt != null) {
+
+                            switch (txt.Tag.ToString()) {
+                                case "X":
+                                    if (float.TryParse(ObtenerTextoNúmeroLocal(txt.Text), out float x) && x >= 0 && x <= 1) rectángulo.X = x;
+                                    break;
+                                case "Y":
+                                    if (float.TryParse(ObtenerTextoNúmeroLocal(txt.Text), out float y) && y >= 0 && y <= 1) rectángulo.Y = y;
+                                    break;
+                                case "Height":
+                                    if (float.TryParse(ObtenerTextoNúmeroLocal(txt.Text), out float height) && height > 0 && height <= 1) 
+                                        rectángulo.Height = height;
+                                    break;
+                                case "Width":
+                                    if (float.TryParse(ObtenerTextoNúmeroLocal(txt.Text), out float width) && width > 0 && width <= 1) 
+                                        rectángulo.Width = width;
+                                    break;
+                                default:
+                                    MostrarError("Unexpected value in GuardarRectángulosOCR()");
+                                    break;
+                            }
+
+                        }
+
+                    } // foreach (var control2 in spnRect.Children).
+
+                    Preferencias.ScreenCaptureRectangles[tipoRectángulo] = rectángulo;
+
+                }
+
+            } // foreach (var control in SpnRectangles.Children.
+
+            if (!cerrando) VentanaPrincipal.AplicarPreferencias();
+
+        } // GuardarRectángulosOCR>
+
+
         private void CargarPrioridadesNombres() {
 
             SpnDisplayPriority.Children.Clear();
@@ -380,7 +562,7 @@ namespace RTSHelper {
                     esIdioma = true;
 
                 }
-                var SpnName = new StackPanel() { Orientation = Controles.Orientation.Horizontal };
+                var spnName = new StackPanel() { Orientation = Controles.Orientation.Horizontal };
                 var label = new Controles.Label() {
                     VerticalAlignment = VerticalAlignment.Center,
                     Content = esIdioma ? "Other Language" : displayPriority.Key.ATexto(), Tag = displayPriority
@@ -393,19 +575,19 @@ namespace RTSHelper {
                 if (cuenta <= 0) btnUp.IsEnabled = false;
                 if (cuenta >= totalNombresSinIdiomas - 1) btnDown.IsEnabled = false;
 
-                SpnName.Children.Add(btnUp);
-                SpnName.Children.Add(btnDown);
-                SpnName.Children.Add(label);
+                spnName.Children.Add(btnUp);
+                spnName.Children.Add(btnDown);
+                spnName.Children.Add(label);
 
                 if (esIdioma) { // Solo pasa por aquí cuando encuentra el primero.
 
                     var cmbIdioma = new Controles.ComboBox() { VerticalAlignment = VerticalAlignment.Center };
                     AgregarIdiomas(cmbIdioma, idiomaEncontrado, IdiomasNombres);
                     cmbIdioma.SelectionChanged += new Controles.SelectionChangedEventHandler(this.CmbOtherLanguage_SelectionChanged);
-                    SpnName.Children.Add(cmbIdioma);
+                    spnName.Children.Add(cmbIdioma);
 
                 }
-                SpnDisplayPriority.Children.Add(SpnName);
+                SpnDisplayPriority.Children.Add(spnName);
                 cuenta++;
 
             }
@@ -599,6 +781,7 @@ namespace RTSHelper {
         private void Window_Closed(object sender, EventArgs e) {
 
             GuardarNombresPersonalizados(cerrando: true);
+            SalirDePreferenciasOCR(cerrando: true);
             VentanaPrincipal.AplicarPreferencias();
             Settings.Guardar(Preferencias, RutaPreferencias);
             if (ActualizarDuraciónPasoAlSalir) VentanaPrincipal.ActualizarDuraciónPaso(); // Se aplica solo al salir para no reiniciar el timer cada vez que se haga un cambio en los controles.

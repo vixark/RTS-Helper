@@ -1,4 +1,4 @@
-|| Author: Vixark, Date: 21/02/2022, Description: A sample build order for RTS Helper. Good vs. archers if you make good damage early. ||
+|| Author: Vixark, Date: 21/02/2022, Description: A sample build order for RTS Helper. Good vs. archers if you make good damage early. Read the documentation if you want to create your own build orders: http://vixark.com/age-of-empires-ii/rts-helper-documentation. ||
 
 {{t=25 empty={fc="none" s="none"}}}
 

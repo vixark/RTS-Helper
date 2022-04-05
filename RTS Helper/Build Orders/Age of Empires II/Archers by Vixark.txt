@@ -1,4 +1,4 @@
-|| Author: Vixark, Date: 03/03/2022, Use Byzantines as a test civilization because they don't have early game economic bonuses. ||
+|| Author: Vixark, Date: 03/03/2022, Use Byzantines as a test civilization because they don't have early game economic bonuses. Read the documentation if you want to create your own build orders: http://vixark.com/age-of-empires-ii/rts-helper-documentation. ||
 
 {{t=25 empty={fc="none" s="none"}}}
 

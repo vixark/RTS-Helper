@@ -1,4 +1,4 @@
-|| Author: Vixark, Date: 12/02/2022, Description: A sample build order for RTS Helper. Good vs. archers if you can wall up without receiving much damage. ||
+|| Author: Vixark, Date: 12/02/2022, Description: A sample build order for RTS Helper. Good vs. archers if you can wall up without receiving much damage. Read the documentation if you want to create your own build orders: http://vixark.com/age-of-empires-ii/rts-helper-documentation. ||
 
 {{t=25 empty={fc="none" s="none"}}}
 

@@ -231,28 +231,9 @@ namespace RTSHelper {
                 case EEstado.Stoped: // Stop otra vez. No pasa nada.
                     break;
                 case EEstado.Running: // Stop. Independiente si está ejecutando o en pausa, siempre hace Stop. Esto se cambió del comportamiento anterior porque ahora el inicio es automático cuando inicia el juego.
-                case EEstado.Paused: 
+                case EEstado.Paused:
 
-                    Estado = EEstado.Stoped;
-                    BtnStart.Content = "▷";
-                    BtnStart.ToolTip = "Start";
-                    ReiniciarVariables();
-                    ActualizarPaso(stop: true);
-                    TxtPaso.Text = "";
-                    TxtPaso.IsEnabled = false;
-                    Timer?.Stop();
-                    TimerFlash.Stop();
-                    MedidorTimer.Reset();
-                    TimerStepEndSound?.Stop();
-                    TimerDetecciónPausa.Stop();
-                    TimerDetecciónProgreso.Stop();
-                    TimerDetecciónInicioJuego.Start();
-                    ActualizarUI(forzar: true);  
-                    BtnNext.IsEnabled = false;
-                    BtnBack.IsEnabled = false;
-                    BtnRemoveIdleTime.IsEnabled = false;
-                    BtnAddIdleTime.IsEnabled = false;
-                    SuspenderBlinkingTiempoJuego();
+                    Stop();
                     break;
 
                 default:
@@ -386,7 +367,7 @@ namespace RTSHelper {
             if (!Jugando()) return;
             if (Preferencias.Game == AOE2Name) {
 
-                var colorFondoEsquinaInferior = ExtraerColorFondo(ScreenCaptureText.Age_of_Empires_II_InicioJuego);
+                var colorFondoEsquinaInferior = ExtraerColorFondo(ScreenCaptureText.Age_of_Empires_II_Game_Start);
                 if (colorFondoEsquinaInferior.R < 10 && colorFondoEsquinaInferior.G < 10 && colorFondoEsquinaInferior.B < 10) { // 14-14-14 puede ser el color cuando se está en la página principal y se le da clic a 'Single Player'.
 
                     ContadorPantallaCarga++;
@@ -864,6 +845,32 @@ namespace RTSHelper {
         } // EstablecerRunningUI>
 
 
+        public void Stop() {
+
+            Estado = EEstado.Stoped;
+            BtnStart.Content = "▷";
+            BtnStart.ToolTip = "Start";
+            ReiniciarVariables();
+            ActualizarPaso(stop: true);
+            TxtPaso.Text = "";
+            TxtPaso.IsEnabled = false;
+            Timer?.Stop();
+            TimerFlash.Stop();
+            MedidorTimer.Reset();
+            TimerStepEndSound?.Stop();
+            TimerDetecciónPausa.Stop();
+            TimerDetecciónProgreso.Stop();
+            TimerDetecciónInicioJuego.Start();
+            ActualizarUI(forzar: true);
+            BtnNext.IsEnabled = false;
+            BtnBack.IsEnabled = false;
+            BtnRemoveIdleTime.IsEnabled = false;
+            BtnAddIdleTime.IsEnabled = false;
+            SuspenderBlinkingTiempoJuego();
+
+        } // Stop>
+
+
         private void Restart(double msTimerDesface = 0) {
 
             EstablecerRunningUI(EEstado.Paused);
@@ -1049,6 +1056,7 @@ namespace RTSHelper {
                 return; // En este modo se desactiva el ajuste de progreso automático para facilitar realizar los ensayos.
 
             }
+
             if (!Preferencias.AutoAdjustIdleTime) return;
             if (!forzarAplicación && !Jugando()) return;
             if (!forzarAplicación && Estado != EEstado.Running) return;

@@ -8,12 +8,15 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
+using System.Windows.Interop;
 
 
 
@@ -344,6 +347,27 @@ namespace Vixark {
             return estáLibre;
 
         } // ObtenerArchivoLibre>
+
+
+        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool BorrarObjeto([In] IntPtr hObject);
+
+
+        /// <summary>
+        /// Devuelve un objeto ImageSource para ser presentado en la interface a partir de un bitmap <paramref name="bmp"/>.
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <returns></returns>
+        public static System.Windows.Media.ImageSource ObtenerImageSource(Bitmap bmp) { // Ver https://stackoverflow.com/a/35274172/8330412. If you get 'dllimport unknown'-, add 'using System.Runtime.InteropServices;'
+
+            var handle = bmp.GetHbitmap();
+            try {
+                return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty,
+                    System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+            } finally { BorrarObjeto(handle); }
+
+        } // ObtenerImageSource>
 
 
     } // General>

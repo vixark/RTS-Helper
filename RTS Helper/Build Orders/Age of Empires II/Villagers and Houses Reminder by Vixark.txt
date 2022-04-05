@@ -1,4 +1,4 @@
-|| Author: Vixark, Date: 18/02/2022, Description: Not a build order. Reminds you to keep creating villagers and building houses. ||
+|| Author: Vixark, Date: 18/02/2022, Description: Not a build order. Reminds you to keep creating villagers and building houses. Read the documentation if you want to create your own build orders: http://vixark.com/age-of-empires-ii/rts-helper-documentation. ||
 
 {{t=25 empty={fc="none" s="none"}}}
 

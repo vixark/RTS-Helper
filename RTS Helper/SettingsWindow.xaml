@@ -607,18 +607,24 @@
                 </ScrollViewer>
             </TabItem>
 
-            <TabItem Header="OCR" x:Name="TbiOCR">
+            <TabItem Header="OCR" x:Name="TbiOCR" Selector.Selected="TbiOCR_Selected" 
+                     Selector.Unselected="TbiOCR_Unselected">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="20 20 20 0" Orientation="Vertical" x:Name="SpnOCR">
 
                         <TextBlock TextWrapping="Wrap">
-                            RTS Helper uses Optical Character Recognition (OCR) to synchronize your progress with the game. So it needs to know
-                            the position in your screen of some game data.
+                            RTS Helper uses Optical Character Recognition (OCR) to synchronize your progress with the game, to autostart and to detect pauses. 
+                            To do it correctly, it needs to know the location in your screen of some game data. If you don't have any mod installed 
+                            that changes the default location of game data, don't change any value here.
                         </TextBlock>
+ 
+                        <StackPanel Margin="-5 10 0 0" Orientation="Vertical" x:Name="SpnRectangles">
+
+                        </StackPanel>
 
                         <CheckBox Checked="ChkOCRTestMode_Checked" Unchecked="ChkOCRTestMode_Checked" x:Name="ChkOCRTestMode" 
-                                      Margin="0 20 0 5">OCR Test Mode</CheckBox>
-                        
+                                      Margin="0 20 0 5">OCR Test Mode (See captured images in RTS Helper\OCR Tests)</CheckBox>
+
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
