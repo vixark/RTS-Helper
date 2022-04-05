@@ -18,7 +18,7 @@
 
 || 4 - 1:40 ||  {p=7} 6[v@shp] [->] [boar]<p>[flag]<x>[1]<>   +[v]  /f  <r>7[f]  7[pop]
 
-|| 5 - 2:05 ||  {p=8} [v]<x>[9]<> [->] [lc]   +[v]  /f  <r>8[f]  8[pop] || Se consideró hacer el LC 1 cuadro antes del bosque, pero no mejoró significativamente la w al llegar a feudal (solo 10+) y retrasó apróximadamente un paso la construcción de la herrería y hacía apretado la construcción de granjas. Conclusión: Es mejor adjunto al bosque, incluso si se tienen 10 leñadores.
+|| 5 - 2:05 ||  {p=8} [v]<x>[9]<> [->] [lc]   +[v]  /f  <r>8[f]  8[pop] || Se consideró hacer el campamento maderero 1 cuadro antes del bosque, pero no mejoró significativamente la madera al llegar a feudal (solo 10+) y retrasó apróximadamente un paso la construcción de la herrería y hacía apretado la construcción de granjas. Conclusión: Es mejor adjunto al bosque, incluso si se tienen 10 leñadores.
 
 || 6 - 2:30 ||  {p=9} [v]<x>[1][0]<> [->] [h] [->w]   8[v]<x>[boar]<p>[f]=12<> [->] [drop food]   + 2[v]  /f  <r>8[f]  1[lc]  9[pop]
 
