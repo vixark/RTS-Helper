@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -15,6 +16,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -101,6 +103,20 @@ namespace Vixark {
 
 
         /// <summary>
+        /// Abre una Url en el navegador predeterminado.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static bool AbrirUrl(string? url) {
+
+            if (url == null) return false;
+            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            return true;
+
+        } // AbrirUrl>
+
+
+        /// <summary>
         /// Abre un directorio en el explorador de Windows.
         /// </summary>
         /// <param name="rutaDirectorio"></param>
@@ -122,6 +138,47 @@ namespace Vixark {
             }
 
         } // ObtenerMediaColor>
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="clienteHtml">Se debe proveer un objeto que sea reusado por toda la aplicación para evitar el agotamiento de sockets.</param>
+        /// <param name="url"></param>
+        /// <param name="rutaArchivo"></param>
+        /// <returns></returns>
+        public async static Task<bool> DescargarArchivoAsync(HttpClient clienteHtml, string? url, string rutaArchivo) { // Ver https://jonathancrozier.com/blog/how-to-download-files-using-c-sharp.
+
+            if (url is null) return false;
+
+            try {
+
+                using var stream = await clienteHtml.GetStreamAsync(url);
+                using var fileStream = new FileStream(rutaArchivo, FileMode.Create);
+                await stream.CopyToAsync(fileStream);
+                return true;
+
+            } catch (Exception) {
+                return false;
+            }
+
+        } // DescargarArchivo>
+
+
+        /// <summary>
+        /// Elimina un archivo sin generar excepciones. Devuelve verdadero si fue borrado y falso si no se pudo borrar. Útil en los casos
+        /// que se quiere eliminar un archivo, pero si por alguna razón está bloqueado y no se puede eliminar, se puede dejar sin eliminar.
+        /// </summary>
+        public static bool IntentarEliminar(string rutaArchivo) {
+
+            try {
+                File.Delete(rutaArchivo);
+                return true;
+            } catch (Exception) {
+                return false;
+            }
+
+        } // IntentarEliminar>
 
 
         public static Color? ObtenerColor(string textoColor) {

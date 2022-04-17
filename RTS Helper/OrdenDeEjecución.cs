@@ -68,16 +68,14 @@ namespace RTSHelper {
         #region Funciones y Procedimientos
 
 
-        public void CargarPasos(string directorioBuildOrders, string nombreBuildOrder, out string? errores) {
+        public bool CargarPasos(string directorioBuildOrders, string nombreBuildOrder, out string? errores, out string? rutaBuildOrder) {
 
             errores = null;
             var pasos = new List<Paso>();
-            var rutaBuildOrder = Path.Combine(directorioBuildOrders, $"{nombreBuildOrder}.txt");
+            rutaBuildOrder = Path.Combine(directorioBuildOrders, $"{nombreBuildOrder}.txt");
             if (!Directory.Exists(directorioBuildOrders)) Directory.CreateDirectory(directorioBuildOrders);
-            if (!File.Exists(rutaBuildOrder))
-                File.WriteAllText(rutaBuildOrder, $@"Edit '\RTS Helper\Build Orders{Preferencias.Game}\{nombreBuildOrder}.txt' \\n to add your build order.");
-
-            if (!ObtenerArchivoLibre(rutaBuildOrder)) return; // Si pasado el tiempo máximo permitido el archivo no está libre, no carga los pasos.
+            if (!File.Exists(rutaBuildOrder)) return false;
+            if (!ObtenerArchivoLibre(rutaBuildOrder)) return true; // Si pasado el tiempo máximo permitido el archivo no está libre, no carga los pasos.
 
             var textosPasos = File.ReadAllLines(rutaBuildOrder);
             Formato? formatoGlobal = null;
@@ -190,6 +188,8 @@ namespace RTSHelper {
                 }
             }
             Pasos = pasos;
+
+            return true;
 
         } // CargarPasos>
 

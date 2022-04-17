@@ -1,0 +1,19 @@
+﻿<Window x:Class="RTSHelper.DiálogoConHtmlWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RTSHelper"
+        mc:Ignorable="d"
+        Title="Título" Topmost="True" WindowStartupLocation="CenterScreen" Height="500" Width="400" WindowStyle="ToolWindow">
+    <Grid>
+        <StackPanel>
+            <TextBlock x:Name="TbMensaje" Margin="10 20 10 10" TextWrapping="Wrap" FontSize="14">Mensaje</TextBlock>
+            <WebBrowser x:Name="WbCambios" Height="300" Margin="10" Navigating="WbCambios_Navigating"></WebBrowser>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="BtnNo" Margin="10" FontSize="14" Padding="4" Width="60" Click="BtnNo_Click">Cancel</Button>
+                <Button x:Name="BtnYes" Margin="10 10 20 10" FontSize="14" Padding="4" Width="60" Click="BtnYes_Click">Update</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

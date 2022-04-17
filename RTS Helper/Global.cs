@@ -50,6 +50,8 @@ namespace RTSHelper {
 
         public static string OtherName = "Other";
 
+        public static List<string> Juegos = new List<string>() { AOE2Name, AOE4Name, OtherName }; // Al cambiar o agregar un elemento aquí también se debe agregar en SettingsWindows.xaml.
+
         public static string DirectorioAOE2 = @"D:\Juegos\Steam\steamapps\common\AoE2DE";
 
         public static string DirectorioAplicaciónReal = @"D:\Programas\RTS Helper";
@@ -72,6 +74,8 @@ namespace RTSHelper {
 
         public static string DirectorioNombres = Path.Combine(DirectorioAplicación, "Names");
 
+        public static string DirectorioTemporal = Path.Combine(DirectorioAplicación, "Temp");
+
         public static string DirectorioÓrdenesDeEjecuciónCompilación = Path.Combine(DirectorioCompilación, "Build Orders");
 
         public static string DirectorioÓrdenesDeEjecuciónCódigo = @"D:\Programas\RTS Helper\Código\RTS Helper\RTS Helper\Build Orders";
@@ -89,6 +93,8 @@ namespace RTSHelper {
         public static double CorrecciónEscala = 1.25 / (WForms.Screen.PrimaryScreen.Bounds.Width / SystemParameters.PrimaryScreenWidth); // Todos los valores son calculados experimentalmente en mi computador que tiene una escala de 125, entonces para ser usado en computadores de otra escala se debe ajustar todos los valores con este factor.
 
         public static string SeparadorDecimales = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
+
+        public static InformaciónÚltimasVersiones? InformaciónÚltimasVersiones;
 
         public enum NameType { // Al agregar un valor aquí, se debe agregar a Settings.NamesTypesPriority y en Idiomas si es un idioma.
             [Display(Name = "Complete Name")] Complete, [Display(Name = "Common Name")] Common, Abbreviation, Acronym,
@@ -116,6 +122,9 @@ namespace RTSHelper {
         public enum TamañosFuente { Indeterminado, XXXS, XXS, XS, S, M, L, XL, XXL, XXXL }
 
         public enum TipoFuente { Sans, SansNegrita, Serif, SerifCuadrada, Caligráfica, Símbolos }
+
+        public enum TipoArchivoActualización { Completo, ActualizaciónBinarios, Imágenes, Sonidos, ÓrdenesDeEjecución, InformaciónÚltimasVersiones, 
+            CambiosImágenes, CambiosSonidos, CambiosÓrdenesDeEjecución }
 
         public static Dictionary<string, Nombre> Nombres = new Dictionary<string, Nombre>(); // Los nombres no repetidos. La utilidad de este diccionario es principalmente para identificar nombres entre [] y reemplazarlo por la entidad correspondiente. La primera vez que aparezca un nombre sin importar en que idioma esté se agregará a este diccionario con ese idioma, los demás se ignoran. La clave son todos los nombres posibles.
 
@@ -286,7 +295,7 @@ namespace RTSHelper {
         public static ParámetrosExtracción AlfaNumNegByNL1_5C2 = new ParámetrosExtracción(soloNúmeros: false,
             permitirUnCarácter: false, negativo: true, blancoYNegro: true, escala: 1, luminosidad: 1.5f, contraste: 2, InterpolationMode.NearestNeighbor,
             DImg.PixelFormat.Format8bppIndexed);
-
+        
         public enum ScreenCaptureText : int { // Por facilidad y flexibilidad se agregan todos los posibles textos en la misma enumeración. El prefijo es el nombre del juego usando _ en vez de espacios para poder filtrarlo fácilmente en opciones.
             Age_of_Empires_II_PauseF3XS, Age_of_Empires_II_PauseF3S, Age_of_Empires_II_PauseF3M, Age_of_Empires_II_PauseF3L, Age_of_Empires_II_PauseF3XL,
             Age_of_Empires_II_PauseM, Age_of_Empires_II_PauseL,
@@ -295,6 +304,13 @@ namespace RTSHelper {
             Age_of_Empires_II_Maximum_Population, Age_of_Empires_II_Villagers_on_Wood, Age_of_Empires_II_Villagers_on_Food, 
             Age_of_Empires_II_Villagers_on_Gold, Age_of_Empires_II_Villagers_on_Stone, Age_of_Empires_II_Timer, Age_of_Empires_II_Speed, 
             Age_of_Empires_II_Age, Age_of_Empires_II_Game_Start
+        }
+
+        public enum UIMod : int { // Nunca cambiar el nombre, se almacenan como texto en preferencias. Al agregarlo aquí también se debe agregar a UIMods y al código que establece los rectángulos según el Mod. No se usará el nombre del juego en el nombre del mod de manera predeterminada porque es improbable que se repita en otros juegos. De todas maneras si se llegara a repetir, no hay problema porque los valores se manejan diferentes según el juego.
+            No_Mod, Anne_HK_Better_Resource_Panel_and_Idle_Villager_Icon, Anne_HK_Better_Resource_Panel_TheViper_Version, 
+            KoBHV_Brand_New_Resource_Panel_with_Annoying_Idle_Villager_Button, KoBHV_Brand_New_Resource_Panel_Standard_Version,
+            Anne_HK_Better_Resource_Panel_Top_Center_Version, Streamlined_UI, PointiBoi_Minimalistic_UI, AllYourBase_Maximum_Advantage_UI,
+            Custom_UI_Centered_Modern_Black_and_White, XavilUI, Villese_UI, Bottom_Side_UI, Resource_Bar_at_Bottom, Bottom_Resource_Panel
         }
 
         public static List<ScreenCaptureText> RectángulosAfectadosPorEscalaInterface = new List<ScreenCaptureText> {
@@ -312,16 +328,62 @@ namespace RTSHelper {
             ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, 
             ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, ScreenCaptureText.Age_of_Empires_II_Game_Start }; // Los rectángulos que actualmente se están usando en el programa y deben mostrarse en los la sección de preferencias para ser poder ser personalizados por el usuario.
 
+        public static Dictionary<string, List<UIMod>> UIMods = new Dictionary<string, List<UIMod>> { { AOE2Name, new List<UIMod> { UIMod.No_Mod,
+            UIMod.Anne_HK_Better_Resource_Panel_and_Idle_Villager_Icon, UIMod.Anne_HK_Better_Resource_Panel_TheViper_Version,
+            UIMod.KoBHV_Brand_New_Resource_Panel_with_Annoying_Idle_Villager_Button, UIMod.KoBHV_Brand_New_Resource_Panel_Standard_Version,
+            UIMod.Anne_HK_Better_Resource_Panel_Top_Center_Version, UIMod.Streamlined_UI, UIMod.PointiBoi_Minimalistic_UI,
+            UIMod.AllYourBase_Maximum_Advantage_UI, UIMod.Custom_UI_Centered_Modern_Black_and_White, UIMod.XavilUI, UIMod.Villese_UI,
+            UIMod.Bottom_Side_UI, UIMod.Resource_Bar_at_Bottom, UIMod.Bottom_Resource_Panel} } };
+
         public static float ConfianzaOCRAceptable = 0.50f;
 
         public static bool MostrandoPreferenciasOCR = false;
 
         public static Dictionary<ScreenCaptureText, Controles.Image> RectángulosImágenesPrueba = new Dictionary<ScreenCaptureText, Image>();
 
+        public static string EnlaceDonación = "https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW";
+
+        public static List<string> ÓrdenesDeEjecuciónAEliminar = new List<string> { "Crossbows Flood by Vixark" }; // A estas órdenes de ejecución se les cambió el nombre por otro, y el archivo con este nombre fue sobreescrito con un txt vacío y se quiere que sea eliminado al iniciar.
+
         #endregion Variables>
 
 
         #region Funciones y Procedimientos
+
+        public static string HtmlDonación(int tamañoFuente) 
+            => @$"<div style='font-size: {tamañoFuente}px;'>If you like this application, please consider to <a href='{EnlaceDonación}'>donate</a>.</div>";
+
+
+        public static string? ObtenerURLArchivo(TipoArchivoActualización tipo, int? versiónActual = null, int? últimaVersión = null, 
+            string? versiónActualPrograma = null) {
+
+            var baseUrl = InformaciónÚltimasVersiones?.BaseUrl ?? Preferencias.UpdatesBaseUrl;
+
+            switch (tipo) {
+                case TipoArchivoActualización.Completo:
+                    return $"{baseUrl}/RTS Helper.zip";
+                case TipoArchivoActualización.ActualizaciónBinarios:
+                    return $"{baseUrl}/update-{versiónActualPrograma?.TrimEnd('.')}.zip";
+                case TipoArchivoActualización.Imágenes:
+                    return $"{baseUrl}/images-{versiónActual}-to-{últimaVersión}.zip";
+                case TipoArchivoActualización.Sonidos:
+                    return $"{baseUrl}/sounds-{versiónActual}-to-{últimaVersión}.zip";
+                case TipoArchivoActualización.ÓrdenesDeEjecución:
+                    return $"{baseUrl}/build-orders-{últimaVersión}.zip";
+                case TipoArchivoActualización.InformaciónÚltimasVersiones:
+                    return $"{baseUrl}/last-versions-info.json";
+                case TipoArchivoActualización.CambiosImágenes:
+                    return $"{baseUrl}/images-changes-{versiónActual}-to-{últimaVersión}.html";
+                case TipoArchivoActualización.CambiosSonidos:
+                    return $"{baseUrl}/sounds-changes-{versiónActual}-to-{últimaVersión}.html";
+                case TipoArchivoActualización.CambiosÓrdenesDeEjecución:
+                    return $"{baseUrl}/build-orders-changes-{versiónActual}-to-{últimaVersión}.html";
+                default:
+                    return null;
+            }
+            
+        } // ObtenerURLArchivo>
+
 
         public static string ObtenerSeleccionadoEnCombobox(SelectionChangedEventArgs e, bool tag = false) {
 
@@ -2473,7 +2535,7 @@ namespace RTSHelper {
 
         public static SDrw.RectangleF ObtenerRectánguloTextoEnPantalla(ScreenCaptureText tipo) {
 
-            if (Preferencias.ScreenCaptureRectangles == null) CrearOCompletarScreenCaptureRectangles(cambióResolución: false);
+            if (Preferencias.ScreenCaptureRectangles == null) CrearOCompletarScreenCaptureRectangles(cambióResolución: false, cambióUIMod: false);
             if (Preferencias.ScreenCaptureRectangles!.ContainsKey(tipo)) { // Después de CrearOCompletarScreenCaptureRectangles() se asegura que Preferencias.ScreenCaptureRectangles no es nulo.
                
                 var r = Preferencias.ScreenCaptureRectangles![tipo];
@@ -2487,7 +2549,7 @@ namespace RTSHelper {
         } // ObtenerRectánguloTextoEnPantalla>
 
 
-        public static void CrearOCompletarScreenCaptureRectangles(bool cambióResolución) {
+        public static void CrearOCompletarScreenCaptureRectangles(bool cambióResolución, bool cambióUIMod) {
 
             var cambió = false;
             if (Preferencias.ScreenCaptureRectangles == null) {
@@ -2501,13 +2563,15 @@ namespace RTSHelper {
                     new SDrw.RectangleF(2F / 2560, 1416F / 1440, 22F / 2560, 22F / 1440));
             }
 
-            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9)) {
+            if (cambióUIMod || !Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9)) {
+
                 cambió = true;
                 Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, 
                     new SDrw.RectangleF(582F / 2560, 49F / 1440, 13F / 2560, 17F / 1440)); // El algoritmo de OCR es inestable, cambia con el recorte realizado. Se debe procurar hacer siempre el mismo recorte. Si se cambia el rectángulo de recorte, se deben verificar la estabilidad del algoritmo con todos los números del rango aplicable.
+
             }
 
-            if (cambióResolución || !Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99)) {
+            if (cambióUIMod || cambióResolución || !Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99)) {
 
                 cambió = true;
                 var xSerif = 573F / 2560;
@@ -2527,7 +2591,7 @@ namespace RTSHelper {
                 
             }          
 
-            if (cambióResolución || !Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999)) {
+            if (cambióUIMod || cambióResolución || !Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999)) {
                 
                 cambió = true;
                 var xSerif = 565F / 2560;

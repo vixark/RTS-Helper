@@ -23,6 +23,10 @@ using System.IO;
 using static Vixark.General;
 using System.Drawing.Drawing2D;
 using System.Threading;
+using AutoUpdaterDotNET;
+using System.Xml;
+using System.Net.Http;
+using System.IO.Compression;
 
 
 
@@ -53,6 +57,8 @@ namespace RTSHelper {
         private DispatcherTimer TimerActualizadorUIPorCambioTamaño = new DispatcherTimer();
 
         private DispatcherTimer TimerVerificadorVentanaEsVisible = new DispatcherTimer();
+
+        private DispatcherTimer TimerActualizadorDePaquetes = new DispatcherTimer();
 
         private DispatcherTimer TimerDetecciónPausa = new DispatcherTimer();
 
@@ -114,20 +120,31 @@ namespace RTSHelper {
         public MainWindow() {
 
             InitializeComponent();
+
             TimerFocus.Interval = TimeSpan.FromMilliseconds(20);
             TimerFocus.Tick += new EventHandler(TimerFocus_Tick);
+
             TimerFlash.Interval = TimeSpan.FromMilliseconds(500);
             TimerFlash.Tick += new EventHandler(TimerFlash_Tick);
+
             TimerActualizadorUI.Interval = TimeSpan.FromMilliseconds(200);
             TimerActualizadorUI.Tick += new EventHandler(TimerActualizadorUI_Tick);
             TimerActualizadorUI.Start();
+
             TimerActualizadorUIPorCambioTamaño.Interval = TimeSpan.FromMilliseconds(1000);
             TimerActualizadorUIPorCambioTamaño.Tick += new EventHandler(TimerActualizadorUIPorCambioTamaño_Tick);
+
             TimerVerificadorVentanaEsVisible.Interval = TimeSpan.FromMilliseconds(5000);
             TimerVerificadorVentanaEsVisible.Tick += new EventHandler(TimerVerificadorVentanaEsVisible_Tick);
             TimerVerificadorVentanaEsVisible.Start();
+
+            TimerActualizadorDePaquetes.Interval = TimeSpan.FromMilliseconds(2000);
+            TimerActualizadorDePaquetes.Tick += new EventHandler(TimerActualizadorDePaquetes_Tick);
+            TimerActualizadorDePaquetes.Start();
+
             TimerBlinkerGameTime.Interval = TimeSpan.FromMilliseconds(300);
             TimerBlinkerGameTime.Tick += new EventHandler(TimerBlinkerGameTime_Tick);
+
             TimerDetecciónPausa.Interval = TimeSpan.FromMilliseconds(1000); // Cada ejecución tarda en mi computador alrededor de 50 a 70 ms. 
             TimerDetecciónPausa.Tick += new EventHandler(TimerDetecciónPausa_Tick);
 
@@ -140,8 +157,7 @@ namespace RTSHelper {
 
             LeerPreferencias();
             OrdenDeEjecución.EnCambioNúmeroPaso = () => EnCambioNúmeroPaso();
-            OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder, out string? erroresInternos);
-            ActualizarAlertaDeErrores(erroresInternos, altoSuperado: false, limpiarErroresAnteriores: false);
+            CargarPasos();
             LeerBuildOrders();
             CargarBuildOrder(iniciando: true);
 
@@ -165,9 +181,13 @@ namespace RTSHelper {
             Inició = true;
             CambiandoTxtPasoAutomáticamente = false;
 
+            Actualizar();
+
+            RecordarDonación();
+
         } // MainWindow>
 
-        
+
         private void OrdenDeEjecuciónActual_Changed(object source, FileSystemEventArgs e) {
 
             if ((DateTime.Now - ÚltimaEjecuciónDeOrdenDeEjecuciónActualChanged).TotalSeconds < 1) return; // En algunas ocasiones se ejecuta varias veces el evento.
@@ -525,8 +545,7 @@ namespace RTSHelper {
         private void MniRecargarBuildOrder_Click(object sender, RoutedEventArgs e) {
 
             if (!Inició || EditandoComboBoxEnCódigo) return;
-            LeerBuildOrders();
-            CargarBuildOrder();
+            RecargarBuildOrder();
 
         } // MniRecargarBuildOrder_Click>
 
@@ -591,6 +610,21 @@ namespace RTSHelper {
         private void MniFordward_Click(object sender, RoutedEventArgs e) => Fordward();
 
         private void TimerVerificadorVentanaEsVisible_Tick(object? sender, EventArgs e) => VerificarSiVentanaEsVisible();
+
+
+        private void TimerActualizadorDePaquetes_Tick(object? sender, EventArgs e) {
+
+            if (Global.InformaciónÚltimasVersiones != null && Global.InformaciónÚltimasVersiones.ImagesVersion != null 
+                && Global.InformaciónÚltimasVersiones.BuildOrdersVersion != null && Global.InformaciónÚltimasVersiones.SoundsVersion != null) { // Si las versiones no son nulas, es porque ya se cargaron con el método asincrónico de Autoupdater.
+
+                TimerActualizadorDePaquetes.Stop();
+                ActualizarPaquetes((int)Global.InformaciónÚltimasVersiones.ImagesVersion, (int)Global.InformaciónÚltimasVersiones.BuildOrdersVersion,
+                    (int)Global.InformaciónÚltimasVersiones.SoundsVersion);
+
+            }
+
+        } // TimerActualizadorDePaquetes_Tick>
+
 
         private void BtnAddIdleTime_Click(object sender, RoutedEventArgs e) => Delay();
 
@@ -1032,14 +1066,24 @@ namespace RTSHelper {
             foreach (var archivoBuildOrder in archivosBuildOrders) {
 
                 var nombreBuildOrder = Path.GetFileNameWithoutExtension(archivoBuildOrder);
-                if (nombreBuildOrder.ToLower() != "tutorial" && RequiereAgregarÓrdenDeEjecución(Preferencias.Game, nombreBuildOrder, out _)) 
-                    CmbBuildOrders.Items.Add(nombreBuildOrder);
+                if (nombreBuildOrder.ToLower() != "tutorial" && RequiereAgregarÓrdenDeEjecución(Preferencias.Game, nombreBuildOrder, out _)) {
 
+                    if (ÓrdenesDeEjecuciónAEliminar.Contains(nombreBuildOrder)) {
+                        IntentarEliminar(archivoBuildOrder);
+                    } else {
+                        CmbBuildOrders.Items.Add(nombreBuildOrder);
+                    }
+                    
+                }
+                    
             }
 
             if (Preferencias.ShowOnlyFavoriteBuildOrders) {
-                if (juegoSinFavoritas && mostrarMensajeNoFavoritas) MostrarInformación($"You don't have favorite build orders for {Preferencias.Game}. All build orders will be shown.");
+
+                if (juegoSinFavoritas && mostrarMensajeNoFavoritas) 
+                    MostrarInformación($"You don't have favorite build orders for {Preferencias.Game}. All build orders will be shown.");
                 MniAlternarVerSoloFavoritos.Header = "👁   Show All";
+
             } else {
                 MniAlternarVerSoloFavoritos.Header = "👁   Show Only Favorites";
             }
@@ -1356,7 +1400,7 @@ namespace RTSHelper {
                 Preferencias = new Settings();
                 var resoluciónRecomendada = ObtenerResoluciónRecomendada();
                 var juegoRecomendado = AOE2Name;
-                Preferencias.EstablecerValoresRecomendados(resoluciónRecomendada, juegoRecomendado, cambióResolución: false);
+                Preferencias.EstablecerValoresRecomendados(resoluciónRecomendada, juegoRecomendado, cambióResolución: false, cambióUIMod: false);
                 var winSettings = new SettingsWindow(primerInicio: true, this);
                 winSettings.ShowDialog();
 
@@ -1364,7 +1408,7 @@ namespace RTSHelper {
             if (Preferencias.StepEndSoundDuration == 0) Preferencias.StepEndSoundDuration = ObtenerDuraciónEndStepSound(ObtenerPresonido(-1));
 
             AplicarPreferencias(iniciando: true);
-            CrearOCompletarScreenCaptureRectangles(cambióResolución: false); // Se debe hacer siempre después de finalizar la lectura de preferencias para agregar los nuevos rectángulos generales (los que no tiene el usuario).
+            CrearOCompletarScreenCaptureRectangles(cambióResolución: false, cambióUIMod: false); // Se debe hacer siempre después de finalizar la lectura de preferencias para agregar los nuevos rectángulos generales (los que no tiene el usuario).
 
         } // LeerPreferencias>
 
@@ -1412,7 +1456,7 @@ namespace RTSHelper {
         } // ReiniciarPasoActual>
 
 
-        private double ObtenerVelocidadJuegoEfectiva(double velocidadJuego) => velocidadJuego / (velocidadJuego == 1.7 ? 1.02 : 1); // En realidad la velocidad 1.7 de AOE2 corresponde aproximadamente a 36 s reales. Lo cual es 2% más lento de lo esperado (60/1.7 = 35.29 s).
+        private double ObtenerVelocidadJuegoEfectiva(double velocidadJuego) => velocidadJuego / (velocidadJuego == 1.7 ? 1.035575048732943 : 1); // En realidad la velocidad 1.7 de AOE2 corresponde aproximadamente a 36.55 s reales en mi computador: se hizo experimento 3 veces hasta 10 minutos = 600 segundos y se tardó 365.5 s reales medidos con cronómetro del celular dando un factor de velocidad de 1.6416. Lo cual es 3,5 % más lento de lo esperado. En algunos computadores más lentos esta velocidad puede ser incluso menor, pero es imposible controlar todos los factores para encontrar un valor exacto para cada uno. Lo mejor que se puede hacer es dejarlo con los valores de mi computador y confiar en que la funcionalidad de sincronización de progreso permita generar una experiencia aceptable para todos los usuarios con computadores de diferentes velocidades.
 
 
         private double ObtenerFactorTimerAJuego() => ObtenerVelocidadJuegoEfectiva(Preferencias.GameSpeed);
@@ -1619,8 +1663,7 @@ namespace RTSHelper {
                 EditandoComboBoxEnCódigo = false;
             }
 
-            OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder, out string? erroresInternos);
-            ActualizarAlertaDeErrores(erroresInternos, altoSuperado: false, limpiarErroresAnteriores: true);
+            CargarPasos();
             if (!iniciando) ActualizarPaso(stop: Estado == EEstado.Stoped, cargandoBuildOrder: true);
             if (EsFavorita(Preferencias.Game, Preferencias.CurrentBuildOrder)) {
                 MniAdicionarEliminarDeFavoritos.Header = " ★    Remove from Favorites";
@@ -1655,12 +1698,234 @@ namespace RTSHelper {
             if (this.Top > SystemParameters.PrimaryScreenHeight || this.Left > SystemParameters.PrimaryScreenWidth) {
 
                 Preferencias.ScreenResolution = ObtenerResoluciónRecomendada();
-                Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false);
+                Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false, cambióUIMod: false);
                 AplicarPreferencias();
 
             }
 
         } // VerificarSiVentanaEsVisible>
+
+
+        private void CargarPasos() {
+
+            reintentarConTutorial:
+            OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder, out string? erroresInternos,
+                out string? rutaBuildOrder);
+
+            if (!File.Exists(rutaBuildOrder) && Preferencias.CurrentBuildOrder != "Tutorial") {
+
+                MostrarError($"{Preferencias.CurrentBuildOrder} build order wasn't found.");
+                Preferencias.CurrentBuildOrder = "Tutorial";
+                CmbBuildOrders.SelectedItem = "Tutorial";
+                goto reintentarConTutorial;
+
+            } else if (!File.Exists(rutaBuildOrder)) {
+                MostrarError($"Tutorial build order wasn't found. Create an empty Tutorial.txt file to avoid this error.");
+                return; // En el caso de que no esté Tutorial.txt. No debería suceder.
+            }
+
+            ActualizarAlertaDeErrores(erroresInternos, altoSuperado: false, limpiarErroresAnteriores: false);
+
+        } // CargarPasos>
+
+
+        private void RecargarBuildOrder() {
+
+            LeerBuildOrders();
+            CargarBuildOrder();
+
+        } // RecargarBuildOrder>
+
+
+        private void Actualizar() {
+
+            AutoUpdater.RunUpdateAsAdmin = false; // Como la descarga original siempre es un Zip que el usuario extrae donde quiera, se asumirá que no se requiere privilegios de administrador para actualizarla.
+            AutoUpdater.ParseUpdateInfoEvent += AutoUpdaterOnParseUpdateInfoEvent;
+            AutoUpdater.Start(ObtenerURLArchivo(TipoArchivoActualización.InformaciónÚltimasVersiones));
+
+        } // Actualizar>
+
+
+        private void RecordarDonación() {
+
+            if (Preferencias.LastDateDonationSuggestion == DateTime.MinValue) {
+                Preferencias.LastDateDonationSuggestion = DateTime.Now;
+            } else {
+
+                if (DateTime.Now > Preferencias.LastDateDonationSuggestion.AddDays(30)) {
+                    DiálogoConHtmlWindow.MostrarDiálogo("", "Donation Reminder", HtmlDonación(30), "Close", mostrarBotónNo: false, altoVentana: 200);
+                    Preferencias.LastDateDonationSuggestion = DateTime.Now;
+                }
+
+            }
+
+        } // RecordarDonación>
+
+
+        private async Task<bool> DescargarYDescomprimirPaquete(HttpClient clienteHtml, int versiónActual, int últimaVersión,
+            TipoArchivoActualización tipoPaquete, List<string>? archivosAEliminar = null) {
+
+            var éxito = false;
+            var urlZip = ObtenerURLArchivo(tipoPaquete, versiónActual, últimaVersión);
+            var rutaZip = Path.Combine(DirectorioTemporal, Path.GetFileName(urlZip) ?? "temp.zip"); // Nunca debería ser "temp.zip", se pone solo para que no sea nulo.
+            bool descargado = await DescargarArchivoAsync(clienteHtml, urlZip, rutaZip);
+
+            if (descargado) {
+
+                try {
+
+                    if (tipoPaquete == TipoArchivoActualización.ÓrdenesDeEjecución) { // Hace la copia de seguridad de las órdenes de ejecución de cada juego soportado. Al ser archivos de texto no importa que se dupliquen las que no se van a cambiar porque no ocuparán mayor espacio.
+
+                        foreach (var juego in Juegos) {
+
+                            var directorioÓrdenesDeEjecución = Settings.ObtenerDirectorioÓrdenesDeEjecución(DirectorioÓrdenesDeEjecución, juego);
+                            var directorioArchivo = Path.Combine(directorioÓrdenesDeEjecución, "Archive");
+                            if (!Directory.Exists(directorioArchivo)) Directory.CreateDirectory(directorioArchivo);
+                            var directorioArchivoHoy = Path.Combine(directorioArchivo, $"{DateAndTime.Now:yyyy-MM-dd}");
+                            if (!Directory.Exists(directorioArchivoHoy)) Directory.CreateDirectory(directorioArchivoHoy);
+                            foreach (var file in Directory.GetFiles(directorioÓrdenesDeEjecución)) {
+
+                                var nombreArchivo = Path.GetFileName(file);
+                                File.Copy(file, Path.Combine(directorioArchivoHoy, nombreArchivo), overwrite: true);
+                                if (archivosAEliminar != null && archivosAEliminar.Contiene(nombreArchivo) && nombreArchivo != "Tutorial.txt") // Nunca elimina Tutorial.txt para evitar casos eventuales en los que esté cargando Tutorial.txt y justo en ese momento se haya eliminado y aún no se haya reemplazado. Solo se hace con esta porque es la órden de ejecución que se selecciona por defecto cuando no se encuentra la que se quiere cargar.
+                                    IntentarEliminar(file); // Solo se eliminan las que se marcan para eliminación.
+
+                            }
+
+                        }
+
+                    }
+                    var directorioAplicación = ModoDesarrollo ? Path.GetDirectoryName(DirectorioÓrdenesDeEjecución) : DirectorioAplicación;
+                    ZipFile.ExtractToDirectory(rutaZip, directorioAplicación, overwriteFiles: true);
+                    éxito = true;
+
+                } catch (Exception) {
+                    éxito = false;
+                }
+                IntentarEliminar(rutaZip);
+
+            } else {
+                éxito = false;
+            }
+
+            return éxito;
+
+        } // DescargarYDescomprimirPaquete>
+
+
+        private async Task<string> ObtenerCambiosPaquete(HttpClient clienteHtml, int últimaVersión, int versiónActual,
+            TipoArchivoActualización tipoPaquete) {
+
+            var tipoArchivoHtml = tipoPaquete switch {
+                TipoArchivoActualización.Imágenes => TipoArchivoActualización.CambiosImágenes,
+                TipoArchivoActualización.Sonidos => TipoArchivoActualización.CambiosSonidos,
+                TipoArchivoActualización.ÓrdenesDeEjecución => TipoArchivoActualización.CambiosÓrdenesDeEjecución,
+                _ => throw new Exception("No esperado valor en ObtenerCambiosPaquete()")
+            };
+
+            var html = "";
+            if (tipoArchivoHtml == TipoArchivoActualización.CambiosÓrdenesDeEjecución) {
+                html += "Your custom build orders won't be changed. If you made changes to the included build orders, you can find your modified " +
+                    $@"build orders in:{Environment.NewLine}{Environment.NewLine}{DirectorioÓrdenesDeEjecución}\{Preferencias.Game}\Archive" +
+                    $@"\{DateAndTime.Now:yyyy-MM-dd}";
+            }
+
+            for (int i = versiónActual; i < últimaVersión; i++) {
+
+                var rutaUrl = ObtenerURLArchivo(tipoArchivoHtml, i, i + 1);
+                var rutaArchivo = Path.Combine(DirectorioTemporal, Path.GetFileName(rutaUrl) ?? "temp.html");
+                var éxito = await DescargarArchivoAsync(clienteHtml, rutaUrl, rutaArchivo);
+                if (éxito) {
+                    html += File.ReadAllText(rutaArchivo);
+                    IntentarEliminar(rutaArchivo);
+                }
+
+            }
+
+            return html + HtmlDonación(24);
+
+        } // ObtenerCambiosPaquete>
+
+
+        private async Task ActualizarPaquete(HttpClient clienteHtml, string nombrePaquete, int últimaVersión, int versiónActual,
+            TipoArchivoActualización tipoPaquete, List<string>? archivosAEliminar = null) {
+
+            var htmlCambiosPaquete = await ObtenerCambiosPaquete(clienteHtml, últimaVersión, versiónActual, tipoPaquete);
+            var actualizar = DiálogoConHtmlWindow.MostrarDiálogo($"Your {nombrePaquete.ToLower()} package version {versiónActual} is outdated." +
+                $" The lastest is version {últimaVersión}. Do you want to update it?", $"{nombrePaquete} Outdated", htmlCambiosPaquete);
+            if (actualizar == MessageBoxResult.No || actualizar == MessageBoxResult.None) return;
+
+            var alMenosUnoFalló = false;
+            if (tipoPaquete == TipoArchivoActualización.Sonidos || tipoPaquete == TipoArchivoActualización.Imágenes) { // Las imágenes y los sonidos se reemplazan secuencialmente por paquetes. Esto permite que cada paquete de actualización sea de un tamaño pequeño.
+
+                ProgresoWindow.Iniciar($"Downloading {nombrePaquete} Package...", últimaVersión - versiónActual + 1, 1);
+                for (int i = versiónActual; i < últimaVersión; i++) {
+
+                    var éxito = await DescargarYDescomprimirPaquete(clienteHtml, i, i + 1, tipoPaquete);
+                    if (!éxito) alMenosUnoFalló = true;
+                    ProgresoWindow.Aumentar();
+
+                }
+                ProgresoWindow.Finalizar();
+
+            } else if (tipoPaquete == TipoArchivoActualización.ÓrdenesDeEjecución) { // Las órdenes de ejecución se reemplazan completamente. Esto permite que se puedan 'eliminar' órdenes de ejecución que ya no harán parte del paquete principal y que se reemplacen los cambios realizados por el usuario. Aunque se hace una copia de seguridad antes de reemplazarlos.
+
+                ProgresoWindow.Iniciar($"Downloading {nombrePaquete} Package...", 2, 1);
+                var éxito = await DescargarYDescomprimirPaquete(clienteHtml, versiónActual, últimaVersión, tipoPaquete, archivosAEliminar);
+                if (!éxito) alMenosUnoFalló = true;
+                ProgresoWindow.Finalizar();
+
+            }
+
+            if (!alMenosUnoFalló) {
+
+                if (tipoPaquete == TipoArchivoActualización.Imágenes) Preferencias.ImagesVersion = últimaVersión;
+                if (tipoPaquete == TipoArchivoActualización.Sonidos) Preferencias.SoundsVersion = últimaVersión;
+                if (tipoPaquete == TipoArchivoActualización.ÓrdenesDeEjecución) Preferencias.BuildOrdersVersion = últimaVersión;
+                Settings.Guardar(Preferencias, RutaPreferencias);
+
+            }
+
+        } // ActualizarPaquete>
+
+
+        private async void ActualizarPaquetes(int últimaVersiónImágenes, int últimaVersiónÓrdenesDeEjecución, int últimaVersiónSonidos) {
+
+            if (!Directory.Exists(DirectorioTemporal)) Directory.CreateDirectory(DirectorioTemporal);
+            var clienteHtml = new HttpClient();
+            var archivosAEliminar = new List<string>(); // Originalmente se incluían aquí las órdenes de ejecución para eliminar, pero se prefirió no incluirlas porque eso habría requerido hacer una consulta adicional al CDN o aumentar el tamaño de last-versions-info.json de manera permantente con las órdenes de ejecución con nombre que ya no se usará. La necesidad de cambiar de nombre a una orden de ejecución es muy eventual, entonces se prefiere evitar esas situaciones y maneja directamente en la actualización del programa. Mientras tanto los usuarios tendrán una órden de ejecución con el nombre antiguo y con contenido vacío. No es tan grave esta situación.
+
+            if (últimaVersiónImágenes > Preferencias.ImagesVersion) {
+                await ActualizarPaquete(clienteHtml, "Images", últimaVersiónImágenes, Preferencias.ImagesVersion, TipoArchivoActualización.Imágenes);
+            }
+
+            if (últimaVersiónSonidos > Preferencias.SoundsVersion) {
+                await ActualizarPaquete(clienteHtml, "Sounds", últimaVersiónSonidos, Preferencias.SoundsVersion, TipoArchivoActualización.Sonidos);
+            }
+
+            if (últimaVersiónÓrdenesDeEjecución > Preferencias.BuildOrdersVersion) {
+
+                await ActualizarPaquete(clienteHtml, "Build Orders", últimaVersiónÓrdenesDeEjecución, Preferencias.BuildOrdersVersion,
+                    TipoArchivoActualización.ÓrdenesDeEjecución, archivosAEliminar); // Se menciona solo la carpeta del juego actual por claridad, aunque en realidad esta copia se hace para todos los juegos.
+                RecargarBuildOrder();
+
+            }
+
+        } // ActualizarPaquetes>
+
+
+        private void AutoUpdaterOnParseUpdateInfoEvent(ParseUpdateInfoEventArgs args) {
+
+            Global.InformaciónÚltimasVersiones = JsonSerializer.Deserialize<InformaciónÚltimasVersiones>(args.RemoteData); // Al cargar los valores en esta variable global, permite que el TimerActualizadorDePaquetes detecte cuando se cargaron y verifique si es necesario actualizar los paquetes. Se hace de esta manera porque cuando se incluía la detección de esos paquetes en este evento, se presentaban varios conflictos de hilos.
+            if (Global.InformaciónÚltimasVersiones.BaseUrl != null) Preferencias.UpdatesBaseUrl = Global.InformaciónÚltimasVersiones.BaseUrl;
+
+            args.UpdateInfo = new UpdateInfoEventArgs {
+                CurrentVersion = Global.InformaciónÚltimasVersiones.Version,
+                ChangelogURL = Global.InformaciónÚltimasVersiones.ChangelogUrl,
+                DownloadURL = Global.InformaciónÚltimasVersiones.Url, // Mandatory = new Mandatory { Value = json.mandatory.value, UpdateMode = json.mandatory.mode, MinimumVersion = json.mandatory.minVersion }, // CheckSum = new CheckSum { Value = json.checksum.value, HashingAlgorithm = json.checksum.hashingAlgorithm }
+            };
+
+        } // AutoUpdaterOnParseUpdateInfoEvent>
 
 
         #endregion Procedimientos y Funciones>

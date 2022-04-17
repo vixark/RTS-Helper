@@ -39,8 +39,6 @@ namespace RTSHelper {
 
         public bool ShowPreviousStep { get; set; } = ShowPreviousStepPredeterminado;
 
-        public string? BuildOrderCustomDirectory { get; set; }
-
         public bool MinimizeOnComplete { get; set; } = false;
 
         public double LineSpacing { get; set; } = 20;
@@ -52,6 +50,8 @@ namespace RTSHelper {
         public bool ShowAlternateNextPreviousStepButton { get; set; } = true;
 
         public bool ShowAlwaysStatsButton { get; set; } = true; // Si es falso, solo se muestra al final.
+
+        public DateTime LastDateDonationSuggestion { get; set; } = DateTime.MinValue;
 
         #endregion Generales>
 
@@ -284,19 +284,27 @@ namespace RTSHelper {
 
         public bool OCRTestMode { get; set; } = false;
 
+        public string UIMod { get; set; } = Global.UIMod.No_Mod.ToString();
+
         #endregion OCR>
+
+
+        #region Actualizaciones
+
+        public int ImagesVersion { get; set; } = 1;
+
+        public int SoundsVersion { get; set; } = 1;
+
+        public int BuildOrdersVersion { get; set; } = 1;
+
+        public string UpdatesBaseUrl = "https://vixark.b-cdn.net/rts-helper"; // Es cambiada cuando se lee desde el Json. Este valor solo sirve para la ejecución inicial. Debería ser cambiado cuando se cambie la ruta del CDN para que los usuarios que lo instalen por primera vez puedan acceder a las actualizaciones automáticas.
+
+        #endregion Actualizaciones>
 
 
         #region Propiedades Autocalculadas
 
-        public string BuildOrdersDirectory {
-            get {
-
-                if (Preferencias.BuildOrderCustomDirectory != null) return Preferencias.BuildOrderCustomDirectory;
-                return ObtenerDirectorioÓrdenesDeEjecución(DirectorioÓrdenesDeEjecución, Game);
-
-            }
-        }
+        public string BuildOrdersDirectory { get => ObtenerDirectorioÓrdenesDeEjecución(DirectorioÓrdenesDeEjecución, Game); }
 
         public string NamesDirectory {
             get {
@@ -462,7 +470,7 @@ namespace RTSHelper {
         } // EstablecerValoresRecomendadosAOE2>
 
 
-        public void EstablecerValoresRecomendados(string resolución, string juego, bool cambióResolución) {
+        public void EstablecerValoresRecomendados(string resolución, string juego, bool cambióResolución, bool cambióUIMod) {
 
             Game = juego;
             ScreenResolution = resolución;
@@ -470,7 +478,7 @@ namespace RTSHelper {
             if (juego == AOE2Name) {
 
                 EstablecerValoresRecomendadosAOE2(resolución);
-                if (cambióResolución) CrearOCompletarScreenCaptureRectangles(cambióResolución: true);
+                if (cambióResolución || cambióUIMod) CrearOCompletarScreenCaptureRectangles(cambióResolución: true, cambióUIMod);
 
             } else if (juego == AOE4Name) {
 

@@ -30,6 +30,8 @@ namespace RTSHelper {
 
         public bool Activado { get; set; } = false;
 
+        public bool ActualizandoUIMods { get; set; } = false;
+
         private MainWindow VentanaPrincipal { get; set; }
 
         public bool ActualizarDuraciónPasoAlSalir { get; set; } = false;
@@ -49,6 +51,7 @@ namespace RTSHelper {
             LblVersion.Content = $"{versión?.Major}.{versión?.Minor}{(versión?.Build == 0 ? "" : $".{versión?.Build.ToString()}")}";
             TimerPruebasOCR.Interval = TimeSpan.FromMilliseconds(300); // Se hace un poco más frecuente para que se visualicen los cambios más rápidamente. En el modo Pruebas OCR no es tan importante el rendimiento.
             TimerPruebasOCR.Tick += new EventHandler(TimerDetecciónPruebasOCR_Tick);
+            LnkDonate.NavigateUri = new Uri(EnlaceDonación);
 
             CargarValores(primerInicio);
             if (primerInicio) {
@@ -61,7 +64,6 @@ namespace RTSHelper {
                 LblBackColor.Visibility = Visibility.Collapsed;
                 LblFontColor.Visibility = Visibility.Collapsed;
                 LblOpacity.Visibility = Visibility.Collapsed;
-                SpnBuildOrderPath.Visibility = Visibility.Collapsed;
                 TbiNotifications.Visibility = Visibility.Collapsed;
                 TbiImages.Visibility = Visibility.Collapsed;
                 TbiDisplayPriority.Visibility = Visibility.Collapsed;
@@ -71,8 +73,8 @@ namespace RTSHelper {
                 TbiOverrides.Visibility = Visibility.Collapsed;
                 TbiControl.Visibility = Visibility.Collapsed;
                 TbiOCR.Visibility = Visibility.Collapsed;
-                Height = 320;
-                TbcPreferencias.Height = 210;
+                Height = 350;
+                TbcPreferencias.Height = 240;
                 Width = 350;
                 LblStepDuration.Visibility = Visibility.Collapsed;
                 TxtStepDuration.Visibility = Visibility.Collapsed;
@@ -93,7 +95,6 @@ namespace RTSHelper {
             CmbGame.Text = Preferencias.Game;
             CmbGameSpeed.Text = Preferencias.ObtenerGameSpeedText(Preferencias.Game);
             TxtOpacity.Text = Preferencias.Opacity.ToString();
-            TxtBuildOrderPath.Text = Preferencias.BuildOrderCustomDirectory;    
             TxtStepFontSize.Text = Preferencias.CurrentStepFontSize.ToString();
             TxtNextPreviousStepFontSize.Text = Preferencias.NextPreviousStepFontSize.ToString();
             ChkShowNextStep.IsChecked = Preferencias.ShowNextStep;
@@ -167,6 +168,7 @@ namespace RTSHelper {
             ChkOCRTestMode.IsChecked = Preferencias.OCRTestMode;
 
             AgregarIdiomas(CmbGameLanguage, Preferencias.GameLanguage, IdiomasJuego);
+            AgregarUIMods();
             CargarVelocidadEjecución();
             CargarEscalaInterface();
 
@@ -595,6 +597,47 @@ namespace RTSHelper {
         } // CargarPrioridadesNombres>
 
 
+        private void AgregarUIMods() {
+
+            ActualizandoUIMods = true;
+            var anteriorUIMod = Preferencias.UIMod;
+            CmbUIMod.Items.Clear();
+
+            if (UIMods.ContainsKey(Preferencias.Game)) {
+
+                ComboBoxItem? selectedCbi = null;
+                ComboBoxItem? noModCbi = null;
+                foreach (var mod in UIMods[Preferencias.Game]) {
+
+                    var cmi = new ComboBoxItem() { Content = mod.ToString().Replace("_", " "), Tag = mod };
+                    CmbUIMod.Items.Add(cmi);
+                    if (mod.ToString().ToLower() == Preferencias.UIMod.ToLower()) selectedCbi = cmi;
+                    if (mod.ToString() == UIMod.No_Mod.ToString()) noModCbi = cmi;
+
+                }
+
+                if (selectedCbi != null) {
+                    CmbUIMod.SelectedItem = selectedCbi;
+                } else {
+                    CmbUIMod.SelectedItem = noModCbi;
+                }
+
+            } else {
+
+                var cbi = new ComboBoxItem() { Content = UIMod.No_Mod.ToString().Replace("_", " "), Tag = UIMod.No_Mod };
+                CmbUIMod.Items.Add(cbi);
+                CmbUIMod.SelectedItem = cbi;
+
+            }
+
+            if (CmbUIMod.SelectedItem is ComboBoxItem cbi2) Preferencias.UIMod = cbi2.Tag?.ToString() ?? UIMod.No_Mod.ToString();
+            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false, 
+                cambióUIMod: anteriorUIMod != Preferencias.UIMod);
+            ActualizandoUIMods = false;
+
+        } // AgregarUIMods>
+
+
         private void AgregarIdiomas(Controles.ComboBox cmbIdioma, string idiomaSeleccionado, Dictionary<string, string> idiomas) {
 
             foreach (var kv in idiomas) {
@@ -774,8 +817,7 @@ namespace RTSHelper {
         } // BtnNextPreviousStepFontColor_Click>
 
 
-        private void BtnSave_Click(object sender, RoutedEventArgs e) 
-            => this.Close();
+        private void BtnSave_Click(object sender, RoutedEventArgs e) => this.Close();
 
 
         private void Window_Closed(object sender, EventArgs e) {
@@ -792,8 +834,9 @@ namespace RTSHelper {
         private void CmbGame_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             if (!Activado) return;
-            Preferencias.Game = ObtenerSeleccionadoEnCombobox(e); 
-            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false);
+            Preferencias.Game = ObtenerSeleccionadoEnCombobox(e);
+            AgregarUIMods();
+            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false, cambióUIMod: false); // Esta instrucción se repite dentro de AgregarUIMods() con cambióUIMod = true. Solo genera un poco de menos rendimiento, nada grave.
             TxtStepDuration.Text = Preferencias.StepDuration.ToString(); // Es el único valor que se actualiza en la interface de preferencias después de haber cambiado el juego. No es lo más óptimo, pero de todas maneras lo ideal es que cada archivo de txt de build orders traiga su propio StepDuration.
             VentanaPrincipal.AplicarPreferencias();
             CrearEntidadesYNombres();
@@ -821,7 +864,7 @@ namespace RTSHelper {
 
             if (!Activado) return;
             Preferencias.ScreenResolution = ObtenerSeleccionadoEnCombobox(e);
-            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: true);
+            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: true, cambióUIMod: false);
             VentanaPrincipal.AplicarPreferencias();
 
         } //CmbResolution_SelectionChanged>
@@ -878,26 +921,6 @@ namespace RTSHelper {
             VentanaPrincipal.AplicarPreferencias();
 
         } // ChkShowPreviousStep_Checked>
-
-
-        private void TxtBuildOrderPath_TextChanged(object sender, TextChangedEventArgs e) {
-
-            if (!Activado) return;
-            if (Directory.Exists(TxtBuildOrderPath.Text)) {
-
-                Preferencias.BuildOrderCustomDirectory = TxtBuildOrderPath.Text;
-                VentanaPrincipal.LeerBuildOrders();
-                VentanaPrincipal.CargarBuildOrder();
-
-            } else if (string.IsNullOrEmpty(TxtBuildOrderPath.Text)) { 
-
-                Preferencias.BuildOrderCustomDirectory = null;
-                VentanaPrincipal.LeerBuildOrders();
-                VentanaPrincipal.CargarBuildOrder();
-
-            } 
-
-        } // TxtBuildOrderPath_TextChanged>
 
 
         private void CmbEndSound_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -1025,19 +1048,7 @@ namespace RTSHelper {
         } // TxtStepDuration_TextChanged>
 
 
-        private void BtnBuildOrderPath_Click(object sender, RoutedEventArgs e) {
-
-            var folderDialog = new FolderBrowserDialog();
-            folderDialog.SelectedPath = TxtBuildOrderPath.Text;
-            if (string.IsNullOrEmpty(folderDialog.SelectedPath)) folderDialog.SelectedPath = Preferencias.BuildOrdersDirectory;
-            var respuesta = folderDialog.ShowDialog();
-            if (respuesta != System.Windows.Forms.DialogResult.Cancel) TxtBuildOrderPath.Text = folderDialog.SelectedPath;
-
-        } // BtnBuildOrderPath_Click>
-
-
-        private void Lnk_Click(object sender, RoutedEventArgs e) 
-            => Process.Start(new ProcessStartInfo(((Hyperlink)sender).NavigateUri.ToString()) { UseShellExecute = true });
+        private void Lnk_Click(object sender, RoutedEventArgs e) => AbrirUrl(((Hyperlink)sender).NavigateUri.ToString());
 
 
         private void ChkCurrentStepFontBold_Checked(object sender, RoutedEventArgs e) {
@@ -1185,6 +1196,15 @@ namespace RTSHelper {
 
             if (!Activado) return;
             Preferencias.GameLanguage = ObtenerSeleccionadoEnCombobox(e, tag: true);
+
+        } // CmbGameLanguage_SelectionChanged>
+
+
+        private void CmbUIMod_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            if (!Activado || ActualizandoUIMods) return;
+            Preferencias.UIMod = ObtenerSeleccionadoEnCombobox(e, tag: true);
+            AgregarUIMods();
 
         } // CmbGameLanguage_SelectionChanged>
 
