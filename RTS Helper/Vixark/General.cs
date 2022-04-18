@@ -427,6 +427,16 @@ namespace Vixark {
         } // ObtenerImageSource>
 
 
+        /// <summary>
+        /// Encapsulación de acceso rápido para convertir un texto en una enumeración.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="texto"></param>
+        /// <returns></returns>
+        public static T AEnumeración<T>(this string texto, bool ignorarCapitalización = true) where T : struct, Enum 
+            => (T)Enum.Parse(typeof(T), texto, ignorarCapitalización);
+
+
     } // General>
 
 

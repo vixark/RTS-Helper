@@ -306,13 +306,13 @@ namespace RTSHelper {
             Age_of_Empires_II_Age, Age_of_Empires_II_Game_Start
         }
 
-        public enum UIMod : int { // Nunca cambiar el nombre, se almacenan como texto en preferencias. Al agregarlo aquí también se debe agregar a UIMods y al código que establece los rectángulos según el Mod. No se usará el nombre del juego en el nombre del mod de manera predeterminada porque es improbable que se repita en otros juegos. De todas maneras si se llegara a repetir, no hay problema porque los valores se manejan diferentes según el juego.
+        public enum UIMod : int { // Nunca cambiar el nombre, se almacenan como texto en preferencias. Al agregarlo aquí también se debe agregar a UIMods y a CrearOCompletarScreenCaptureRectangles(). No se usará el nombre del juego en el nombre del mod de manera predeterminada porque es improbable que se repita en otros juegos. De todas maneras si se llegara a repetir, no hay problema porque los valores se manejan diferentes según el juego.
             No_Mod, Anne_HK_Better_Resource_Panel_and_Idle_Villager_Icon, Anne_HK_Better_Resource_Panel_TheViper_Version, 
             KoBHV_Brand_New_Resource_Panel_with_Annoying_Idle_Villager_Button, KoBHV_Brand_New_Resource_Panel_Standard_Version,
             Anne_HK_Better_Resource_Panel_Top_Center_Version, Streamlined_UI, PointiBoi_Minimalistic_UI, AllYourBase_Maximum_Advantage_UI,
             Custom_UI_Centered_Modern_Black_and_White, XavilUI, Villese_UI, Bottom_Side_UI, Resource_Bar_at_Bottom, Bottom_Resource_Panel
-        }
-
+        } // Mods probados que no cambian la posición de los elementos: Transparent UI, Transparent Default UI, 2331_middle mini-map and lower score panel for elders, Transparent UI - Centered Bigger Minimap - Raised Control Groups - Slightly Raised Score Panel, 14752_Custom UI - Opaque Anthrazite.
+        
         public static List<ScreenCaptureText> RectángulosAfectadosPorEscalaInterface = new List<ScreenCaptureText> {
             ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99,
             ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, ScreenCaptureText.Age_of_Empires_II_Wood, ScreenCaptureText.Age_of_Empires_II_Food,
@@ -2342,7 +2342,7 @@ namespace RTSHelper {
 
         public static string? ExtraerTextoDePantalla(ScreenCaptureText tipo, ParámetrosExtracción parámetros, out float confianza) {
 
-            using var bmp = CapturaDePantalla.ObtenerBitmap(ObtenerRectánguloTextoEnPantalla(tipo), parámetros.Negativo, parámetros.BlancoYNegro,
+            using var bmp = CapturaDePantalla.ObtenerBitmap(ObtenerRectángulo(tipo), parámetros.Negativo, parámetros.BlancoYNegro,
                 parámetros.Escala, parámetros.Luminosidad, parámetros.Contraste, parámetros.ModoInterpolación, parámetros.FormatoPixeles);
             var texto = OCR.ObtenerTexto(bmp, parámetros.SoloNúmeros, parámetros.PermitirUnCarácter, out confianza);
 
@@ -2364,7 +2364,7 @@ namespace RTSHelper {
 
         public static SDrw.Color ExtraerColorFondo(ScreenCaptureText tipo) {
 
-            using var bmp = CapturaDePantalla.ObtenerBitmap(ObtenerRectánguloTextoEnPantalla(tipo), negativo: false, blancoYNegro: false, escala: 1, 
+            using var bmp = CapturaDePantalla.ObtenerBitmap(ObtenerRectángulo(tipo), negativo: false, blancoYNegro: false, escala: 1, 
                 luminosidad: 1, contraste: 1, InterpolationMode.Low, DImg.PixelFormat.Format32bppArgb);
             var coloresEsquinas = new List<SDrw.Color>();
             coloresEsquinas.Add(bmp.GetPixel(0, 0));
@@ -2533,7 +2533,7 @@ namespace RTSHelper {
         } // LeerProgreso>
 
 
-        public static SDrw.RectangleF ObtenerRectánguloTextoEnPantalla(ScreenCaptureText tipo) {
+        public static SDrw.RectangleF ObtenerRectángulo(ScreenCaptureText tipo) {
 
             if (Preferencias.ScreenCaptureRectangles == null) CrearOCompletarScreenCaptureRectangles(cambióResolución: false, cambióUIMod: false);
             if (Preferencias.ScreenCaptureRectangles!.ContainsKey(tipo)) { // Después de CrearOCompletarScreenCaptureRectangles() se asegura que Preferencias.ScreenCaptureRectangles no es nulo.
@@ -2546,10 +2546,29 @@ namespace RTSHelper {
                 return new SDrw.RectangleF(0, 0, 0.1f, 0.1f); // Un rectángulo cualquiera para que no saque error.
             }
 
-        } // ObtenerRectánguloTextoEnPantalla>
+        } // ObtenerRectángulo>
 
 
         public static void CrearOCompletarScreenCaptureRectangles(bool cambióResolución, bool cambióUIMod) {
+
+            void actualizarRectánguloAOE2(ScreenCaptureText tipo) {
+
+                if (Preferencias.ScreenCaptureRectangles == null) return;
+                var rectángulo = ObtenerRectánguloRecomendado(tipo, Preferencias.ScreenResolution, Preferencias.UIMod);
+                if (!Preferencias.ScreenCaptureRectangles.ContainsKey(tipo)) {
+                    Preferencias.ScreenCaptureRectangles.Add(tipo, rectángulo);
+                } else {
+                    Preferencias.ScreenCaptureRectangles[tipo] = rectángulo;
+                }
+
+            } // actualizarRectánguloAOE2>
+
+            void agregarRectángulo(ScreenCaptureText tipo) {
+
+                if (Preferencias.ScreenCaptureRectangles == null) return;
+                Preferencias.ScreenCaptureRectangles.Add(tipo, ObtenerRectánguloRecomendado(tipo, Preferencias.ScreenResolution));
+
+            } // agregarRectángulo>
 
             var cambió = false;
             if (Preferencias.ScreenCaptureRectangles == null) {
@@ -2559,102 +2578,278 @@ namespace RTSHelper {
 
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Game_Start)) {
                 cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Game_Start,
-                    new SDrw.RectangleF(2F / 2560, 1416F / 1440, 22F / 2560, 22F / 1440));
+                agregarRectángulo(ScreenCaptureText.Age_of_Empires_II_Game_Start);
             }
 
             if (cambióUIMod || !Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9)) {
-
-                cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, 
-                    new SDrw.RectangleF(582F / 2560, 49F / 1440, 13F / 2560, 17F / 1440)); // El algoritmo de OCR es inestable, cambia con el recorte realizado. Se debe procurar hacer siempre el mismo recorte. Si se cambia el rectángulo de recorte, se deben verificar la estabilidad del algoritmo con todos los números del rango aplicable.
-
+                cambió = true;        
+                actualizarRectánguloAOE2(ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9);
             }
 
             if (cambióUIMod || cambióResolución || !Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99)) {
-
                 cambió = true;
-                var xSerif = 573F / 2560;
-                var xSmoothSerif = 571F / 2560;
-                var x = Preferencias.ScreenResolution == "1920x1080" ? xSmoothSerif : xSerif; // La resolución 1920x1080 fuerza la fuente Smooth Serif, entonces se requiere un recorte diferente.
-                var rectángulo = new SDrw.RectangleF(x, 48F / 1440, 23F / 2560, 17F / 1440);
-
-                if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99)) {
-                    Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, rectángulo);
-                } else {
-
-                    var xActual = Preferencias.ScreenCaptureRectangles[ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99].X;
-                    if (xActual == xSerif || xActual == xSmoothSerif) 
-                        Preferencias.ScreenCaptureRectangles[ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99] = rectángulo; // Evita cambiarlo para los usuarios que lo tengan personalizado. La manera más fácil de reconocer que no lo tienen personalizado es que el x sea uno de los predeterminados.
-
-                }
-                
+                actualizarRectánguloAOE2(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99);
             }          
 
-            if (cambióUIMod || cambióResolución || !Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999)) {
-                
+            if (cambióUIMod || cambióResolución || !Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999)) {   
                 cambió = true;
-                var xSerif = 565F / 2560;
-                var xSmoothSerif = 563F / 2560;
-                var x = Preferencias.ScreenResolution == "1920x1080" ? xSmoothSerif : xSerif; // La resolución 1920x1080 fuerza la fuente Smooth Serif, entonces se requiere un recorte diferente.
-                var rectángulo = new SDrw.RectangleF(x, 49F / 1440, 30F / 2560, 17F / 1440);
-                if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999)) {
-                    Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, rectángulo);
-                } else {
-
-                    var xActual = Preferencias.ScreenCaptureRectangles[ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999].X;
-                    if (xActual == xSerif || xActual == xSmoothSerif)
-                        Preferencias.ScreenCaptureRectangles[ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999] = rectángulo; // Evita cambiarlo para los usuarios que lo tengan personalizado. La manera más fácil de reconocer que no lo tienen personalizado es que el x sea uno de los predeterminados.
-
-                }
-
+                actualizarRectánguloAOE2(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999);
             }
             
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseM)) {
                 cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseM,
-                    new SDrw.RectangleF(1113F / 2560, 675F / 1440, 335F / 2560, 91F / 1440));
+                agregarRectángulo(ScreenCaptureText.Age_of_Empires_II_PauseM);
             }
 
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseL)) {
                 cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseL,
-                    new SDrw.RectangleF(1084F / 2560, 672F / 1440, 393F / 2560, 95F / 1440));
+                agregarRectángulo(ScreenCaptureText.Age_of_Empires_II_PauseL);
             }
 
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseF3XS)) {
                 cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseF3XS,
-                    new SDrw.RectangleF(1310F / 2560, 682F / 1440, 79F / 2560, 71F / 1440));
+                agregarRectángulo(ScreenCaptureText.Age_of_Empires_II_PauseF3XS);
             }
 
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseF3S)) {
                 cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseF3S,
-                    new SDrw.RectangleF(1295F / 2560, 682F / 1440, 79F / 2560, 71F / 1440));
+                agregarRectángulo(ScreenCaptureText.Age_of_Empires_II_PauseF3S);
             }
 
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseF3M)) {
                 cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseF3M,
-                    new SDrw.RectangleF(1322F / 2560, 682F / 1440, 79F / 2560, 71F / 1440));
+                agregarRectángulo(ScreenCaptureText.Age_of_Empires_II_PauseF3M);
             }
 
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseF3L)) {
                 cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseF3L,
-                    new SDrw.RectangleF(1351F / 2560, 682F / 1440, 79F / 2560, 71F / 1440));
+                agregarRectángulo(ScreenCaptureText.Age_of_Empires_II_PauseF3L);
             }
 
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseF3XL)) {
                 cambió = true;
-                Preferencias.ScreenCaptureRectangles.Add(ScreenCaptureText.Age_of_Empires_II_PauseF3XL,
-                    new SDrw.RectangleF(1417F / 2560, 682F / 1440, 79F / 2560, 71F / 1440));
+                agregarRectángulo(ScreenCaptureText.Age_of_Empires_II_PauseF3XL);
             }
 
             if (cambió) Settings.Guardar(Preferencias, RutaPreferencias);
 
         } // CrearOCompletarScreenCaptureRectangles>
+
+
+        public static SDrw.RectangleF ObtenerRectánguloRecomendado(ScreenCaptureText tipo, string resolución, string uiModStr = "No_Mod") {
+
+            var xDesfaceAOE2V = (resolución.Contains("x1080") || resolución.Contains("x1050") || resolución.Contains("x1024") || 
+                resolución.Contains("x960") || resolución.Contains("x900") || resolución.Contains("x864") || resolución.Contains("x800") || 
+                resolución.Contains("x768") || resolución.Contains("x720") || resolución.Contains("x600")) ? (571.5F - 573F) / 2560 : 0; // La resolución 1920x1080 o menor fuerza la fuente Smooth Serif, entonces se requiere un recorte diferente.
+            if (xDesfaceAOE2V != 0 && tipo == ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999) xDesfaceAOE2V += 1F / 2560; // Un pequeño ajuste números más grandes.
+            if (xDesfaceAOE2V != 0 && tipo == ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9) xDesfaceAOE2V = 0; // Para un solo carácter no se realiza el ajuste con xDesfaceAOE2V.
+
+            var rectángulo = new SDrw.RectangleF();
+            var uiMod = uiModStr.AEnumeración<UIMod>();
+    
+            switch (tipo) {
+                case ScreenCaptureText.Age_of_Empires_II_PauseF3XS:
+                    rectángulo = new SDrw.RectangleF(1310F / 2560, 682F / 1440, 79F / 2560, 71F / 1440);
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_PauseF3S:
+                    rectángulo = new SDrw.RectangleF(1295F / 2560, 682F / 1440, 79F / 2560, 71F / 1440);
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_PauseF3M:
+                    rectángulo = new SDrw.RectangleF(1322F / 2560, 682F / 1440, 79F / 2560, 71F / 1440);
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_PauseF3L:
+                    rectángulo = new SDrw.RectangleF(1351F / 2560, 682F / 1440, 79F / 2560, 71F / 1440);
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_PauseF3XL:
+                    rectángulo = new SDrw.RectangleF(1417F / 2560, 682F / 1440, 79F / 2560, 71F / 1440);
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_PauseM:
+                    rectángulo = new SDrw.RectangleF(1113F / 2560, 675F / 1440, 335F / 2560, 91F / 1440);
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_PauseL:
+                    rectángulo = new SDrw.RectangleF(1084F / 2560, 672F / 1440, 393F / 2560, 95F / 1440);
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9:
+
+                    rectángulo = new SDrw.RectangleF(582F / 2560, 49F / 1440, 13F / 2560, 17F / 1440); // El algoritmo de OCR es inestable, cambia con el recorte realizado. Se debe procurar hacer siempre el mismo recorte. Si se cambia el rectángulo de recorte, se deben verificar la estabilidad del algoritmo con todos los números del rango aplicable.
+                    switch (uiMod) {
+                        case UIMod.No_Mod:
+                            break;
+                        case UIMod.Anne_HK_Better_Resource_Panel_and_Idle_Villager_Icon:
+                        case UIMod.Anne_HK_Better_Resource_Panel_TheViper_Version:
+                        case UIMod.KoBHV_Brand_New_Resource_Panel_with_Annoying_Idle_Villager_Button:
+                        case UIMod.KoBHV_Brand_New_Resource_Panel_Standard_Version:
+                            rectángulo = new SDrw.RectangleF(0.2255F - xDesfaceAOE2V, 0.029F, 0.008F, 0.014F);
+                            break;
+                        case UIMod.Anne_HK_Better_Resource_Panel_Top_Center_Version:
+                            rectángulo = new SDrw.RectangleF(0.4755F - xDesfaceAOE2V, 0.029F, 0.008F, 0.014F);
+                            break;
+                        case UIMod.Streamlined_UI:
+                            rectángulo = new SDrw.RectangleF(0.2257F - xDesfaceAOE2V, 0.034F, 0.008F, 0.013F);
+                            break;
+                        case UIMod.PointiBoi_Minimalistic_UI:
+                            rectángulo = new SDrw.RectangleF(0.2263F - xDesfaceAOE2V, 0.032F, 0.008F, 0.013F);
+                            break;
+                        case UIMod.AllYourBase_Maximum_Advantage_UI:
+                            MostrarError("The mod AllYourBase Maximum Advantage UI is not compatible with RTS Helper. Please ask the mod author to make the font of villager count bigger."); // Solo se muestra aquí para no repetir el error varias veces.
+                            rectángulo.X = 0.3208F; rectángulo.Y = 0.816F;
+                            break;
+                        case UIMod.Custom_UI_Centered_Modern_Black_and_White:
+                            rectángulo = new SDrw.RectangleF(0.391F - xDesfaceAOE2V, 0.8325F, 0.008F, 0.012F);
+                            break;
+                        case UIMod.XavilUI:
+                            rectángulo.X = 0.488F; rectángulo.Y = 0.8135F;
+                            break;
+                        case UIMod.Villese_UI:
+                            rectángulo.X = 0.264F; rectángulo.Y = 0.814F;
+                            break;
+                        case UIMod.Bottom_Side_UI:
+                            rectángulo.X = 0.468F; rectángulo.Y = 0.821F;
+                            break;
+                        case UIMod.Resource_Bar_at_Bottom:
+                            rectángulo.Y = 0.812F;
+                            break;
+                        case UIMod.Bottom_Resource_Panel:
+                            rectángulo.X = 0.264F; rectángulo.Y = 0.814F;
+                            break;
+                        default:
+                            break;
+                    }
+                    rectángulo.X = rectángulo.X + xDesfaceAOE2V;
+                    break;
+
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99:
+
+                    rectángulo = new SDrw.RectangleF(573F / 2560, 48F / 1440, 23F / 2560, 17F / 1440); // Desface de x comparado con 0-9: -0,0035 a -0,0038 para el panel estandar sin cambio de letra ni tamaño.
+                    switch (uiMod) {
+                        case UIMod.No_Mod:
+                            break;
+                        case UIMod.Anne_HK_Better_Resource_Panel_and_Idle_Villager_Icon:
+                        case UIMod.Anne_HK_Better_Resource_Panel_TheViper_Version:
+                        case UIMod.KoBHV_Brand_New_Resource_Panel_with_Annoying_Idle_Villager_Button:
+                        case UIMod.KoBHV_Brand_New_Resource_Panel_Standard_Version:
+                            rectángulo = new SDrw.RectangleF(0.221F - xDesfaceAOE2V, 0.029F, 0.012F, 0.014F); // Los recuadors deben ser con amplitud a los lados para que no se descuadre en otras resoluciones y con poca altura par que no confunda el 7 con el 1. Locuras de la librería de OCR...
+                            break;
+                        case UIMod.Anne_HK_Better_Resource_Panel_Top_Center_Version:
+                            rectángulo = new SDrw.RectangleF(0.471F - xDesfaceAOE2V, 0.029F, 0.012F, 0.014F); // Los recuadors deben ser con amplitud a los lados para que no se descuadre en otras resoluciones y con poca altura par que no confunda el 7 con el 1. Locuras de la librería de OCR...
+                            break;
+                        case UIMod.Streamlined_UI:
+                            rectángulo = new SDrw.RectangleF(0.2215F - xDesfaceAOE2V, 0.034F, 0.012F, 0.013F);
+                            break;
+                        case UIMod.PointiBoi_Minimalistic_UI:
+                            rectángulo = new SDrw.RectangleF(0.222F - xDesfaceAOE2V, 0.032F, 0.012F, 0.013F);
+                            break;
+                        case UIMod.AllYourBase_Maximum_Advantage_UI:
+                            rectángulo.X = 0.3177F; rectángulo.Y = 0.816F;
+                            break;
+                        case UIMod.Custom_UI_Centered_Modern_Black_and_White:
+                            rectángulo = new SDrw.RectangleF(0.3907F - xDesfaceAOE2V, 0.8325F, 0.012F, 0.012F);
+                            break;
+                        case UIMod.XavilUI:
+                            rectángulo.X = 0.48448437F; rectángulo.Y = 0.8135F;
+                            break;
+                        case UIMod.Villese_UI:
+                            rectángulo.X = 0.2603F; rectángulo.Y = 0.814F;
+                            break;
+                        case UIMod.Bottom_Side_UI:
+                            rectángulo.X = 0.4642F; rectángulo.Y = 0.821F;
+                            break;
+                        case UIMod.Resource_Bar_at_Bottom:
+                            rectángulo.Y = 0.812F;
+                            break;
+                        case UIMod.Bottom_Resource_Panel:
+                            rectángulo.X = 0.2602F; rectángulo.Y = 0.814F;
+                            break;
+                        default:
+                            break;
+                    }
+                    rectángulo.X = rectángulo.X + xDesfaceAOE2V;
+                    break;
+
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999:
+
+                    rectángulo = new SDrw.RectangleF(565F / 2560, 49F / 1440, 30F / 2560, 17F / 1440); // Desface de x comparado con -0,0066 para el panel estandar sin cambio de letra ni tamaño.
+                    switch (uiMod) {
+                        case UIMod.No_Mod:
+                            break;
+                        case UIMod.Anne_HK_Better_Resource_Panel_and_Idle_Villager_Icon:
+                        case UIMod.Anne_HK_Better_Resource_Panel_TheViper_Version:
+                        case UIMod.KoBHV_Brand_New_Resource_Panel_with_Annoying_Idle_Villager_Button:
+                        case UIMod.KoBHV_Brand_New_Resource_Panel_Standard_Version:
+                            rectángulo = new SDrw.RectangleF(0.2165F - xDesfaceAOE2V, 0.029F, 0.016F, 0.014F);
+                            break;
+                        case UIMod.Anne_HK_Better_Resource_Panel_Top_Center_Version:
+                            rectángulo = new SDrw.RectangleF(0.4665F - xDesfaceAOE2V, 0.029F, 0.016F, 0.014F);
+                            break;
+                        case UIMod.Streamlined_UI:
+                            rectángulo = new SDrw.RectangleF(0.217F - xDesfaceAOE2V, 0.034F, 0.016F, 0.013F);
+                            break;
+                        case UIMod.PointiBoi_Minimalistic_UI:
+                            rectángulo = new SDrw.RectangleF(0.2175F - xDesfaceAOE2V, 0.032F, 0.016F, 0.013F);
+                            break;
+                        case UIMod.AllYourBase_Maximum_Advantage_UI:
+                            rectángulo.X = 0.3146F; rectángulo.Y = 0.816F;
+                            break;
+                        case UIMod.Custom_UI_Centered_Modern_Black_and_White:
+                            rectángulo = new SDrw.RectangleF(0.3915F - xDesfaceAOE2V, 0.8325F, 0.015F, 0.012F);
+                            break;
+                        case UIMod.XavilUI:
+                            rectángulo.X = 0.481F; rectángulo.Y = 0.8135F;
+                            break;
+                        case UIMod.Villese_UI:
+                            rectángulo.X = 0.2572F; rectángulo.Y = 0.814F;
+                            break;
+                        case UIMod.Bottom_Side_UI:
+                            rectángulo.X = 0.4608F; rectángulo.Y = 0.821F;
+                            break;
+                        case UIMod.Resource_Bar_at_Bottom:
+                            rectángulo.Y = 0.812F;
+                            break;
+                        case UIMod.Bottom_Resource_Panel:
+                            rectángulo.X = 0.257F; rectángulo.Y = 0.814F;
+                            break;
+                        default:
+                            break;
+                    }
+                    rectángulo.X = rectángulo.X + xDesfaceAOE2V;
+                    break;
+
+                case ScreenCaptureText.Age_of_Empires_II_Wood:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Food:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Gold:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Stone:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Population:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Maximum_Population:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_on_Wood:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_on_Food:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_on_Gold:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Villagers_on_Stone:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Timer:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Speed:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Age:
+                    break;
+                case ScreenCaptureText.Age_of_Empires_II_Game_Start:
+                    rectángulo = new SDrw.RectangleF(2F / 2560, 1416F / 1440, 22F / 2560, 22F / 1440);
+                    break;
+                default:
+                    break;
+            }
+
+            return rectángulo;
+
+        } // ObtenerRectánguloRecomendado>
 
 
         public static ParámetrosExtracción ObtenerParámetrosOCR(ScreenCaptureText tipo, int númeroRecomendado) {

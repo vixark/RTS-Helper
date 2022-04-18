@@ -20,6 +20,8 @@ using System.Reflection;
 using System.Windows.Threading;
 using System.Drawing.Drawing2D;
 
+
+
 namespace RTSHelper {
 
 
@@ -168,7 +170,7 @@ namespace RTSHelper {
             ChkOCRTestMode.IsChecked = Preferencias.OCRTestMode;
 
             AgregarIdiomas(CmbGameLanguage, Preferencias.GameLanguage, IdiomasJuego);
-            AgregarUIMods();
+            AgregarUIMods(Preferencias.UIMod);
             CargarVelocidadEjecución();
             CargarEscalaInterface();
 
@@ -185,7 +187,7 @@ namespace RTSHelper {
 
                     void obtenerBitmapYMostrar(ScreenCaptureText tipoRectángulo) {
 
-                        using var bmp = CapturaDePantalla.ObtenerBitmap(ObtenerRectánguloTextoEnPantalla(tipoRectángulo), false, false, 1, 1, 1, 
+                        using var bmp = CapturaDePantalla.ObtenerBitmap(ObtenerRectángulo(tipoRectángulo), false, false, 1, 1, 1, 
                             InterpolationMode.HighQualityBicubic, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         if (RectángulosImágenesPrueba.ContainsKey(tipoRectángulo))
                             RectángulosImágenesPrueba[tipoRectángulo].Source = ObtenerImageSource(bmp);
@@ -441,15 +443,16 @@ namespace RTSHelper {
                     VerticalContentAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0), 
                     VerticalAlignment = VerticalAlignment.Center, Tag = "Y"
                 };
-                var lblHeight = new Controles.Label() { Content = "H:", VerticalAlignment = VerticalAlignment.Center };
-                var txtHeight = new Controles.TextBox() { Text = Preferencias.ScreenCaptureRectangles[rectángulo].Height.ToString(), Width = 39, 
-                    Height = 25, VerticalContentAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0), 
-                    VerticalAlignment = VerticalAlignment.Center, Tag = "Height"
-                };
                 var lblWidth = new Controles.Label() { Content = "W:", VerticalAlignment = VerticalAlignment.Center };
                 var txtWidth = new Controles.TextBox() { Text = Preferencias.ScreenCaptureRectangles[rectángulo].Width.ToString(), Width = 39, 
                     Height = 25, VerticalContentAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0), 
                     VerticalAlignment = VerticalAlignment.Center, Tag = "Width"
+                };
+                var lblHeight = new Controles.Label() { Content = "H:", VerticalAlignment = VerticalAlignment.Center };
+                var txtHeight = new Controles.TextBox() {
+                    Text = Preferencias.ScreenCaptureRectangles[rectángulo].Height.ToString(), Width = 39,
+                    Height = 25, VerticalContentAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0),
+                    VerticalAlignment = VerticalAlignment.Center, Tag = "Height"
                 };
 
                 var img = new Controles.Image() { Height = 60, Width = 120, MaxHeight = 60, MaxWidth = 120, MinHeight = 60, MinWidth = 120 };
@@ -474,18 +477,46 @@ namespace RTSHelper {
             } // agregarControlesRectángulo>
 
             SpnRectangles.Children.Clear();
-            var rectánguloPausa = ObtenerTipoPausa(); // En el ciclo siguiente se ignoran todos los que tengan Pause en el nombre del tipo.
-            agregarControlesRectángulo(rectánguloPausa, "Pause");
-            foreach (var rectángulo in RectángulosActivos) {
-
-                var nombreRectángulo = rectángulo.ToString();
-                if (!nombreRectángulo.Contains("Pause") && nombreRectángulo.Contains(Preferencias.Game.Reemplazar(" ", "_"))) {
-                    agregarControlesRectángulo(rectángulo, nombreRectángulo.Reemplazar("_", " ").Reemplazar(Preferencias.Game, "").Trim());
-                }
-
+            foreach (var kv in ObtenerRectángulosActivos(Preferencias.Game)) {
+                agregarControlesRectángulo(kv.Key, kv.Value.Reemplazar("_", " ").Reemplazar(Preferencias.Game, "").Trim());
             }
 
         } // CargarRectángulosOCR>
+
+
+        private bool RectángulosSonLosRecomendados() {
+
+            foreach (var kv in ObtenerRectángulosActivos(Preferencias.Game)) {
+
+                var tipo = kv.Key;
+                var rectánguloRecomendado = ObtenerRectánguloRecomendado(tipo, Preferencias.ScreenResolution, Preferencias.UIMod.ToString());
+                var rectángulo = ObtenerRectángulo(tipo);
+                if (rectánguloRecomendado != rectángulo) return false;
+
+            }
+
+            return true;
+
+        } // VerificarSiRectángulosSonLosRecomendados>
+
+
+        private Dictionary<ScreenCaptureText, string> ObtenerRectángulosActivos(string juego) {
+
+            var rectángulosActivos = new Dictionary<ScreenCaptureText, string>();
+            var rectánguloPausa = ObtenerTipoPausa(); // En el ciclo siguiente se ignoran todos los que tengan Pause en el nombre del tipo.
+            rectángulosActivos.Add(rectánguloPausa, "Pause");
+
+            foreach (var rectángulo in RectángulosActivos) {
+
+                var nombreRectángulo = rectángulo.ToString();
+                if (!nombreRectángulo.Contains("Pause") && nombreRectángulo.Contains(juego.Reemplazar(" ", "_"))) {
+                    rectángulosActivos.Add(rectángulo, nombreRectángulo);
+                }
+
+            }
+            return rectángulosActivos;
+
+        } // ObtenerRectángulosActivos>
 
 
         private void CambióRectángulo(object sender, TextChangedEventArgs e) 
@@ -597,10 +628,9 @@ namespace RTSHelper {
         } // CargarPrioridadesNombres>
 
 
-        private void AgregarUIMods() {
+        private void AgregarUIMods(string anteriorUIMod) {
 
             ActualizandoUIMods = true;
-            var anteriorUIMod = Preferencias.UIMod;
             CmbUIMod.Items.Clear();
 
             if (UIMods.ContainsKey(Preferencias.Game)) {
@@ -631,8 +661,11 @@ namespace RTSHelper {
             }
 
             if (CmbUIMod.SelectedItem is ComboBoxItem cbi2) Preferencias.UIMod = cbi2.Tag?.ToString() ?? UIMod.No_Mod.ToString();
-            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false, 
-                cambióUIMod: anteriorUIMod != Preferencias.UIMod);
+
+            if (anteriorUIMod != Preferencias.UIMod) 
+                Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false, cambióUIMod: true, 
+                    cambióJuego: false);
+
             ActualizandoUIMods = false;
 
         } // AgregarUIMods>
@@ -822,6 +855,7 @@ namespace RTSHelper {
 
         private void Window_Closed(object sender, EventArgs e) {
 
+            VerificarResolución();
             GuardarNombresPersonalizados(cerrando: true);
             SalirDePreferenciasOCR(cerrando: true);
             VentanaPrincipal.AplicarPreferencias();
@@ -835,9 +869,17 @@ namespace RTSHelper {
 
             if (!Activado) return;
             Preferencias.Game = ObtenerSeleccionadoEnCombobox(e);
-            AgregarUIMods();
-            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false, cambióUIMod: false); // Esta instrucción se repite dentro de AgregarUIMods() con cambióUIMod = true. Solo genera un poco de menos rendimiento, nada grave.
-            TxtStepDuration.Text = Preferencias.StepDuration.ToString(); // Es el único valor que se actualiza en la interface de preferencias después de haber cambiado el juego. No es lo más óptimo, pero de todas maneras lo ideal es que cada archivo de txt de build orders traiga su propio StepDuration.
+            AgregarUIMods(Preferencias.UIMod);
+            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false, cambióUIMod: false, 
+                cambióJuego: true); // Esta instrucción se repite dentro de AgregarUIMods() con cambióUIMod = true. Solo genera un poco de menos rendimiento, nada grave.
+
+            Activado = false; // Se desactiva esta variable para permitir reflejar en la interface los cambios realizados en Preferencias.EstablecerValoresRecomendados() al cambiar el juego sin generar nuevamente eventos de cambio en estos controles.
+            TxtStepDuration.Text = Preferencias.StepDuration.ToString();
+            CmbGameSpeed.Text = Preferencias.ObtenerGameSpeedText(Preferencias.Game);
+            ChkShowNextStep.IsChecked = Preferencias.ShowNextStep;
+            ChkShowPreviousStep.IsChecked = Preferencias.ShowPreviousStep;
+            Activado = true;
+
             VentanaPrincipal.AplicarPreferencias();
             CrearEntidadesYNombres();
             VentanaPrincipal.LeerBuildOrders();
@@ -860,11 +902,33 @@ namespace RTSHelper {
         } // CmbGameSpeed_SelectionChanged>
 
 
+        private void VerificarResolución() {
+
+            if (Preferencias.Game == AOE2Name && Preferencias.UIMod == UIMod.No_Mod.ToString()) {
+
+                switch (Preferencias.ScreenResolution) {
+                    case "1366x768":
+                        MostrarInformación("Your screen resolution is low. For RTS Helper to work correctly for Age of Empires II, install one of the 'Anne HK Better " +
+                            "Resource Panel' mods and select it in 'Settings > General > Game Interface Mod'."); 
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+        } // VerificarResolución>
+
+
         private void CmbResolution_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             if (!Activado) return;
+            if (!ValidarCambioRectángulos(CmbResolution, Preferencias.ScreenResolution)) return;
+
             Preferencias.ScreenResolution = ObtenerSeleccionadoEnCombobox(e);
-            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: true, cambióUIMod: false);
+            VerificarResolución();
+            Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: true, cambióUIMod: false, 
+                cambióJuego: false);
             VentanaPrincipal.AplicarPreferencias();
 
         } //CmbResolution_SelectionChanged>
@@ -1200,11 +1264,41 @@ namespace RTSHelper {
         } // CmbGameLanguage_SelectionChanged>
 
 
+        private bool ValidarCambioRectángulos(Controles.ComboBox cmb, string valorAnterior) {
+
+            if (!RectángulosSonLosRecomendados()) {
+
+                if (System.Windows.MessageBox.Show($@"You have modified manually the OCR values. If you make this change, you will lose your custom " +
+                    $@"values.{Environment.NewLine}{Environment.NewLine}Do you want to continue?", 
+                    "OCR Rectangles", MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
+
+                    return true; // Cambio aceptado.
+
+                } else {
+
+                    Activado = false;
+                    var cbi = cmb.Items.OfType<ComboBoxItem>().FirstOrDefault(x => x.Content.ToString() == valorAnterior);
+                    cmb.SelectedIndex = cmb.Items.IndexOf(cbi);
+                    Activado = true;
+                    return false; // Cambio no aceptado.
+
+                }
+
+            } else {
+                return true; // Cambio aceptado.
+            }
+
+        } // ValidarCambioRectángulos>
+
+
         private void CmbUIMod_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             if (!Activado || ActualizandoUIMods) return;
+            if (!ValidarCambioRectángulos(CmbUIMod, Preferencias.UIMod.Replace("_", " "))) return;
+
+            var anteriorUIMod = Preferencias.UIMod;
             Preferencias.UIMod = ObtenerSeleccionadoEnCombobox(e, tag: true);
-            AgregarUIMods();
+            AgregarUIMods(anteriorUIMod);
 
         } // CmbGameLanguage_SelectionChanged>
 
@@ -1422,6 +1516,16 @@ namespace RTSHelper {
             VentanaPrincipal.AplicarPreferencias();
 
         } // ChkOCRTestMode_Checked>
+
+
+        private void BtnRestoreDefaultRectangles_Click(object sender, RoutedEventArgs e) {
+
+            Preferencias.ScreenCaptureRectangles?.Clear();
+            Preferencias.ScreenCaptureRectangles = null;
+            CrearOCompletarScreenCaptureRectangles(cambióResolución: false, cambióUIMod: false);
+            CargarRectángulosOCR();
+
+        } // BtnRestoreDefaultRectangles_Click>
 
 
     } // SettingsWindow>

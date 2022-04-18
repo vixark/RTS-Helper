@@ -243,7 +243,7 @@ namespace RTSHelper {
 
         public int RemoveIdleTimeSeconds { get; set; } = 10;
 
-        public int MinimumDelayToAutoAdjustIdleTime { get; set; } = 3;
+        public int MinimumDelayToAutoAdjustIdleTime { get; set; } = 2; // 3 me parecía un poco alto. En algunas ocasiones quería que se sincronizara automáticamente y sentía que el desface que quedaba sin autoajuste era más grande de lo que quisiera.
 
         public int ForwardSeconds { get; set; } = 10;
 
@@ -366,7 +366,7 @@ namespace RTSHelper {
                 GameSpeed = (gameSpeedText == "Normal" ? 1.7 : (gameSpeedText == "Slow" ? 1 : (gameSpeedText == "Casual" ? 1.5 : (gameSpeedText == "Fast" ? 2 : 1))));
             } else {
                 if (gameSpeedText != "Normal")
-                    MostrarInformación($"The game {game} doesn't have speed options other than normal, normal speed will be used.");
+                    MostrarInformación($"The game {game} doesn't have speed options other than normal. Normal speed will be used.");
                 GameSpeed = 1;
             }
 
@@ -382,12 +382,14 @@ namespace RTSHelper {
         } // ObtenerDirectorioÓrdenesDeEjecución>
 
 
-        public void EstablecerValoresRecomendadosAOE2(string resolución) {
+        public void EstablecerValoresRecomendadosAOE2(string resolución, bool cambióJuego) {
 
-            ShowNextStep = false;
-            ShowPreviousStep = true;
-            GameSpeed = 1.7;
-            StepDuration = 25; // El tiempo de creación de 1 aldeano.
+            if (cambióJuego) {
+                ShowNextStep = false;
+                ShowPreviousStep = true;
+                GameSpeed = 1.7;
+                StepDuration = 25; // El tiempo de creación de 1 aldeano.
+            }
 
             switch (resolución) {
                 case "1920x1080":
@@ -470,24 +472,26 @@ namespace RTSHelper {
         } // EstablecerValoresRecomendadosAOE2>
 
 
-        public void EstablecerValoresRecomendados(string resolución, string juego, bool cambióResolución, bool cambióUIMod) {
+        public void EstablecerValoresRecomendados(string resolución, string juego, bool cambióResolución, bool cambióUIMod, bool cambióJuego) {
 
             Game = juego;
             ScreenResolution = resolución;
 
             if (juego == AOE2Name) {
 
-                EstablecerValoresRecomendadosAOE2(resolución);
+                EstablecerValoresRecomendadosAOE2(resolución, cambióJuego);
                 if (cambióResolución || cambióUIMod) CrearOCompletarScreenCaptureRectangles(cambióResolución: true, cambióUIMod);
 
             } else if (juego == AOE4Name) {
 
-                EstablecerValoresRecomendadosAOE2(resolución);
+                EstablecerValoresRecomendadosAOE2(resolución, cambióJuego);
                 
-                GameSpeed = 1;
-                ShowNextStep = false;
-                ShowPreviousStep = false;
-                StepDuration = 60; // 60 es el tiempo de creación de 3 aldeanos.
+                if (cambióJuego) {
+                    GameSpeed = 1;
+                    ShowNextStep = false;
+                    ShowPreviousStep = false;
+                    StepDuration = 60; // 60 es el tiempo de creación de 3 aldeanos.
+                }
 
                 switch (resolución) {
                     case "1920x1080":
@@ -530,9 +534,11 @@ namespace RTSHelper {
 
             } else if (juego == OtherName) {
 
-                EstablecerValoresRecomendadosAOE2(resolución);
-                GameSpeed = 1;
-                StepDuration = 60;
+                EstablecerValoresRecomendadosAOE2(resolución, cambióJuego);
+                if (cambióJuego) {
+                    GameSpeed = 1;
+                    StepDuration = 60;
+                }
 
             }
 

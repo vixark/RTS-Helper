@@ -417,7 +417,7 @@ namespace RTSHelper {
 
             var juegoPausado = false;
             var textoPausa = LeerPausa(out float confianzaPausa);
-            if (!string.IsNullOrEmpty(textoPausa)) {
+            if (!string.IsNullOrEmpty(textoPausa) && TextosPausa.ContainsKey(Preferencias.Game)) {
 
                 if (TextosPausa[Preferencias.Game].Exists(tp => textoPausa.ToLower().Contains(tp.ToLower()))) {
                     juegoPausado = true;
@@ -609,7 +609,7 @@ namespace RTSHelper {
         
         private void MniFordward_Click(object sender, RoutedEventArgs e) => Fordward();
 
-        private void TimerVerificadorVentanaEsVisible_Tick(object? sender, EventArgs e) => VerificarSiVentanaEsVisible();
+        private void TimerVerificadorVentanaEsVisible_Tick(object? sender, EventArgs e) => EsVentanaVisible();
 
 
         private void TimerActualizadorDePaquetes_Tick(object? sender, EventArgs e) {
@@ -1400,7 +1400,8 @@ namespace RTSHelper {
                 Preferencias = new Settings();
                 var resoluciónRecomendada = ObtenerResoluciónRecomendada();
                 var juegoRecomendado = AOE2Name;
-                Preferencias.EstablecerValoresRecomendados(resoluciónRecomendada, juegoRecomendado, cambióResolución: false, cambióUIMod: false);
+                Preferencias.EstablecerValoresRecomendados(resoluciónRecomendada, juegoRecomendado, cambióResolución: false, cambióUIMod: false, 
+                    cambióJuego: true); // Se establece cambióJuego = true, para forzar leer los valores predeterminados del juegoRecomendado.
                 var winSettings = new SettingsWindow(primerInicio: true, this);
                 winSettings.ShowDialog();
 
@@ -1692,18 +1693,19 @@ namespace RTSHelper {
                 ObtenerPresonido(OrdenDeEjecución.NúmeroPaso)), ObtenerVolumenPresonido(OrdenDeEjecución.NúmeroPaso));
 
 
-        private void VerificarSiVentanaEsVisible() {
+        private void EsVentanaVisible() {
 
             var rectánguloPantallaActual = ObtenerRectánguloPantallaActual(ajustadoEscala: true);
             if (this.Top > SystemParameters.PrimaryScreenHeight || this.Left > SystemParameters.PrimaryScreenWidth) {
 
                 Preferencias.ScreenResolution = ObtenerResoluciónRecomendada();
-                Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false, cambióUIMod: false);
+                Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: false, cambióUIMod: false, 
+                    cambióJuego: false);
                 AplicarPreferencias();
 
             }
 
-        } // VerificarSiVentanaEsVisible>
+        } // EsVentanaVisible>
 
 
         private void CargarPasos() {
