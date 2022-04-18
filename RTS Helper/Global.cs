@@ -7,7 +7,6 @@ using WForms = System.Windows.Forms;
 using System.IO;
 using System.Text.Json;
 using Vixark;
-using System.Text.Json.Serialization;
 using System.Linq;
 using System.Windows;
 using static Vixark.General;
@@ -567,7 +566,7 @@ namespace RTSHelper {
                 var tipo = types["Type"].FirstOrDefault(kv2 => kv2.Key == nombreCompleto).Value;
                 var imagenPersonalizada = customImages[NameType.Image].FirstOrDefault(kv2 => kv2.Key == nombreCompleto).Value;
                 if (tipo == null) {
-                    throw new Exception($"Type can't be null for {nombreCompleto} ID = {kv.Key}.");
+                    MostrarError($"Type can't be null for {nombreCompleto} ID = {kv.Key}. Entity wasn't created for {nombreCompleto}.");
                 } else {
                     Entidades.Add(kv.Key, new Entidad(kv.Key, nombreCompleto, tipo, imagenPersonalizada));
                 }
@@ -622,30 +621,36 @@ namespace RTSHelper {
                                 } else { // Ya está el nombre para otro ID distinto. Se debe solucionar el conflicto.
 
                                     var tipo = Entidades[id].Tipo;
-                                    var tipoAnterior = Entidades[idAnterior].Tipo;
-                                    if (tipo == tipoAnterior) { // Es un conflicto más grave porque el juego tiene el mismo nombre para diferentes IDs del mismo tipo. Aún se puede solucionar en caso que sea colisión de idiomas.
+                                    if (!Entidades.ContainsKey(idAnterior)) {
+                                        MostrarError($"Entity not found for {idAnterior}"); // No debería suceder. Se ignora.
+                                    } else {
 
-                                        var tipoNombreAnterior = nombresYTipoNombre[nombreMinúscula];
-                                        if (tipoNombre == tipoNombreAnterior) { // Es un conflicto grave porque es el mismo nombre para unidades diferentes del mismo tipo en el mismo idioma. Es un error de traducción del juego que fue reportado aquí https://forums.ageofempires.com/t/units-buildings-tech-names-collisions-in-various-languages/187437. Por el momento lo único que se puede hacer es agregar un asterisco para diferenciarlos. 
+                                        var tipoAnterior = Entidades[idAnterior].Tipo;
+                                        if (tipo == tipoAnterior) { // Es un conflicto más grave porque el juego tiene el mismo nombre para diferentes IDs del mismo tipo. Aún se puede solucionar en caso que sea colisión de idiomas.
 
-                                            nombre += "*";
-                                            conflictosEncontrados.Agregar(nombre, tipoNombre);
-                                            goto reintentar; // Se usa goto para reiniciar el procedimiento de chequeo completo, podría suceder que se repita varias veces y se tenga que hacer esta corrección varias veces.
-                                            //MessageBox.Show($"The name {nombre} of type {tipoNombre} with ID = {id} is already used by entity " + $"ID = {idAnterior}.", "Warning");
+                                            var tipoNombreAnterior = nombresYTipoNombre[nombreMinúscula];
+                                            if (tipoNombre == tipoNombreAnterior) { // Es un conflicto grave porque es el mismo nombre para unidades diferentes del mismo tipo en el mismo idioma. Es un error de traducción del juego que fue reportado aquí https://forums.ageofempires.com/t/units-buildings-tech-names-collisions-in-various-languages/187437. Por el momento lo único que se puede hacer es agregar un asterisco para diferenciarlos. 
 
-                                        } else { // Es una colisión entre nombres de entidades en diferentes idiomas. Se agrega al nombre un identificador del idioma.
+                                                nombre += "*";
+                                                conflictosEncontrados.Agregar(nombre, tipoNombre);
+                                                goto reintentar; // Se usa goto para reiniciar el procedimiento de chequeo completo, podría suceder que se repita varias veces y se tenga que hacer esta corrección varias veces.
+                                                                 //MessageBox.Show($"The name {nombre} of type {tipoNombre} with ID = {id} is already used by entity " + $"ID = {idAnterior}.", "Warning");
+
+                                            } else { // Es una colisión entre nombres de entidades en diferentes idiomas. Se agrega al nombre un identificador del idioma.
+
+                                                nombre += "*";
+                                                conflictosEncontrados.Agregar(nombre, tipoNombre);
+                                                goto reintentar; // Se usa goto para reiniciar el procedimiento de chequeo completo, podría suceder que se repita varias veces y se tenga que hacer esta corrección varias veces.
+
+                                            }
+
+                                        } else { // Es una colisión entre entidades de diferente tipo. Puede suceder por ejemplo, con cosas como Mercado (edificio) y Mercado (mapa). Se soluciona agregando el tipo al siguiente a agregar.
 
                                             nombre += "*";
                                             conflictosEncontrados.Agregar(nombre, tipoNombre);
                                             goto reintentar; // Se usa goto para reiniciar el procedimiento de chequeo completo, podría suceder que se repita varias veces y se tenga que hacer esta corrección varias veces.
 
                                         }
-
-                                    } else { // Es una colisión entre entidades de diferente tipo. Puede suceder por ejemplo, con cosas como Mercado (edificio) y Mercado (mapa). Se soluciona agregando el tipo al siguiente a agregar.
-
-                                        nombre += "*";
-                                        conflictosEncontrados.Agregar(nombre, tipoNombre);
-                                        goto reintentar; // Se usa goto para reiniciar el procedimiento de chequeo completo, podría suceder que se repita varias veces y se tenga que hacer esta corrección varias veces.
 
                                     }
                                      

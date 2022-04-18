@@ -119,7 +119,13 @@ namespace RTSHelper {
 
         public MainWindow() {
 
+            //var logInicio = "";
+
             InitializeComponent();
+
+            //logInicio += $"Iniciando{Environment.NewLine}";
+            //File.WriteAllText(Path.Combine(DirectorioAplicación , "Log.txt"), logInicio);
+            //MostrarInformación($"Starting{Environment.NewLine}");
 
             TimerFocus.Interval = TimeSpan.FromMilliseconds(20);
             TimerFocus.Tick += new EventHandler(TimerFocus_Tick);
@@ -155,16 +161,33 @@ namespace RTSHelper {
             TimerDetecciónInicioJuego.Tick += new EventHandler(TimerDetecciónInicioJuego_Tick);
             TimerDetecciónInicioJuego.Start();
 
+            //logInicio += $"Timers inicializados{Environment.NewLine}";
+            //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
+            //MostrarInformación($"Timers Started{Environment.NewLine}");
+
             LeerPreferencias();
+
+            //logInicio += $"Preferencias leídas{Environment.NewLine}";
+            //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
+            //MostrarInformación($"Settings read{Environment.NewLine}");
+
             OrdenDeEjecución.EnCambioNúmeroPaso = () => EnCambioNúmeroPaso();
             CargarPasos();
             LeerBuildOrders();
             CargarBuildOrder(iniciando: true);
 
+            //logInicio += $"Build orders cargadas{Environment.NewLine}";
+            //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
+            //MostrarInformación($"Build orders loaded{Environment.NewLine}");
+
             SupervisorOrdenDeEjecuciónActual = new FileSystemWatcher { NotifyFilter = NotifyFilters.LastWrite };
             ActualizarSupervisorOrdenDeEjecución();
             SupervisorOrdenDeEjecuciónActual.Changed += OrdenDeEjecuciónActual_Changed;
             SupervisorOrdenDeEjecuciónActual.EnableRaisingEvents = true;
+
+            //logInicio += $"Supervisor build orders iniciado{Environment.NewLine}";
+            //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
+            //MostrarInformación($"Supervisor build orders started{Environment.NewLine}");
 
             if (ModoDesarrollo) {
 
@@ -178,12 +201,24 @@ namespace RTSHelper {
             CrearEntidadesYNombres();
             ActualizarContenidoPaso(númeroPaso: null);
 
+            //logInicio += $"Nombres creados{Environment.NewLine}";
+            //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
+            //MostrarInformación($"Names created{Environment.NewLine}");
+
             Inició = true;
             CambiandoTxtPasoAutomáticamente = false;
 
             Actualizar();
 
+            //logInicio += $"Chequeo de actualización{Environment.NewLine}";
+            //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
+            //MostrarInformación($"Update checked{Environment.NewLine}");
+
             RecordarDonación();
+
+            //logInicio += $"Chequeo de donación{Environment.NewLine}";
+            //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
+            //MostrarInformación($"Donation checked{Environment.NewLine}");
 
         } // MainWindow>
 
