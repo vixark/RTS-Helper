@@ -51,6 +51,7 @@ namespace RTSHelper {
             VentanaPrincipal = ventanaPrincipal;
             var versión = Assembly.GetEntryAssembly()?.GetName().Version;
             LblVersion.Content = $"{versión?.Major}.{versión?.Minor}{(versión?.Build == 0 ? "" : $".{versión?.Build.ToString()}")}";
+            TbCopyright.Text = @$"Copyright© {DateTime.Now.Year} Vixark (vixark@outlook.com, github/vixark)";
             TimerPruebasOCR.Interval = TimeSpan.FromMilliseconds(300); // Se hace un poco más frecuente para que se visualicen los cambios más rápidamente. En el modo Pruebas OCR no es tan importante el rendimiento.
             TimerPruebasOCR.Tick += new EventHandler(TimerDetecciónPruebasOCR_Tick);
             LnkDonate.NavigateUri = new Uri(EnlaceDonación);

@@ -641,11 +641,11 @@
                         
                         <StackPanel Orientation="Horizontal" Margin="-5 0 0 0">
                             <Label FontSize="{DynamicResource FuenteGrande}" FontWeight="Bold">RTS Helper</Label>
-                            <Label FontSize="{DynamicResource FuenteGrande}" FontWeight="Bold" x:Name="LblVersion">1.3</Label>
+                            <Label FontSize="{DynamicResource FuenteGrande}" FontWeight="Bold" x:Name="LblVersion">#.#</Label>
                         </StackPanel>
 
                         <StackPanel>
-                            <TextBlock Margin="0 0 0 5">Copyright© 2022 Vixark (vixark@outlook.com, github/vixark)</TextBlock>
+                            <TextBlock Margin="0 0 0 5" x:Name="TbCopyright"></TextBlock>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal">
