@@ -465,17 +465,55 @@
 
                                 <ComboBox x:Name="CmbVelocidadEjecución" HorizontalAlignment="Left" Margin="4 0 4 0" 
                                           SelectionChanged="CmbVelocidadEjecución_SelectionChanged" Width="80">
+                                    <ComboBoxItem Tag="150">150%</ComboBoxItem>
+                                    <ComboBoxItem Tag="140">140%</ComboBoxItem>
+                                    <ComboBoxItem Tag="130">130%</ComboBoxItem>
+                                    <ComboBoxItem Tag="125">125%</ComboBoxItem>
+                                    <ComboBoxItem Tag="120">120%</ComboBoxItem>
+                                    <ComboBoxItem Tag="119">119%</ComboBoxItem>
+                                    <ComboBoxItem Tag="118">118%</ComboBoxItem>
+                                    <ComboBoxItem Tag="117">117%</ComboBoxItem>
+                                    <ComboBoxItem Tag="116">116%</ComboBoxItem>
+                                    <ComboBoxItem Tag="115">115%</ComboBoxItem>
+                                    <ComboBoxItem Tag="114">114%</ComboBoxItem>
+                                    <ComboBoxItem Tag="113">113%</ComboBoxItem>
+                                    <ComboBoxItem Tag="112">112%</ComboBoxItem>
+                                    <ComboBoxItem Tag="111">110%</ComboBoxItem>
+                                    <ComboBoxItem Tag="110">110%</ComboBoxItem>
+                                    <ComboBoxItem Tag="109">109%</ComboBoxItem>
+                                    <ComboBoxItem Tag="108">108%</ComboBoxItem>
+                                    <ComboBoxItem Tag="107">107%</ComboBoxItem>
+                                    <ComboBoxItem Tag="106">106%</ComboBoxItem>
+                                    <ComboBoxItem Tag="105">105%</ComboBoxItem>
+                                    <ComboBoxItem Tag="104">104%</ComboBoxItem>
+                                    <ComboBoxItem Tag="103">103%</ComboBoxItem>
+                                    <ComboBoxItem Tag="102">102%</ComboBoxItem>
+                                    <ComboBoxItem Tag="101">101%</ComboBoxItem>
                                     <ComboBoxItem Tag="100">100%</ComboBoxItem>
+                                    <ComboBoxItem Tag="99">99%</ComboBoxItem>
                                     <ComboBoxItem Tag="98">98%</ComboBoxItem>
+                                    <ComboBoxItem Tag="97">97%</ComboBoxItem>
                                     <ComboBoxItem Tag="96">96%</ComboBoxItem>
+                                    <ComboBoxItem Tag="95">95%</ComboBoxItem>
                                     <ComboBoxItem Tag="94">94%</ComboBoxItem>
+                                    <ComboBoxItem Tag="93">93%</ComboBoxItem>
                                     <ComboBoxItem Tag="92">92%</ComboBoxItem>
+                                    <ComboBoxItem Tag="91">91%</ComboBoxItem>
                                     <ComboBoxItem Tag="90">90%</ComboBoxItem>
+                                    <ComboBoxItem Tag="89">89%</ComboBoxItem>
+                                    <ComboBoxItem Tag="88">88%</ComboBoxItem>
+                                    <ComboBoxItem Tag="87">87%</ComboBoxItem>
+                                    <ComboBoxItem Tag="86">86%</ComboBoxItem>
                                     <ComboBoxItem Tag="85">85%</ComboBoxItem>
+                                    <ComboBoxItem Tag="84">84%</ComboBoxItem>
+                                    <ComboBoxItem Tag="83">83%</ComboBoxItem>
+                                    <ComboBoxItem Tag="82">82%</ComboBoxItem>
+                                    <ComboBoxItem Tag="81">81%</ComboBoxItem>
                                     <ComboBoxItem Tag="80">80%</ComboBoxItem>
                                     <ComboBoxItem Tag="75">75%</ComboBoxItem>
                                     <ComboBoxItem Tag="70">70%</ComboBoxItem>
                                     <ComboBoxItem Tag="60">60%</ComboBoxItem>
+                                    <ComboBoxItem Tag="50">50%</ComboBoxItem>
                                 </ComboBox>
 
                             </StackPanel>
@@ -549,7 +587,7 @@
                     <StackPanel Margin="20 20 20 0" Orientation="Vertical" x:Name="SpnOverrides" >
 
                         <TextBlock TextWrapping="Wrap">
-                            Build orders can override some of your selected options. Check the options that could be changed by build orders and uncheck 
+                            Build orders can override some of your selected options. Check the options that can be changed by build orders and uncheck 
                             the ones you want to remain unchanged:
                         </TextBlock>
 

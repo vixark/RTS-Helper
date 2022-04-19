@@ -199,7 +199,7 @@ namespace RTSHelper {
             }
 
             CrearEntidadesYNombres();
-            ActualizarContenidoPaso(númeroPaso: null);
+            ActualizarContenidoPaso(númeroPaso: null, limpiarErroresAnteriores: true);
 
             //logInicio += $"Nombres creados{Environment.NewLine}";
             //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
@@ -1590,7 +1590,7 @@ namespace RTSHelper {
             bool siguienteOAnterior = false, bool cambióTamaño = false, bool alternandoSiguienteAnteriorPaso = false) {
 
             if (stop) {
-                ActualizarContenidoPaso(númeroPaso: null);
+                ActualizarContenidoPaso(númeroPaso: null, limpiarErroresAnteriores: true);
             } else {
 
                 if ((Timer is null || !Timer.IsEnabled) 
@@ -1605,14 +1605,14 @@ namespace RTSHelper {
 
                 }
 
-                ActualizarContenidoPaso(Estado == EEstado.Stoped ? (int?)null : OrdenDeEjecución.NúmeroPaso);
+                ActualizarContenidoPaso(Estado == EEstado.Stoped ? (int?)null : OrdenDeEjecución.NúmeroPaso, limpiarErroresAnteriores: cargandoBuildOrder);
 
             }
 
         } // ActualizarPaso>
 
 
-        private void ActualizarContenidoPaso(int? númeroPaso) {
+        private void ActualizarContenidoPaso(int? númeroPaso, bool limpiarErroresAnteriores) {
 
             var errores = (string?)null;
             SpnPaso.Children.Clear();
@@ -1666,7 +1666,7 @@ namespace RTSHelper {
 
             if (this.WindowState == WindowState.Normal) 
                 ActualizarAlertaDeErrores(errores, superóAltoPasoActual || superóAltoSiguientePaso || superóAltoAnteriorPaso, 
-                    limpiarErroresAnteriores: false);
+                    limpiarErroresAnteriores: limpiarErroresAnteriores);
 
         } // ActualizarContenidoPaso>
 
@@ -1677,7 +1677,7 @@ namespace RTSHelper {
             var código = Preferencias.CurrentBuildOrder + "|" + OrdenDeEjecución.NúmeroPaso;
             BtnAlert.Tag = código;
             if (códigoAnterior == código && !string.IsNullOrEmpty(BtnAlert.ToolTip.ToString())) {
-                 BtnAlert.ToolTip = BtnAlert.ToolTip + Environment.NewLine;
+                BtnAlert.ToolTip = BtnAlert.ToolTip + Environment.NewLine;
             } else {
                 BtnAlert.ToolTip = "";
             }

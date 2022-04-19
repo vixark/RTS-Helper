@@ -909,8 +909,11 @@ namespace RTSHelper {
 
                 switch (Preferencias.ScreenResolution) {
                     case "1366x768":
-                        MostrarInformación("Your screen resolution is low. For RTS Helper to work correctly for Age of Empires II, install one of the 'Anne HK Better " +
-                            "Resource Panel' mods and select it in 'Settings > General > Game Interface Mod'."); 
+                        MostrarInformación($"Your screen resolution is low.{Environment.NewLine}{Environment.NewLine}" +
+                            $"For RTS Helper to work correctly for Age of Empires II, install one of the 'Anne HK Better Resource Panel' mods and select " +
+                            $"it in 'RTS Helper > Settings > General > Game Interface Mod' and/or in game settings " +
+                            "increase the 'Interface > In-game HUD Scale' value and select the same value in 'RTS Helper > Settings > General > " +
+                            "Game Interface Scale'."); 
                         break;
                     default:
                         break;

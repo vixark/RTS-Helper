@@ -34,7 +34,7 @@ namespace RTSHelper {
 
         public static Settings Preferencias = new Settings();
 
-        public static bool ModoDesarrollo = false;
+        public static bool ModoDesarrollo = true;
 
         public const string AOE2Name = "Age of Empires II";
 
@@ -320,6 +320,12 @@ namespace RTSHelper {
             ScreenCaptureText.Age_of_Empires_II_Villagers_on_Food, ScreenCaptureText.Age_of_Empires_II_Villagers_on_Gold,
             ScreenCaptureText.Age_of_Empires_II_Villagers_on_Stone, ScreenCaptureText.Age_of_Empires_II_Timer, ScreenCaptureText.Age_of_Empires_II_Speed,
             ScreenCaptureText.Age_of_Empires_II_Age, ScreenCaptureText.Age_of_Empires_II_Game_Start };
+
+        public static List<ScreenCaptureText> RectángulosAfectadosCentradosPorEscalaInterface = new List<ScreenCaptureText> {
+            ScreenCaptureText.Age_of_Empires_II_PauseF3XS, ScreenCaptureText.Age_of_Empires_II_PauseF3S, ScreenCaptureText.Age_of_Empires_II_PauseF3M, 
+            ScreenCaptureText.Age_of_Empires_II_PauseF3L, ScreenCaptureText.Age_of_Empires_II_PauseF3XL,
+            ScreenCaptureText.Age_of_Empires_II_PauseM, ScreenCaptureText.Age_of_Empires_II_PauseL,
+        };
 
         public static List<ScreenCaptureText> RectángulosActivos = new List<ScreenCaptureText> { ScreenCaptureText.Age_of_Empires_II_PauseF3XS,
             ScreenCaptureText.Age_of_Empires_II_PauseF3S, ScreenCaptureText.Age_of_Empires_II_PauseF3M, ScreenCaptureText.Age_of_Empires_II_PauseF3L,
@@ -2180,7 +2186,6 @@ namespace RTSHelper {
 
                 string u(string original) => original.Replace("|", $" U|") + " U";
 
-
                 void autogeneración(string textoClave, Func<string, string> conversiónAcrónimos, Func<string, string> conversiónNormal, 
                     List<string> códigosAIgnorar, out List<string> códigosCoincidentes) {
 
@@ -2544,8 +2549,14 @@ namespace RTSHelper {
             if (Preferencias.ScreenCaptureRectangles!.ContainsKey(tipo)) { // Después de CrearOCompletarScreenCaptureRectangles() se asegura que Preferencias.ScreenCaptureRectangles no es nulo.
                
                 var r = Preferencias.ScreenCaptureRectangles![tipo];
-                var e = RectángulosAfectadosPorEscalaInterface.Contains(tipo) ? Preferencias.GameInterfaceScale / 100 : 1;
-                return new SDrw.RectangleF(r.X * e, r.Y * e, r.Width * e, r.Height * e);
+
+                if (RectángulosAfectadosCentradosPorEscalaInterface.Contains(tipo)) {
+                    var e = Preferencias.GameInterfaceScale / 100;
+                    return new SDrw.RectangleF(r.X - r.Width * (e - 1) / 2, r.Y - r.Height * (e - 1) / 2, r.Width * e, r.Height * e);
+                } else {
+                    var e = RectángulosAfectadosPorEscalaInterface.Contains(tipo) ? Preferencias.GameInterfaceScale / 100 : 1;
+                    return new SDrw.RectangleF(r.X * e, r.Y * e, r.Width * e, r.Height * e);
+                }
 
             } else {
                 return new SDrw.RectangleF(0, 0, 0.1f, 0.1f); // Un rectángulo cualquiera para que no saque error.
