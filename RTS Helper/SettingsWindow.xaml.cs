@@ -34,6 +34,8 @@ namespace RTSHelper {
 
         public bool ActualizandoUIMods { get; set; } = false;
 
+        public bool CambióResolución { get; set; } = false;
+
         private MainWindow VentanaPrincipal { get; set; }
 
         public bool ActualizarDuraciónPasoAlSalir { get; set; } = false;
@@ -86,6 +88,7 @@ namespace RTSHelper {
                 LblShowTime.Visibility = Visibility.Collapsed;
                 ChkShowStepProgress.Visibility = Visibility.Collapsed;
                 ChkShowTime.Visibility = Visibility.Collapsed;
+                CambióResolución = true; // Para que haga la verificación inicial de la resolución después de autodetectarla.
 
             }
 
@@ -491,7 +494,7 @@ namespace RTSHelper {
 
                 var tipo = kv.Key;
                 var rectánguloRecomendado = ObtenerRectánguloRecomendado(tipo, Preferencias.ScreenResolution, Preferencias.UIMod.ToString());
-                var rectángulo = ObtenerRectángulo(tipo);
+                var rectángulo = ObtenerRectánguloSinAjustes(tipo);
                 if (rectánguloRecomendado != rectángulo) return false;
 
             }
@@ -856,7 +859,7 @@ namespace RTSHelper {
 
         private void Window_Closed(object sender, EventArgs e) {
 
-            VerificarResolución();
+            if (CambióResolución) VerificarResolución(); 
             GuardarNombresPersonalizados(cerrando: true);
             SalirDePreferenciasOCR(cerrando: true);
             VentanaPrincipal.AplicarPreferencias();
@@ -909,12 +912,19 @@ namespace RTSHelper {
 
                 switch (Preferencias.ScreenResolution) {
                     case "1366x768":
+                    case "1280x720":
+                    case "1600x900":
+                    case "1360x768":
+                    case "1280x800":
+                    case "1440x900":
+
                         MostrarInformación($"Your screen resolution is low.{Environment.NewLine}{Environment.NewLine}" +
                             $"For RTS Helper to work correctly for Age of Empires II, install one of the 'Anne HK Better Resource Panel' mods and select " +
                             $"it in 'RTS Helper > Settings > General > Game Interface Mod' and/or in game settings " +
                             "increase the 'Interface > In-game HUD Scale' value and select the same value in 'RTS Helper > Settings > General > " +
                             "Game Interface Scale'."); 
                         break;
+
                     default:
                         break;
                 }
@@ -929,8 +939,8 @@ namespace RTSHelper {
             if (!Activado) return;
             if (!ValidarCambioRectángulos(CmbResolution, Preferencias.ScreenResolution)) return;
 
+            CambióResolución = true;
             Preferencias.ScreenResolution = ObtenerSeleccionadoEnCombobox(e);
-            VerificarResolución();
             Preferencias.EstablecerValoresRecomendados(Preferencias.ScreenResolution, Preferencias.Game, cambióResolución: true, cambióUIMod: false, 
                 cambióJuego: false);
             VentanaPrincipal.AplicarPreferencias();

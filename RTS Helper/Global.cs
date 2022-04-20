@@ -312,16 +312,16 @@ namespace RTSHelper {
             Custom_UI_Centered_Modern_Black_and_White, XavilUI, Villese_UI, Bottom_Side_UI, Resource_Bar_at_Bottom, Bottom_Resource_Panel
         } // Mods probados que no cambian la posición de los elementos: Transparent UI, Transparent Default UI, 2331_middle mini-map and lower score panel for elders, Transparent UI - Centered Bigger Minimap - Raised Control Groups - Slightly Raised Score Panel, 14752_Custom UI - Opaque Anthrazite.
         
-        public static List<ScreenCaptureText> RectángulosAfectadosPorEscalaInterface = new List<ScreenCaptureText> {
+        public static List<ScreenCaptureText> RectángulosSuperioresIzquierdosAfectadosPorEscalaUI = new List<ScreenCaptureText> {
             ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99,
             ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, ScreenCaptureText.Age_of_Empires_II_Wood, ScreenCaptureText.Age_of_Empires_II_Food,
             ScreenCaptureText.Age_of_Empires_II_Gold, ScreenCaptureText.Age_of_Empires_II_Stone, ScreenCaptureText.Age_of_Empires_II_Population,
             ScreenCaptureText.Age_of_Empires_II_Maximum_Population, ScreenCaptureText.Age_of_Empires_II_Villagers_on_Wood,
             ScreenCaptureText.Age_of_Empires_II_Villagers_on_Food, ScreenCaptureText.Age_of_Empires_II_Villagers_on_Gold,
             ScreenCaptureText.Age_of_Empires_II_Villagers_on_Stone, ScreenCaptureText.Age_of_Empires_II_Timer, ScreenCaptureText.Age_of_Empires_II_Speed,
-            ScreenCaptureText.Age_of_Empires_II_Age, ScreenCaptureText.Age_of_Empires_II_Game_Start };
+            ScreenCaptureText.Age_of_Empires_II_Age };
 
-        public static List<ScreenCaptureText> RectángulosAfectadosCentradosPorEscalaInterface = new List<ScreenCaptureText> {
+        public static List<ScreenCaptureText> RectángulosCentradosAfectadosPorEscalaUI = new List<ScreenCaptureText> {
             ScreenCaptureText.Age_of_Empires_II_PauseF3XS, ScreenCaptureText.Age_of_Empires_II_PauseF3S, ScreenCaptureText.Age_of_Empires_II_PauseF3M, 
             ScreenCaptureText.Age_of_Empires_II_PauseF3L, ScreenCaptureText.Age_of_Empires_II_PauseF3XL,
             ScreenCaptureText.Age_of_Empires_II_PauseM, ScreenCaptureText.Age_of_Empires_II_PauseL,
@@ -445,20 +445,38 @@ namespace RTSHelper {
             var resolución = "1920x1080";
             if (anchoPantalla == 1920 && altoPantalla == 1080) {
                 resolución = "1920x1080";
+            } else if(anchoPantalla == 1680 && altoPantalla == 1050) {
+                resolución = "1680x1050";
+            } else if(anchoPantalla == 1920 && altoPantalla == 1200) {
+                resolución = "1920x1200";
             } else if (anchoPantalla == 2560 && altoPantalla == 1440) {
                 resolución = "2560x1440";
             } else if (anchoPantalla == 1366 && altoPantalla == 768) {
                 resolución = "1366x768";
+            } else if (anchoPantalla == 1280 && altoPantalla == 800) {
+                resolución = "1280x800";
+            } else if (anchoPantalla == 1280 && altoPantalla == 720) {
+                resolución = "1280x720";
             } else if (anchoPantalla == 3840 && altoPantalla == 2160) {
                 resolución = "3840x2160";
+            } else if (anchoPantalla == 1600 && altoPantalla == 900) {
+                resolución = "1600x900";
+            } else if (anchoPantalla == 1440 && altoPantalla == 900) {
+                resolución = "1440x900";
+            } else if (anchoPantalla == 1360 && altoPantalla == 768) {
+                resolución = "1360x768";
             } else if (altoPantalla >= 2160) {
                 resolución = "3840x2160";
             } else if (altoPantalla >= 1440) {
                 resolución = "2560x1440";
             } else if (altoPantalla >= 1080) {
                 resolución = "1920x1080";
-            } else {
+            } else if (altoPantalla >= 900) {
+                resolución = "1600x900";
+            } else if (altoPantalla >= 768) {
                 resolución = "1366x768";
+            } else {
+                resolución = "1280x720";                 
             }
             return resolución;
 
@@ -2509,7 +2527,10 @@ namespace RTSHelper {
                     var extraConfianzaRequerida = 0F;
                     if (progresoActual >= 74 && progresoActual <= 78 && (Preferencias.ScreenResolution == "2560x1440" 
                         || Preferencias.ScreenResolution == "3840x2160")) extraConfianzaRequerida = 0.25F; // Con el 76 el OCR se enloquece y devuelve 716 sin razón alguna. Esta extra confianza hace que no se acepte ese 716 y se obtenga una lectura correcta con otros parámetros.
-                    if (progresoActual >= 90 && progresoActual <= 99 && Preferencias.ScreenResolution == "1920x1080") extraConfianzaRequerida = 0.2F; // Con la nueva fuente Smooth Serif de 2022 para la resolución 1920x1080 el intervalo de 90 a 99 es muy inexacto y puede producir números consecutivos incorrectos en 98 y 99 que pueden ser leídos como 8 y 9. Para evitar, este problema se sube la confianza para que el 98 que se lee como 8 con confianza 0,61, no se lea.
+                    if (progresoActual >= 90 && progresoActual <= 99 && 
+                        (Preferencias.ScreenResolution == "1920x1080" || Preferencias.ScreenResolution == "1680x1050" 
+                        || Preferencias.ScreenResolution == "1920x1200")) 
+                            extraConfianzaRequerida = 0.2F; // Con la nueva fuente Smooth Serif de 2022 para la resolución 1920x1080 el intervalo de 90 a 99 es muy inexacto y puede producir números consecutivos incorrectos en 98 y 99 que pueden ser leídos como 8 y 9. Para evitar, este problema se sube la confianza para que el 98 que se lee como 8 con confianza 0,61, no se lea.
                     texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, valoresEsperados, out confianza, 
                         extraConfianzaRequerida: extraConfianzaRequerida);
             
@@ -2543,19 +2564,35 @@ namespace RTSHelper {
         } // LeerProgreso>
 
 
+        public static SDrw.RectangleF? ObtenerRectánguloSinAjustes(ScreenCaptureText tipo) { // El único objetivo de esta función es comparar con el rectángulo recomendado para detectar si se ha cambiado manualmente. No se usa en ninguna otra parte.
+
+            if (Preferencias.ScreenCaptureRectangles != null && Preferencias.ScreenCaptureRectangles.ContainsKey(tipo)) { 
+                return Preferencias.ScreenCaptureRectangles[tipo];
+            } else {
+                return null;
+            }
+
+        } // ObtenerRectánguloSinAjustes>
+
+
         public static SDrw.RectangleF ObtenerRectángulo(ScreenCaptureText tipo) {
 
             if (Preferencias.ScreenCaptureRectangles == null) CrearOCompletarScreenCaptureRectangles(cambióResolución: false, cambióUIMod: false);
             if (Preferencias.ScreenCaptureRectangles!.ContainsKey(tipo)) { // Después de CrearOCompletarScreenCaptureRectangles() se asegura que Preferencias.ScreenCaptureRectangles no es nulo.
                
                 var r = Preferencias.ScreenCaptureRectangles![tipo];
+                var e = Preferencias.GameInterfaceScale / 100;
 
-                if (RectángulosAfectadosCentradosPorEscalaInterface.Contains(tipo)) {
-                    var e = Preferencias.GameInterfaceScale / 100;
+                if (RectángulosCentradosAfectadosPorEscalaUI.Contains(tipo)) {
                     return new SDrw.RectangleF(r.X - r.Width * (e - 1) / 2, r.Y - r.Height * (e - 1) / 2, r.Width * e, r.Height * e);
+                } else if (RectángulosSuperioresIzquierdosAfectadosPorEscalaUI.Contains(tipo)) {
+
+                    var altura16a9 = Preferencias.WidthScreenResolution * 9 / 16; // Los rectángulos superiores izquierdos de la interface en el caso de Age of Empires II y por el momento se asumirá que en el caso de otros juegos también se mantienen inalterados al cambiar de resolución de proporción 16:9 (1,77) a otras proporciones (típicamente 1.66). Entonces todos los cálculos de los rectángulos superiores se hacen con base en la altura que tendría una pantalla si tuviera una relación 16:9 que es con la que se crean inicialmente los rectángulos. 
+                    var factorAltura = (float)altura16a9 / (float)Preferencias.HeightScreenResolution; // Este factor es 1 para todas las pantallas con proporción 16:9 (1.77) que es con las que se crearon originalmente los rectángulos.
+                    return new SDrw.RectangleF(r.X * e, r.Y * e * factorAltura, r.Width * e, r.Height * e * factorAltura);
+
                 } else {
-                    var e = RectángulosAfectadosPorEscalaInterface.Contains(tipo) ? Preferencias.GameInterfaceScale / 100 : 1;
-                    return new SDrw.RectangleF(r.X * e, r.Y * e, r.Width * e, r.Height * e);
+                    return r;
                 }
 
             } else {
@@ -2656,7 +2693,8 @@ namespace RTSHelper {
 
             var xDesfaceAOE2V = (resolución.Contains("x1080") || resolución.Contains("x1050") || resolución.Contains("x1024") || 
                 resolución.Contains("x960") || resolución.Contains("x900") || resolución.Contains("x864") || resolución.Contains("x800") || 
-                resolución.Contains("x768") || resolución.Contains("x720") || resolución.Contains("x600")) ? (571.5F - 573F) / 2560 : 0; // La resolución 1920x1080 o menor fuerza la fuente Smooth Serif, entonces se requiere un recorte diferente.
+                resolución.Contains("x768") || resolución.Contains("x720") || resolución.Contains("x600") || resolución.Contains("x1200")) 
+                ? (571.5F - 573F) / 2560 : 0; // La resolución 1920x1080 o menor fuerza la fuente Smooth Serif, entonces se requiere un recorte diferente.
             if (xDesfaceAOE2V != 0 && tipo == ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999) xDesfaceAOE2V += 1F / 2560; // Un pequeño ajuste números más grandes.
             if (xDesfaceAOE2V != 0 && tipo == ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9) xDesfaceAOE2V = 0; // Para un solo carácter no se realiza el ajuste con xDesfaceAOE2V.
 
@@ -2886,8 +2924,15 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                case "1680x1050":
+                                case "1920x1200":
                                     return HQBCL1_5C2x16; // Smooth Serif.
                                 case "1366x768":
+                                case "1600x900":
+                                case "1280x720":
+                                case "1360x768":
+                                case "1280x800":
+                                case "1440x900":
                                     return NNL1C2x2; // Para Smooth Serif: HQBCL1_5C2x16.
                                 case "2560x1440":
                                 case "3840x2160":
@@ -2899,8 +2944,15 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                case "1680x1050":
+                                case "1920x1200":
                                     return HQBCL2C2x16; // Smooth Serif.
                                 case "1366x768":
+                                case "1600x900":
+                                case "1280x720":
+                                case "1360x768":
+                                case "1280x800":
+                                case "1440x900":
                                     return HQBCL1C2x4; // Para Smooth Serif: HQBCL2C2x16.
                                 case "2560x1440":
                                 case "3840x2160":
@@ -2912,8 +2964,15 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                case "1680x1050":
+                                case "1920x1200":
                                     return NNL1C2x1; // Smooth Serif.
                                 case "1366x768":
+                                case "1600x900":
+                                case "1280x720":
+                                case "1360x768":
+                                case "1280x800":
+                                case "1440x900":
                                     return NNL1C2x1; // Para Smooth Serif: NNL1C2x1.
                                 case "2560x1440":
                                 case "3840x2160":
@@ -2931,8 +2990,15 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                case "1680x1050":
+                                case "1920x1200":
                                     return HQBCL1_5C2x16; // Smooth Serif.
                                 case "1366x768":
+                                case "1600x900":
+                                case "1280x720":
+                                case "1360x768":
+                                case "1280x800":
+                                case "1440x900":
                                     return HQBCL1C2x16; // Para Smooth Serif: HQBCL1_5C2x16.
                                 case "2560x1440":
                                 case "3840x2160":
@@ -2944,8 +3010,15 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                case "1680x1050":
+                                case "1920x1200":
                                     return HQBCL2C2x16; // Smooth Serif.
                                 case "1366x768":
+                                case "1600x900":
+                                case "1280x720":
+                                case "1360x768":
+                                case "1280x800":
+                                case "1440x900":
                                     return HQBCL2C6x4; // Para Smooth Serif: HQBCL2C2x16.
                                 case "2560x1440":
                                 case "3840x2160":
@@ -2957,8 +3030,15 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                case "1680x1050":
+                                case "1920x1200":
                                     return NNL1C2x1; // Smooth Serif.
                                 case "1366x768":
+                                case "1600x900":
+                                case "1280x720":
+                                case "1360x768":
+                                case "1280x800":
+                                case "1440x900":
                                     return NNL1C2x1; // Para Smooth Serif: NNL1C2x1.
                                 case "2560x1440":
                                 case "3840x2160":
@@ -2976,8 +3056,15 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                case "1680x1050":
+                                case "1920x1200":
                                     return HQBCL1_5C2x16; // Smooth Serif.
                                 case "1366x768":
+                                case "1600x900":
+                                case "1280x720":
+                                case "1360x768":
+                                case "1280x800":
+                                case "1440x900":
                                     return HQBCL2C6x4; // Para Smooth Serif: HQBCL1_5C2x16.
                                 case "2560x1440":
                                 case "3840x2160":
@@ -2989,8 +3076,15 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                case "1680x1050":
+                                case "1920x1200":
                                     return HQBCL2C2x16; // Smooth Serif.
                                 case "1366x768":
+                                case "1600x900":
+                                case "1280x720":
+                                case "1360x768":
+                                case "1280x800":
+                                case "1440x900":
                                     return NNL1C2x1; // Para Smooth Serif: HQBCL2C2x16.
                                 case "2560x1440":
                                 case "3840x2160":
@@ -3002,8 +3096,15 @@ namespace RTSHelper {
 
                             switch (Preferencias.ScreenResolution) {
                                 case "1920x1080":
+                                case "1680x1050":
+                                case "1920x1200":
                                     return NNL1C2x1; // Smooth Serif.
                                 case "1366x768":
+                                case "1600x900":
+                                case "1280x720":
+                                case "1360x768":
+                                case "1280x800":
+                                case "1440x900":
                                     return HQBCL1C2x16; // Para Smooth Serif: NNL1C2x1.
                                 case "2560x1440":
                                 case "3840x2160":

@@ -44,10 +44,17 @@
                                 </ComboBox>
 
                                 <ComboBox SelectionChanged="CmbResolution_SelectionChanged" x:Name="CmbResolution" Margin="4">
-                                    <ComboBoxItem>1920x1080</ComboBoxItem>
-                                    <ComboBoxItem>2560x1440</ComboBoxItem>
-                                    <ComboBoxItem>1366x768</ComboBoxItem>
                                     <ComboBoxItem>3840x2160</ComboBoxItem>
+                                    <ComboBoxItem>2560x1440</ComboBoxItem>
+                                    <ComboBoxItem>1920x1200</ComboBoxItem>
+                                    <ComboBoxItem>1920x1080</ComboBoxItem>
+                                    <ComboBoxItem>1680x1050</ComboBoxItem>
+                                    <ComboBoxItem>1600x900</ComboBoxItem>
+                                    <ComboBoxItem>1440x900</ComboBoxItem>
+                                    <ComboBoxItem>1366x768</ComboBoxItem>
+                                    <ComboBoxItem>1360x768</ComboBoxItem>
+                                    <ComboBoxItem>1280x800</ComboBoxItem>
+                                    <ComboBoxItem>1280x720</ComboBoxItem>
                                 </ComboBox>
 
                                 <ComboBox SelectionChanged="CmbGameLanguage_SelectionChanged" x:Name="CmbGameLanguage" Margin="4">

@@ -8,6 +8,7 @@ using System.IO;
 using static RTSHelper.Global;
 using static Vixark.General;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 
 
@@ -342,6 +343,10 @@ namespace RTSHelper {
 
         public string EnglishNamesPath => Path.Combine(NamesDirectory, "English Names.json"); // Es temporal, se escribe usando información de la hoja de excel para crear el Names.json que contiene los otros idiomas.
 
+        public int WidthScreenResolution => int.Parse(Regex.Match(Preferencias.ScreenResolution, "([0-9]+)x").Groups[1].Value);
+
+        public int HeightScreenResolution => int.Parse(Regex.Match(Preferencias.ScreenResolution, "x([0-9]+)").Groups[1].Value);
+
         #endregion Propiedades Autocalculadas>
 
 
@@ -393,11 +398,21 @@ namespace RTSHelper {
 
             switch (resolución) {
                 case "1920x1080":
+                case "1680x1050":
+                case "1920x1200":
 
                     Height = 146 * CorrecciónEscala;
                     Width = 495 * CorrecciónEscala;
                     Top = 718 * CorrecciónEscala;
                     Left = 722 * CorrecciónEscala;
+                    if (resolución == "1680x1050") {
+                        Top = 695 * CorrecciónEscala;
+                        Left = 600 * CorrecciónEscala;
+                    }
+                    if (resolución == "1920x1200") {
+                        Top = 815 * CorrecciónEscala;
+                        Left = 722 * CorrecciónEscala;
+                    }
                     CurrentStepFontSize = 18.5 * CorrecciónEscala;
                     NextPreviousStepFontSize = 11.5 * CorrecciónEscala;
                     ButtonsSize = 24 * CorrecciónEscala;
@@ -442,11 +457,22 @@ namespace RTSHelper {
                     break;
 
                 case "1366x768":
+                case "1280x720":
+                case "1360x768":
+                case "1280x800":
 
                     Height = 105 * CorrecciónEscala;
                     Width = 354 * CorrecciónEscala;
                     Top = 510 * CorrecciónEscala;
                     Left = 513 * CorrecciónEscala;
+                    if (resolución == "1280x720") {
+                        Top = 472 * CorrecciónEscala;
+                        Left = 470 * CorrecciónEscala;
+                    }
+                    if (resolución == "1280x800") {
+                        Top = 538 * CorrecciónEscala;
+                        Left = 475 * CorrecciónEscala;
+                    }
                     CurrentStepFontSize = 13.5 * CorrecciónEscala;
                     NextPreviousStepFontSize = 8.3 * CorrecciónEscala;
                     ButtonsSize = 17 * CorrecciónEscala;
@@ -463,6 +489,35 @@ namespace RTSHelper {
                     ExecutionSpeedSelectorWidth = 40 * CorrecciónEscala;
                     ThicknessCircularProgressBar = 4 * CorrecciónEscala;
                     RightMarginCircularProgressBar = 4 * CorrecciónEscala;
+                    break;
+
+                case "1600x900":
+                case "1440x900":
+
+                    Height = 125 * CorrecciónEscala;
+                    Width = 424 * CorrecciónEscala;
+                    Top = 595 * CorrecciónEscala;
+                    Left = 595 * CorrecciónEscala;
+                    if (resolución == "1440x900") {
+                        Top = 595 * CorrecciónEscala;
+                        Left = 510 * CorrecciónEscala;
+                    }
+                    CurrentStepFontSize = 16 * CorrecciónEscala;
+                    NextPreviousStepFontSize = 10 * CorrecciónEscala;
+                    ButtonsSize = 20.5 * CorrecciónEscala;
+                    ButtonsMargin = 1.5 * CorrecciónEscala;
+                    ButtonsPadding = 1.5 * CorrecciónEscala;
+                    LargeFontSize = 14 * CorrecciónEscala;
+                    MediumFontSize = 12 * CorrecciónEscala;
+                    LeftMarginCurrentStep = 11.5 * CorrecciónEscala;
+                    TopMarginCurrentStep = 2.5 * CorrecciónEscala;
+                    TopMarginNextPreviousStep = 21 * CorrecciónEscala;
+                    BottomMargenSteps = 2.5 * CorrecciónEscala;
+                    RightMarginNextPreviousStep = 56 * CorrecciónEscala;
+                    BuildOrderSelectorWidth = 128 * CorrecciónEscala;
+                    ExecutionSpeedSelectorWidth = 47.5 * CorrecciónEscala;
+                    ThicknessCircularProgressBar = 5 * CorrecciónEscala;
+                    RightMarginCircularProgressBar = 5 * CorrecciónEscala;
                     break;
 
                 default:
@@ -495,6 +550,8 @@ namespace RTSHelper {
 
                 switch (resolución) {
                     case "1920x1080":
+                    case "1680x1050":
+                    case "1920x1200":
 
                         BottomMargenSteps += 32 * CorrecciónEscala;
                         Height = 146 * CorrecciónEscala;
@@ -518,6 +575,9 @@ namespace RTSHelper {
                         break;
 
                     case "1366x768":
+                    case "1280x720":
+                    case "1360x768":
+                    case "1280x800":
 
                         BottomMargenSteps += 26 * CorrecciónEscala;
                         Height = 105 * CorrecciónEscala;
@@ -526,6 +586,18 @@ namespace RTSHelper {
                         Left = 743 * CorrecciónEscala;
                         CurrentStepFontSize = 10 * CorrecciónEscala;
                         BuildOrderSelectorWidth = 97 * CorrecciónEscala;
+                        break;
+
+                    case "1600x900":
+                    case "1440x900":
+
+                        BottomMargenSteps += 29 * CorrecciónEscala;
+                        Height = 125 * CorrecciónEscala;
+                        Width = 226 * CorrecciónEscala;
+                        Top = 614 * CorrecciónEscala;
+                        Left = 894 * CorrecciónEscala;
+                        CurrentStepFontSize = 12.3 * CorrecciónEscala;
+                        BuildOrderSelectorWidth = 119 * CorrecciónEscala;
                         break;
 
                     default:
