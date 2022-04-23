@@ -346,9 +346,9 @@ namespace RTSHelper {
 
         public static Dictionary<ScreenCaptureText, Controles.Image> RectángulosImágenesPrueba = new Dictionary<ScreenCaptureText, Image>();
 
-        public static string EnlaceDonación = "https://www.paypal.com/donate/?hosted_button_id=RZL9L6X3QZLXW";
+        public static string EnlaceDonación = "http://vixark.com/donate";
 
-        public static List<string> ÓrdenesDeEjecuciónAEliminar = new List<string> { "Crossbows Flood by Vixark" }; // A estas órdenes de ejecución se les cambió el nombre por otro, y el archivo con este nombre fue sobreescrito con un txt vacío y se quiere que sea eliminado al iniciar.
+        public static List<string> ÓrdenesDeEjecuciónAEliminar = new List<string> { }; // A estas órdenes de ejecución se les cambió el nombre por otro, y el archivo con este nombre fue sobreescrito con un txt vacío y se quiere que sea eliminado al iniciar.
 
         #endregion Variables>
 

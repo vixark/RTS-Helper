@@ -695,19 +695,19 @@
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Margin="0 0 0 5">Help:
-                                <Hyperlink Click="Lnk_Click" NavigateUri="http://vixark.com/age-of-empires-ii/rts-helper-help">vixark.com/age-of-empires-ii/rts-helper-help</Hyperlink>
+                                <Hyperlink Click="Lnk_Click" NavigateUri="http://vixark.com/rts-helper/help">vixark.com/rts-helper/help</Hyperlink>
                             </TextBlock>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Margin="0 0 0 5">Website:
-                                <Hyperlink Click="Lnk_Click" NavigateUri="http://vixark.com/age-of-empires-ii/rts-helper">vixark.com/age-of-empires-ii/rts-helper</Hyperlink>
+                                <Hyperlink Click="Lnk_Click" NavigateUri="http://vixark.com/rts-helper">vixark.com/rts-helper</Hyperlink>
                             </TextBlock>
                         </StackPanel>
                         
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Margin="0 0 0 5">Documentation:
-                                <Hyperlink Click="Lnk_Click" NavigateUri="http://vixark.com/age-of-empires-ii/rts-helper-documentation">vixark.com/age-of-empires-ii/rts-helper-documentation</Hyperlink>
+                                <Hyperlink Click="Lnk_Click" NavigateUri="http://vixark.com/rts-helper/documentation">vixark.com/rts-helper/documentation</Hyperlink>
                             </TextBlock>
                         </StackPanel>
 
