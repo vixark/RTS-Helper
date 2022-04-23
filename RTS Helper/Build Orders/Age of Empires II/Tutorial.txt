@@ -44,4 +44,4 @@
 
 || 19 || <title m>Colors:   <brown>Brown   <aqua>Aqua   <seagreen>Sea Green   <#B5B>Any custom color.
 
-|| 20 || End of tutorial.      To learn more visit: http://vixark.com/age-of-empires-ii/rts-helper:Vixark.com
+|| 20 || End of tutorial.      To learn more, visit: http://vixark.com/rts-helper:Vixark.com
