@@ -1,0 +1,1 @@
+Create a file with the name Windows Beep ###Hz ###ms and RTS Helper will reproduce a sound with that frequency (higher Hz is more high pitch) and that duration in miliseconds (ms). The drawback of these beeps is that their volume can't be modified.
