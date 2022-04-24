@@ -13,7 +13,7 @@ Dynamic build order reader for real-time strategy video games. It lets you to re
 # Running it from code
 * Extract RTS Helper binaries (Zip file) in your computer, for example in D:\Programs\RTS Helper 1.4.0\RTS Helper.
 * Open the code and change the following variables: 
-* Global.cs > DirectorioAOE2 to your AoE2DE Steam folder (it doesn't work with for Windows Store Version) 
+* Global.cs > DirectorioAOE2 to your AoE2DE Steam folder (it doesn't work with for the Windows Store version of the game).
 * Global.cs > DirectorioAplicaciónReal to your RTS Helper folder, for example: D:\Programs\RTS Helper 1.4.0\RTS Helper.
 * Global.cs > ModoDesarrollo to true.
 * Run RTS Helper from your development enviroment.
