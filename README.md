@@ -1,6 +1,8 @@
 # RTS Helper
 Dynamic build order reader for real-time strategy video games. It lets you to read a set of instructions of your build order in real time. It makes easier to follow and learn build orders.
 
+It supports Age of Empires II and includes <a href="https://www.youtube.com/channel/UCeqc9aYVAZcRQq9Ey0x26AQ">Hera</a>'s build orders.
+
 # Games Supported
 * Age of Empires II
 * Age of Empires IV (soon)
