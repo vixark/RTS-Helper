@@ -4,9 +4,9 @@
 
 <<r=<b xs is100> x=<sub> p=<sup>>>
 
-[[xf=[<x>[flag]<>] mc@s=[[mc]<x>[stone mine]<>] mc@g=[[mc]<x>[gold mine]<>] 1hv@berries=[[v]<x>[berries]<> [->] [h] [->] [berries]<x>[flag]<>] 2hv@berries=[[v]<x>[berries]<> [->] 2 [h] [->] [berries]<x>[flag]<>] 1hv@g=[[v]<x>[gold mine]<> [->] [h] [->] [gold mine]<x>[flag]<>] 2hv@g=[[v]<x>[gold mine]<> [->] 2 [h] [->] [gold mine]<x>[flag]<>] 3hv@g=[[v]<x>[gold mine]<> [->] 3 [h] [->] [gold mine]<x>[flag]<>] 4hv@w=[[v]<x>[tree]<> [->] 4 [h] [->] [tree]<x>[flag]<>]  3hv@w=[[v]<x>[tree]<> [->] 3 [h] [->] [tree]<x>[flag]<>] 2hv@w=[[v]<x>[tree]<> [->] 2 [h] [->] [tree]<x>[flag]<>] 1hv@str=[[v]<x>[str]<> [->] [h] [->] [str]<x>[flag]<>] 1hv@w=[[v]<x>[tree]<> [->] [h] [->] [tree]<x>[flag]<>] farm@tc=[[farm]<x>[tc]<>] farm@mill=[[farm]<x>[mill]<>] ->shp=[[->] [shp]<x>[flag]<>] ->berries=[[->] [berries]<x>[flag]<>] ->w=[[->] [tree]<x>[flag]<>] ->str=[[->] [str]<x>[flag]<>] ->g=[[->] [gold mine]<x>[flag]<>] ->s=[[->] [stone mine]<x>[flag]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@g=[[v]<x>[gold mine]<>] v@s=[[v]<x>[stone mine]<>] v@berries=[[v]<x>[berries]<>] v@deer=[[v]<x>[deer]<>] v@w=[[v]<x>[tree]<>] v@str=[[v]<x>[str]<>] +1h=[[v]<x>[h]<> [->] [h]<x>[flag]<>] +2h=[[v]<x>[h]<> [->] 2 [h]<x>[flag]<>] +3h=[[v]<x>[h]<> [->] 3 [h]<x>[flag]<>] +4h=[[v]<x>[h]<> [->] 4 [h]<x>[flag]<>] vdboar=[[v]<p>[drop food]<x>[boar]<>] vddeer=[[v]<p>[drop food]<x>[deer]<>] vdstr=[[v]<p>[drop wood]<x>[str]<>] vdw=[[v]<p>[drop wood]<x>[tree]<>] vdshp=[[v]<p>[drop food]<x>[shp]<>] vdberries=[[v]<p>[drop food]<x>[berries]<>] vdg=[[v]<p>[drop gold]<x>[gold mine]<>] vds=[[v]<p>[drop stone]<x>[stone mine]<>]]]
+[[xf=[<x>[flag]<>] mc@s=[[mc]<x>[stone mine]<>] mc@g=[[mc]<x>[gold mine]<>] 1hv@berries=[[v]<x>[berries]<> [->] [h] [->] [berries]<x>[flag]<>] 2hv@berries=[[v]<x>[berries]<> [->] 2 [h] [->] [berries]<x>[flag]<>] 1hv@g=[[v]<x>[gold mine]<> [->] [h] [->] [gold mine]<x>[flag]<>] 2hv@g=[[v]<x>[gold mine]<> [->] 2 [h] [->] [gold mine]<x>[flag]<>] 3hv@g=[[v]<x>[gold mine]<> [->] 3 [h] [->] [gold mine]<x>[flag]<>] 4hv@w=[[v]<x>[tree]<> [->] 4 [h] [->] [tree]<x>[flag]<>]  3hv@w=[[v]<x>[tree]<> [->] 3 [h] [->] [tree]<x>[flag]<>] 2hv@w=[[v]<x>[tree]<> [->] 2 [h] [->] [tree]<x>[flag]<>] 1hv@str=[[v]<x>[str]<> [->] [h] [->] [str]<x>[flag]<>] 2hv@str=[[v]<x>[str]<> [->] 2 [h] [->] [str]<x>[flag]<>] 1hv@w=[[v]<x>[tree]<> [->] [h] [->] [tree]<x>[flag]<>] 1fv@str=[[v@str] [->] [farm]] 2fv@str=[2[v@str] [->] 2 [farm]] 3fv@str=[3[v@str] [->] 3 [farm]] 4fv@str=[4[v@str] [->] 4 [farm]] 5fv@str=[5[v@str] [->] 5 [farm]] 6fv@str=[6[v@str] [->] 6 [farm]] v@pal=[[v]<x>[palisade]<>] 1hv@pal=[[v]<x>[palisade]<> [->] [h] [->] [palisade]<x>[flag]<>] 2hv@pal=[[v]<x>[palisade]<> [->] 2 [h] [->] [palisade]<x>[flag]<>] farm@tc=[[farm]<x>[tc]<>] mill@berries=[[mill]<x>[berries]<>] farm@mill=[[farm]<x>[mill]<>] ->shp=[[->] [shp]<x>[flag]<>] ->pal=[[->] [palisade]<x>[flag]<>] ->berries=[[->] [berries]<x>[flag]<>] ->boar=[[->] [boar]<x>[flag]<>] ->w=[[->] [tree]<x>[flag]<>] ->str=[[->] [str]<x>[flag]<>] ->g=[[->] [gold mine]<x>[flag]<>] ->s=[[->] [stone mine]<x>[flag]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@g=[[v]<x>[gold mine]<>] v@s=[[v]<x>[stone mine]<>] v@berries=[[v]<x>[berries]<>] v@deer=[[v]<x>[deer]<>] v@w=[[v]<x>[tree]<>] v@str=[[v]<x>[str]<>] +1h=[[v]<x>[h]<> [->] [h]<x>[flag]<>] +2h=[[v]<x>[h]<> [->] 2 [h]<x>[flag]<>] +3h=[[v]<x>[h]<> [->] 3 [h]<x>[flag]<>] +4h=[[v]<x>[h]<> [->] 4 [h]<x>[flag]<>] vdboar=[[v]<p>[drop food]<x>[boar]<>] vddeer=[[v]<p>[drop food]<x>[deer]<>] vdstr=[[v]<p>[drop wood]<x>[str]<>] vdw=[[v]<p>[drop wood]<x>[tree]<>] vdshp=[[v]<p>[drop food]<x>[shp]<>] vdfarm=[[v]<p>[drop food]<x>[farm]<>] vdberries=[[v]<p>[drop food]<x>[berries]<>] vdg=[[v]<p>[drop gold]<x>[gold mine]<>] vds=[[v]<p>[drop stone]<x>[stone mine]<>]]]
 
-((6 [scout] [->] [knights] @ 2[stables] on <xl>[green arabia]<>   <b>Version:<> 1.0   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] http://vixark.com/donate:Donate   <b>Difficulty:<> Easy))
+((6 [scout] [->] [knights] @ 2[stables] on <xl>[green arabia]<>   <b>Version:<> 1.1   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] http://vixark.com/donate:Donate   <b>Difficulty:<> Easy))
 
 || 0 - 0:00 ||  {p=3 sns="no"} + 4[v] [3s] 2[v] [->] [h] [3s] [v] [->] [h]   [shp]<x>[1]<> [->] [tc] [9s] 3[v]<x>[h]<> [->] [shp]<p>[flag]<x>[1]<>   [v]<x>[4][-][6]<> [->] [shp]<x>[1]<> [3s] [scout] [->] [shp]<x>[2][-][4]<> [->] [explore][xf]  /f <r>3[h]  3[pop]
 
@@ -44,7 +44,7 @@
 
 || 17 - 7:05 ||  {p=19 t=65} [vdshp] [->] [tree]   [vdshp] [->] [str]    5[v@shp] [->] [shp]<p>[flag]<x>[6][-][8]<>  /f <r>9[w]  10[f]  19[pop]
 
-|| 18 - 8:10 ||  {p=19 t=65 sps="no" sns="no"} + 2[v] [3s] [v@str] [->] [rax] [->str]   [v@str] [->] 2 [h] [->str]   3[vddeer] [->berries]  /f <r>7[w]  10[f]  1[h]  1[rax]  19[pop]
+|| 18 - 8:10 ||  {p=19 t=65 sps="no" sns="no"} + 2[v] [3s] [v@str] [->] [rax] [->str]   [2hv@str]   3[vddeer] [->berries]  /f <r>7[w]  10[f]  1[h]  1[rax]  19[pop]
 
 || 19 - 9:15 ||  {p=19 sps="no"} 2 [v@w] [->] [stable] [->w]   [dba]   4[vdstr] [->] [deer]<p>[flag]<x>[4]<>  /f <r>3[w]  14[f]  2[stable]  19[pop]
 
@@ -58,21 +58,21 @@
 
 || 24 - 11:20 ||  {p=24} +[v]   4[v@deer] [->] [mill] [->]   [3s] [deer]<p>[flag]<x>[4][-][6]<> [->w]  /f <r>11[w]  8[f]  1[h]  4[mill]  24[pop]
 
-|| 25 - 11:45 ||  {p=25} +[sc] [3s] +[v]   [v]<x>[2][6][-][3][2]<> [->] [str]   4[vdstr] [->] [stone wall] + [palisade wall]  /f <r>9[w]  12[f]  4[stone wall]  25[pop]
+|| 25 - 11:45 ||  {p=25} +[sc] [3s] +[v]   [v]<x>[2][6][-][3][2]<> [->] [str]   4[vdstr] [->] [stone wall] + [palisade]  /f <r>9[w]  12[f]  4[stone wall]  25[pop]
 
 || 26 - 12:10 ||  {p=26} +[v]   4[v@berries] [->] 4 [farm]   +[sc]  /f <r>10[w]  8[f]  4[farm]  4[stone wall]  26[pop]
 
 || 27 - 12:35 ||  {p=27} +[v]   [2hv@w]  /f <r>10[w]  12[f]  1[h]  4[stone wall]  27[pop]
 
-|| 28 - 13:00 ||  {p=28} +[v]   2 [v@str] [->] 2 [farm] /f <r>9[w]  12[f]  1[h]  2[farm]  4[stone wall]  28[pop]
+|| 28 - 13:00 ||  {p=28} +[v]   [2fv@str]  /f <r>9[w]  12[f]  1[h]  2[farm]  4[stone wall]  28[pop]
 
-|| 29 - 13:25 ||  {p=29} + 2[v]   2[v@str] [->] 2 [farm]  /f <r>9[w]  14[f]  2[farm]  4[stone wall]  29[pop]
+|| 29 - 13:25 ||  {p=29} + 2[v]   [2fv@str]  /f <r>9[w]  14[f]  2[farm]  4[stone wall]  29[pop]
 
 || 30 - 13:50 ||  {p=30 empty} /f <r>10[w]  16[f]  4[stone wall]  30[pop]
 
-|| 31 - 14:15 ||  {p=31} + 2[v]   2[v@str] [->] 2 [farm]  /f <r>9[w]  16[f]  2[farm]  4[stone wall]  31[pop]
+|| 31 - 14:15 ||  {p=31} + 2[v]   [2fv@str]  /f <r>9[w]  16[f]  2[farm]  4[stone wall]  31[pop]
 
-|| 32 - 14:40 ||  {p=32} [v@str] [->] [farm]   [v@str] [->] [mc@g]   [v]<x>[3][3][-][3][9]<> [->] [gold mine]  /f <r>8[w]  18[f]  1[farm]  1[mc]  4[stone wall]  32[pop]
+|| 32 - 14:40 ||  {p=32} [1fv@str]   [v@str] [->] [mc@g]   [v]<x>[3][3][-][3][9]<> [->] [gold mine]  /f <r>8[w]  18[f]  1[farm]  1[mc]  4[stone wall]  32[pop]
 
 || 33 - 15:05 ||  {p=33} + 2[v]   [v]<p>[idle]<x>[stone wall]<> [->] [gold mine]  /f <r>12[w]  15[f]  2[g]  4[stone wall]  33[pop]
 

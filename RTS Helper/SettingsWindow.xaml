@@ -729,7 +729,10 @@
                          <TextBlock TextWrapping="Wrap" Margin="0 0 0 10">
                             Thanks to Shorcle and Bryan for their help with testing and ideas.
                         </TextBlock>
-
+                        <TextBlock TextWrapping="Wrap" Margin="0 0 0 10">
+                            Thanks to Hera for allowing to include his build orders.
+                        </TextBlock>
+                        
                         <StackPanel Orientation="Horizontal">
                             <Label FontSize="{DynamicResource FuenteGrande}" FontWeight="Bold" Margin="-5 0 0 0">Legal</Label>
                         </StackPanel>

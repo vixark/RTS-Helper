@@ -492,7 +492,7 @@ namespace RTSHelper {
                         if (Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute)) {
 
                             enlace.NavigateUri = new Uri(url);
-                            var textoEnlace = match.Groups[2].Value;
+                            var textoEnlace = match.Groups[2].Value.Replace("_", " ");
                             enlace.Inlines.Add(string.IsNullOrWhiteSpace(textoEnlace) ? url : textoEnlace);
                             enlace.RequestNavigate += Enlace_RequestNavigate;
                             var textoPlano = texto.Substring(índiceActual, índiceMatch - índiceActual);

@@ -1,0 +1,91 @@
+|| Author: Hera, Date: 01/10/2021, Use Portuguese as a test civilization because they don't have early game economic bonuses and they have Bloodlines. With Portuguese the gold discount for knights would mean to have more gold than expected in Castle Age, but it's ok because that's the end of the build order. The 14 villagers on gold at the end is required for civilizations without gold discount on knights. Using Portuguese you need to wait 6 seconds after Loom to advance to Feudal Age and 17 seconds after Wheelbarrow to create next villagers to keep the timings the same as other civilizations. Read the documentation if you want to create your own build orders: http://vixark.com/rts-helper/documentation. ||
+
+{{t=25 empty={fc="none" s="none"}}}
+
+<<r=<b xs is100> x=<sub> p=<sup>>>
+
+[[xf=[<x>[flag]<>] mc@s=[[mc]<x>[stone mine]<>] mc@g=[[mc]<x>[gold mine]<>] 1hv@berries=[[v]<x>[berries]<> [->] [h] [->] [berries]<x>[flag]<>] 2hv@berries=[[v]<x>[berries]<> [->] 2 [h] [->] [berries]<x>[flag]<>] 1hv@g=[[v]<x>[gold mine]<> [->] [h] [->] [gold mine]<x>[flag]<>] 2hv@g=[[v]<x>[gold mine]<> [->] 2 [h] [->] [gold mine]<x>[flag]<>] 3hv@g=[[v]<x>[gold mine]<> [->] 3 [h] [->] [gold mine]<x>[flag]<>] 4hv@w=[[v]<x>[tree]<> [->] 4 [h] [->] [tree]<x>[flag]<>]  3hv@w=[[v]<x>[tree]<> [->] 3 [h] [->] [tree]<x>[flag]<>] 2hv@w=[[v]<x>[tree]<> [->] 2 [h] [->] [tree]<x>[flag]<>] 1hv@str=[[v]<x>[str]<> [->] [h] [->] [str]<x>[flag]<>] 2hv@str=[[v]<x>[str]<> [->] 2 [h] [->] [str]<x>[flag]<>] 1hv@w=[[v]<x>[tree]<> [->] [h] [->] [tree]<x>[flag]<>] 1fv@str=[[v@str] [->] [farm]] 2fv@str=[2[v@str] [->] 2 [farm]] 3fv@str=[3[v@str] [->] 3 [farm]] 4fv@str=[4[v@str] [->] 4 [farm]] 5fv@str=[5[v@str] [->] 5 [farm]] 6fv@str=[6[v@str] [->] 6 [farm]] v@pal=[[v]<x>[palisade]<>] 1hv@pal=[[v]<x>[palisade]<> [->] [h] [->] [palisade]<x>[flag]<>] 2hv@pal=[[v]<x>[palisade]<> [->] 2 [h] [->] [palisade]<x>[flag]<>] farm@tc=[[farm]<x>[tc]<>] mill@berries=[[mill]<x>[berries]<>] farm@mill=[[farm]<x>[mill]<>] ->shp=[[->] [shp]<x>[flag]<>] ->pal=[[->] [palisade]<x>[flag]<>] ->berries=[[->] [berries]<x>[flag]<>] ->boar=[[->] [boar]<x>[flag]<>] ->w=[[->] [tree]<x>[flag]<>] ->str=[[->] [str]<x>[flag]<>] ->g=[[->] [gold mine]<x>[flag]<>] ->s=[[->] [stone mine]<x>[flag]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@g=[[v]<x>[gold mine]<>] v@s=[[v]<x>[stone mine]<>] v@berries=[[v]<x>[berries]<>] v@deer=[[v]<x>[deer]<>] v@w=[[v]<x>[tree]<>] v@str=[[v]<x>[str]<>] +1h=[[v]<x>[h]<> [->] [h]<x>[flag]<>] +2h=[[v]<x>[h]<> [->] 2 [h]<x>[flag]<>] +3h=[[v]<x>[h]<> [->] 3 [h]<x>[flag]<>] +4h=[[v]<x>[h]<> [->] 4 [h]<x>[flag]<>] vdboar=[[v]<p>[drop food]<x>[boar]<>] vddeer=[[v]<p>[drop food]<x>[deer]<>] vdstr=[[v]<p>[drop wood]<x>[str]<>] vdw=[[v]<p>[drop wood]<x>[tree]<>] vdshp=[[v]<p>[drop food]<x>[shp]<>] vdfarm=[[v]<p>[drop food]<x>[farm]<>] vdberries=[[v]<p>[drop food]<x>[berries]<>] vdg=[[v]<p>[drop gold]<x>[gold mine]<>] vds=[[v]<p>[drop stone]<x>[stone mine]<>]]]
+
+((6 [sc] [->] [kts] @ 2[stable] on <xl>[green arabia]<>   <b>Version:<> 1.0   <b>Author:<> https://linktr.ee/HeraAOE:Hera [1s] https://streamelements.com/hera-5133/tip:Donate_to_Hera   <b>Difficulty:<> Easy))
+
+|| 0 - 0:00 ||  {p=3 sns="no"} + 4[v] [3s] 2[v] [->] [h] [3s] [v] [->] [h]   [shp]<x>[1]<> [->] [tc] [9s] 3[v]<x>[h]<> [->] [shp]<p>[flag]<x>[1]<>   [v]<x>[4][-][6]<> [->] [shp]<x>[1]<> [3s] [sc] [->] [shp]<x>[2][-][4]<> [->] [explore][xf]  /f <r>3[h]  3[pop]
+
+|| 1 - 0:25 ||  {p=4 empty} /f  <r>4[f]  4[pop]
+
+|| 2 - 0:50 ||  {p=5} [shp]<x>[2]<> [->] [tc]  /f  <r>5[f]  5[pop]
+
+|| 3 - 1:15 ||  {p=6} [v]<x>[7]<> [->] [lc]   +[v]   [shp]<x>[3][-][4]<> [->] [tc]  /f  <r>6[f]  6[pop]
+
+|| 4 - 1:40 ||  {p=7} [v]<x>[8][-][9]<> [->] [tree]   6[v@shp] [->] [shp]<p>[flag]<x>[3]<>   +[v]  /f  <r>6[f]  1[lc]  7[pop]
+
+|| 5 - 2:05 ||  {p=8} +[v]  /f  <r>1[w]  6[f]  1[lc]  8[pop]
+
+|| 6 - 2:30 ||  {p=9} [f]<x>[shp]<x xs>[3]<> [less than] 70 [->] [v@shp] [->] [boar]<x>[1]<>   [v]<x>[1][0][-][1][1]<> [->] [boar]<x>[1]<>   +[v]  /f  <r>3[w]  6[f]  9[pop]
+
+|| 7 - 2:55 ||  {p=10} +[v]   5[v@shp] [->boar]  /f <r>3[w]  7[f]  10[pop]
+
+|| 8 - 3:20 ||  {p=11} [v]<x>[1][2]<> [->] [h]<x>[berries]<> [->berries]   8[v@boar] [->] [drop food]   +[v]  /f <r>3[w]  8[f]  11[pop]
+
+|| 9 - 3:45 ||  {p=12} [v]<x>[1][3]<> [->] [mill]<x>[berries]<>   8[v@boar] [->] [drop food]   +[v]  /f <r>3[w]  8[f]  1[h]  12[pop]
+
+|| 10 - 4:10 ||  {p=13} [v]<x>[1][4]<> [->] [berries]   8[v@boar] [->] [drop food]   +[v]  /f <r>3[w]  9[f]  1[mill]  13[pop]
+
+|| 11 - 4:35 ||  {p=14} [v]<x>[1][5]<> [->] [boar]<x>[2]<>   8[v@boar] [->] [shp]<p>[flag]<x>[4]<>   +[v]  /f <r>3[w]  11[f]  14[pop]
+
+|| 12 - 5:00 ||  {p=15} [v]<x>[1][6]<> [->] [berries]   + 2[v]   8[v@shp] [->] [boar]<p>[flag]<x>[2]<>  /f <r>3[w]  12[f]  15[pop]
+
+|| 13 - 5:25 ||  {p=16} [v]<x>[1][7]<> [->] [boar]<x>[2]<>   + 2[v]   [1hv@w]  /f <r>2[w]  13[f]  1[h]  16[pop]
+
+|| 14 - 5:50 ||  {p=17} [v]<x>[1][8][-][1][9]<> [->] [tree]   If Found [shp]<x>[5][-][8]<> [->]   [3s] [sc] [->] [explore] Opponent  /f <r>3[w]  14[f]  17[pop]
+
+|| 15 - 6:15 ||  {p=18} 5[v@boar] [->] [shp]<p>[flag]<x>[6]<>   5[v@boar] [->] [shp]<p>[flag]<x>[7]<>  /f <r>4[w]  14[f]  18[pop]
+
+|| 16 - 6:40 ||  {p=19} [v]<x>[2][0]<> [->] [lc]<x>[2]<>   [loom]  /f <r>5[w]  14[f]  19[pop]
+
+|| 17 - 7:05 ||  {p=20} 5[v@shp] [->] [drop food]   [feudal age]  /f <r>5[w]  14[f]  1[lc]  20[pop]
+
+|| 18 - 7:30 ||  {p=20 t=65} 3[vdshp] [->] [tree][tree]<x>[2]<>   7[v@shp] [->] [shp]<p>[flag]<x>[7]<>   [v@berries] [->] [rax] [->berries]  /f <r>9[w]  10[f]  1[rax]  20[pop]
+
+|| 19 - 8:35 ||  {p=20 t=65} 7[v@shp] [->str]   + 2[v]   [v]<x>[2][1]<> [->] [tree][tree]<x>[2]<>  /f <r>16[w]  4[f]  20[pop]
+
+|| 20 - 9:40 ||  {p=20} 2[v@str] [->] [stable] [->] [h][xf] [->] [palisade][xf]   [dba]   [hrc]  /f <r>14[w]  4[f]  2[stable]  20[pop]
+
+|| 21 - 10:05 ||  {p=21} [v]<x>[2][2][-][3][0]<> [->] [str]   [4fv@str]   +[v] [3s] + 2 [sc]  /f <r>11[w]  4[f]  2[h]  4[farm]  21[pop]
+
+|| 22 - 10:30 ||  {p=22} [1fv@str]   +[v]  /f <r>11[w]  8[f]  1[farm]  2[palisade]  22[pop]
+
+|| 23 - 10:55 ||  {p=23} [1fv@str]   +[v]   [1hv@pal]  /f <r>11[w]  9[f]  1[h]  1[farm]  1[palisade]  23[pop]
+
+|| 24 - 11:20 ||  {p=24} [2fv@str]   +[v]   3 [sc] [->] [attack]  /f <r>10[w]  10[f]  2[farm]  2[palisade]  24[pop]
+
+|| 25 - 11:45 ||  {p=25} [1fv@str]   +[v]   /f <r>10[w]  12[f]  1[farm]  2[palisade]  25[pop]
+
+|| 26 - 12:10 ||  {p=26} [1fv@str]   +[v]   +[sc]  /f <r>10[w]  13[f]  1[farm]  2[palisade]  26[pop]
+
+|| 27 - 12:35 ||  {p=27} [1fv@str]<x>[mill]<>   +[v]  /f <r>10[w]  14[f]  1[farm]  2[palisade]  27[pop]
+
+|| 28 - 13:00 ||  {p=28} +[v]   +[sc]   [v@pal] [->] [h] [->] [palisade][xf]  /f <r>11[w]  15[f]  1[h]  1[palisade]  28[pop]
+
+|| 29 - 13:25 ||  {p=29} [2fv@str]<x>[mill]<>   +[v]   +[sc]  /f <r>10[w]  15[f]  2[farm]  2[palisade]  29[pop]
+
+|| 30 - 13:50 ||  {p=30} +[v]   [v]<x>[3][1][-]...<> [->] [gold mine]   [1fv@str]<x>[mill]<>  /f <r>10[w]  17[f]  1[farm]  2[palisade]  30[pop]
+
+|| 31 - 14:15 ||  {p=31} +[v]   [v]<p>[idle]<x>[palisade]<> [->] [gold mine]   [v@g] [->] [mc]  /f <r>10[w]  18[f]  1[mc]  2[palisade]  31[pop]
+
+|| 32 - 14:40 ||  {p=32} +[v]   [v@pal] [->] [h] [->] [blacksmith][xf] [->pal]  /f <r>10[w]  18[f]  1[g]  1[h]  1[mc]  1[palisade]  32[pop]
+
+|| 33 - 15:05 ||  {p=33} +[v] /f <r>10[w]  18[f]  3[g]  1[blacksmith]  1[palisade]  33[pop]
+
+|| 34 - 15:30 ||  {p=34} [wb] /f <r>10[w]  18[f]  4[g]  1[blacksmith]  1[palisade]  34[pop]
+
+|| 35 - 15:55 ||  {p=35 t=75} 4[v]<p>[idle]<x>[berries]<> [->] 4 [farm]   [castle age]  /f <r>10[w]  18[f]  7[g]  35[pop]
+
+|| 36 - 17:10 ||  {p=35 t=50} [v@w] [->] [stable] [->w]  /f <r>9[w]  18[f]  7[g]  1[stable]  35[pop]
+
+|| 37 - 18:00 ||  {p=35 t=55} [bloodlines]   [sba]   [gold mining]  /f <r>10[w]  18[f]  7[g]  35[pop]
+
+|| 38 - 18:55 ||  {p=35 t=55} + 2[v]  /f <r>10[w]  18[f]  7[g]  35[pop]
+
+|| 39 - 19:50 ||  {p=35 sns="no"} Start [kts] Production   5[v@w] [->] [tc]<x>[gold mine]<>   5[v@w] [->] [tc]<x>[tree]<>  /f <r>18[f]  7[g]  10[tc]  35[pop]
+
+|| 40 - 20:15 ||  {sps="no"} [knights] @ 2[stables] [1s] [v] @ 3 [tc]   [bow saw] [3s] [cba] [3s] [forging]   [heavy plow] [3s] [husbandry] [3s] [iron casting]  /f <r>10[w]  18[f]  8+[g]  36+[pop]
