@@ -34,7 +34,7 @@ namespace RTSHelper {
 
         public static Settings Preferencias = new Settings();
 
-        public static bool ModoDesarrollo = false;
+        public static bool ModoDesarrollo = true;
 
         public const string AOE2Name = "Age of Empires II";
 
@@ -94,7 +94,7 @@ namespace RTSHelper {
         public static string SeparadorDecimales = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
 
         public static InformaciónÚltimasVersiones? InformaciónÚltimasVersiones;
-
+        
         public enum NameType { // Al agregar un valor aquí, se debe agregar a Settings.NamesTypesPriority y en Idiomas si es un idioma.
             [Display(Name = "Complete Name")] Complete, [Display(Name = "Common Name")] Common, Abbreviation, Acronym,
             [Display(Name = "Plural Common Name")] CommonPlural, [Display(Name = "Plural Abbreviation")] AbbreviationPlural, 
