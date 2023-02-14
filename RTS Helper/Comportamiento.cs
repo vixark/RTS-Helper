@@ -52,7 +52,7 @@ namespace RTSHelper {
 
         public static Dictionary<string, int?> DuraciónPresonidos = new Dictionary<string, int?>();
 
-        public int? Progreso { get; set; } // Progreso de la orden de ejecución. Normalmente es la cantidad de unidades recolectoras económicas (aldeanos).
+        public int? Progreso { get; set; } // Progreso de la estrategia. Normalmente es la cantidad de unidades recolectoras económicas (aldeanos).
 
         #endregion Propiedades>
 
@@ -63,17 +63,17 @@ namespace RTSHelper {
         public Comportamiento() { }
 
 
-        public Comportamiento(string texto, out Dictionary<string, Comportamiento> clasesLeídas, Dictionary<string, Comportamiento>? clases, 
+        public Comportamiento(string código, out Dictionary<string, Comportamiento> clasesLeídas, Dictionary<string, Comportamiento>? clases, 
             out string? errores, int? númeroPaso) {
 
             errores = null;
             clasesLeídas = new Dictionary<string, Comportamiento>();
-            if (string.IsNullOrEmpty(texto)) return; // Si el texto es vacío, no contiene ni comportamientos ni clases.
+            if (string.IsNullOrEmpty(código)) return; // Si el texto es vacío, no contiene ni comportamientos ni clases.
 
             var palabrasClaveTextos = "s|es|fc|sns|sps";
             var palabrasClaveNúmeros = "t|fco|sv|esv|p";
             var palabrasClave = $"{palabrasClaveTextos}|{palabrasClaveNúmeros}".Split("|").ToList();
-            var textoMinúscula = texto.ToLowerInvariant();
+            var textoMinúscula = código.ToLowerInvariant();
 
             var coincidenciasClases = Regex.Matches(textoMinúscula, @"([áéíóúüa-z0-9_-]+)={(.+?)}"); // Primero extrae las coincidencias de clases de formato y las elimina del texto.
             if (coincidenciasClases.Count > 0) {

@@ -101,7 +101,7 @@ namespace RTSHelper {
             var segmentos = new List<Segmento>();
             var tipoActual = TipoSegmento.Texto;
             var textoActual = new StringBuilder();
-
+            
             foreach (var c in textoPresegmento) {
 
                 if (c == '[' || c == ']') {

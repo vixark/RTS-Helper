@@ -1,47 +1,51 @@
 {{t=15 es="none" s="none" sns="no" sps="no" short={t=5 s="default"} long={t=30}}}
 
-<<title=<b L> longtext=<s> footnote=<b xs is100>>>
+<<title=<b L> r=<b xs is100> x=<sub> p=<sup> t=<b font2 xl> xt=<sub b font2 xl> pt=<sup b font2>>>
 
-((<title>Welcome to RTS Helper!   <>This a tutorial build order.   <b>Game:<> Age of Empires II [1s] <b>Duration:<> 5 minutes   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com   Click ▷ to start.))
+[[>=[ → ] +=[<b>+<> ] 5=[<t>5<> ] v@shp=[[v]<x>[shp]<>] v@w=[[v]<x>[wl]<>] boar1=[[boar]<xt>1<>]]
 
-|| 0 || This is the first step.   Each step is a new line in the build order file:   <i>Build Orders\Age of Empires II\Tutorial.txt<>   Right click the build order selector   and click 'Edit' to open it.
+((<title>Welcome to RTS Helper!   <>This a tutorial build order.   <b>Game:<> Age of Empires II [1s] <b>Duration:<> 5 minutes   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark [3s] Click ▷ to start.))
 
-|| 1 || Use the control buttons: ▷ ❚❚ ■ ⟳ |◁  ▷|   to navigate the build order.   Right click the  |◁  and  ▷|  buttons to get access   to more control options.
+|| 0 ||  This is the first step. Each step is a new line   in the build order file: <i>Tutorial.txt<>. Right click the   build order selector and click 'Edit All Code' to open   it or click 'Edit Code' to edit the current step.
 
-|| 2 || You don't need to control anything while   playing. It automatically starts after the loading   screen, detects game pauses and autoadjusts the   step shown to the current villager count (useful   when you have town center idle time).
+|| 1 ||  Use the control buttons: ▷ ❚❚ ■ ⟳ |◁  ▷|   to navigate the build order.   Right click the  |◁  and  ▷|  buttons to get access   to more control options.
 
-|| 3 || After you finish the game, use the   stats button 📊 to check how much idle time   you had in each step.
+|| 2 ||  <s>You don't need to control anything while   playing. It automatically starts after the loading screen,   detects game pauses and autoadjusts the current step    to the current villager count, useful when you have town    center idle time, it waits for you!<>
 
-|| 4 || {s="Sheep Bah.mp3"}This is the fifth step.   Don't like the sheep baah?   You can change it for other sound,   mute it or customize it per step.
+|| 3 ||  After you finish the game, use the   stats button 📊 to check how much idle time   you had in each step.
 
-|| 5 || That's all you need to know to use   RTS Helper for following build orders.      Keep reading if you want to learn how to create   your own build order files.
+|| 4 ||  {s="Sheep Bah.mp3"}  This is the fifth step.   Don't like the sheep baah?   You can change it for other sound,   mute it or customize it per step.
 
-|| 6 || {s="Ticket Machine 1.mp3"}<title>Images<>   <longtext>To load them you can use their names between squared   brackets. Use abbreviations, common names and acronyms;   in plural or singular and even names in other supported   languages. See examples in next step.   See all avaliables names https://docs.google.com/spreadsheets/d/1N98XMYNNlUOlA45B3NKTJ54Fhuo53PFYSsnt_F2S7nU:here.
+|| 5 ||  Build orders include create [v] and [h]    instructions. If you don't need them, disable them    in ⚙️ > Personalization > Optional Instructions.
 
-|| 7 || {long}[open square bracket]Vil[close square bracket]: [Vil] [1s] [open square bracket]F[close square bracket]: [F] [1s] [open square bracket]MAA[close square bracket]: [MAA]   [open square bracket]Pike[close square bracket]: [Pike] [1s] [open square bracket]Bodkin[close square bracket]: [Bodkin] [1s] [open square bracket]竞技场[close square bracket]: [竞技场]   [open square bracket]Tirailleur d'élite[close square bracket]: [Tirailleur d'élite] [1s] [open square bracket]Castle Age[close square bracket]: [Castle Age]   [open square bracket]KTS[close square bracket]: [Knights] [1s] [open square bracket]Malians[close square bracket]: [Malians]
+|| 6 || That's all you need to know to use   RTS Helper for following build orders.      Keep reading if you want to learn how to create   your own build order files.
 
-|| 8 || {short}Make steps with very short   duration, like this one,   or as long as you want.
+|| 7 ||  {s="Ticket Machine 1.mp3"}  <title>Images: <s>To load them you can use their names   between squared brackets. Use abbreviations, common   names and acronyms; in plural or singular and even names   in other supported languages. See examples in next step.   See all avaliables names https://docs.google.com/spreadsheets/d/1N98XMYNNlUOlA45B3NKTJ54Fhuo53PFYSsnt_F2S7nU:here.
 
-|| 9 || Customize the flashing color   per step. For example, make it fucshia.
+|| 8 ||  {long}  [open square bracket]v[close square bracket]: [Vil] [1s] [open square bracket]maa[close square bracket]: [MAA] [open square bracket]pike[close square bracket]: [Pike]   [open square bracket]bodkin[close square bracket]: [Bodkin] [1s] [open square bracket]竞技场[close square bracket]: [竞技场] [1s] [open square bracket]poles[close square bracket]: [poles]   [open square bracket]tirailleur d'élite[close square bracket]: [Tirailleur d'élite] [1s] [open square bracket]castle age[close square bracket]: [Castle Age]
 
-|| 10 || {es="Sonar 1.mp3" fc="#F0F"}Play a sound before   ending the current step.
+|| 9 ||  {short}  Make steps with very short   duration, like this one,   or as long as you want.
 
-|| 11 || {sps="yes" s="default"}Preview next or previous step.   See previous step in the right [->]
+|| 10 ||  Customize the flashing color   per step. For example, make it fucshia.
 
-|| 12 || Keep reading if you   want to see other examples.
+|| 11 ||  {es="Sonar 1.mp3" fc="#F0F"}  Play a sound before   ending the current step.
 
-|| 13 || {s="AOE2 Gold.mp3"} [v]<sub>[1][8]<> [->] [gold mine]   [v]<sup>[sheep]<sub>[goat]<> [->] [drop food] [->] [boar]<sub>[1]<>   [V]<sub>[w][g][berries]<> [->] [rax] [->] [h] [->] [h]  /f  <footnote>12[w]  5[f]  3[g]  2[s]  22[pop]
+|| 12 ||  {sps="yes" s="default"}  Preview next or previous step.   See previous step in the right [>]
 
-|| 14 || {s="AOE2 Attack an Enemy Now.mp3"} [double-bit axe] + [horse collar] + [wheelbarrow]     5 [militia] [->] [attack]   20 [Geno] [->] [attack][knights]  /f  <footnote>12[w]  15[f]  7[g]  1[h]  34[pop]
+|| 13 ||  Keep reading if you   want to see other examples.
 
-|| 15 || {s="AOE2 The Wonder, The Wonder, The... No!.mp3|AOE2 You Played Two Hours to Die Like This.mp3|AOE2 (Herb Laugh).mp3"} [imperial age] [1s] [arbalester upgrade]   20[arb] + [trebuchet] [->] [attack] [wonder]   30 [champion] + [wonder] [->] [delete]  /f  <footnote>20[w]  40[f]  15[g]  6[s]  81[pop]
+|| 14 ||  {s="AOE2 Gold.mp3"}  [v]<xt>18<>[>][gm]   [v@shp][>][drop food][>][boar1]   [v@w]<x>[g][berries]<>[>][rax][>][h][>][h]  /f  <r>12[w]  5[f]  3[g]  2[s]  22[vs]
 
-|| 16 || <title>Font Sizes: <xxxl>Size XXXL,   <xxl>Size XXL, <xl>Size XL, <l>Size L, <m>Size M,   <s>Size S, <xs>Size XS, <xxs>Size XXS and <xxxs>Size XXXS.
+|| 15 ||  {s="AOE2 Attack an Enemy Now.mp3"}  [double-bit axe] [1s] [hrc] [1s] [wheelbarrow]     [5][militia][>][attack]   <t>20<>[geno][>][attack][kt]  /f  <r>12[w]  15[f]  7[g]  1[h]  34[vs]
 
-|| 17 || <title m>Font Styles:   <b>Bold   <u>Underline   <i>Italics
+|| 16 ||  {s="AOE2 The Wonder, The Wonder, The... No!.mp3|AOE2 You Played Two Hours to Die Like This.mp3|AOE2 (Herb Laugh).mp3"}  [imperial age] [1s] [arbalester upgrade]   <t>20<>[arb] [treb][>][attack] [wonder]   <t>30<> [champion] [wonder][>][delete]  /f  <r>20[w]  40[f]  15[g]  6[s]  81[vs]
 
-|| 18 || <title>Fonts, Subscripts and Superscripts   <arial s>Arial<arial sub s>ABC123  <impact s>Impact<impact sub s>123  <timesnewroman s>Times New Roman<sub timesnewroman s>123<> <cambria s>Cambria<cambria sup s>ABC123   <arialblack s>Arial Black<arialblack sup s>123  <Constantia s>Constantia<Constantia sup s>123  <couriernew s>courier new<couriernew sub s>ABC123   <calibri s>Calibri<calibri sub s>123  <palatinoLinotype s>Palatino Linotype<palatinoLinotype sub s>ABC123   <MVBoli s>MV Boli<MVBoli sub s>123  <gabriola s>Gabriola<gabriola sup s>ABC123
+|| 17 ||  <title>Font Sizes: <xxxl>Size XXXL,   <xxl>Size XXL, <xl>Size XL, <l>Size L, <m>Size M,   <s>Size S, <xs>Size XS, <xxs>Size XXS and <xxxs>Size XXXS.
 
-|| 19 || <title m>Colors:   <brown>Brown   <aqua>Aqua   <seagreen>Sea Green   <#B5B>Any custom color.
+|| 18 ||  <title m>Font Styles:   <b>Bold   <u>Underline   <i>Italics
 
-|| 20 || End of tutorial.      To learn more, visit: http://vixark.com/rts-helper:Vixark.com
+|| 19 ||  <title>Fonts, Subscripts and Superscripts   <arial s>Arial<arial sub s>ABC123  <impact s>Impact<impact sub s>123  <timesnewroman s>Times New Roman<sub timesnewroman s>123<> <cambria s>Cambria<cambria sup s>ABC123   <arialblack s>Arial Black<arialblack sup s>123  <Constantia s>Constantia<Constantia sup s>123  <couriernew s>courier new<couriernew sub s>ABC123   <calibri s>Calibri<calibri sub s>123  <palatinoLinotype s>Palatino Linotype<palatinoLinotype sub s>ABC123   <MVBoli s>MV Boli<MVBoli sub s>123  <gabriola s>Gabriola<gabriola sup s>ABC123
+
+|| 20 ||  <title m>Colors:   <aqua>Aqua   <seagreen>Sea Green   <#B5B>Any custom color.
+
+|| 21 ||  End of tutorial.      To learn more, visit: http://vixark.com/rts-helper:Vixark.com

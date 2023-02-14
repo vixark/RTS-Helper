@@ -437,6 +437,40 @@ namespace Vixark {
             => (T)Enum.Parse(typeof(T), texto, ignorarCapitalización);
 
 
+        public static double Ancho(this System.Windows.Controls.TextBlock textBlock) { // https://stackoverflow.com/questions/9264398/how-to-calculate-wpf-textblock-width-for-its-known-font-size-and-characters y https://stackoverflow.com/questions/45765980/formattedtext-formttedtext-is-obsolete-use-the-pixelsperdip-override.
+
+            var fuente = new System.Windows.Media.Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
+            var textoFormateado = new System.Windows.Media.FormattedText(textBlock.Text, Thread.CurrentThread.CurrentCulture, textBlock.FlowDirection,
+                fuente, textBlock.FontSize, textBlock.Foreground, System.Windows.Media.VisualTreeHelper.GetDpi(textBlock).PixelsPerDip);
+            var tamaño = new System.Windows.Size(textoFormateado.WidthIncludingTrailingWhitespace, textoFormateado.Height);
+            return tamaño.Width;
+
+        } // Ancho>
+
+
+        /// <summary>
+        /// Obtiene la ruta de una carpeta y provee la opción de crearla si no existe. Si se quiere verificar la existencia
+        /// de cierta carpeta se puede pasar la ruta en rutaPadre y pasar nombreCarpeta vacío. Funciona correctamente 
+        /// si la carpeta que se requiere crear está dentro de una carpeta que tampoco existe, en este caso se crean todas las carpetas 
+        /// necesarias para que exista la ruta rutaPadre + nombreCarpeta.
+        /// </summary>
+        public static string ObtenerRutaCarpeta(string rutaPadre, string nombreCarpeta, bool crearSiNoExiste) {
+
+            var ruta = Path.Combine(rutaPadre, nombreCarpeta);
+            if (!Directory.Exists(ruta)) {
+
+                if (crearSiNoExiste) {
+                    Directory.CreateDirectory(ruta);
+                } else {
+                    throw new ArgumentException($"No existe la carpeta {ruta}");
+                }
+
+            }
+            return ruta;
+
+        } // ObtenerRutaCarpeta>
+
+
     } // General>
 
 

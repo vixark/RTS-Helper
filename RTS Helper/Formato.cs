@@ -49,22 +49,24 @@ namespace RTSHelper {
         public Formato() { }
 
 
-        public Formato(string? texto, out Dictionary<string, Formato> clasesLeídas, Dictionary<string, Formato>? clases, out string? errores, int? númeroPaso) {
+        public Formato(string? código, out Dictionary<string, Formato> clasesLeídas, Dictionary<string, Formato>? clases, out string? errores, int? númeroPaso) {
 
             errores = null;
             clasesLeídas = new Dictionary<string, Formato>();
-            if (texto == null) return; // Si el texto es vacío, no contiene ni formatos ni clases.
+            if (código == null) return; // Si el texto es vacío, no contiene ni formatos ni clases.
 
-            var textoMinúscula = texto.ToLowerInvariant();
+            var códigoMinúscula = código.ToLowerInvariant();
             var palabrasClave = new List<string>();
             palabrasClave.AddRange(Estilos);
             palabrasClave.AddRange(Posiciones);
             palabrasClave.AddRange(Colores);
             palabrasClave.AddRange(Tamaños);
             palabrasClave.AddRange(Fuentes.Keys);
+            palabrasClave.AddRange(new List<string> { "font1", "font2" });
+
             var iniciosPalabrasClave = new List<string> { "#", "is" };
        
-            var coincidenciasClases = Regex.Matches(textoMinúscula, @"([áéíóúüa-z0-9_-]+)=<(.+?)>"); // Primero extrae las coincidencias de clases de formato y las elimina del texto.
+            var coincidenciasClases = Regex.Matches(códigoMinúscula, @"([áéíóúüa-z0-9_-]+)=<(.+?)>"); // Primero extrae las coincidencias de clases de formato y las elimina del texto.
             if (coincidenciasClases.Count > 0) {
                 foreach (Match? coincidenciasClase in coincidenciasClases) {
                     if (coincidenciasClase != null && coincidenciasClase.Success) {
@@ -81,7 +83,7 @@ namespace RTSHelper {
                             } else {
 
                                 clasesLeídas.Add(nombreClase, new Formato(textoFormatosClase, out _, null, out string? erroresInternos, númeroPaso));
-                                textoMinúscula = textoMinúscula.Replace(coincidenciasClase.Groups[0].Value, "");
+                                códigoMinúscula = códigoMinúscula.Replace(coincidenciasClase.Groups[0].Value, "");
                                 AgregarErrores(ref errores, erroresInternos, númeroPaso: null);
 
                             }
@@ -92,7 +94,7 @@ namespace RTSHelper {
                 }
             }
            
-            var valores = textoMinúscula.Split(" ").ToList() ?? new List<string>();
+            var valores = códigoMinúscula.Split(" ").ToList() ?? new List<string>();
             var formatosDeClases = new List<Formato>();
 
             foreach (var valor in valores) {
@@ -159,9 +161,15 @@ namespace RTSHelper {
 
                 }
 
-                if (Fuentes.Keys.Contains(valor)) {
-                    if (Preferencias.OverrideFontName) NombreFuente = Fuentes[valor].Nombre;
+                if (Fuentes.Keys.Contains(valor) || valor == "font1" || valor == "font2") {
+
+                    var valorAplicable = valor switch {
+                        "font1" => NombreFuentePredeterminada.Replace(" ", "").ToLowerInvariant(),
+                        "font2" => NombreFuenteSecundariaPredeterminada.Replace(" ", "").ToLowerInvariant(),
+                        _ => valor };
+                    if (Preferencias.OverrideFontName) NombreFuente = Fuentes[valorAplicable].Nombre;
                     valorIdentificado = true;
+
                 }
 
                 if (valor.StartsWith("is")) {
@@ -264,29 +272,17 @@ namespace RTSHelper {
         } // ObtenerFormatoEfectivo>
 
 
-        public double? TamañoFuenteEfectiva
-            => TamañoBaseFuente == null ? null : TamañoFuente switch {
-                TamañosFuente.XXXL => 2D * TamañoBaseFuente,
-                TamañosFuente.XXL => 1.5D * TamañoBaseFuente,
-                TamañosFuente.XL => 1.3D * TamañoBaseFuente,
-                TamañosFuente.L => 1.15D * TamañoBaseFuente,
-                TamañosFuente.M => 1 * TamañoBaseFuente, 
-                TamañosFuente.S => (1D / 1.2) * TamañoBaseFuente,
-                TamañosFuente.XS => (1D / 1.5) * TamañoBaseFuente,
-                TamañosFuente.XXS => (1D / 2) * TamañoBaseFuente,
-                TamañosFuente.XXXS => (1D / 3) * TamañoBaseFuente,
-                TamañosFuente.Indeterminado => null
-            };
-
+        public double? TamañoFuenteEfectiva => TamañoBaseFuente == null ? null : ObtenerFactorTamañoFuente(TamañoFuente) * TamañoBaseFuente;
 
         public string? ColorHexadecimal => Color == null ? null : Color.ToString();
 
-        public double? TamañoTextoEfectivo => TamañoFuenteEfectiva * FactorTamañoTextoAPixeles;
+        public double? TamañoTextoEfectivo => TamañoFuenteEfectiva * FactorTamañoTextoAPixelesFuentePredeterminada;
 
-        public double? ObtenerTamañoImagenEfectiva(double imageSize) => TamañoTextoEfectivo * (imageSize / 100);
+        public double? ObtenerTamañoImagenEfectiva(double tamañoImagen) => TamañoTextoEfectivo * (tamañoImagen / 100);
 
 
-        public static FontFamily ObtenerFuentePosiciónEspecial(PosiciónTexto posición, string texto, string nombreFuente, out string? errores, int? númeroPaso) {
+        public static FontFamily ObtenerFuentePosiciónEspecial(PosiciónTexto posición, string texto, string nombreFuente, out string? errores, 
+            int? númeroPaso) {
 
             errores = null;
             var tipo = Regex.IsMatch(texto, "^[0-9 ]+$") ? "num" : "alfanum"; // En Global.cs se buscó false, .*, true, .* y no hubo resultados. Esto significa que no hay fuentes que tengan superíndice letras y que no tengan superíndice números. Es decir el superíndice es alfanumérico o solo numérico. Igual para el subíndice.
@@ -301,8 +297,7 @@ namespace RTSHelper {
                     AgregarErrores(ref errores, "To Developer: Indeterminado is unexpected in ObtenerFuentePosiciónEspecial()", númeroPaso);
                     break;
                 case PosiciónTexto.Normal:
-                    AgregarErrores(ref errores, "To Developer: Normal is unexpected in ObtenerFuentePosiciónEspecial()", númeroPaso);
-                    break;
+                    return new FontFamily(fuente.Nombre);
                 case PosiciónTexto.Subíndice:
 
                     requerimiento = $"sub-{tipo}";

@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:RTSHelper"
         mc:Ignorable="d" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" ResizeMode="CanResizeWithGrip"
-        Title="Settings - RTS Helper" Height="490" Width="600" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
+        Title="Settings - RTS Helper" Height="520" Width="600" WindowStartupLocation="CenterScreen" Closed="Window_Closed" Activated="Window_Activated">
     <!--Se debe establecer CanResizeWithGrip porque algunos usuarios les aparece la ventana de settings cortada. No se porqué... Si se quiere quitar el botón de maximizar usar esto https://stackoverflow.com/questions/18707782/disable-maximize-button-of-wpf-window-keeping-resizing-feature-intact -->
 
     <Grid>
@@ -139,7 +139,7 @@
                 </ScrollViewer>
                 
             </TabItem>
-            <TabItem Header="Personalization" x:Name="TbiPersonalization">
+            <TabItem Header="Personalization" x:Name="TbiPersonalization" Selector.Selected="TbiPersonalization_Selected">
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
 
@@ -153,7 +153,8 @@
                                     <Label Margin="2" x:Name="LblFontColor">Fore Color:</Label>
                                     <Label Margin="2" x:Name="LblOpacity">Opacity:</Label>
                                     <Label Margin="2" FontWeight="Bold">Current Step</Label>
-                                    <Label Margin="2">Font Name:</Label>
+                                    <Label Margin="2">Font:</Label>
+                                    <Label Margin="2" ToolTip="Usually used for numbers.">Secondary Font:</Label>
                                     <Label Margin="2">Font Size:</Label>
                                     <Label Margin="2">Font Color:</Label>
                                     <Label Margin="2">Font Bold:</Label>
@@ -221,6 +222,53 @@
                                         <ComboBoxItem>Wingdings</ComboBoxItem>
                                     </ComboBox>
 
+                                    <ComboBox SelectionChanged="CmbSecondaryFontName_SelectionChanged" HorizontalAlignment="Stretch" Margin="4 2 4 7" x:Name="CmbSecondaryFontName" ToolTip="Usually used for numbers.">
+                                        <ComboBoxItem>Arial</ComboBoxItem>
+                                        <ComboBoxItem>Arial Black</ComboBoxItem>
+                                        <ComboBoxItem>Calibri</ComboBoxItem>
+                                        <ComboBoxItem>Cambria</ComboBoxItem>
+                                        <ComboBoxItem>Cambria Math</ComboBoxItem>
+                                        <ComboBoxItem>Candara</ComboBoxItem>
+                                        <ComboBoxItem>Comic Sans MS</ComboBoxItem>
+                                        <ComboBoxItem>Consolas</ComboBoxItem>
+                                        <ComboBoxItem>Constantia</ComboBoxItem>
+                                        <ComboBoxItem>Corbel</ComboBoxItem>
+                                        <ComboBoxItem>Courier New</ComboBoxItem>
+                                        <ComboBoxItem>Ebrima</ComboBoxItem>
+                                        <ComboBoxItem>Franklin Gothic Medium</ComboBoxItem>
+                                        <ComboBoxItem>Gabriola</ComboBoxItem>
+                                        <ComboBoxItem>Georgia</ComboBoxItem>
+                                        <ComboBoxItem>Impact</ComboBoxItem>
+                                        <ComboBoxItem>Lucida Console</ComboBoxItem>
+                                        <ComboBoxItem>Lucida Sans Unicode</ComboBoxItem>
+                                        <ComboBoxItem>Malgun Gothic</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Himalaya</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft JhengHei</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft New Tai Lue</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft PhagsPa</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Sans Serif</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Tai Le</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft YaHei</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Yi Baiti</ComboBoxItem>
+                                        <ComboBoxItem>Mongolian Baiti</ComboBoxItem>
+                                        <ComboBoxItem>MS Gothic</ComboBoxItem>
+                                        <ComboBoxItem>MV Boli</ComboBoxItem>
+                                        <ComboBoxItem>Palatino Linotype</ComboBoxItem>
+                                        <ComboBoxItem>Segoe Print</ComboBoxItem>
+                                        <ComboBoxItem>Segoe Script</ComboBoxItem>
+                                        <ComboBoxItem>Segoe UI</ComboBoxItem>
+                                        <ComboBoxItem>Segoe UI Symbol</ComboBoxItem>
+                                        <ComboBoxItem>SimSun</ComboBoxItem>
+                                        <ComboBoxItem>Sylfaen</ComboBoxItem>
+                                        <ComboBoxItem>Symbol</ComboBoxItem>
+                                        <ComboBoxItem>Tahoma</ComboBoxItem>
+                                        <ComboBoxItem>Times New Roman</ComboBoxItem>
+                                        <ComboBoxItem>Trebuchet MS</ComboBoxItem>
+                                        <ComboBoxItem>Verdana</ComboBoxItem>
+                                        <ComboBoxItem>Webdings</ComboBoxItem>
+                                        <ComboBoxItem>Wingdings</ComboBoxItem>
+                                    </ComboBox>
+                                    
                                     <TextBox TextChanged="TxtStepFontSize_TextChanged" x:Name="TxtStepFontSize" Margin="4 1 4 1" 
                                              HorizontalContentAlignment="Center" Width="40" Height="25" HorizontalAlignment="Left" 
                                              VerticalContentAlignment="Center" />
@@ -257,6 +305,9 @@
                                 <Label FontWeight="Bold">Buttons:</Label>
                                 <Label Margin="2">Stats:</Label>
                                 <Label Margin="2">Alternate View:</Label>
+                                <Label FontWeight="Bold" Name="LblOptionalInstructions">Optional Instructions:</Label>
+                                <Label Name="LblShowOptionalInstructions1" Margin="2">1:</Label>
+                                <Label Name="LblShowOptionalInstructions2" Margin="2">2:</Label>
                             </StackPanel>
 
                             <StackPanel x:Name="SpnSettings3" Orientation="Vertical" Width="150">
@@ -284,6 +335,14 @@
 
                                 <CheckBox Checked="ChkShowAlternateNextPreviousStepButton_Checked" Unchecked="ChkShowAlternateNextPreviousStepButton_Checked" 
                                           x:Name="ChkShowAlternateNextPreviousStepButton" Margin="4 9 0 9" />
+
+                                <Label Margin="0 10 0 0"/>
+
+                                <CheckBox Checked="ChkShowOptionalInstructions1_Checked" Unchecked="ChkShowOptionalInstructions1_Checked" 
+                                          x:Name="ChkShowOptionalInstructions1" Margin="4 9 0 9" />
+
+                                <CheckBox Checked="ChkShowOptionalInstructions2_Checked" Unchecked="ChkShowOptionalInstructions2_Checked" 
+                                          x:Name="ChkShowOptionalInstructions2" Margin="4 9 0 9" />
 
                             </StackPanel>
 

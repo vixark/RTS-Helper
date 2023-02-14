@@ -65,7 +65,11 @@ namespace RTSHelper {
 
         public static string NombreFuentePredeterminada = "Tahoma";
 
-        public static double FactorTamañoTextoAPixeles = 136D / 113; // Es un factor experimental para la fuente actual predeterminada (Tahoma) que permite convertir el tamaño de la fuente al tamaño de la imagen para que ambos sean del mismo alto. Se hace para la fuente predeterminada aunque no debería ser muy diferente con otras fuentes.
+        public static string NombreTimesNewRoman = "Times New Roman";
+
+        public static string NombreFuenteSecundariaPredeterminada = NombreTimesNewRoman;
+
+        public static double FactorTamañoTextoAPixelesFuentePredeterminada = 136D / 113; // Es un factor experimental para la fuente actual predeterminada (Tahoma) que permite convertir el tamaño de la fuente al tamaño de la imagen para que ambos sean del mismo alto. Se hace para la fuente predeterminada aunque no debería ser muy diferente con otras fuentes.
 
         public static string DirectorioSonidosCortos = Path.Combine(DirectorioAplicación, "Sounds", "Short");
 
@@ -75,11 +79,11 @@ namespace RTSHelper {
 
         public static string DirectorioTemporal = Path.Combine(DirectorioAplicación, "Temp");
 
-        public static string DirectorioÓrdenesDeEjecuciónCompilación = Path.Combine(DirectorioCompilación, "Build Orders");
+        public static string DirectorioEstrategiasCompilación = Path.Combine(DirectorioCompilación, "Build Orders");
 
-        public static string DirectorioÓrdenesDeEjecuciónCódigo = @"D:\Programas\RTS Helper\Código\RTS Helper\RTS Helper\Build Orders";
+        public static string DirectorioEstrategiasCódigo = @"D:\Programas\RTS Helper\Código\RTS Helper\RTS Helper\Build Orders";
 
-        public static string DirectorioÓrdenesDeEjecución = DirectorioÓrdenesDeEjecuciónCompilación; // Tanto en desarrollo como en producción es la misma carpeta porque las órdenes de ejecución se almacenan en el repositorio y se copian al directorio en la compilación.
+        public static string DirectorioEstrategias = DirectorioEstrategiasCompilación; // Tanto en desarrollo como en producción es la misma carpeta porque las estrategias se almacenan en el repositorio y se copian al directorio en la compilación.
 
         public static string DirectorioImágenes = Path.Combine(DirectorioAplicación, "Images");
 
@@ -122,8 +126,10 @@ namespace RTSHelper {
 
         public enum TipoFuente { Sans, SansNegrita, Serif, SerifCuadrada, Caligráfica, Símbolos }
 
-        public enum TipoArchivoActualización { Completo, ActualizaciónBinarios, Imágenes, Sonidos, ÓrdenesDeEjecución, InformaciónÚltimasVersiones, 
-            CambiosImágenes, CambiosSonidos, CambiosÓrdenesDeEjecución }
+        public enum FuenteEstrategia { Archivo, Memoria }
+
+        public enum TipoArchivoActualización { Completo, ActualizaciónBinarios, Imágenes, Sonidos, Estrategias, InformaciónÚltimasVersiones, 
+            CambiosImágenes, CambiosSonidos, CambiosEstrategias }
 
         public static Dictionary<string, Nombre> Nombres = new Dictionary<string, Nombre>(); // Los nombres no repetidos. La utilidad de este diccionario es principalmente para identificar nombres entre [] y reemplazarlo por la entidad correspondiente. La primera vez que aparezca un nombre sin importar en que idioma esté se agregará a este diccionario con ese idioma, los demás se ignoran. La clave son todos los nombres posibles.
 
@@ -348,7 +354,9 @@ namespace RTSHelper {
 
         public static string EnlaceDonación = "http://vixark.com/donate";
 
-        public static List<string> ÓrdenesDeEjecuciónAEliminar = new List<string> { }; // A estas órdenes de ejecución se les cambió el nombre por otro, y el archivo con este nombre fue sobreescrito con un txt vacío y se quiere que sea eliminado al iniciar.
+        public static List<string> ÓrdenesDeEjecuciónAEliminar = new List<string> { }; // A estas estrategias se les cambió el nombre por otro, y el archivo con este nombre fue sobreescrito con un TXT vacío y se quiere que sea eliminado al iniciar.
+
+        public static List<char> CarácteresComoImágenes = new List<char> { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '=', '%', '>', '<', '&', '$', '#', '@', '*', '_', '^', '!', '¡', '?', '¿', '\\', '/', '|' }; // Algunos carácteres se pueden también escribir como imágenes si se quiere generar una personalización especial de ese carácter. Estas imágenes de carácteres no tendrán el alto de las imágenes sino de la fuente.
 
         #endregion Variables>
 
@@ -373,7 +381,7 @@ namespace RTSHelper {
                     return $"{baseUrl}/images-{versiónActual}-to-{últimaVersión}.zip";
                 case TipoArchivoActualización.Sonidos:
                     return $"{baseUrl}/sounds-{versiónActual}-to-{últimaVersión}.zip";
-                case TipoArchivoActualización.ÓrdenesDeEjecución:
+                case TipoArchivoActualización.Estrategias:
                     return $"{baseUrl}/build-orders-{últimaVersión}.zip";
                 case TipoArchivoActualización.InformaciónÚltimasVersiones:
                     return $"{baseUrl}/last-versions-info.json";
@@ -381,13 +389,27 @@ namespace RTSHelper {
                     return $"{baseUrl}/images-changes-{versiónActual}-to-{últimaVersión}.html";
                 case TipoArchivoActualización.CambiosSonidos:
                     return $"{baseUrl}/sounds-changes-{versiónActual}-to-{últimaVersión}.html";
-                case TipoArchivoActualización.CambiosÓrdenesDeEjecución:
+                case TipoArchivoActualización.CambiosEstrategias:
                     return $"{baseUrl}/build-orders-changes-{versiónActual}-to-{últimaVersión}.html";
                 default:
                     return null;
             }
             
         } // ObtenerURLArchivo>
+
+
+        public static double? ObtenerFactorTamañoFuente(TamañosFuente tamañoFuente) => tamañoFuente switch {
+            TamañosFuente.XXXL => 2D,
+            TamañosFuente.XXL => 1.5D,
+            TamañosFuente.XL => 1.3D,
+            TamañosFuente.L => 1.15D,
+            TamañosFuente.M => 1,
+            TamañosFuente.S => (1D / 1.2),
+            TamañosFuente.XS => (1D / 1.5),
+            TamañosFuente.XXS => (1D / 2),
+            TamañosFuente.XXXS => (1D / 3),
+            TamañosFuente.Indeterminado => null
+        };
 
 
         public static string ObtenerSeleccionadoEnCombobox(SelectionChangedEventArgs e, bool tag = false) {
@@ -1326,20 +1348,9 @@ namespace RTSHelper {
                 types["Type"].Add("Tracking", "Other");
                 types["Type"].Add("Cursor", "Other");
                 types["Type"].Add("Arrow Up", "Other");
-                types["Type"].Add("->", "Other");
-                types["Type"].Add("1", "Other");
-                types["Type"].Add("2", "Other");
-                types["Type"].Add("3", "Other");
-                types["Type"].Add("4", "Other");
-                types["Type"].Add("5", "Other");
-                types["Type"].Add("6", "Other");
-                types["Type"].Add("7", "Other");
-                types["Type"].Add("8", "Other");
-                types["Type"].Add("9", "Other");
-                types["Type"].Add("0", "Other");
-                types["Type"].Add("-", "Other");
                 types["Type"].Add("Explore", "Action");
                 types["Type"].Add("Flag", "Other");
+                types["Type"].Add("0s", "Other");
                 types["Type"].Add("1s", "Other");
                 types["Type"].Add("2s", "Other");
                 types["Type"].Add("3s", "Other");
@@ -1356,6 +1367,8 @@ namespace RTSHelper {
                 types["Type"].Add("Open Square Bracket", "Other");
                 types["Type"].Add("Close Square Bracket", "Other");
                 types["Type"].Add("Random Civilization", "Civilization");
+                types["Type"].Add("Go Back to Work", "Action");
+                types["Type"].Add("Woodline", "Resource");
 
             }
 
@@ -1570,7 +1583,7 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("4136", "Guard");
                 names[NameType.Complete].Add("4137", "Follow");
                 names[NameType.Complete].Add("4138", "Patrol");
-                names[NameType.Complete].Add("4144", "Set Gather Point");
+                names[NameType.Complete].Add("4144", "Set Gather Point"); names[NameType.Acronym].Add("4144", "SET GP");
                 names[NameType.Complete].Add("11580", "Attack Move");
                 names[NameType.Complete].Add("10109", "Garrison");
                 names[NameType.Complete].Add("13051", "Defend");
@@ -1617,8 +1630,8 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("5175", "Water Buffalo"); names[NameType.Common].Add("5175", "Buffalo"); names[NameType.CommonPlural].Add("5175", "Buffalos");
                 names[NameType.Complete].Add("5743", "Elephant"); names[NameType.Abbreviation].Add("5743", "Ele"); names[NameType.CommonPlural].Add("5743", "Elephants"); names[NameType.AbbreviationPlural].Add("5743", "Eles");
                 names[NameType.Complete].Add("5796", "Fruit Bush");
-                names[NameType.Complete].Add("5252", "Stone Mine");
-                names[NameType.Complete].Add("5400", "Gold Mine");
+                names[NameType.Complete].Add("5252", "Stone Mine"); names[NameType.Acronym].Add("5252", "SM");
+                names[NameType.Complete].Add("5400", "Gold Mine"); names[NameType.Acronym].Add("5400", "GM");
                 names[NameType.Complete].Add("400029", "Food to Gold");
                 names[NameType.Complete].Add("400030", "Food to Stone");
                 names[NameType.Complete].Add("400031", "Food to Wood");
@@ -1799,7 +1812,7 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("5128", "Archery Range"); names[NameType.Common].Add("5128", "Archery|Range"); names[NameType.Acronym].Add("5128", "AR"); names[NameType.CommonPlural].Add("5128", "Archeries|Ranges");
                 names[NameType.Complete].Add("5135", "Barracks"); names[NameType.Abbreviation].Add("5135", "Rax"); names[NameType.AbbreviationPlural].Add("5135", "Raxes");
                 names[NameType.Complete].Add("5171", "Stable"); names[NameType.Acronym].Add("5171", "STBL|STB"); names[NameType.CommonPlural].Add("5171", "Stables");
-                names[NameType.Complete].Add("5169", "Siege Workshop"); names[NameType.Acronym].Add("5169", "SW"); names[NameType.CommonPlural].Add("5169", "Siege Workshops");
+                names[NameType.Complete].Add("5169", "Siege Workshop"); names[NameType.Acronym].Add("5169", "SWS"); names[NameType.CommonPlural].Add("5169", "Siege Workshops");
                 names[NameType.Complete].Add("5131", "Blacksmith"); names[NameType.Acronym].Add("5131", "BLK");
                 names[NameType.Complete].Add("5495", "Fish Trap"); names[NameType.CommonPlural].Add("5495", "Fish Traps");
                 names[NameType.Complete].Add("5176", "University"); names[NameType.Abbreviation].Add("5176", "Uni"); names[NameType.CommonPlural].Add("5176", "Universities"); names[NameType.AbbreviationPlural].Add("5176", "Unis");
@@ -1809,9 +1822,9 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("5154", "Guard Tower"); names[NameType.CommonPlural].Add("5154", "Guard Towers");
                 names[NameType.Complete].Add("5155", "Keep"); names[NameType.CommonPlural].Add("5155", "Keeps");
                 names[NameType.Complete].Add("5156", "Bombard Tower"); names[NameType.Acronym].Add("5156", "BBT"); names[NameType.CommonPlural].Add("5156", "Bombard Towers");
-                names[NameType.Complete].Add("5202", "Palisade Wall"); names[NameType.Common].Add("5202", "Palisade"); names[NameType.Acronym].Add("5202", "PWLL"); names[NameType.CommonPlural].Add("5202", "Palisades");
-                names[NameType.Complete].Add("5186", "Palisade Gate"); names[NameType.CommonPlural].Add("5186", "Palisade Gates");
-                names[NameType.Complete].Add("5203", "Stone Wall"); names[NameType.Acronym].Add("5203", "SWLL"); names[NameType.CommonPlural].Add("5203", "Stone Walls");
+                names[NameType.Complete].Add("5202", "Palisade Wall"); names[NameType.Common].Add("5202", "Palisade"); names[NameType.Acronym].Add("5202", "PW"); names[NameType.CommonPlural].Add("5202", "Palisades");
+                names[NameType.Complete].Add("5186", "Palisade Gate"); names[NameType.CommonPlural].Add("5186", "Palisade Gates"); names[NameType.Acronym].Add("5186", "PG");
+                names[NameType.Complete].Add("5203", "Stone Wall"); names[NameType.Acronym].Add("5203", "SW"); names[NameType.CommonPlural].Add("5203", "Stone Walls"); names[NameType.Acronym].Add("5185", "SG");
                 names[NameType.Complete].Add("5204", "Fortified Wall"); names[NameType.CommonPlural].Add("5204", "Fortified Walls");
                 names[NameType.Complete].Add("5185", "Gate"); names[NameType.Common].Add("5185", "Stone Gate"); names[NameType.CommonPlural].Add("5185", "Stone Gates");
                 names[NameType.Complete].Add("5142", "Castle"); names[NameType.Acronym].Add("5142", "CSTL"); names[NameType.CommonPlural].Add("5142", "Castles");
@@ -1921,8 +1934,8 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("7211", "Wheelbarrow"); names[NameType.Acronym].Add("7211", "WB");
                 names[NameType.Complete].Add("7282", "Town Patrol");
                 names[NameType.Complete].Add("7246", "Hand Cart"); names[NameType.Acronym].Add("7246", "HC");
-                names[NameType.Complete].Add("7055", "Gold Mining"); names[NameType.Acronym].Add("7055", "GM");
-                names[NameType.Complete].Add("7276", "Stone Mining"); names[NameType.Acronym].Add("7276", "SM");
+                names[NameType.Complete].Add("7055", "Gold Mining"); names[NameType.Acronym].Add("7055", "GMG");
+                names[NameType.Complete].Add("7276", "Stone Mining"); names[NameType.Acronym].Add("7276", "SMG");
                 names[NameType.Complete].Add("7180", "Gold Shaft Mining"); names[NameType.Acronym].Add("7180", "GSM");
                 names[NameType.Complete].Add("7277", "Stone Shaft Mining"); names[NameType.Acronym].Add("7277", "SSM");
                 names[NameType.Complete].Add("7189", "Double-Bit Axe"); names[NameType.Acronym].Add("7189", "DBA");
@@ -2146,13 +2159,13 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("4305", "Health");
                 names[NameType.Complete].Add("4306", "Armor");
                 names[NameType.Complete].Add("6039", "Civilization"); names[NameType.Abbreviation].Add("6039", "Civ"); names[NameType.CommonPlural].Add("6039", "Civilizations"); names[NameType.AbbreviationPlural].Add("6039", "Civs");
-                names[NameType.Complete].Add("4313", "Population"); names[NameType.Abbreviation].Add("4313", "Pop");
+                names[NameType.Complete].Add("4313", "Population"); names[NameType.Abbreviation].Add("4313", "Pop|VS");
                 names[NameType.Complete].Add("4314", "Range*");
                 names[NameType.Complete].Add("4316", "Speed");
                 names[NameType.Complete].Add("12201", "Line of Sight"); names[NameType.Acronym].Add("12201", "LoS");
                 names[NameType.Complete].Add("19322", "Unique Unit"); names[NameType.Acronym].Add("19322", "UU"); names[NameType.CommonPlural].Add("19322", "Unique Units");
                 names[NameType.Complete].Add("13073", "Idle");
-                names[NameType.Complete].Add("13140", "Gather Point");
+                names[NameType.Complete].Add("13140", "Gather Point"); names[NameType.Acronym].Add("13140", "GP");
                 names[NameType.Complete].Add("10026", "Artificial Intelligence"); names[NameType.Acronym].Add("10026", "AI");
                 names[NameType.Complete].Add("20205", "Pierce Armor: "); names[NameType.Common].Add("20205", "Pierce Armor"); names[NameType.Acronym].Add("20205", "PA");
                 names[NameType.Complete].Add("400012", "Long Distance"); names[NameType.Acronym].Add("400012", "LD");
@@ -2161,20 +2174,9 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("7090", "Tracking");
                 names[NameType.Complete].Add("400041", "Cursor");
                 names[NameType.Complete].Add("400042", "Arrow Up");
-                names[NameType.Complete].Add("400043", "->"); names[NameType.Common].Add("400043", "→");
-                names[NameType.Complete].Add("98", "1");
-                names[NameType.Complete].Add("22121", "2");
-                names[NameType.Complete].Add("400044", "3");
-                names[NameType.Complete].Add("400045", "4");
-                names[NameType.Complete].Add("400046", "5");
-                names[NameType.Complete].Add("400047", "6");
-                names[NameType.Complete].Add("22126", "7");
-                names[NameType.Complete].Add("22127", "8");
-                names[NameType.Complete].Add("22128", "9");
-                names[NameType.Complete].Add("99", "0");
-                names[NameType.Complete].Add("9648", "-");
                 names[NameType.Complete].Add("13055", "Explore");
                 names[NameType.Complete].Add("13330", "Flag");
+                names[NameType.Complete].Add("400064", "0s"); names[NameType.Common].Add("400064", "");
                 names[NameType.Complete].Add("400048", "1s"); names[NameType.Common].Add("400048", " ");
                 names[NameType.Complete].Add("400049", "2s"); names[NameType.Common].Add("400049", "  ");
                 names[NameType.Complete].Add("400050", "3s"); names[NameType.Common].Add("400050", "   ");
@@ -2191,6 +2193,8 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("400061", "Open Square Bracket"); names[NameType.Common].Add("400061", "[");
                 names[NameType.Complete].Add("400062", "Close Square Bracket"); names[NameType.Common].Add("400062", "]");
                 names[NameType.Complete].Add("400063", "Random Civilization");
+                names[NameType.Complete].Add("19324", "Go Back to Work"); names[NameType.Common].Add("19324", "Back to Work");
+                names[NameType.Complete].Add("400065", "Woodline"); names[NameType.Acronym].Add("400065", "WL");
 
                 string elite(string original) => "Elite " + original.Replace("|", $"|Elite ");
 

@@ -123,6 +123,7 @@ namespace RTSHelper {
             TxtStepDuration.Text = Preferencias.StepDuration.ToString();
 
             CmbFontName.Text = Preferencias.FontName;
+            CmbSecondaryFontName.Text = Preferencias.SecondaryFontName;
             ChkCurrentStepFontBold.IsChecked = Preferencias.CurrentStepFontBold;
             ChkNextPreviousStepFontBold.IsChecked = Preferencias.NextPreviousStepFontBold;
 
@@ -172,6 +173,8 @@ namespace RTSHelper {
             ChkShowAlwaysStatsButton.IsChecked = Preferencias.ShowAlwaysStatsButton;
             ChkShowAlternateNextPreviousStepButton.IsChecked = Preferencias.ShowAlternateNextPreviousStepButton;
             ChkOCRTestMode.IsChecked = Preferencias.OCRTestMode;
+            ChkShowOptionalInstructions1.IsChecked = Preferencias.ShowOptionalInstructions1;
+            ChkShowOptionalInstructions2.IsChecked = Preferencias.ShowOptionalInstructions2;
 
             AgregarIdiomas(CmbGameLanguage, Preferencias.GameLanguage, IdiomasJuego);
             AgregarUIMods(Preferencias.UIMod);
@@ -213,6 +216,31 @@ namespace RTSHelper {
 
 
         private void TbiCustomNames_Selected(object sender, RoutedEventArgs e) => CargarNombresPersonalizados();
+
+
+        private void TbiPersonalization_Selected(object sender, RoutedEventArgs e) {
+
+            if (Preferencias.Game == AOE2Name || Preferencias.Game == AOE4Name) {
+
+                LblOptionalInstructions.Visibility = Visibility.Visible;
+                LblShowOptionalInstructions1.Visibility = Visibility.Visible;
+                LblShowOptionalInstructions2.Visibility = Visibility.Visible;
+                ChkShowOptionalInstructions1.Visibility = Visibility.Visible;
+                ChkShowOptionalInstructions2.Visibility = Visibility.Visible;
+                LblShowOptionalInstructions1.Content = "Show Villagers: ";
+                LblShowOptionalInstructions2.Content = "Show Houses: ";
+
+            } else {
+
+                LblOptionalInstructions.Visibility = Visibility.Hidden;
+                LblShowOptionalInstructions1.Visibility = Visibility.Hidden;
+                LblShowOptionalInstructions2.Visibility = Visibility.Hidden;
+                ChkShowOptionalInstructions1.Visibility = Visibility.Hidden;
+                ChkShowOptionalInstructions2.Visibility = Visibility.Hidden;
+
+            }
+
+        } // TbiPersonalization_Selected>
 
 
         private void TbiCustomNames_Unselected(object sender, RoutedEventArgs e) => GuardarNombresPersonalizados(cerrando: false);
@@ -290,7 +318,7 @@ namespace RTSHelper {
             Preferencias.OverrideStepEndSoundVolume = (bool)ChkOverrideStepEndSoundVolume.IsChecked!;
             Preferencias.OverrideStepStartSound = (bool)ChkOverrideStepStartSound.IsChecked!;
             Preferencias.OverrideStepStartSoundVolume = (bool)ChkOverrideStepStartSoundVolume.IsChecked!;
-            VentanaPrincipal.CargarBuildOrder();
+            VentanaPrincipal.VerificarModoDesarrolloYCargarBuildOrder();
 
         } // GuardarOverrides>
 
@@ -886,8 +914,7 @@ namespace RTSHelper {
 
             VentanaPrincipal.AplicarPreferencias();
             CrearEntidadesYNombres();
-            VentanaPrincipal.LeerBuildOrders();
-            VentanaPrincipal.CargarBuildOrder();
+            VentanaPrincipal.RecargarEstrategia();
             ActualizarDuraciónPasoAlSalir = true;
 
         } // CmbGame_SelectionChanged>
@@ -1154,6 +1181,15 @@ namespace RTSHelper {
             VentanaPrincipal.AplicarPreferencias();
 
         } // CmbFontName_SelectionChanged>
+
+
+        private void CmbSecondaryFontName_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.SecondaryFontName = ObtenerSeleccionadoEnCombobox(e);
+            VentanaPrincipal.AplicarPreferencias();
+
+        } // CmbSecondaryFontName_SelectionChanged>
 
 
         private void TxtLineSpacing_TextChanged(object sender, TextChangedEventArgs e) {
@@ -1511,6 +1547,26 @@ namespace RTSHelper {
             VentanaPrincipal.AplicarPreferencias();
 
         } // ChkShowAlternateNextPreviousStepButton_Checked>
+
+
+        private void ChkShowOptionalInstructions1_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.ShowOptionalInstructions1 = ChkShowOptionalInstructions1.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+            VentanaPrincipal.RecargarEstrategia();
+
+        } // ChkShowOptionalInstructions1_Checked>
+
+
+        private void ChkShowOptionalInstructions2_Checked(object sender, RoutedEventArgs e) {
+
+            if (!Activado) return;
+            Preferencias.ShowOptionalInstructions2 = ChkShowOptionalInstructions2.IsChecked ?? false;
+            VentanaPrincipal.AplicarPreferencias();
+            VentanaPrincipal.RecargarEstrategia();
+
+        } // ChkShowOptionalInstructions2_Checked>
 
 
         private void CmbGameInterfaceScale_SelectionChanged(object sender, SelectionChangedEventArgs e) {

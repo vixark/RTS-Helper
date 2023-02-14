@@ -1,117 +1,117 @@
-|| Author: Vixark, Date: 03/03/2022, Use Byzantines as a test civilization because they don't have early game economic bonuses. Read the documentation if you want to create your own build orders: http://vixark.com/age-of-empires-ii/rts-helper-documentation. ||
+|| Author: Vixark, Version: 1.0. A generic dark age build order that is the basis of 21 to 23 pop build orders by Vixark. Read the documentation if you want to create your own build orders: http://vixark.com/rts-helper/documentation. ||
 
 {{t=25 empty={fc="none" s="none"}}}
 
-<<r=<b xs is100> x=<sub> p=<sup>>>
+<<r=<b xs is100> x=<sub> p=<sup> t=<b font2 xl> xt=<sub b font2 xl> pt=<sup b font2>>>
 
-[[xf=[<x>[flag]<>] mc@s=[[mc]<x>[stone mine]<>] mc@g=[[mc]<x>[gold mine]<>] 1hv@berries=[[v]<x>[berries]<> [->] [h] [->] [berries]<x>[flag]<>] 2hv@berries=[[v]<x>[berries]<> [->] 2 [h] [->] [berries]<x>[flag]<>] 1hv@g=[[v]<x>[gold mine]<> [->] [h] [->] [gold mine]<x>[flag]<>] 2hv@g=[[v]<x>[gold mine]<> [->] 2 [h] [->] [gold mine]<x>[flag]<>] 3hv@g=[[v]<x>[gold mine]<> [->] 3 [h] [->] [gold mine]<x>[flag]<>] 4hv@w=[[v]<x>[tree]<> [->] 4 [h] [->] [tree]<x>[flag]<>]  3hv@w=[[v]<x>[tree]<> [->] 3 [h] [->] [tree]<x>[flag]<>] 2hv@w=[[v]<x>[tree]<> [->] 2 [h] [->] [tree]<x>[flag]<>] 1hv@str=[[v]<x>[str]<> [->] [h] [->] [str]<x>[flag]<>] 2hv@str=[[v]<x>[str]<> [->] 2 [h] [->] [str]<x>[flag]<>] 1hv@w=[[v]<x>[tree]<> [->] [h] [->] [tree]<x>[flag]<>] 1fv@str=[[v@str] [->] [farm]] 2fv@str=[2[v@str] [->] 2 [farm]] 3fv@str=[3[v@str] [->] 3 [farm]] 4fv@str=[4[v@str] [->] 4 [farm]] 5fv@str=[5[v@str] [->] 5 [farm]] 6fv@str=[6[v@str] [->] 6 [farm]] v@pal=[[v]<x>[palisade]<>] 1hv@pal=[[v]<x>[palisade]<> [->] [h] [->] [palisade]<x>[flag]<>] 2hv@pal=[[v]<x>[palisade]<> [->] 2 [h] [->] [palisade]<x>[flag]<>] farm@tc=[[farm]<x>[tc]<>] mill@berries=[[mill]<x>[berries]<>] farm@mill=[[farm]<x>[mill]<>] ->shp=[[->] [shp]<x>[flag]<>] ->pal=[[->] [palisade]<x>[flag]<>] ->berries=[[->] [berries]<x>[flag]<>] ->boar=[[->] [boar]<x>[flag]<>] ->w=[[->] [tree]<x>[flag]<>] ->str=[[->] [str]<x>[flag]<>] ->g=[[->] [gold mine]<x>[flag]<>] ->s=[[->] [stone mine]<x>[flag]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@g=[[v]<x>[gold mine]<>] v@s=[[v]<x>[stone mine]<>] v@berries=[[v]<x>[berries]<>] v@deer=[[v]<x>[deer]<>] v@w=[[v]<x>[tree]<>] v@str=[[v]<x>[str]<>] +1h=[[v]<x>[h]<> [->] [h]<x>[flag]<>] +2h=[[v]<x>[h]<> [->] 2 [h]<x>[flag]<>] +3h=[[v]<x>[h]<> [->] 3 [h]<x>[flag]<>] +4h=[[v]<x>[h]<> [->] 4 [h]<x>[flag]<>] vdboar=[[v]<p>[drop food]<x>[boar]<>] vddeer=[[v]<p>[drop food]<x>[deer]<>] vdstr=[[v]<p>[drop wood]<x>[str]<>] vdw=[[v]<p>[drop wood]<x>[tree]<>] vdshp=[[v]<p>[drop food]<x>[shp]<>] vdfarm=[[v]<p>[drop food]<x>[farm]<>] vdberries=[[v]<p>[drop food]<x>[berries]<>] vdg=[[v]<p>[drop gold]<x>[gold mine]<>] vds=[[v]<p>[drop stone]<x>[stone mine]<>]]]
+[[>=[ → ] ?=[ ?[1s]] +=[<b>+<> ] +v=[[+][v]] 0=[<t>0<>] 1=[<t>1<> ] 2=[<t>2<> ] 3=[<t>3<> ] 4=[<t>4<> ] 5=[<t>5<> ] 6=[<t>6<> ] 7=[<t>7<> ] 8=[<t>8<> ] 9=[<t>9<> ] all=[All ] +2=[[+][2]] +3=[[+][3]] +4=[[+][4]] +5=[[+][5]] +6=[[+][6]] +2v=[[+2][v]] +3v=[[+3][v]] +4v=[[+4][v]] +5v=[[+5][v]] +6v=[[+6][v]] xf=[<x>[flag]<>] pf=[<p>[flag]<>] xi=[<x>[idle]<>] pi=[<p>[idle]<>] mc@sm=[[mc]<x>[sm]<>] mc@gm=[[mc]<x>[gm]<>] mill@berry=[[mill]<x>[berry]<>] farm@tc=[[farm]<x>[tc]<>] farm@mill=[[farm]<x>[mill]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@gm=[[v]<x>[gm]<>] v@sm=[[v]<x>[sm]<>] v@farm=[[v]<x>[farm]<>] v@berry=[[v]<x>[berry]<>] v@deer=[[v]<x>[deer]<>] v@wl=[[v]<x>[wl]<>] v@str=[[v]<x>[str]<>] v@pw=[[v]<x>[pw]<>] v@sw=[[v]<x>[sw]<>] v@tc=[[v]<x>[tc]<>] vdboar=[[v]<p>[drop food]<x>[boar]<>] vddeer=[[v]<p>[drop food]<x>[deer]<>] vdstr=[[v]<p>[drop wood]<x>[str]<>] vdwl=[[v]<p>[drop wood]<x>[wl]<>] vdshp=[[v]<p>[drop food]<x>[shp]<>] vdfarm=[[v]<p>[drop food]<x>[farm]<>] vdberry=[[v]<p>[drop food]<x>[berry]<>] vdgm=[[v]<p>[drop gold]<x>[gm]<>] vdsm=[[v]<p>[drop stone]<x>[sm]<>] >h=[[>][h][xf]] >shp=[[>][shp][xf]] >sw=[[>][sw][xf]] >pw=[[>][pw][xf]] >berry=[[>][berry][xf]] >boar=[[>][boar][xf]] >deer=[[>][deer][xf]] >farm=[[>][farm][xf]] >str=[[>][str][xf]] >wl=[[>][wl][xf]] >gm=[[>][gm][xf]] >sm=[[>][sm][xf]] 1hv@berry=[[v@berry][>][h][>berry]] 2hv@berry=[[v@berry][>][2][h][>berry]] 1hv@gm=[[v@gm][>][h][>gm]] 2hv@gm=[[v@gm][>][2][h][>gm]] 3hv@gm=[[v@gm][>][3][h][>gm]] 4hv@gm=[[v@gm][>][4][h][>gm]] 1hv@wl=[[v@wl][>][h][>wl]] 2hv@wl=[[v@wl][>][2][h][>wl]] 3hv@wl=[[v@wl][>][3][h][>wl]] 4hv@wl=[[v@wl][>][4][h][>wl]] 1hv@str=[[v@str][>][h][>str]] 2hv@str=[[v@str][>][2][h][>str]] 3hv@str=[[v@str][>][3][h][>str]] 4hv@str=[[v@str][>][4][h][>str]] 1fv@shp=[[v@shp][>][farm]] 2fv@shp=[[2][v@shp][>][2][farm]] 3fv@shp=[[3][v@shp][>][3][farm]] 4fv@shp=[[4][v@shp][>][4][farm]] 5fv@shp=[[5][v@shp][>][5][farm]] 6fv@shp=[[6][v@shp][>][6][farm]] 1fv@berry=[[v@berry][>][farm]] 2fv@berry=[[2][v@berry][>][2][farm]] 3fv@berry=[[3][v@berry][>][3][farm]] 4fv@berry=[[4][v@berry][>][4][farm]] 5fv@berry=[[5][v@berry][>][5][farm]] 6fv@berry=[[6][v@berry][>][6][farm]] 1fv@wl=[[v@wl][>][farm]] 2fv@wl=[[2][v@wl][>][2][farm]] 3fv@wl=[[3][v@wl][>][3][farm]] 4fv@wl=[[4][v@wl][>][4][farm]] 5fv@wl=[[5][v@wl][>][5][farm]] 6fv@wl=[[6][v@wl][>][6][farm]] 1fv@str=[[v@str][>][farm]] 2fv@str=[[2][v@str][>][2][farm]] 3fv@str=[[3][v@str][>][3][farm]] 4fv@str=[[4][v@str][>][4][farm]] 5fv@str=[[5][v@str][>][5][farm]] 6fv@str=[[6][v@str][>][6][farm]] 1hv@pw=[[v@pw][>][h][>pw]] 2hv@pw=[[v@pw][>][2] [h][>pw]] 3hv@pw=[[v@pw][>][3] [h][>pw]] 1hv@sw=[[v@sw][>][h][>sw]] 2hv@sw=[[v@sw][>][2][h][>sw]] 3hv@sw=[[v@sw][>][3][h][>sw]] +h=[[v@h][>h]] +2h=[[v@h][>][2][h][xf]] +3h=[[v@h][>][3][h][xf]] +4h=[[v@h][>][4][h][xf]] +5h=[[v@h][>][5][h][xf]] +6h=[[v@h][>][6][h][xf]] 80v@tc=[[v]<p>[tc]<xt m>80%<>] 70v@tc=[[v]<p>[tc]<xt m>70%<>] 50v@tc=[[v]<p>[tc]<xt m>50%<>] boar1=[[boar]<xt>1<>] boar2=[[boar]<xt>2<>] >boar1=[[>][boar][pf]<xt>1<>] >boar2=[[>][boar][pf]<xt>2<>] deer1=[[deer]<xt>1<>] >deer1=[[>][deer][pf]<xt>1<>] deer2=[[deer]<xt>2<>] >deer2=[[>][deer][pf]<xt>2<>] deer3=[[deer]<xt>3<>] >deer3=[[>][deer][pf]<xt>3<>] deer4=[[deer]<xt>4<>] >deer4=[[>][deer][pf]<xt>4<>] deer5=[[deer]<xt>5<>] >deer5=[[>][deer][pf]<xt>5<>] deer6=[[deer]<xt>6<>] >deer6=[[>][deer][pf]<xt>6<>] shp1=[[shp]<xt>1<>] >shp1=[[>][shp][pf]<xt>1<>] shp2=[[shp]<xt>2<>] >shp2=[[>][shp][pf]<xt>2<>] shp3=[[shp]<xt>3<>] >shp3=[[>][shp][pf]<xt>3<>] shp4=[[shp]<xt>4<>] >shp4=[[>][shp][pf]<xt>4<>] shp5=[[shp]<xt>5<>] >shp5=[[>][shp][pf]<xt>5<>] shp6=[[shp]<xt>6<>] >shp6=[[>][shp][pf]<xt>6<>] shp7=[[shp]<xt>7<>] >shp7=[[>][shp][pf]<xt>7<>] shp8=[[shp]<xt>8<>] >shp8=[[>][shp][pf]<xt>8<>] wl1=[[wl]<xt>1<>] wl2=[[wl]<xt>2<>] wl3=[[wl]<xt>3<>] >wl1=[[>][wl][pf]<xt>1<>] >wl2=[[>][wl][pf]<xt>2<>] >wl3=[[>][wl][pf]<xt>3<>] str1=[[str]<xt>1<>] str2=[[str]<xt>2<>] str3=[[str]<xt>3<>] str4=[[str]<xt>4<>] str5=[[str]<xt>5<>] >str1=[[>][str][pf]<xt>1<>] >str2=[[>][str][pf]<xt>2<>] >str3=[[>][str][pf]<xt>3<>] >str4=[[>][str][pf]<xt>4<>] >str5=[[>][str][pf]<xt>5<>] lc1=[[lc]<xt>1<>] lc2=[[lc]<xt>2<>] lc3=[[lc]<xt>3<>] mc1=[[mc]<xt>1<>] mc2=[[mc]<xt>2<>] mc3=[[mc]<xt>3<>] vtodeer=[[v]<p>[arrow]<x>[deer]<>] vtowl=[[v]<p>[arrow]<x>[wl]<>] vtogm=[[v]<p>[arrow]<x>[gm]<>] vtosm=[[v]<p>[arrow]<x>[sm]<>] vtoberry=[[v]<p>[arrow]<x>[berry]<>] vtoshp=[[v]<p>[arrow]<x>[shp]<>] v@shpfh=[[v]<p>[shp]<x>Full[health]<>] v@boarfh=[[v]<p>[boar]<x>Full[health]<>] v@shplh=[[v]<p>[shp]<x>Low[health]<>] v@boarlh=[[v]<p>[boar]<x>Low[health]<>] vdshpfh=[[vdshp]<x>Full[health]<>] vdboarfh=[[vdboar]<x>Full[health]<>] vdshplh=[[vdshp]<x>Low[health]<>] vdboarlh=[[vdboar]<x>Low[health]<>] v@strfh=[[v]<p>[str]<x>Full[health]<>] v@strlh=[[v]<p>[str]<x>Low[health]<>] vdstrfh=[[vdstr]<x>Full[health]<>] vdstrlh=[[vdstr]<x>Low[health]<>]]] || No usar [v@x]<p>[drop r]<> dentro de la definición de vdx porque hace a [vdx] incompatible con subíndices adicionales del tipo [vdx]<x>Subíndice<>. Aplica igual para vtox. Actualizar también en New.txt. Actualizarlos con la aplicación cerrada en \Código\RTS Helper\RTS Helper\Build Orders\Age of Empires II.
 
-(([archers] @ 2[ranges] [->] [xbow] @ 3[ranges] on <xl>[green arabia]<>   <b>Version:<> 1.1   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark.com [1s] http://vixark.com/donate:Donate   <b>Difficulty:<> Easy))
+((<t>20<b> [arch]<xt>2<x>[range]<>[>][xbow]<xt>3<x>[range]<> on<> [green arabia]   <b>21 Pop<> [1s] https://www.youtube.com/:Watch_Video   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark [1s] http://vixark.com/donate:Donate   <b>Difficulty:<> Moderate || Pending info. ))
 
-|| 0 - 0:00 ||  {p=3 sns="no"} + 4[v] [3s] 2[v] [->] [h] [3s] [v] [->] [h]   [shp]<x>[1]<> [->] [tc] [9s] 3[v]<x>[h]<> [->] [shp]<p>[flag]<x>[1]<>   [v]<x>[4][-][6]<> [->] [shp]<x>[1]<> [3s] [sc] [->] [shp]<x>[2][-][4]<> [->] [explore][xf]  /f <r>3[h]  3[pop]
+|| 0 ||  {p=3 sns="no"}  [+4v] [2s] [2][v][>][h] [2s] [v][>][h]   [shp1][>][tc] [3s] [sc][>][shp]<xt>2-4<>   [3][v@h][>shp1] [3s] [v]<xt>4-6<>[>][shp1]  /f  <r>3[h]  3[vs] || If you are fast, wait until the sheep #1 is reaching its final position under the town center to place the gather point on it so the new villagers spawn near it. \n\n You can consider sending to sheep #1 one the villagers in the first house before finishing it, but you should be careful with the timing so you don't get housed.
 
-|| 1 - 0:25 ||  {p=4 empty} /f  <r>4[f]  4[pop]
+|| 1 ||  {p=4}  [sc][>][explore]  /f  <r>4[f]  4[vs] || Use shift queuing to make the initial scout's scouting path. Since you'll also scout with sheep and won't push deer, it's ok to have less scoutting efficiency so you can focus in your economy. \n\n If you are in one side of the map, don't go twice behind your base at the edge of the map. Make one circle around your town center, moving closer to the edge of the map when near it, and then make a U shaped path around the first circle avoiding the edge of the map. \n\n If you are in a corner of the map, you usually spawn at a greater distance from the edges so making two circles with the scout is fine. \n\n The two layers of scoutting should be enough to find all your sheep and the first patch of deer. After that, you can manually task the scout to look for the second patch of deer if the sheeps haven't found it yet and to explore the opponent's town. \n\n For exploring the opponent's town faster and easier without running into the town center, you can use the mod 'Minimap TC Orbit' and make a scoutting path inside the circle.
 
-|| 2 - 0:50 ||  {p=5} [shp]<x>[2]<> [->] [tc]   [shp]<x>[3]<> <> [->] [explore]   [shp]<x>[4]<> <> [->] [explore]  /f  <r>5[f]  5[pop]
+|| 2 ||  {p=5}  [shp2][>][tc]   [shp]<xt>3-4<>[>][explore]  /f  <r>5[f]  5[vs] || Use shift queuing to make the sheep's scouting path. Make zig-zag paths after the area that the scout will explore. \n\n If you are in one side of the map, send two sheep to each side (use starting and newly found sheep). One sheep explore near the edge of the map and the other more towards the front, but not in the front because there's risk of being converted. \n\n If you are in a corner of the map, send one sheep to the corner and one to each side near the edge. \n\n You should look for the second patch of deer, secondary gold and relics. If you find that the second patch of deer is in a safe spot, you could plan to take it.
 
-|| 3 - 1:15 ||  {p=6} [v]<x>[7][-][8]<> [->] [boar]<x>[1]<>   +[v]  /f  <r>6[f]  6[pop]
+|| 3 ||  {p=6}  [v]<xt>7-8<>[>][boar1]   [+v]  /f  <r>6[f]  6[vs] || Hunt the boar in your town's front to avoid laming.
 
-|| 4 - 1:40 ||  {p=7} 6[v@shp] [->] [boar]<p>[flag]<x>[1]<>   +[v]  /f  <r>7[f]  7[pop]
+|| 4 ||  {p=7}  [all][vdshp][>boar1]   [+v]  /f  <r>7[f]  7[vs] || Shoot the boar twice and retreat to the opposite side of town center. Block the boar's path with villager #8 if the other villagers haven't finished yet. Don't kill it next to the solid part of the town center (upper corner), kill it near the left, right or bottom corner so many villagers can gather food from it unrestricted.
 
-|| 5 - 2:05 ||  {p=8} [v]<x>[9]<> [->] [lc]   +[v]  /f  <r>8[f]  8[pop] || Se consideró hacer el LC 1 cuadro antes del bosque, pero no mejoró significativamente la w al llegar a feudal (solo 10+) y retrasó apróximadamente un paso la construcción de la herrería y hacía apretado la construcción de granjas. Conclusión: Es mejor adjunto al bosque, incluso si se tienen 10 leñadores.
+|| 5 ||  {p=8}  [v]<xt>9-10<>[>][wl]   [+v]  /f  <r>8[f]  8[vs]
 
-|| 6 - 2:30 ||  {p=9} [v]<x>[1][0]<> [->] [h]   8[v]<x>[boar]<p>[f]=12<> [->] [drop food]   + 2[v]  /f  <r>8[f]  1[lc]  9[pop]
+|| 6 ||  {p=9}  [vtowl][>][lc]   [70v@tc][>][all][vdboar]   [+2v]  /f  <r>8[f]  1[lc]  9[vs] || Make the lumber camp adjacent to the woodline. If possible, queue the lumber camp builder to a tree behind the lumber camp and the villager #10 to the other tree behind. \n\n You can consider making the lumber camp one tile away from woodline if you plan to put many lumberjacks early, but you'd have an inneficient lumber camp in middle feudal age. Usually it's better to open up the one tile gap to the woodline with the first three to four lumberjacks while you have the extra lumberjacks in efficient stragglers (two tiles away from town center). When the one tile gap is open, send the villagers in stragglers to the lumber camp, since it can now support efficiently many villagers.
 
-|| 7 - 2:55 ||  {p=10} [v@h] [->w]   [v]<x>[1][1][-][1][5]<> [->] [boar]<x>[2]<>  /f <r>8[f]  1[h]  1[lc]  10[pop]
+|| 7 ||  {p=10}  [v]<xt>11-16<>[>][boar2]   [vtowl][>][2][h][>wl]  /f  <r>8[f]  1[h]  1[lc]  10[vs] || Place the houses so they can be part of a future wall to the town center protecting the woodline. \n\n If you are in a map with elephants or rhinoceros, send the villager #11 to the first elephant/rhinoceros and the next villagers to the second one.
 
-|| 8 - 3:20 ||  {p=11} 8[vdboar] [->] [boar]<p>[flag]<x>[2]<>   + 2[v]  /f <r>2[w]  9[f]  11[pop]
+|| 8 ||  {p=11}  [all][vdboar][>boar2]   [+2v]  /f  <r>1[w]  9[f]  1[h]  11[vs] || Shoot the boar twice and retreat to the opposite side of town center. Block the boar's path with villager #12 if the other villagers haven't finished yet. Don't kill the boar next to the solid part of the town center (upper corner), kill it near the left, right or bottom corner so many villagers can gather food from it unrestricted. \n\n If you are in a map with elephants or rhinoceros, send a villager in the first one to the second one around 3:30.
 
-|| 9 - 3:45 ||  {p=12 empty} /f <r>2[w]  10[f]  12[pop]
+|| 9 ||  {p=12}  [v]<p>[hunt]<x>Full[health]<>[>][wl]   [set gp]<x>[tc]<>[>][boar2]  /f  <r>3[w]  9[f]  12[vs] || The town center's gather point should be reset to boar #2 so the new villagers spawn near it.
 
-|| 10 - 4:10 ||  {p=13} 3[vdboar] [->] [deer]<x>[1]<>   3[vdboar] [->] [deer]<x>[2]<>   + 2[v]  /f <r>2[w]  11[f]  13[pop]
+|| 10 ||  {p=13}  [+2v]   Select [6][v@boarfh]  /f  <r>3[w]  10[f]  13[vs] || To select six villagers with full health, select all the villagers in boar and use ctrl in the portrait area to deselect the injured ones until you have six healthy villagers selected.
 
-|| 11 - 4:35 ||  {p=14} If Found [shp]<x>[5][-][8]<> + [deer]<x>[4][-][6]<> [->]   [3s] [sc] [->] [explore] Opponent   [shp]<x>[3][-][8]<> [->] [tc]  /f <r>2[w]  12[f]  14[pop]
+|| 11 ||  {p=14}  [6][vdboar]:  [3][>][deer1]   [9s] [2s] [3][>][deer2]   [shp]<xt>3-8<>[>][tc]  /f  <r>3[w]  11[f]  14[vs] || Send the six villagers to one deer first, then while they are walking towards it, deselect three villagers using ctrl in the unit portrait area and asign the rest to the other deer. This step should be done quickly because they need to come back to the town center just in time for advancing to feudal age. \n\n Place the sheep close to the town center so they are safe of being converted by opponent's scout, but not so close that they interfere with villagers. Around the top corner of the town center could be a good spot for them.
 
-|| 12 - 5:00 ||  {p=15} +[v]   [v]<x>[1][6][-][1][7]<> [->] [tree]  /f <r>2[w]  13[f]  15[pop]
+|| 12 ||  {p=15}  [+2v]   [8][shp] Found[>]   [3s] [sc][>][explore]<x>Opponent<>  /f  <r>3[w]  12[f]  15[vs]
 
-|| 13 - 5:25 ||  {p=16} + 2[v]   7[v@boar] [->] [shp]<p>[flag]<x>[3]<>  /f <r>3[w]  13[f]  16[pop]
+|| 13 ||  {p=16}  [v]<xt>17<>[>][gm]   [all][v@boar][>][shp][pf]<xt>3-5<>  /f  <r>3[w]  13[f]  16[vs]
 
-|| 14 - 5:50 ||  {p=17} [loom]   7[v@shp] [->] [shp]<p>[flag]<x>[4][-][5]<>   [v]<x>[1][8][-][2][2]<> [->] [gold mine]<>  /f <r>4[w]  13[f]  17[pop]
+|| 14 ||  {p=17}  [v]<xt>18-21<>[>][wl]   [vtogm][>][mc]   [+2v]  /f  <r>3[w]  13[f]  1[mc]  17[vs]
 
-|| 15 - 6:15 ||  {p=18} [v@g] [->] [mc@g]   3[vddeer] [->str]   3[vddeer] [->] [deer]<p>[flag]<x>[3]<>  /f <r>4[w]  13[f]  1[mc]  18[pop]
+|| 15 ||  {p=18}  /f  <r>4[w]  13[f]  1[mc]  18[vs]
 
-|| 16 - 6:40 ||  {p=19} 3[vdshp] [->] [tree]   [feudal age]  /f <r>10[w]  7[f]  2[g]  19[pop]
+|| 16 ||  {p=19}  [6][vddeer]:  [3][>][str1]   [9s] [2s] [3][>][str2]   [loom]  /f  <r>5[w]  13[f]  1[g]  19[vs] || Choose straggler trees two tiles away from the town center.
 
-|| 17 - 7:05 ||  {p=19 t=65 sns="no"} 4[v@shp] [->] [shp]<p>[flag]<x>[5][-][6]<>   [v@g] [->] [rax] [->g]   Optimize [v]<x>[tree]<>  /f <r>10[w]  7[f]  1[g]  1[rax]  19[pop]
+|| 17 ||  {p=20}  [feudal age]  /f  <r>12[w]  7[f]  1[g]  20[vs]
 
-|| 18 - 8:10 ||  {p=19 t=65} [v@g] [->] 2 [h]   + 2[v]   3[v@deer] + 4[v@shp] [->] [shp]<p>[flag]<x>[6][-][8]<>  /f <r>10[w]  7[f]  1[g]  1[h]  19[pop]
+|| 18 ||  {p=20 t=30}  [all][vdshp][>][shp][pf]<xt>6-8<>[>str3]   Optimize [v@wl]  /f  <r>12[w]  7[f]  1[g]  20[vs]
 
-|| 19 - 9:15 ||  {p=19 sps="no"} [v@h] [->] [archery]<x>[1]<> [->g]    [v@g] [->] [archery]<x>[2]<> [->g]  /f <r>10[w]  7[f]  2[archery]  19[pop]
+|| 19 ||  {p=20 t=30}  [+2v]   [vdshpfh][>]   [3s] [rax]<x>[sw] Town's Front<>[>h]  /f  <r>12[w]  6[f]  1[g]  1[rax]  20[vs]
 
-|| 20 - 9:40 ||  {p=20} + 2[v]   [dba]  /f <r>10[w]  7[f]  1[g]  2[archery]  20[pop]
+|| 20 ||  {p=20 t=50}  [3][vdstr][>][deer3]   [3][v@str][>str2][>gm]   [vdshpfh][>][wl]  /f  <r>9[w]  9[f]  1[g]  1[rax]  20[vs]
 
-|| 21 - 10:05 ||  {p=21} Start [archer] Production at 2 [archeries]   3[vdshp] [->] [gold mine]  /f <r>10[w]  4[f]  7[g]  21[pop]
+|| 21 ||  {p=20 t=20 sns="no" sps="no"}  [vdshpfh][>][range]<x>Location in Town's Front Near [berry]<>   /f  <r>7[w]  7[f]  4[g]  1[h]  1[arrow]  20[vs]
 
-|| 22 - 10:30 ||  {p=22 sps="no"} + 2[v] [3s] [v]<x>[2][3][-][2][8]<> [->] [berries]   [v@str] [->] [mill]<x>[berries]<>   [vdstr] [->berries]  /f <r>8[w]  5[f]  8[g]  1[mill]  22[pop]
+|| 22 ||  {p=20 sns="no" sps="no"}  [dba]   [v]<x>[arrow]<>[>][range]<xt>1<>[>berry]   [v]<x>[sw]<>[>][range]<xt>2<>[>h]  /f  <r>7[w]  7[f]  4[g]  2[range]  20[vs]
 
-|| 23 - 10:55 ||  {p=23} 4[v@shp] [->] [deer]<p>[flag]<x>[4]<>   [3hv@g]  /f <r>8[w]  6[f]  7[g]  1[h]  1[mill]  23[pop]
+|| 23 ||  {p=21}  [v]<xt>22-25<>[>][berry]   [+v]  /f  <r>8[w]  7[f]  4[g]  2[range]  21[vs]
 
-|| 24 - 11:20 ||  {p=24} +[v]  /f <r>8[w]  8[f]  7[g]  1[h]  24[pop]
+|| 24 ||  {p=22}  [+2][arch] [3s] [+v]   [vtoberry][>][mill]<x> 1 Tile From [berry]<>   [all][vddeer][>][berry]  /f  <r>12[w]  4[f]  4[g]  1[h]  1[mill]  22[vs] || You'll have many villagers in berries so it's important to avoid them getting stuck by placing the mill one tile away from berries. If possible, place it in front of a straight section of three forage bushes.
 
-|| 25 - 11:45 ||  {p=25} +[v]  /f <r>8[w]  9[f]  7[g]  1[h]  25[pop]
+|| 25 ||  {p=23}  [v@h][>h]   [+2][arch]   [+v]   /f  <r>12[w]  5[f]  4[g]  1[h]  1[mill]  23[vs]
 
-|| 26 - 12:10 ||  {p=26} +[v]  /f <r>8[w]  10[f]  7[g]  1[h]  26[pop]
+|| 26 ||  {p=24}  [v@h][>][blk][xf][>]   [3s] [sg][sw][xf] Saving 100 [s]   [+v]  /f  <r>12[w]  7[f]  4[g]  1[h]  24[vs]
 
-|| 27 - 12:35 ||  {p=27} +[v]  /f <r>8[w]  11[f]  8[g]  27[pop]
+|| 27 ||  {p=25}  [v]<xt>26-27<>[>][gm]   [+2][arch] [3s] [+v]   [vdstrfh][>][2][h][>sw]   /f  <r>11[w]  8[f]  4[g]  1[h]  1[blk]  25[vs]
 
-|| 28 - 13:00 ||  {p=28} +[v] [3s] Check [v@deer]   [v]<x>[2][9][-][3][2]<> [->] [tree]   [v@g] [->] 2 [h] [->g]  /f <r>8[w]  12[f]  7[g]  1[h]  28[pop]
+|| 28 ||  {p=26 sps="no"}  [+v]   Any [v@str][>][farm] Until <t>10<> [v@farm]   /f  <r>9[w]  8[f]  5[g]  1[h]  2[farm]  1[blk]  26[vs]
 
-|| 29 - 13:25 ||  {p=29} +[v]   4[v@deer] [->] [mill] [->]   [3s] [deer]<p>[flag]<x>[4][-][6]<> [->str]  /f <r>9[w]  8[f]  7[g]  4[mill]  1[h]  29[pop]
+|| 29 ||  {p=27}  [v]<xt>28-34<>[>][str]   [fletching] [3s] [+v]   [6][arch][sc][>][attack]<x>[berry]<>  /f  <r>9[w]  10[f]  6[g]  1[h]  1[sw]  27[vs]
 
-|| 30 - 13:50 ||  {p=30} +[v]   2[vdg] [->] [blacksmith][xf] [->g]  /f <r>10[w]  12[f]  6[g]  2[blacksmith]  30[pop]
+|| 30 ||  {p=28}  [+v]   [+2][arch]  /f  <r>8[w]  10[f]  6[g]  2[farm]  2[sw]  28[vs]
 
-|| 31 - 14:15 ||  {p=31} [fletching]   +[v]  /f <r>11[w]  12[f]  8[g]  31[pop]
+|| 31 ||  {p=29}  [+v]  /f  <r>9[w]  12[f]  6[g]  2[sw]  29[vs]
 
-|| 32 - 14:40 ||  {p=32} +[v]  /f <r>12[w]  12[f]  8[g]  32[pop]
+|| 32 ||  {p=30}  [+2v]   [+2][arch]  /f  <r>8[w]  12[f]  6[g]  2[farm]  2[sw]  30[vs]
 
-|| 33 - 15:05 ||  {p=33} +[v]  /f <r>13[w]  12[f]  8[g]  33[pop]
+|| 33 ||  {p=31}  [sw] Not Finished   [3s] [>] [vdwl][>pw]   [3s] [>] [2][v@sw][>pw]  /f  <r>8[w]  14[f]  6[g]  1[pw]  2[sw]  31[vs] || The wood isn't used for palisades up to this point. You should have at least 6 farms before start placing palisade walls.
 
-|| 34 - 15:30 ||  {p=34} +[v]   [v@g] [->] 2 [h]  /f <r>14[w]  12[f]  7[g]  1[h]  34[pop]
+|| 34 ||  {p=32}  [+2v]   [+2][arch]  /f  <r>7[w]  14[f]  6[g]  2[farm]  1[pw]  2[sw]  32[vs]
 
-|| 35 - 15:55 ||  {p=35} +[v]   [horse collar]  /f <r>15[w]  12[f]  7[g]  1[h]  35[pop]
+|| 35 ||  {p=33}  [3hv@pw]   Any [v@pw][pi][>][wl]   /f  <r>8[w]  16[f]  6[g]  1[h]  2[pw]  33[vs]
 
-|| 36 - 16:20 ||  {p=36} +[v]   4[v@berries] [->] 4 [farm@mill]   [v@h] [->] 2 [h] [->g]  /f <r>16[w]  7[f]  8[g]  4[farm]  1[h]  36[pop]
+|| 36 ||  {p=34}  [v]<xt>35-39<>[>][gm]   [+2v]  /f  <r>8[w]  16[f]  6[g]  1[h]  2[farm]  1[pw]  34[vs]
 
-|| 37 - 16:45 ||  {p=37} + 2[v]   5[vdw] [->] [lc]<x>[2]<>   [v]<x>[3][8][-][5][0]<> [->] [tree][tree]<x>[2]<>  /f <r>16[w]  8[f]  7[g]  1[h]  5[lc]  37[pop]
+|| 37 ||  {p=35}  [+2][arch]  /f  <r>9[w]  18[f]  7[g]  1[pw]  35[vs]
 
-|| 38 - 17:10 ||  {p=38} [3fv@str]  /f <r>19[w]  8[f]  7[g]  1[h]  3[farm]  38[pop]
+|| 38 ||  {p=36}  [+2v]   [+2][arch]  /f  <r>9[w]  18[f]  8[g]  1[pw]  36[vs]
 
-|| 39 - 17:35 ||  {p=39} + 2[v]   [2fv@str]  /f <r>18[w]  11[f]  8[g]  2[farm]  39[pop]
+|| 39 ||  {p=37}  /f  <r>10[w]  18[f]  9[g]  37[vs]
 
-|| 40 - 18:00 ||  {p=40 empty} [v@w] [->] [farm@tc]  /f <r>18[w]  13[f]  8[g]  1[farm]  40[pop]
+|| 40 ||  {p=38}  [+2v]   [2fv@berry]   [6][v@berry][>][wl][pf]<xt>2<>  /f  <r>10[w]  16[f]  10[g]  2[farm]  38[vs]
 
-|| 41 - 18:25 ||  {p=41} + 2[v]   2[v@berries] [->] 2 [farm]  /f <r>19[w]  12[f]  8[g]  2[farm]  41[pop]
+|| 41 ||  {p=39}  [v]<xt>40-...<>[>][wl2]   [+2][arch]  /f  <r>16[w]  12[f]  11[g]  39[vs]
 
-|| 42 - 18:50 ||  {p=42} 2[v@w] [->] 2 [farm@tc]   [v@w] [->] 2 [h]  /f <r>17[w]  14[f]  8[g]  1[h]  2[farm]  42[pop]
+|| 42 ||  {p=40}  [+v]   [all][v@wl]<xt s>2<>[>][lc2]<x> 1 Tile From [wl]<>  /f  <r>10[w]  12[f]  11[g]  7[lc]  40[vs]
 
-|| 43 - 19:15 ||  {p=43} + 2[v]   2[v@berries] [->] 2 [farm]  /f <r>18[w]  14[f]  8[g]  1[h]  2[farm]  43[pop]
+|| 43 ||  {p=41}  [+2][arch]   [castle age]   /f  <r>18[w]  12[f]  11[g]  41[vs]
 
-|| 44 - 19:40 ||  {p=44} [+2h]  /f <r>19[w]  16[f]  8[g]  1[h]  44[pop]
+|| 44 ||  {p=42 t=50}  [vdwl][>][2][h][>]...   [+2][arch]   [paa]   /f  <r>18[w]  12[f]  11[g]  1[h]  42[vs]
 
-|| 45 - 20:05 ||  {p=45} + 2[v]   Produce [archer] Leaving 200 [g]   /f <r>20[w]  16[f]  8[g]  1[h]  45[pop]
+|| 45 ||  {p=42 t=50}  [+2][arch]   [hrc]   [+4h]  /f  <r>18[w]  12[f]  11[g]  1[h]  42[vs]
 
-|| 46 - 20:30 ||  {p=46} 5[v@w] [->] [mc]<x>[2]<p>[gold]<>   [+4h]  /f <r>16[w]  16[f]  8[g]  1[h]  5[mc]  46[pop]
+|| 46 ||  {p=42 t=60}  [+v]   [+3][arch]   [v@gm][>][range][>][mc@gm][pf]  /f  <r>18[w]  12[f]  10[g]  1[h]  1[range]  42[vs]
 
-|| 47 - 20:55 ||  {p=47} [castle age]  /f <r>17[w]  16[f]  8[g]  1[h]  5[mc]  47[pop]
+|| 47 ||  {p=42}  [xbow u] [3s] [bodkin]   [all][v@wl]<xt s>1<>[>][tc]<x>[wl]<>   [+v]  /f  <r>10[w]  12[f]  10[g]  1[h]  8[tc]  1[range]  42[vs]
 
-|| 48 - 21:20 ||  {p=48 t=50} [v@w] [->] [range]<x>[3]<> [->w]   [paa]   [gold mining]  /f <r>17[w]  16[f]  13[g]  1[h]  1[archery]  48[pop]
+|| 48 ||  {p=43}  [+2][arch]   [+v]   [+4h]   /f  <r>11[w]  12[f]  10[g]  1[h]  8[tc]  1[mc]  43[vs]
 
-|| 49 - 22:10 ||  {p=48 t=55} Start [archer] Production at 3 [ranges]   [+4h]  /f <r>18[w]  16[f]  13[g]  1[h]  48[pop]
+|| 49 ||  {p=44}  [set gp]<x>[tc]<xt s>2<>[>][wl]   [+3v]  /f  <r>20[w]  12[f]  10[g]  1[h]  1[mc]  44[vs]
 
-|| 50 - 23:05 ||  {p=48 t=55} + 2[v]  /f <r>18[w]  16[f]  13[g]  1[h]  48[pop]
+|| 50 ||  {p=45}  Start [xbow] Production at 3 [range]   [+v]  /f  <r>21[w]  12[f]  11[g]  1[h]  45[vs]
 
-|| 51 - 24:00 ||  {p=48} [bodkin] [1s] [xbow u] [1s] [bow saw]   3[v@w] [->] [tc]<x>[tree]<>   4[v@w] [->] [tc]<x>[stone mine]  /f <r>11[w]  16[f]  13[g]  1[h]  7[tc]  48[pop]
+|| 51 ||  {p=47}  [4][vdwl][>][gm]   [+2v]  /f  <r>19[w]  12[f]  15[g]  1[h]  47[vs]
 
-|| 52 - 24:25 ||  {p=49} + 2[v]   [+4h]  /f <r>12[w]  16[f]  13[g]  1[h]  7[tc]  49[pop]
+|| 52 ||  {p=49}  [4fv@wl]   [+2v]   /f  <r>17[w]  12[f]  15[g]  1[h]  4[farm]  49[vs]
 
-|| 53 - 24:50 ||  {sps="no"} [xbow] @ 3[ranges] [3s] [v]@ 3 [tc]   [university] [->] [ballistics] [4s] [siege workshop] [->] [mangonel]   [laa] [1s] [thumb ring] [1s] [wb] [1s] [stone mining] [1s] [heavy plow] [1s] [castle] [1s]/f <r>15+[w]  19+[f]  13+[g]  4+[s]  1[h]  52+[pop]
+|| 53 ||  {sps="no"}  [+][xbow]<xt>3<x>[range]<> [3s] <b b>+<> [v]<xt>2<x>[tc]<>   [uni][>][ballistics] [4s] [sws][>][mango]   [gmg] [1s] [laa] [1s] [bs] [1s] [thumb ring] [1s] [wb]  /f  <r>19+[w]  16+[f]  15+[g]  1[h]  51+[vs]

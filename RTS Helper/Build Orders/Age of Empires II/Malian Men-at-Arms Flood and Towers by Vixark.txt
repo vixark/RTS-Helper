@@ -6,7 +6,7 @@
 
 [[>=[ → ] ?=[ ?[1s]] +=[<b>+<> ] +v=[[+][v]] 0=[<t>0<>] 1=[<t>1<> ] 2=[<t>2<> ] 3=[<t>3<> ] 4=[<t>4<> ] 5=[<t>5<> ] 6=[<t>6<> ] 7=[<t>7<> ] 8=[<t>8<> ] 9=[<t>9<> ] all=[All ] +2=[[+][2]] +3=[[+][3]] +4=[[+][4]] +5=[[+][5]] +6=[[+][6]] +2v=[[+2][v]] +3v=[[+3][v]] +4v=[[+4][v]] +5v=[[+5][v]] +6v=[[+6][v]] xf=[<x>[flag]<>] pf=[<p>[flag]<>] xi=[<x>[idle]<>] pi=[<p>[idle]<>] mc@sm=[[mc]<x>[sm]<>] mc@gm=[[mc]<x>[gm]<>] mill@berry=[[mill]<x>[berry]<>] farm@tc=[[farm]<x>[tc]<>] farm@mill=[[farm]<x>[mill]<>] v@shp=[[v]<x>[shp]<>] v@boar=[[v]<x>[boar]<>] v@h=[[v]<x>[h]<>] v@gm=[[v]<x>[gm]<>] v@sm=[[v]<x>[sm]<>] v@farm=[[v]<x>[farm]<>] v@berry=[[v]<x>[berry]<>] v@deer=[[v]<x>[deer]<>] v@wl=[[v]<x>[wl]<>] v@str=[[v]<x>[str]<>] v@pw=[[v]<x>[pw]<>] v@sw=[[v]<x>[sw]<>] v@tc=[[v]<x>[tc]<>] vdboar=[[v]<p>[drop food]<x>[boar]<>] vddeer=[[v]<p>[drop food]<x>[deer]<>] vdstr=[[v]<p>[drop wood]<x>[str]<>] vdwl=[[v]<p>[drop wood]<x>[wl]<>] vdshp=[[v]<p>[drop food]<x>[shp]<>] vdfarm=[[v]<p>[drop food]<x>[farm]<>] vdberry=[[v]<p>[drop food]<x>[berry]<>] vdgm=[[v]<p>[drop gold]<x>[gm]<>] vdsm=[[v]<p>[drop stone]<x>[sm]<>] >h=[[>][h][xf]] >shp=[[>][shp][xf]] >sw=[[>][sw][xf]] >pw=[[>][pw][xf]] >berry=[[>][berry][xf]] >boar=[[>][boar][xf]] >deer=[[>][deer][xf]] >farm=[[>][farm][xf]] >str=[[>][str][xf]] >wl=[[>][wl][xf]] >gm=[[>][gm][xf]] >sm=[[>][sm][xf]] 1hv@berry=[[v@berry][>][h][>berry]] 2hv@berry=[[v@berry][>][2][h][>berry]] 1hv@gm=[[v@gm][>][h][>gm]] 2hv@gm=[[v@gm][>][2][h][>gm]] 3hv@gm=[[v@gm][>][3][h][>gm]] 4hv@gm=[[v@gm][>][4][h][>gm]] 1hv@wl=[[v@wl][>][h][>wl]] 2hv@wl=[[v@wl][>][2][h][>wl]] 3hv@wl=[[v@wl][>][3][h][>wl]] 4hv@wl=[[v@wl][>][4][h][>wl]] 1hv@str=[[v@str][>][h][>str]] 2hv@str=[[v@str][>][2][h][>str]] 3hv@str=[[v@str][>][3][h][>str]] 4hv@str=[[v@str][>][4][h][>str]] 1fv@shp=[[v@shp][>][farm]] 2fv@shp=[[2][v@shp][>][2][farm]] 3fv@shp=[[3][v@shp][>][3][farm]] 4fv@shp=[[4][v@shp][>][4][farm]] 5fv@shp=[[5][v@shp][>][5][farm]] 6fv@shp=[[6][v@shp][>][6][farm]] 1fv@berry=[[v@berry][>][farm]] 2fv@berry=[[2][v@berry][>][2][farm]] 3fv@berry=[[3][v@berry][>][3][farm]] 4fv@berry=[[4][v@berry][>][4][farm]] 5fv@berry=[[5][v@berry][>][5][farm]] 6fv@berry=[[6][v@berry][>][6][farm]] 1fv@wl=[[v@wl][>][farm]] 2fv@wl=[[2][v@wl][>][2][farm]] 3fv@wl=[[3][v@wl][>][3][farm]] 4fv@wl=[[4][v@wl][>][4][farm]] 5fv@wl=[[5][v@wl][>][5][farm]] 6fv@wl=[[6][v@wl][>][6][farm]] 1fv@str=[[v@str][>][farm]] 2fv@str=[[2][v@str][>][2][farm]] 3fv@str=[[3][v@str][>][3][farm]] 4fv@str=[[4][v@str][>][4][farm]] 5fv@str=[[5][v@str][>][5][farm]] 6fv@str=[[6][v@str][>][6][farm]] 1hv@pw=[[v@pw][>][h][>pw]] 2hv@pw=[[v@pw][>][2] [h][>pw]] 3hv@pw=[[v@pw][>][3] [h][>pw]] 1hv@sw=[[v@sw][>][h][>sw]] 2hv@sw=[[v@sw][>][2][h][>sw]] 3hv@sw=[[v@sw][>][3][h][>sw]] +h=[[v@h][>h]] +2h=[[v@h][>][2][h][xf]] +3h=[[v@h][>][3][h][xf]] +4h=[[v@h][>][4][h][xf]] +5h=[[v@h][>][5][h][xf]] +6h=[[v@h][>][6][h][xf]] 80v@tc=[[v]<p>[tc]<xt m>80%<>] 70v@tc=[[v]<p>[tc]<xt m>70%<>] 50v@tc=[[v]<p>[tc]<xt m>50%<>] boar1=[[boar]<xt>1<>] boar2=[[boar]<xt>2<>] >boar1=[[>][boar][pf]<xt>1<>] >boar2=[[>][boar][pf]<xt>2<>] deer1=[[deer]<xt>1<>] >deer1=[[>][deer][pf]<xt>1<>] deer2=[[deer]<xt>2<>] >deer2=[[>][deer][pf]<xt>2<>] deer3=[[deer]<xt>3<>] >deer3=[[>][deer][pf]<xt>3<>] deer4=[[deer]<xt>4<>] >deer4=[[>][deer][pf]<xt>4<>] deer5=[[deer]<xt>5<>] >deer5=[[>][deer][pf]<xt>5<>] deer6=[[deer]<xt>6<>] >deer6=[[>][deer][pf]<xt>6<>] shp1=[[shp]<xt>1<>] >shp1=[[>][shp][pf]<xt>1<>] shp2=[[shp]<xt>2<>] >shp2=[[>][shp][pf]<xt>2<>] shp3=[[shp]<xt>3<>] >shp3=[[>][shp][pf]<xt>3<>] shp4=[[shp]<xt>4<>] >shp4=[[>][shp][pf]<xt>4<>] shp5=[[shp]<xt>5<>] >shp5=[[>][shp][pf]<xt>5<>] shp6=[[shp]<xt>6<>] >shp6=[[>][shp][pf]<xt>6<>] shp7=[[shp]<xt>7<>] >shp7=[[>][shp][pf]<xt>7<>] shp8=[[shp]<xt>8<>] >shp8=[[>][shp][pf]<xt>8<>] wl1=[[wl]<xt>1<>] wl2=[[wl]<xt>2<>] wl3=[[wl]<xt>3<>] >wl1=[[>][wl][pf]<xt>1<>] >wl2=[[>][wl][pf]<xt>2<>] >wl3=[[>][wl][pf]<xt>3<>] str1=[[str]<xt>1<>] str2=[[str]<xt>2<>] str3=[[str]<xt>3<>] str4=[[str]<xt>4<>] str5=[[str]<xt>5<>] >str1=[[>][str][pf]<xt>1<>] >str2=[[>][str][pf]<xt>2<>] >str3=[[>][str][pf]<xt>3<>] >str4=[[>][str][pf]<xt>4<>] >str5=[[>][str][pf]<xt>5<>] lc1=[[lc]<xt>1<>] lc2=[[lc]<xt>2<>] lc3=[[lc]<xt>3<>] mc1=[[mc]<xt>1<>] mc2=[[mc]<xt>2<>] mc3=[[mc]<xt>3<>] vtodeer=[[v]<p>[arrow]<x>[deer]<>] vtowl=[[v]<p>[arrow]<x>[wl]<>] vtogm=[[v]<p>[arrow]<x>[gm]<>] vtosm=[[v]<p>[arrow]<x>[sm]<>] vtoberry=[[v]<p>[arrow]<x>[berry]<>] vtoshp=[[v]<p>[arrow]<x>[shp]<>] v@shpfh=[[v]<p>[shp]<x>Full[health]<>] v@boarfh=[[v]<p>[boar]<x>Full[health]<>] v@shplh=[[v]<p>[shp]<x>Low[health]<>] v@boarlh=[[v]<p>[boar]<x>Low[health]<>] vdshpfh=[[vdshp]<x>Full[health]<>] vdboarfh=[[vdboar]<x>Full[health]<>] vdshplh=[[vdshp]<x>Low[health]<>] vdboarlh=[[vdboar]<x>Low[health]<>] v@strfh=[[v]<p>[str]<x>Full[health]<>] v@strlh=[[v]<p>[str]<x>Low[health]<>] vdstrfh=[[vdstr]<x>Full[health]<>] vdstrlh=[[vdstr]<x>Low[health]<>]]] || No usar [v@x]<p>[drop r]<> dentro de la definición de vdx porque hace a [vdx] incompatible con subíndices adicionales del tipo [vdx]<x>Subíndice<>. Aplica igual para vtox. Actualizar también en New.txt. Actualizarlos con la aplicación cerrada en \Código\RTS Helper\RTS Helper\Build Orders\Age of Empires II.
 
-(([6][maa][>][ls]<xt>3<x>[rax]<>[>][champ]<xt>5<x>[rax]<>   <b>for [Malians] on [green arabia] [1s] 21 Pop<> [1s] https://www.youtube.com/:Watch_Video   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark [1s] http://vixark.com/donate:Donate   <b>Difficulty:<> Easy || An easy to follow and safer than 20 pop build order that gets 3 militias at 9:15 (same as 20 pop), upgrades them to men-at-arms at 10:20 (0:25 after 20 pop) and gets 6 men-at-arms at 11:23 (0:25 after 20 pop). \n\n It gets loom after advancing to feudal age at 10:05 (1:40 before 20 pop) and has your town stone walled at 14:30-15:00 (1:00 before 20 pop). \n\n The main objective is to disturb your opponent with 6 men-at-arms while you stone wall your town and advance to castle age with a food heavy economy. \n\n Starting castle age you can have 15 long swordsmen with +5 pierce armor and squires around 22:00. The 15 long swordsmen can destroy a big mass of feudal archers and skirmishers, face a medium mass of crosbowmen, face 6 knights and destroy town centers if they're unguarded. \n\n Your economy is set up for producing long swordsmen constantly from 3 barracks and you can click up to imperial at 30:00 to get the third armor and two-handed swordsman upgrades power spike and produce them constantly from 5 barracks. \n\n It's good vs. archers if you can wall up without receiving much damage. It can also work vs. scouts into knights if you can defend your villagers with spearmen and men-at-arms and distract in the opponent's town with other men-at-arms and create some spearmen/pikemen in castle age.))
+(([maa]<xt>1<x>[rax]<> [+2][towers][>][ls]<xt>2<x>[rax]<>[>][champ]<xt>5<x>[rax]<>   <b>for [Malians] on [green arabia] [1s] 21 Pop<> [1s] https://www.youtube.com/:Watch_Video      <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark [1s] http://vixark.com/donate:Donate   <b>Difficulty:<> Moderate || Info Pending. ))
 
 || 0 ||  {p=3 sns="no"}  [+4v] [2s] [2][v][>][h] [2s] [v][>][h]   [shp1][>][tc] [3s] [sc][>][shp]<xt>2-4<>   [3][v@h][>shp1] [3s] [v]<xt>4-6<>[>][shp1]  /f  <r>3[h]  3[vs] || If you are fast, wait until the sheep #1 is reaching its final position under the town center to place the gather point on it so the new villagers spawn near it. \n\n You can consider sending to sheep #1 one the villagers in the first house before finishing it, but you should be careful with the timing so you don't get housed.
 
@@ -36,7 +36,7 @@
 
 || 13 ||  {p=16}  [v]<xt>17<>[>][berry]   [all][v@boar][>][shp][pf]<xt>3-5<>  /f  <r>3[w]  13[f]  16[vs]
 
-|| 14 ||  {p=17}  [v]<xt>18-21<>[>][str]<x> Near[deer]<xt s>4<>   [vtoberry][>][mill]   [+3v]  /f  <r>3[w]  13[f]  1[mill]  17[vs]
+|| 14 ||  {p=17}  [v]<xt>18-21<>[>][str]<x> Near[deer]<xt s>4<>   [vtoberry][>][mill]<x> 1 Tile From [berry]<>   [+3v]  /f  <r>3[w]  13[f]  1[mill]  17[vs]  || You'll have eight villagers in berries so it's important to avoid them getting stuck by placing the mill one tile away from berries. If possible, place it in front of a straight section of three forage bushes.
 
 || 15 ||  {p=18}  /f  <r>4[w]  13[f]  1[mill]  18[vs]
 
@@ -44,126 +44,126 @@
 
 || 17 ||  {p=20}  [vdshpfh][>][rax]<p>Front of<x>Town<>   [all][vdshp]   [feudal age]  /f  <r>9[w]  10[f]  1[rax]  20[vs]
 
-|| 18 ||  {p=21 t=30}  [all][v@shp][>][shp][pf]<xt>6-8<>[>berry]   [3][v@str][>][mc@gm]   [4][vdstr][>][deer]<xt>4<>  /f  <r>3[w]  14[f]  3[mc]  1[rax]  21[vs] || If the two patches of deer are close to each other, don't send the four villagers in stragglers to the fourth deer, send three of them to berries and one to join the three villagers in the third deer and then to build a mill near the second patch of deer to drop the food of the third deer. \n\n This added efficiency allows you to create an extra militia/men-at-arms or research double-bit axe earlier. \n\n If possible, place the mining camp in front of a straight section of three gold mines one tile away from them.
+|| 18 ||  {p=21 t=30}  [all][v@shp][>][shp][pf]<xt>6-8<>   [3][v@str][>][mc@gm]   [4][vdstr][>][deer]<xt>4<>  /f  <r>3[w]  14[f]  3[mc]  1[rax]  21[vs] || If the two patches of deer are close to each other, don't send the four villagers in stragglers to the fourth deer, send three of them to berries and one to join the three villagers in the third deer and then to build a mill near the second patch of deer to drop the food of the third deer. \n\n This added efficiency allows you to create an extra militia/men-at-arms or research double-bit axe earlier. \n\n If possible, place the mining camp in front of a straight section of three gold mines one tile away from them.
 
-|| 19 ||  {p=21 t=30}  [v]<xt>22-27<>[>][wl]   [loom]   [v]<x>[rax]<>[>][h]<x>[sw][pf] [3s] [+][mil]  /f  <r>3[w]  14[f]  3[g]  1[h]  21[vs]
+|| 19 ||  {p=21 t=30}  [v]<xt>22-27<>[>][wl]   [loom]   [v]<x>[rax]<>[>h] [3s] [+][mil]  /f  <r>3[w]  14[f]  3[g]  1[h]  21[vs]
 
 || 20 ||  {p=21 t=30}  [+2][mil]   [all][v@deer][>][mill][>]   [3s] [deer][pf]<xt>4-6<>[>str]  /f  <r>3[w]  10[f]  3[g]  4[mill]  1[idle]  21[vs] || There's some food lost to decay in the deer while the four villagers build the mill next to it, but the priority is to have the food income as fast as possible to be able to make the sixth men-at-arms without delay. \n\n If you want to minimize rotting, you could task one villager to make the mill and the other three to continue gathering food from the deer, but you will have to make the tasks queue to the other two deers and the straggler tree two times.
 
-|| 21 ||  {p=21 t=40}  [v@h]<p>[idle]<>[>][2][h]<x>[sw]<>   [all][vddeer]<xt s>3<>[>][berry]  /f  <r>3[w]  14[f]  3[g]  1[h]  21[vs] || Se usa [v@h]<p>[idle] para forzar que no sea ocultado por la opción de ocultar casas. Estas dos casas no se consideran casas de constructor dedicado de casas. |||| If you are in a map with rhinoceros or elephants, you can send the three villagers in deer to the last sheep and then to berries. This way you'll finish all sheep at around the same time as in a green arabia map.
+|| 21 ||  {p=21 t=40}  [v@h]<p>[idle]<>[>][2][h]   [all][vddeer]<xt s>3<>[>][berry]  /f  <r>3[w]  14[f]  3[g]  1[h]  21[vs] || Se [v@h]<p>[idle] para forzar que no sea ocultado por la opción de ocultar casas. Estas dos casas no se consideran casas de constructor dedicado de casas. |||| If you are in a map with rhinoceros or elephants, you can send the three villagers in deer to the last sheep and then to berries. This way you'll finish all sheep at around the same time as in a green arabia map.
 
-|| 22 ||  {p=21}  [maa u] [3s] [+v]   [3][mil][sc][>][attack]<x>[gm]<>   [v@h][>][sg][sw][xf]  /f  <r>3[w]  14[f]  3[g]  1[h]  21[vs] || Attack villagers in berries or mill vs. scouts and gold miners or mining camp vs. archers. \n\n *** \n\n Stone walls are stronger and cheaper in villager time than palisades walls in one town center pushes. Read 'Stone Walling in One Town Center Push' in vixark.com/age-of-empires-ii. \n\n Connect woodlines with stone walls prioritizing diagonal segments. The diagonal segments cover more linear distance for the same stone. \n\n Don't be afraid to make a big walled area. If there's risk, protect the wallers with spearmen, men-at-arms and the scout. \n\n Try to have a safe woodline that can't be reached by opponent's archers, even if this means walling behind it. One safe woodline is enough until imperial age. \n\n In castle age the large stone walls are not only for safety, they are also for hiding your strategy while the opponent usually can't. If you see the opponent booming, you continue with this build order. But if you see the opponent preparing a defence for your long swordsmen, you are in a good position to boom and defend behind stone walls.
+|| 22 ||  {p=21}  [maa u] [3s] [+v]   [3][mil][sc][>][attack]<x>[gm]<>   [v@h][>][sw][tower][sw]<x> Opponent's [gm]<>  /f  <r>3[w]  14[f]  3[g]  1[twr]  21[vs] || Attack villagers in berries or mill vs. scouts and gold miners or mining camp vs. archers. \n\n *** \n\n Stone walls are stronger and cheaper in villager time than palisades walls in one town center pushes. Read 'Stone Walling in One Town Center Push' in vixark.com/age-of-empires-ii. \n\n Connect woodlines with stone walls prioritizing diagonal segments. The diagonal segments cover more linear distance for the same stone. \n\n Don't be afraid to make a big walled area. If there's risk, protect the wallers with spearmen, men-at-arms and the scout. \n\n Try to have a safe woodline that can't be reached by opponent's archers, even if this means walling behind it. One safe woodline is enough until imperial age. \n\n In castle age the large stone walls are not only for safety, they are also for hiding your strategy while the opponent usually can't. If you see the opponent booming, you continue with this build order. But if you see the opponent preparing a defence for your long swordsmen, you are in a good position to boom and defend behind stone walls.
 
-|| 23 ||  {p=21}  [2][vdshplh][>][str]   [+][mil] [0s] or [0s] [+2][spear]   [+v]  /f  <r>5[w]  12[f]  3[g]  1[h]  21[vs] || You can decide if you leave the second group of men-at-arms defending at home or send them to support the aggression in opponent's town. Versus archers, it could be better to send them to the front to disturb completely their gold income. Versus scouts, depending on how long is the wall needed and how much damage you can do with the first three men-at-arms, you can choose to make spears and men-at-arms to defend the wallers or send them to the front.
+|| 23 ||  {p=21 sps="no"}  [2][vdshplh][>][str]   [4][v@shp][>berry]   [+][mil] [3s] [+v]  /f  <r>5[w]  12[f]  3[g]  1[twr]  21[vs] || You can decide if you leave the second group of men-at-arms defending at home or send them to support the aggression in opponent's town. Versus archers, it could be better to send them to the front to disturb completely their gold income. Versus scouts, depending on how long is the wall needed and how much damage you can do with the first three men-at-arms, you can choose to make spears and men-at-arms to defend the wallers or send them to the front.
 
-|| 24 ||  {p=22}  [+][maa]   [2][vtoberry][>][sw]   [+v]  /f  <r>6[w]  10[f]  3[g]  3[sw]  22[vs]
+|| 24 ||  {p=22}  [+][maa]   [+v]   /f  <r>6[w]  12[f]  3[g]  1[twr]  22[vs]
 
-|| 25 ||  {p=23}  [+][maa]   [+v]  /f  <r>7[w]  10[f]  3[g]  3[sw]  23[vs]
+|| 25 ||  {p=23}  [+][maa]   [+v]   [2fv@str]  /f  <r>5[w]  12[f]  3[g]  2[farm]  1[twr]  23[vs]
 
-|| 26 ||  {p=24}  [+v]  /f  <r>8[w]  10[f]  3[g]  3[sw]  24[vs] || In dry arabia the rhinoceros/elephants give more food than boars, but you still need to invest villager time gathering it, so this represent only about 45 extra food, which is only is enough for one extra man-at-arm in this step. If you make the extra man-at-arms, you should also make a farm with a villager in straggler tree to avoid having food shortage.
+|| 26 ||  {p=24}  [+v]  /f  <r>6[w]  14[f]  3[g]  1[twr]  24[vs] || In dry arabia the rhinoceros/elephants give more food than boars, but you still need to invest villager time gathering it, so this represent only about 45 extra food, which is only is enough for one extra man-at-arm in this step. If you make the extra man-at-arms, you should also make a farm with a villager in straggler tree to avoid having food shortage.
 
-|| 27 ||  {p=25}  [vdgm][>][mkt]<x>[sw]<>[>sw]   [+v]  /f  <r>9[w]  10[f]  2[g]  1[mkt]  3[sw]  25[vs]
+|| 27 ||  {p=25}  [+v]   [dba]  /f  <r>7[w]  14[f]  3[g]  1[twr]  25[vs]
 
-|| 28 ||  {p=26}  [dba] [3s] [+v]   If Danger[>][2][v@wl][>][sw]   Any [v@sw][pi][>][wl]  /f  <r>10[w]  10[f]  2[g]  1[mkt]  3[sw]  26[vs]
+|| 28 ||  {p=26}  [2hv@gm]   [+v]  /f  <r>8[w]  14[f]  2[g]  1[h]  1[twr]  26[vs]
 
-|| 29 ||  {p=27}  [v]<xt>28-35<>[>][str]   [2fv@str]   [+v]  /f  <r>9[w]  10[f]  2[g]  2[farm]  1[mkt]  3[sw]  27[vs]
+|| 29 ||  {p=27}  [v]<xt>28-33<>[>][str]   [+v]   [supplies]  /f  <r>9[w]  14[f]  2[g]  1[h]  1[twr]  27[vs]
 
-|| 30 ||  {p=28}  If Nearly Walled[>]   [3s] [all][maa][>][garrison]<x>[tc]<>   [+v]  /f  <r>10[w]  12[f]  2[g]  4[sw]  28[vs]
+|| 30 ||  {p=28}  [+v]   [v]<x>[tower]<>[>][mkt][xf]   After [supplies][>]Start [maa] Production   /f  <r>10[w]  14[f]  2[g]  1[h]  1[mkt]  28[vs]
 
-|| 31 ||  {p=29}  [hrc]   Buy <t>100<> [s]   [+v]   /f  <r>15[w]  8[f]  2[g]  4[sw]  29[vs] || If you are able to wall with the starting 200 stone, you can buy food instead and make 2 extra men-at-arms. 
+|| 31 ||  {p=29}  [+v]   /f  <r>15[w]  10[f]  3[g]  1[mkt]  29[vs] || If you are able to wall with the starting 200 stone, you can buy food and make 2 extra men-at-arms. 
 
-|| 32 ||  {p=30}  [2fv@berry]   Any [v@str][>][farm] Until <t>14<> [v@farm]   [+v]   /f  <r>14[w]  6[f]  2[g]  4[farm]  4[sw]  30[vs] || Se hacen 2 sembrados adicionales tipo C un poco más ineficientes en el centro de pueblo que sirven para que la producción de longswords sea más fluída y para avanzar a castillos sin usar el mercado. En teoría solo se necesitan 16 + 8 agricultores de sembrados tipo A o B (adjacentes al centro de pueblo o granero) para soportar la producción de longswords en 3 cuarteles y un centro de pueblo con aldeanos, pero agregarle estas dos granjas tipo C (18 + 8) permite desarrollar las tecnologías económicas más pronto y suspender menos la producción de longswords. |||| Make farms as close as possible to the villager in the straggler tree. Avoid replacing early straggler trees with farms. Make two farms with villagers on stragglers next to the mill. When following the pinwheel farming pattern around the town center, the last two farms are second layer farms in the corner of the town center (not touching it).
+|| 32 ||  {p=30}  [+v]   [4fv@berry]   Any [v@str][>][farm] Until <t>16<> [v@farm]  /f  <r>16[w]  6[f]  3[g]  4[farm]  1[mkt]  30[vs] || Se hacen 2 sembrados adicionales tipo C un poco más ineficientes en el centro de pueblo que sirven para que la producción de longswords sea más fluída y para avanzar a castillos sin usar el mercado. En teoría solo se necesitan 16 + 8 agricultores de sembrados tipo A o B (adjacentes al centro de pueblo o granero) para soportar la producción de longswords en 3 cuarteles y un centro de pueblo con aldeanos, pero agregarle estas dos granjas tipo C (18 + 8) permite desarrollar las tecnologías económicas más pronto y suspender menos la producción de longswords. |||| Make farms as close as possible to the villager in the straggler tree. Avoid replacing early many stragglers with farms. Make two farms with villagers on stragglers next to the mill. When following the pinwheel farming pattern around the town center, the last two farms are second layer farms in the corner of the town center (not touching it).
 
-|| 33 ||  {p=31}  [1hv@str]   [+v]   /f  <r>14[w]  10[f]  2[g]  1[h]  2[farm]  2[sw]  31[vs]
+|| 33 ||  {p=31}  [+v]   [v]<x>[mkt]<>[>][2][h][xf]  /f  <r>15[w]  10[f]  3[g]  1[h]  2[farm]  31[vs]
 
-|| 34 ||  {p=32}  [+2v]  /f  <r>14[w]  12[f]  2[g]  2[farm]  2[sw]  32[vs]
+|| 34 ||  {p=32}  [+v]   /f  <r>14[w]  12[f]  3[g]  1[h]  2[farm]  32[vs]
 
-|| 35 ||  {p=33}  /f  <r>13[w]  14[f]  2[g]  2[farm]  2[sw]  33[vs]
+|| 35 ||  {p=33}  [v]<xt>34-38<>[>][gm]   [+v]  /f  <r>13[w]  14[f]  3[g]  1[h]  2[farm]  33[vs]
 
-|| 36 ||  {p=34}  [+2v]  /f  <r>14[w]  16[f]  2[g]  2[farm]  34[vs]
+|| 36 ||  {p=34}  [+v]   [v@h][>][blk][xf][>h]  /f  <r>13[w]  16[f]  4[g]  1[blk]  34[vs]
 
-|| 37 ||  {p=35}  [v]<xt>36-39<>[>][gm]   [2hv@gm]   [2][v@str][>][lc]<p>Safe Spot<xt>2<>  /f  <r>13[w]  18[f]  1[g]  1[h]  2[lc]  35[vs]
+|| 37 ||  {p=35}  [+v]   /f  <r>11[w]  16[f]  5[g]  2[farm]  1[blk]  35[vs]
 
-|| 38 ||  {p=36}  [+v]  /f  <r>13[w]  18[f]  2[g]  1[h]  2[lc]  36[vs]
+|| 38 ||  {p=36}  [+v]   /f  <r>9[w]  18[f]  6[g]  1[h]  2[farm]  36[vs]
 
-|| 39 ||  {p=37}  [wb]  /f  <r>13[w]  18[f]  3[g]  1[h]  2[lc]  37[vs] || Researching Wheelbarrow instead of making 3 extra villagers gives about 100 more food starting feudal age which is used to research forging. Read more about Wheelbarrow here http://vixark.com/age-of-empires-ii: Research Wheelbarrow In Feudal or In Castle Age: An In-Game Experiment.
+|| 39 ||  {p=37}  [sma]   [+v]   [v@h][>]Opponent's [gm][pf]<xt>2<>  /f  <r>9[w]  20[f]  7[g]  1[h]  37[vs]
 
-|| 40 ||  {p=38 t=37}  [v@wl][>][blk][>wl]  /f  <r>14[w]  18[f]  5[g]  1[blk]  38[vs]
+|| 40 ||  {p=38}  [v]<xt>39-44<>[>][wl] [3s] [+v]   Buy 100[s]   [v]<x>[arrow]<>[>][sw][tower]<xt>2<>[sw]<x> Opponent's [gm]<xt s>2<><>   /f  <r>9[w]  20[f]  8[g]  1[arrow]  38[vs]
 
-|| 41 ||  {p=38 t=19}  [2][vdwl][>][gm]  /f  <r>12[w]  18[f]  7[g]  1[blk]  38[vs]
+|| 41 ||  {p=39}  [+v]   [4][v@berry][pi][>][4][farm]  /f  <r>10[w]  20[f]  8[g]  1[twr]  39[vs]
 
-|| 42 ||  {p=38 t=19}  [castle age]  /f  <r>13[w]  18[f]  7[g]  38[vs]
+|| 42 ||  {p=40}  [+v]   [2hv@wl]   /f  <r>10[w]  20[f]  8[g]  1[h]  1[twr]  40[vs]
 
-|| 43 ||  {p=38  t=50}     [4][v@berry][pi][>][4][farm]   [vtogm][>][2][rax][>h][>gm]   [supplies] /f  <r>13[w]  18[f]  6[g]  1[rax]  38[vs]
+|| 43 ||  {p=41}  [+v]   [all][v@wl][>][lc]<x>1 Tile From [wl]<>  /f  <r>20[f]  8[g]  1[h]  11[lc]  1[twr]  41[vs]
 
-|| 44 ||  {p=38 t=50}  After [supplies][>][+5][maa]   [w] <t>> 325<>[>]   [3s] [4][v@wl][>][mill] [+4][farm]   /f  <r>9[w]  18[f]  6[g]  4[farm]  1[rax]  38[vs]
+|| 44 ||  {p=42}  [+v]   /f  <r>13[w]  20[f]  8[g]  1[twr]  42[vs]
 
-|| 45 ||  {p=38 t=60}   [sma]   [+3][maa] [3s] [+2v]   [all][maa][>][attack]  /f  <r>9[w]  22[f]  7[g]  38[vs]
+|| 45 ||  {p=43}  [wb]   Cancel [maa] Queue and   Stop Production   /f  <r>14[w]  20[f]  8[g]  1[twr]  43[vs]
 
-|| 46 ||  {p=38}  [ls u] [3s] [squires]   [cma]   [vdwl][>][2][h][>]...   /f  <r>8[w]  22[f]  7[g]  1[h]  38[vs]
+|| 46 ||  {p=44}  [v]<x>[twr]<>[>][rax][pf]<x>2<>[>wl]   /f  <r>15[w]  20[f]  8[g]  1[rax]  44[vs]
 
-|| 47 ||  {p=39}  [v]<xt>40-60<>[>][wl2] [3s] [+v]   Start [maa] Production at [3][rax]   Cancel to Afford Tecnologies  /f  <r>8[w]  22[f]  8[g]  1[h]  39[vs]
+|| 47 ||  {p=44}  /f  <r>15[w]  20[f]  8[g]  1[rax]  44[vs]
 
-|| 48 ||  {p=40}  [forging]   [+4h]   [+v]  /f  <r>9[w]  22[f]  8[g]  1[h]  40[vs]
+|| 48 ||  {p=44}  Buy <t>200<> [f]   [castle age]  /f  <r>16[w]  20[f]  8[g]  44[vs]
 
-|| 49 ||  {p=41}  [+v]  /f  <r>10[w]  22[f]  8[g]  1[h]  41[vs]
+|| 49 ||  {p=44 t=50}  Start [maa] Production at [2][rax]   [hrc]  /f  <r>16[w]  20[f]  8[g]  44[vs]
 
-|| 50 ||  {p=42}  [+v]   [w] <t>> 400<>[>]   [3s] [4fv@wl]  /f  <r>7[w]  22[f]  8[g]  1[h]  4[farm]  42[vs] || Only 240 wood is needed for the four farms, but it recommends 400 wood as a limit to build up the wood stockpile before removing four lumberjacks and have enough wood for building the monastery and the university.
+|| 50 ||  {p=44 t=50}  [2hv@wl]  /f  <r>15[w]  20[f]  8[g]  1[h]  44[vs]
 
-|| 51 ||  {p=43}  [+v]  /f  <r>8[w]  26[f]  8[g]  1[h]  43[vs]
+|| 51 ||  {p=44 t=60}  [v]<xt>45-60<>[>][wl2]   [6][v@wl][>][mill] [+6][farm]   [+2v]  /f  <r>10[w]  20[f]  8[g]  6[farm]  44[vs]
 
-|| 52 ||  {p=44}  [arson]   [+4h]   [+v]   /f  <r>9[w]  26[f]  8[g]  1[h]  44[vs]
+|| 52 ||  {p=44}  [ls u]   [squires]   [cma]  /f  <r>10[w]  26[f]  8[g]  44[vs]
 
-|| 53 ||  {p=45}  [+v]  /f  <r>10[w]  26[f]  8[g]  1[h]  45[vs]
+|| 53 ||  {p=45}  [arson]   [+2v]   [vtowl][>][lc]<x>1 Tile From [wl]<>   /f  <r>10[w]  26[f]  8[g]  1[lc]  45[vs]
 
-|| 54 ||  {p=46}  [+v]  /f  <r>11[w]  26[f]  8[g]  1[h]  46[vs]
+|| 54 ||  {p=46}  [forging]   [vdwl][>][4][h][>]...  /f  <r>10[w]  26[f]  8[g]  1[h]  1[lc]  46[vs]
 
-|| 55 ||  {p=47}  [hp]   [bs]   [+v]  /f  <r>12[w]  26[f]  8[g]  1[h]  47[vs]
+|| 55 ||  {p=47}  [+2v]   /f  <r>12[w]  26[f]  8[g]  1[h]  47[vs]
 
-|| 56 ||  {p=48}  [+4h]   [+v]  /f  <r>13[w]  26[f]  8[g]  1[h]  48[vs]
+|| 56 ||  {p=48}  /f  <r>13[w]  26[f]  8[g]  1[h]  48[vs]
 
-|| 57 ||  {p=49}  [+v]  /f  <r>14[w]  26[f]  8[g]  1[h]  49[vs]
+|| 57 ||  {p=49}  [+2v]   /f  <r>14[w]  26[f]  8[g]  1[h]  49[vs]
 
-|| 58 ||  {p=50}  If Battle Isn't Going Well[>]   [3s] [all][ls][>][sw][tc][sw]   [+v]  /f  <r>15[w]  26[f]  8[g]  1[h]  50[vs]
+|| 58 ||  {p=50}  [+4h]  /f  <r>15[w]  26[f]  8[g]  1[h]  50[vs]
 
-|| 59 ||  {p=51}  [gmg]   [+v]  /f  <r>16[w]  26[f]  8[g]  1[h]  51[vs]
+|| 59 ||  {p=51}  [+2v]   /f  <r>16[w]  26[f]  8[g]  1[h]  51[vs]
 
-|| 60 ||  {p=52}  [+v]  /f  <r>17[w]  26[f]  8[g]  1[h]  52[vs]
+|| 60 ||  {p=52}  [gmg]  /f  <r>17[w]  26[f]  8[g]  1[h]  52[vs]
 
-|| 61 ||  {p=53}  [+2h]   [+2v]  /f  <r>18[w]  26[f]  8[g]  1[h]  53[vs]
+|| 61 ||  {p=53}  [+2v]  /f  <r>18[w]  26[f]  8[g]  1[h]  53[vs]
 
-|| 62 ||  {p=54}  [7][v@wl][>][mc@gm]   [4][v@wl][>][mill] [+4][farm]   Deactivate [autofarm]  /f  <r>8[w]  26[f]  8[g]  1[h]  4[mill]  7[mc]  54[vs]
+|| 62 ||  {p=54}  [7][v@wl][>][mc@gm]  /f  <r>12[w]  26[f]  8[g]  1[h]  7[mc]  54[vs]
 
-|| 63 ||  {p=55}  [+2v]   [v@h][>][uni][>h]  /f  <r>9[w]  26[f]  8[g]  4[farm]  7[mc]  1[uni]  55[vs]
+|| 63 ||  {p=55}  [+2v]   [v@h][>][uni][>h]  /f  <r>13[w]  26[f]  8[g]  7[mc]  1[uni]  55[vs]
 
-|| 64 ||  {p=56}  Cancel [ls] Queue and Stop Production   [v@farm][pi][>][mst][>farm]   Activate [autofarm]  /f  <r>10[w]  29[f]  15[g]  1[uni]  1[mst]  56[vs] || Build the monastery near your town center so you can heal faster your army if needed.
+|| 64 ||  {p=56}  [v@wl][>][mst][>wl]  /f  <r>13[w]  26[f]  15[g]  1[uni]  1[mst]  56[vs]
 
-|| 65 ||  {p=57}  [+2v]  /f  <r>11[w]  29[f]  15[g]  1[uni]  1[mst]  57[vs]
+|| 65 ||  {p=57}  [+2v]  /f  <r>14[w]  26[f]  15[g]  1[uni]  1[mst]  57[vs]
 
-|| 66 ||  {p=58}  /f  <r>12[w]  30[f]  15[g]  1[h]  58[vs]
+|| 66 ||  {p=58}  Cancel [ls] Queue and Stop Production   [v@h][>][rax][pf]<xt>3<>[>][4][h][xf]   [bs]   /f  <r>16[w]  26[f]  15[g]  1[rax]  58[vs]
 
-|| 67 ||  {p=59}  [imperial age]   Resume [ls] Production  /f  <r>13[w]  30[f]  15[g]  1[idle]  59[vs]
+|| 67 ||  {p=59}  [imperial age]   Resume [ls] Production  /f  <r>17[w]  26[f]  15[g]  1[rax]  59[vs]
 
-|| 68 ||  {p=60 t=65}  If Many [ls]<x>Low[health]<>[>]   [3s] Sell [f][>][+2][monk]   [v@h][pi][>][4][h]  /f  <r>14[w]  30[f]  15[g]  1[h]  60[vs]
+|| 68 ||  {p=60 t=65}  [hp]   Start [ls] Production at [3][rax]  /f  <r>18[w]  26[f]  15[g]  1[h]  60[vs]
 
-|| 69 ||  {p=60 t=65}  [ic] [3s] [+2v]   [+2h]   [v@gm][>][2][rax][>gm]  /f  <r>14[w]  30[f]  14[g]  1[h]  1[rax]  60[vs]
+|| 69 ||  {p=60 t=65}  [ic]   [+2v]   [v@wl][>][2][rax][>wl]  /f  <r>17[w]  26[f]  15[g]  1[h]  1[rax]  60[vs]
 
-|| 70 ||  {p=60 t=60}  [v]<xt>61-...<>[>][sm]   [+2h]   [2fv@wl]  /f  <r>12[w]  30[f]  14[g]  1[h]  2[farm]  1[rax]  60[vs]
+|| 70 ||  {p=60 t=60}  [v]<xt>61-...<>[>][sm]   [+4h]   [6][v@wl][>][mill] + [6][farm]  /f  <r>11[w]  26[f]  15[g]  1[h]  6[farm]  1[rax]  60[vs]
 
-|| 71 ||  {p=60}  [2hs u] [3s] [pma]   Start [ls] Production at [5][rax]   [all][ls][>][attack]  /f  <r>12[w]  32[f]  15[g]  1[idle]  60[vs]
+|| 71 ||  {p=60}  [2hs u]   [pma]   Start [ls] Production at [5][rax]  /f  <r>12[w]  32[f]  15[g]  1[h]  60[vs]
 
-|| 72 ||  {p=61}  [+2v]   [vtosm][>][mc]   [v@h][pi][>][4][h][>wl]  /f  <r>12[w]  32[f]  15[g]  1[h]  1[mc]  61[vs]
+|| 72 ||  {p=61}  [+2v]   [v@sm][>][mc]  /f  <r>12[w]  32[f]  15[g]  1[h]  1[mc]  61[vs]
 
-|| 73 ||  {p=62}  /f  <r>12[w]  32[f]  15[g]  1[s]  1[h]  1[mc]  62[vs]
+|| 73 ||  {p=62}  [+4h]  /f  <r>12[w]  32[f]  15[g]  1[s]  1[h]  1[mc]  62[vs]
 
-|| 74 ||  {p=63}  [+2v]  /f  <r>12[w]  32[f]  15[g]  2[s]  1[h]  1[mc]  63[vs]
+|| 74 ||  {p=63}  [+2v]  /f  <r>12[w]  32[f]  15[g]  3[s]  1[h]  63[vs]
 
 || 75 ||  {p=64}  /f  <r>12[w]  32[f]  15[g]  4[s]  1[h]  64[vs]
 
 || 76 ||  {p=65}  [+2v]  /f  <r>12[w]  32[f]  15[g]  5[s]  1[h]  65[vs]
 
-|| 77 ||  {p=66}  When Pop Cap[>]   [3s] Buy [f][>][chmp u]  /f  <r>12[w]  32[f]  15[g]  6[s]  1[h]  66[vs]
+|| 77 ||  {p=66}  [v@h][>][3][h][xf][>wl]   When Pop Cap[>]   [3s] Buy [f][>][chmp u]  /f  <r>12[w]  32[f]  15[g]  6[s]  1[h]  66[vs]
 
-|| 78 ||  {p=67 sns="no"}  [+2v]   [4][v@wl][>][tc]<p>[wl]<xt>2<> [+4][farm]  /f  <r>9[w]  32[f]  15[g]  7[s]  4[tc]  67[vs]
+|| 78 ||  {p=67 sns="no"}  [+2v]   [4][v@wl][>][tc]<p>[wl]<xt>2<> [+4][farm]  /f  <r>8[w]  32[f]  15[g]  7[s]  1[h]  4[tc]  67[vs]
 
-|| 79 ||  {sps="no"}  [+][champ]<xt>5<x>[rax]<> [3s] <b b>+<> [v]<xt>2<x>[tc]<>   [all][v@sm][>][castle][>][conscription] [1s] [gbeto] [1s] [treb]   [hc] [1s] [masonry] [1s] [architecture] [1s] [fortified wall]  /f  <r>9+[w]  36+[f]  15+[g]  8+[s]  68+[vs]
+|| 79 ||  {sps="no"}  [+][champ]<xt>5<x>[rax]<> [3s] <b b>+<> [v]<xt>2<x>[tc]<>   [all][v@sm][>][castle][>][conscription] [1s] [+][gbeto] [1s] [+][treb]   [hc]  /f  <r>9+[w]  36+[f]  15+[g]  8+[s]  68+[vs]

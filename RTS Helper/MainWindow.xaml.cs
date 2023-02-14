@@ -27,7 +27,7 @@ using AutoUpdaterDotNET;
 using System.Xml;
 using System.Net.Http;
 using System.IO.Compression;
-
+using System.Text.RegularExpressions;
 
 
 namespace RTSHelper {
@@ -40,7 +40,7 @@ namespace RTSHelper {
 
         #region Propiedades y Variables
 
-        public OrdenDeEjecución OrdenDeEjecución { get; set; } = new OrdenDeEjecución();
+        public Estrategia Estrategia { get; set; } = new Estrategia();
 
         private DispatcherTimer? Timer; // Temporizador principal que genera los cambios de pasos.
 
@@ -66,9 +66,13 @@ namespace RTSHelper {
 
         private DispatcherTimer TimerDetecciónInicioJuego = new DispatcherTimer();
 
+        private DispatcherTimer TimerActualizadorPasoDesdeCódigo = new DispatcherTimer();
+
         private Stopwatch MedidorTimer = new Stopwatch(); // Temporizador medidor del tiempo.
 
         private bool Inició = false;
+
+        private bool ActivarParpadeoRelojEnPausa = true;
 
         private bool EstablecióTamañoInicial = false;
 
@@ -98,17 +102,25 @@ namespace RTSHelper {
 
         private double MilisegundosJuegoDesface = 0; // Milisegundos de desface acumulado. Se usa principalmente para ajustar el reloj para que no se vea afectado por los desfaces. Esto se hace así por diseño debido a que el reloj se espera que esté sincronizado con el reloj del juego y los desfaces son causados debidos a errores del jugador, por ejemplo si no creó el aldeano a tiempo y tardó 10 segundos con el centro de pueblo desocupado se debería desfazar la ejecución 10 segundos, pero el reloj se mantendría igual.
 
-        FileSystemWatcher SupervisorOrdenDeEjecuciónActual;
+        FileSystemWatcher SupervisorEstrategiaActual;
 
-        FileSystemWatcher? SupervisorOrdenDeEjecuciónActualEnCódigo; // Para el modo de desarrollo también supervisa la carpeta de las órdenes de ejecución en la carpeta código para permitir que durante el desarrollo se tenga que actualizar únicamente este archivo.
+        FileSystemWatcher? SupervisorEstrategiaActualEnCódigo; // Para el modo de desarrollo también supervisa la carpeta de las estrategias en la carpeta código para permitir que durante el desarrollo se tenga que actualizar únicamente este archivo.
 
         private int? ÚltimoProgresoLeído = null;
 
-        private static DateTime ÚltimaEjecuciónDeOrdenDeEjecuciónActualChanged = DateTime.Now;
+        private static DateTime ÚltimaEjecuciónDeEstrategiaActualChanged = DateTime.Now;
 
         private int ContadorPantallaCarga = 0;
 
         private bool EnPantallaCarga = false;
+
+        private bool MostrandoCódigo = false;
+
+        private double CambioAltoAlMostrarCódigo = 0;
+
+        private bool ActualizaciónPasoDesdeCódigoPendiente = false;
+
+        private string TextoAnteriorTxtCódigoPaso = "";
 
         #endregion Propiedades y Variables>
 
@@ -161,6 +173,10 @@ namespace RTSHelper {
             TimerDetecciónInicioJuego.Tick += new EventHandler(TimerDetecciónInicioJuego_Tick);
             TimerDetecciónInicioJuego.Start();
 
+            TimerActualizadorPasoDesdeCódigo.Interval = TimeSpan.FromMilliseconds(500);
+            TimerActualizadorPasoDesdeCódigo.Tick += new EventHandler(TimerActualizadorPasoDesdeCódigo_Tick);
+            TimerActualizadorPasoDesdeCódigo.Start();
+
             //logInicio += $"Timers inicializados{Environment.NewLine}";
             //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
             //MostrarInformación($"Timers Started{Environment.NewLine}");
@@ -171,19 +187,19 @@ namespace RTSHelper {
             //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
             //MostrarInformación($"Settings read{Environment.NewLine}");
 
-            OrdenDeEjecución.EnCambioNúmeroPaso = () => EnCambioNúmeroPaso();
-            CargarPasos();
-            LeerBuildOrders();
-            CargarBuildOrder(iniciando: true);
+            Estrategia.EnCambioNúmeroPaso = () => EnCambioNúmeroPaso();
+            CargarPasos(FuenteEstrategia.Archivo, out _);
+            LeerÓrdenesDeEjecución();
+            CargarEstrategia(FuenteEstrategia.Archivo, iniciando: true);
 
             //logInicio += $"Build orders cargadas{Environment.NewLine}";
             //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
             //MostrarInformación($"Build orders loaded{Environment.NewLine}");
 
-            SupervisorOrdenDeEjecuciónActual = new FileSystemWatcher { NotifyFilter = NotifyFilters.LastWrite };
-            ActualizarSupervisorOrdenDeEjecución();
-            SupervisorOrdenDeEjecuciónActual.Changed += OrdenDeEjecuciónActual_Changed;
-            SupervisorOrdenDeEjecuciónActual.EnableRaisingEvents = true;
+            SupervisorEstrategiaActual = new FileSystemWatcher { NotifyFilter = NotifyFilters.LastWrite };
+            ActualizarSupervisorEstrategia();
+            SupervisorEstrategiaActual.Changed += EstrategiaActual_Changed;
+            SupervisorEstrategiaActual.EnableRaisingEvents = true;
 
             //logInicio += $"Supervisor build orders iniciado{Environment.NewLine}";
             //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
@@ -191,15 +207,15 @@ namespace RTSHelper {
 
             if (ModoDesarrollo) {
 
-                SupervisorOrdenDeEjecuciónActualEnCódigo = new FileSystemWatcher { NotifyFilter = NotifyFilters.LastWrite };
-                ActualizarSupervisorOrdenDeEjecuciónEnCódigo();
-                SupervisorOrdenDeEjecuciónActualEnCódigo.Changed += OrdenDeEjecuciónActualEnCódigo_Changed;
-                SupervisorOrdenDeEjecuciónActualEnCódigo.EnableRaisingEvents = true;
+                SupervisorEstrategiaActualEnCódigo = new FileSystemWatcher { NotifyFilter = NotifyFilters.LastWrite };
+                ActualizarSupervisorEstrategiaEnCódigo();
+                SupervisorEstrategiaActualEnCódigo.Changed += EstrategiaActualEnCódigo_Changed;
+                SupervisorEstrategiaActualEnCódigo.EnableRaisingEvents = true;
 
             }
 
             CrearEntidadesYNombres();
-            ActualizarContenidoPaso(númeroPaso: null, limpiarErroresAnteriores: true);
+            ActualizarContenidoPaso(númeroPaso: null, limpiarErroresAnteriores: true, simulación: false, out string? errores);
 
             //logInicio += $"Nombres creados{Environment.NewLine}";
             //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
@@ -207,6 +223,7 @@ namespace RTSHelper {
 
             Inició = true;
             CambiandoTxtPasoAutomáticamente = false;
+            LblTiempoEnJuego.Content = ""; // Se debe iniciar en 0:00 para que la interface cargue correctamente con el tamaño correcto que tendrá cuando se esté mostrando el tiempo de juego y aquí se borra para que no aparezca al inicio.
 
             Actualizar();
 
@@ -220,34 +237,43 @@ namespace RTSHelper {
             //File.WriteAllText(Path.Combine(DirectorioAplicación, "Log.txt"), logInicio);
             //MostrarInformación($"Donation checked{Environment.NewLine}");
 
+            HacerCopiasDeSeguridadDeÓrdenesDeEjecución(); // Sucedió una vez que dos archivos quedaron con el contenido de otro archivo. Es un error muy grave para dejarlo pasar.
+
         } // MainWindow>
 
 
-        private void OrdenDeEjecuciónActual_Changed(object source, FileSystemEventArgs e) {
+        private void EstrategiaActual_Changed(object source, FileSystemEventArgs e) {
 
-            if ((DateTime.Now - ÚltimaEjecuciónDeOrdenDeEjecuciónActualChanged).TotalSeconds < 1) return; // En algunas ocasiones se ejecuta varias veces el evento.
-            ÚltimaEjecuciónDeOrdenDeEjecuciónActualChanged = DateTime.Now;
+            if ((DateTime.Now - ÚltimaEjecuciónDeEstrategiaActualChanged).TotalSeconds < 1) return; // En algunas ocasiones se ejecuta varias veces el evento.
+            ÚltimaEjecuciónDeEstrategiaActualChanged = DateTime.Now;
             Thread.Sleep(100); // Le da un tiempo para que termine de grabar.
             if (ModoDesarrollo) Thread.Sleep(100); // En modo desarrollo le da más tiempo para que termine de copiar el archivo desde la carpeta de código.
-            this.Dispatcher.Invoke(() => CargarBuildOrder());
+            this.Dispatcher.Invoke(() => CargarEstrategia(FuenteEstrategia.Archivo));
 
-        } // OrdenDeEjecuciónActual_Changed>
+        } // EstrategiaActual_Changed>
 
 
-        private void OrdenDeEjecuciónActualEnCódigo_Changed(object source, FileSystemEventArgs e) {
+        private void EstrategiaActualEnCódigo_Changed(object source, FileSystemEventArgs e) {
 
             Thread.Sleep(100); // Le da un tiempo para que termine de grabar.
+            CopiarEstrategiaDeDesarrollo();
+
+        } // EstrategiaActualEnCódigo_Changed>
+
+
+        private void CopiarEstrategiaDeDesarrollo() {
+
             var nombreArchivo = $"{Preferencias.CurrentBuildOrder}.txt";
-            var rutaOrigen 
-                = Path.Combine(Settings.ObtenerDirectorioÓrdenesDeEjecución(Global.DirectorioÓrdenesDeEjecuciónCódigo, Preferencias.Game), nombreArchivo);
+            var rutaOrigen
+                = Path.Combine(Settings.ObtenerDirectorioEstrategias(Global.DirectorioEstrategiasCódigo, Preferencias.Game), nombreArchivo);
             var rutaDestino = Path.Combine(Preferencias.BuildOrdersDirectory, nombreArchivo);
             try { // En algunas ocasiones saca error.
-                File.Copy(rutaOrigen, rutaDestino, overwrite: true); // Copia la orden de ejecución recién modificada en D:\Programas\RTS Helper\Código\RTS Helper\RTS Helper\Build Orders\[Juego] a la ruta de compilación donde el cambio del archivo es detectado por OrdenDeEjecuciónActual_Changed();
+                File.Copy(rutaOrigen, rutaDestino, overwrite: true); // Copia la estrategia en D:\Programas\RTS Helper\Código\RTS Helper\RTS Helper\Build Orders\[Juego] a la ruta de compilación donde el cambio del archivo es detectado por EstrategiaActual_Changed();
             } catch {
                 MostrarError($"File copy from {rutaOrigen} to {rutaDestino} failed.");
             }
 
-        } // OrdenDeEjecuciónActual_Changed>
+        } // CopiarEstrategiaDeDesarrollo>
 
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e) {
@@ -294,8 +320,12 @@ namespace RTSHelper {
                 default:
                     break;
             }
+            EstablecerFocoEnBtnStart();
 
         } // BtnStop_Click>
+
+
+        private void EstablecerFocoEnBtnStart() => BtnStart.Focus(); // Es el botón activado por defecto. Se establece el foco en él para que al darle enter funcione como si lo estuviera capturando la tecla de acceso rápido Enter y haga la misma acción.
 
 
         private void MniRestartStep_Click(object sender, RoutedEventArgs e) => ReiniciarPasoActualGeneral();
@@ -303,9 +333,14 @@ namespace RTSHelper {
 
         private void MniStartNextStep_Click(object sender, RoutedEventArgs e) {
 
-            var estadoActual = Estado;
-            IniciarSiguientePaso();
-            if (estadoActual == EEstado.Paused) Pause();
+            if (Estado == EEstado.Stoped) {
+                Start();
+                Pause();
+            } else {
+                var estadoActual = Estado;
+                IniciarSiguientePaso();
+                if (estadoActual == EEstado.Paused) Pause();
+            }
 
         } // MniStartNextStep_Click>
 
@@ -313,14 +348,14 @@ namespace RTSHelper {
         private void Timer_Tick(object? sender, EventArgs e) {
 
             MedidorTimer.Reset();
-            OrdenDeEjecución.NúmeroPaso++;
+            Estrategia.NúmeroPaso++;
             ActualizarPaso();
             MilisegundosTimerAntesDePausa = 0;
-            GuardarDuraciónPaso(OrdenDeEjecución.NúmeroPaso - 1);
-            GuardarDesfaceAcumulado(OrdenDeEjecución.NúmeroPaso - 1);
+            GuardarDuraciónPaso(Estrategia.NúmeroPaso - 1);
+            GuardarDesfaceAcumulado(Estrategia.NúmeroPaso - 1);
             ActualizarUI();
             Flash();
-            var nuevaDuraciónPaso = ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed, OrdenDeEjecución.NúmeroPaso);
+            var nuevaDuraciónPaso = ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed, Estrategia.NúmeroPaso);
 
             if (!Preferencias.Muted) PlaySonidoInicio();
             if (ActualizarDuraciónPasoEnTimerEnPróximoTick) {
@@ -329,8 +364,8 @@ namespace RTSHelper {
             }
             if (Timer?.Interval != nuevaDuraciónPaso) ActualizarIntervaloTimer(nuevaDuraciónPaso); // Necesario para soportar los comportamientos personalizados por paso.
 
-            if (Preferencias.MinimizeOnComplete && OrdenDeEjecución.EsPasoDespuésDeÚltimo) this.WindowState = WindowState.Minimized; // Se hace con EsPasoDespuésDeÚltimo porque ya se aumentó el valor del paso al siguiente.
-            if (Preferencias.MuteOnComplete && (OrdenDeEjecución.EsPasoDespuésDeÚltimo || OrdenDeEjecución.EsDespuésDeÚltimoPaso)) { // Se hace después de reproducir el último sonido por consistencia. Se incluye el condicional EsDespuésDeÚltimoPaso para los casos que el usuario se haya saltado los pasos hasta el final manualmente.
+            if (Preferencias.MinimizeOnComplete && Estrategia.EsPasoDespuésDeÚltimo) this.WindowState = WindowState.Minimized; // Se hace con EsPasoDespuésDeÚltimo porque ya se aumentó el valor del paso al siguiente.
+            if (Preferencias.MuteOnComplete && (Estrategia.EsPasoDespuésDeÚltimo || Estrategia.EsDespuésDeÚltimoPaso)) { // Se hace después de reproducir el último sonido por consistencia. Se incluye el condicional EsDespuésDeÚltimoPaso para los casos que el usuario se haya saltado los pasos hasta el final manualmente.
                 Preferencias.Muted = true;
                 SilenciadoAlCompletar = true;
                 AplicarPreferenciasMuted(iniciando: false);
@@ -354,13 +389,13 @@ namespace RTSHelper {
 
             if (int.TryParse(TxtPaso.Text, out int intPaso)) {
 
-                if (OrdenDeEjecución.NúmeroPaso < intPaso) {
-                    for (int i = OrdenDeEjecución.NúmeroPaso; i < intPaso; i++) {
+                if (Estrategia.NúmeroPaso < intPaso) {
+                    for (int i = Estrategia.NúmeroPaso; i < intPaso; i++) {
                         GuardarDuraciónPaso(i);
                     }
                 }
 
-                OrdenDeEjecución.NúmeroPaso = intPaso;
+                Estrategia.NúmeroPaso = intPaso;
                 if (CambiandoTxtPasoAutomáticamente) {
                     return;
                 } else if (Estado == EEstado.Running) {
@@ -384,7 +419,7 @@ namespace RTSHelper {
         private void TimerFlash_Tick(object? sender, EventArgs e) {
 
             TimerFlash.Stop();
-            if (!(Preferencias.StopFlashingOnComplete && OrdenDeEjecución.EsDespuésDeÚltimoPaso) && ObtenerFlash(OrdenDeEjecución.NúmeroPaso)) {
+            if (!(Preferencias.StopFlashingOnComplete && Estrategia.EsDespuésDeÚltimoPaso) && ObtenerFlash(Estrategia.NúmeroPaso)) {
                 RestablecerColor();
             }
 
@@ -401,7 +436,7 @@ namespace RTSHelper {
 
         private void TimerBlinkerGameTime_Tick(object? sender, EventArgs e) {
 
-            if (Estado == EEstado.Paused) {
+            if (ActivarParpadeoRelojEnPausa && Estado == EEstado.Paused) {
 
                 if (SpnIndicadoresDeProgreso.Visibility == Visibility.Visible) {
                     SpnIndicadoresDeProgreso.Visibility = Visibility.Hidden;
@@ -444,7 +479,7 @@ namespace RTSHelper {
         } // TimerDetecciónInicioJuego_Tick>
 
 
-        private void TimerDetecciónPausa_Tick(object? sender, EventArgs e) { // En mi computador tarda alrededor de 50 ms cuando está en juego  y alrededor de 70 ms cuando está en pausa.
+        private void TimerDetecciónPausa_Tick(object? sender, EventArgs e) { // En mi computador tarda alrededor de 50 ms cuando está en juego y alrededor de 70 ms cuando está en pausa.
 
             if (!Preferencias.PauseDetection) return;
             if (!Jugando()) return;
@@ -460,10 +495,14 @@ namespace RTSHelper {
 
                     foreach (var tPausa in TextosPausa[Preferencias.Game]) {
 
-                        var distanciaAPausa = ObtenerDistanciaLevenshtein(textoPausa.ToLower(), tPausa);
-                        if (distanciaAPausa < 6) {
-                            juegoPausado = true;
-                            break;
+                        if (tPausa.Length >= 10) { // El texto de pausa debe ser mayor a 10 letras porque si es por ejemplo (F3), cualquier texto leído corto se puede convertir en (F3) en menos de 6 permutaciones y generaría pausas frecuentes incorrectas.
+                            
+                            var distanciaAPausa = ObtenerDistanciaLevenshtein(textoPausa.ToLower(), tPausa);
+                            if (distanciaAPausa < 6) {
+                                juegoPausado = true;
+                                break;
+                            }
+
                         }
 
                     }
@@ -471,6 +510,7 @@ namespace RTSHelper {
                 }
 
                 if (!juegoPausado && textoPausa.Contains("(F3)")) juegoPausado = true; // Este es el último intento principalmente útil para los idiomas que no reconoce Tesseract. Aunque se podría argumentar que es preferible hacer esta verificación antes que todas, se prefiere hacer de la manera actual (coincidiendo con el texto de pausa) para evitar falsos positivos.
+                //if (juegoPausado) Debug.WriteLine(textoPausa);
 
             } else {
                 juegoPausado = false;
@@ -489,9 +529,9 @@ namespace RTSHelper {
 
             if (!Inició || EditandoComboBoxEnCódigo) return;
             Preferencias.CurrentBuildOrder = ObtenerSeleccionadoEnCombobox(e);
-            CargarBuildOrder();
-            ActualizarSupervisoresOrdenDeEjecución();
-
+            ActualizarSupervisoresEstrategia();
+            VerificarModoDesarrolloYCargarBuildOrder();
+ 
         } // CmbBuildOrders_SelectionChanged>
 
 
@@ -512,6 +552,7 @@ namespace RTSHelper {
             var winSettings = new SettingsWindow(primerInicio: false, this);
             winSettings.Topmost = true;
             winSettings.ShowDialog();
+            EstablecerFocoEnBtnStart();
 
         } // BtnSettings_Click>
 
@@ -523,7 +564,7 @@ namespace RTSHelper {
         private void Window_MouseUp(object sender, MouseButtonEventArgs e) {
 
             if (!Inició) return;
-            Preferencias.Top = this.Top;
+            Preferencias.Top = this.Top + CambioAltoAlMostrarCódigo;
             Preferencias.Left = this.Left;
 
         } // Window_MouseUp>
@@ -533,28 +574,33 @@ namespace RTSHelper {
 
             if (!Inició || EstableciendoTamaño) return;
             Preferencias.Width = this.Width;
-            Preferencias.Height = this.Height;
+            Preferencias.Height = this.Height - CambioAltoAlMostrarCódigo;
             if (EstablecióTamañoInicial && !TimerActualizadorUIPorCambioTamaño.IsEnabled) TimerActualizadorUIPorCambioTamaño.Start();
             EstablecióTamañoInicial = true;
 
         } // Window_SizeChanged>
 
 
-        private void BtnMinize_Click(object sender, RoutedEventArgs e)
-            => this.WindowState = WindowState.Minimized;
+        private void BtnMinize_Click(object sender, RoutedEventArgs e) {
+
+            this.WindowState = WindowState.Minimized;
+            EstablecerFocoEnBtnStart();
+
+        } // BtnMinize_Click>
 
 
         private void BtnMute_Click(object sender, RoutedEventArgs e) {
 
             Preferencias.Muted = !Preferencias.Muted;
             AplicarPreferencias();
+            EstablecerFocoEnBtnStart();
 
         } // BtnMute_Click>
 
 
         private void MniFirstStep_Click(object sender, RoutedEventArgs e) {
 
-            var cantidadPasos = OrdenDeEjecución.NúmeroPaso;
+            var cantidadPasos = Estrategia.NúmeroPaso;
             for (int i = 0; i < cantidadPasos; i++) {
                 Back(proporcional: true);
             }
@@ -564,11 +610,16 @@ namespace RTSHelper {
 
         private void MniLastStep_Click(object sender, RoutedEventArgs e) {
 
-            var pasoInicial = OrdenDeEjecución.NúmeroPaso;
+            if (Estado == EEstado.Stoped) {
+                Start();
+                Pause();
+            }
+
+            var pasoInicial = Estrategia.NúmeroPaso;
             GuardarDuraciónPaso(pasoInicial);
-            OrdenDeEjecución.NúmeroPaso = OrdenDeEjecución.Pasos.Count - 1;
-            for (int i = pasoInicial; i < OrdenDeEjecución.NúmeroPaso; i++) {
-                OrdenDeEjecución.Pasos[i].DuraciónEnJuego = OrdenDeEjecución.Pasos[pasoInicial].DuraciónEnJuego;
+            Estrategia.NúmeroPaso = Estrategia.Pasos.Count - 1;
+            for (int i = pasoInicial; i < Estrategia.NúmeroPaso; i++) {
+                Estrategia.Pasos[i].DuraciónEnJuego = Estrategia.Pasos[pasoInicial].DuraciónEnJuego;
             }
 
             ActualizarPaso(siguienteOAnterior: true);
@@ -580,7 +631,7 @@ namespace RTSHelper {
         private void MniRecargarBuildOrder_Click(object sender, RoutedEventArgs e) {
 
             if (!Inició || EditandoComboBoxEnCódigo) return;
-            RecargarBuildOrder();
+            RecargarEstrategia();
 
         } // MniRecargarBuildOrder_Click>
 
@@ -588,7 +639,46 @@ namespace RTSHelper {
         private void MniAbrirCarpetaBuildOrders_Click(object sender, RoutedEventArgs e) => AbrirDirectorio(Preferencias.BuildOrdersDirectory);
 
 
+        private void MniNuevaBuildOrder_Click(object sender, RoutedEventArgs e) {
+
+            var rutaNuevoArchivo = Estrategia.ObtenerRutaEstrategias(Preferencias.BuildOrdersDirectory, "New");
+            if (File.Exists(rutaNuevoArchivo)) {
+
+                var name = DiálogoIngresoDato.Mostrar("Enter the new build order name:", "New Build Order");
+                if (!string.IsNullOrEmpty(name)) {
+
+                    try {
+
+                        var rutaEstrategiaDesarrollo = Estrategia.ObtenerRutaEstrategias(Settings.ObtenerDirectorioEstrategias(
+                            Global.DirectorioEstrategiasCódigo, Preferencias.Game), name);
+                        var rutaEstrategia = Estrategia.ObtenerRutaEstrategias(Preferencias.BuildOrdersDirectory, name);
+                        File.Copy(rutaNuevoArchivo, rutaEstrategia);
+                        if (ModoDesarrollo) File.Copy(rutaNuevoArchivo, rutaEstrategiaDesarrollo);
+                        Preferencias.CurrentBuildOrder = name;
+                        ActualizarSupervisoresEstrategia();
+                        RecargarEstrategia();
+
+                    } catch (Exception) {
+                        MostrarError("Error trying to create new build order file.");
+                        throw;
+                    }
+                    
+                }
+
+            } else {
+                MostrarError("New.txt file wasn't found. The new build order wasn't created.");
+            }
+
+        } // MniNuevaBuildOrder_Click>
+
+
         private void MniEditarBuildOrder_Click(object sender, RoutedEventArgs e) {
+
+            if (SpnCódigoPaso.Visibility == Visibility.Visible) 
+                MostrarInformación("Currently the code is being shown. \n\n" +
+                    "While RTS Helper can recognize and update changes made in the build order file by an external text editor, an external text editor " +
+                    "may not recognize changes in the build order file made by RTS Helper. \n\n" +
+                    "This could result in loss of data if you make changes in both sides at the same time. It's recommended to use just one edition method at a time.");
 
             var rutaBuildOrder = Path.Combine(Preferencias.BuildOrdersDirectory, $"{Preferencias.CurrentBuildOrder}.txt");
             if (File.Exists(rutaBuildOrder)) {
@@ -601,6 +691,161 @@ namespace RTSHelper {
         } // MniEditarBuildOrder_Click>
 
 
+        private void MostrarOcultarCódigo() {
+
+            var margen = 5;
+            if (!MostrandoCódigo) {
+
+                SpnCódigoPaso.Visibility = Visibility.Visible;
+                TxtCódigoPaso.Width = this.Width - TxtPaso.ActualWidth - margen * 2 - TxtPaso.Margin.Right - SpnLateralDerecho.Margin.Right;
+                TxtCódigoPaso.Height = 2 * SpnControlesPaso.ActualHeight - margen; // Arbitrariamente lo hago el doble del panel derecho. Se enlaza de esta manera para que escale adecuadamente con diferentes tamaños de resolución.
+                SpnCódigoPaso.Width = TxtCódigoPaso.Width + (Preferencias.ButtonsSize + 5) * 2;
+                SpnCódigoPaso.Height = TxtCódigoPaso.Height;
+                var anchoInferiorLibre = CmbBuildOrders.Margin.Bottom * 2 + SpnLateralDerecho.Margin.Bottom + CmbBuildOrders.ActualHeight - 4;
+                SpnCódigoPaso.Margin = new Thickness(margen, 0, 0, margen + 2 + anchoInferiorLibre);
+                TxtCódigoPaso.Margin = new Thickness(0);
+                var tamañoImagen = Preferencias.LargeFontSize * FactorTamañoTextoAPixelesFuentePredeterminada * (Preferencias.ImageSize / 100);
+                CambioAltoAlMostrarCódigo = SpnCódigoPaso.Height + anchoInferiorLibre;
+                this.Top -= CambioAltoAlMostrarCódigo;
+                this.Height += CambioAltoAlMostrarCódigo;
+                Panel.SetZIndex(SpnPasoAnterior, -1);
+                MostrandoCódigo = true;
+                MniMostrarOcultarCódigo.Header = "🗙     Hide Code";
+                BtnEscribirCódigoPaso.Visibility = Visibility.Hidden;
+
+            } else {
+
+                var cambioAltoAlMostrarCódigoAnterior = CambioAltoAlMostrarCódigo; // Se debe usar esta variable auxiliar porque en this.Height -= cambioAltoAlMostrarCódigoAnterior; se ejecuta el código de guardado de preferencias y se requiere que CambioAltoAlMostrarCódigo sea cero porque el nuevo tamaño es con el código oculto.
+                CambioAltoAlMostrarCódigo = 0;
+                if (CambioAltoAlMostrarCódigo < this.Height) {   
+                    this.Top += cambioAltoAlMostrarCódigoAnterior;
+                    this.Height -= cambioAltoAlMostrarCódigoAnterior;
+                }
+                SpnCódigoPaso.Visibility = Visibility.Collapsed;
+                Panel.SetZIndex(SpnPasoAnterior, 2);
+                MostrandoCódigo = false;
+                MniMostrarOcultarCódigo.Header = "✎   Edit Code";
+                
+
+            }
+
+        } // MostrarOcultarCódigo>
+
+
+        private void TxtCódigoPaso_TextChanged(object sender, TextChangedEventArgs e) {
+
+            var cambiandoDesdeCódigo = (TxtCódigoPaso.Tag as string) == "cambiando-texto-desde-código";
+            if (Inició && !cambiandoDesdeCódigo) {  // Para evitar que se entre a este código cuando se está escribiendo el código desde código.
+
+                if (e.UndoAction == UndoAction.Undo && e.Changes.Count > 0 && e.Changes.First().Offset == 0) {  // Compara el texto inicial para encontrar diferencias en la sección || ## ||.
+                    
+                    if (TextoAnteriorTxtCódigoPaso.Substring(0, 8) != TxtCódigoPaso.Text.Substring(0, 8)) {
+                        TxtCódigoPaso.Text = TextoAnteriorTxtCódigoPaso; // No es lo ideal volver a escribir el texto porque genera ejecuta nuevamente este código desde esta línea y complica mucho la lógica (no entiendo muy bien porqué funciona bien), pero se intentó de varias maneras y no se pudo encontrar una manera transparente para el usuario que funcionara con el TextBox de WPF. Se pensó en llevar cuenta de los cambios con un contador DeshacerDisponibles, pero el Deshacer junta cambios en un sola acción. También se consideró limpiar el historial de deshacer con ClearUndo(), pero solo está disponible para RichTextBox y este control trae otros problemas asociados a su uso. Y finalmente se pensó recrear el control cada vez que cambiara, pero es inconveniente porque con cada cambio mínimo se estaría creando el control y complica el código de eventos y demás. Así que considerando que es un caso que debe suceder pocas veces y funciona bien, entonces se deja como está, así la ejecución y lógica del código no sean la más limpias.
+                    } else { // Este mensaje solo se mostraría en caso de intentar hacer deshacer más atrás del cambio de estrategia. No debe ser tan frecuente. Es dificil de controlar de otra manera porque ambos textos probablemente inicien por el mismo segmento || ## ||.
+                        MostrarInformación("The undo action probably caused to overwrite current step's text with last viewed step's text. If that isn't what you intented to do, press Ctrl + Y to restore current step's text.");
+                    }
+                  
+                }
+                BtnEscribirCódigoPaso.Visibility = Visibility.Visible;
+                var líneaCódigo = (int?)TxtCódigoPaso.Tag;
+                if (líneaCódigo != null) Estrategia.LíneasCódigo[(int)líneaCódigo] = TxtCódigoPaso.Text;
+                ActualizaciónPasoDesdeCódigoPendiente = true;
+
+            }
+
+            TextoAnteriorTxtCódigoPaso = TxtCódigoPaso.Text;
+
+        } // TxtCódigoPaso_TextChanged>
+
+
+        private void TimerActualizadorPasoDesdeCódigo_Tick(object? sender, EventArgs e) {
+
+            if (ActualizaciónPasoDesdeCódigoPendiente) CargarEstrategia(FuenteEstrategia.Memoria); // En mi computador este procedimiento tarda alrededor de 10ms. Para dar soporte a computadores más lentos, se establece este procedimiento de actualización cada 500 milisegundos con el temporizador.
+            ActualizaciónPasoDesdeCódigoPendiente = false;
+
+        } // TimerActualizadorPasoDesdeCódigo_Tick>
+
+
+        private void EscribirCódigo() {
+
+            if (BtnEscribirCódigoPaso.Visibility == Visibility.Visible) {
+
+                if (!Estrategia.EscribirCódigoEnArchivo(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder, ModoDesarrollo,
+                        out string? rutaOrdenEjecución)) { // Al escribir la estrategia, se detecta el cambio del archivo por EstrategiaActual_Changed o EstrategiaActualEnCódigo_Changed y se carga con los nuevos cambios automáticamente. 
+                    MostrarError($"There was an error trying to write in file {rutaOrdenEjecución}.");
+                }
+                BtnEscribirCódigoPaso.Visibility = Visibility.Collapsed;
+
+            }
+
+        } // EscribirCódigo>
+
+
+        private void TxtCódigoPaso_KeyDown(object sender, KeyEventArgs e) {
+
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key != Key.LeftCtrl && e.Key != Key.RightCtrl) {
+
+                switch (e.Key) {
+                    case Key.S:
+                        EscribirCódigo();
+                        break;
+                    default: 
+                        break;
+                }
+
+            }
+
+        } // TxtCódigoPaso_KeyDown>
+
+
+        private void BtnCerrarCódigo_Click(object sender, RoutedEventArgs e) {
+
+            MostrarOcultarCódigo();
+            EstablecerFocoEnBtnStart();
+
+        } // BtnCerrarCódigo_Click>
+
+
+        private void MniMostrarOcultarCódigo_Click(object sender, RoutedEventArgs e) => MostrarOcultarCódigo();
+
+
+        private void BtnEscribirCódigoPaso_Click(object sender, RoutedEventArgs e) {
+
+            EscribirCódigo();
+            EstablecerFocoEnBtnStart();
+
+        } // BtnEscribirCódigoPaso_Click>
+
+
+        private void TxtCódigoPaso_LostFocus(object sender, RoutedEventArgs e) => EscribirCódigo();
+
+
+        private void MniVerificarCódigo_Click(object sender, RoutedEventArgs e) {
+
+            var estiloCorrectoYNoErrores = true;
+            if (!Estrategia.VerificarEstiloCódigo(out string? inconsistencias)) {
+                MostrarError(inconsistencias!);
+                estiloCorrectoYNoErrores = false; 
+            }
+
+            CargarPasos(FuenteEstrategia.Memoria, out string? errores);
+            var erroresEntidades = (string?)null;
+            foreach (var paso in Estrategia.Pasos) {
+                ActualizarContenidoPaso(paso.Número, limpiarErroresAnteriores: false, simulación: true, out string? erroresEntidadesInternos);
+                AgregarErrores(ref erroresEntidades, erroresEntidadesInternos, null);
+            }
+            AgregarErrores(ref errores, erroresEntidades, null);
+
+            if (!string.IsNullOrEmpty(errores)) {
+                MostrarError(errores);
+                estiloCorrectoYNoErrores = false;
+            }
+
+            if (estiloCorrectoYNoErrores) MostrarInformación("The build order code is correct.");
+
+        } // MniVerificarCódigo_Click>
+
+
         private void MniAdicionarEliminarDeFavoritos_Click(object sender, RoutedEventArgs e) {
 
             if (EsFavorita(Preferencias.Game, Preferencias.CurrentBuildOrder)) {
@@ -608,8 +853,8 @@ namespace RTSHelper {
             } else {
                 AgregarAFavoritos(Preferencias.Game, Preferencias.CurrentBuildOrder);
             }
-            if (Preferencias.ShowOnlyFavoriteBuildOrders) LeerBuildOrders(mostrarMensajeNoFavoritas: true);
-            CargarBuildOrder();
+            if (Preferencias.ShowOnlyFavoriteBuildOrders) LeerÓrdenesDeEjecución(mostrarMensajeNoFavoritas: true);
+            VerificarModoDesarrolloYCargarBuildOrder();
 
         } // MniAdicionarEliminarDeFavoritos_Click>
 
@@ -617,16 +862,37 @@ namespace RTSHelper {
         private void MniAlternarVerSoloFavoritos_Click(object sender, RoutedEventArgs e) {
 
             Preferencias.ShowOnlyFavoriteBuildOrders = !Preferencias.ShowOnlyFavoriteBuildOrders;
-            LeerBuildOrders(mostrarMensajeNoFavoritas: true);
-            CargarBuildOrder();
+            RecargarEstrategia(mostrarMensajeNoFavoritas: true);
 
         } // MniAlternarVerSoloFavoritos_Click>
 
 
-        private void MniSynchronizeProgress_Click(object sender, RoutedEventArgs e) => DetectarProgreso(forzarAplicación: true);
+        private void MniSynchronizeProgress_Click(object sender, RoutedEventArgs e) {
+
+            Stop(); // Para garantizar que no quede el temporizador con unos tiempos negativos que algunas veces aparecen.
+            if (Estado == EEstado.Stoped) {
+                Start();
+                Pause();
+            }
+            DetectarProgreso(forzarAplicación: true);
+
+        } // MniSynchronizeProgress_Click>
 
 
-        private void BtnAlert_Click(object sender, RoutedEventArgs e) => MostrarInformación((string)BtnAlert.ToolTip);
+        private void BtnAlert_Click(object sender, RoutedEventArgs e) {
+
+            MostrarError((string)BtnAlert.ToolTip);
+            EstablecerFocoEnBtnStart();
+
+        } // BtnAlert_Click>
+
+
+        private void BtnInfo_Click(object sender, RoutedEventArgs e) {
+
+            MostrarInformación((string)BtnInfo.ToolTip);
+            EstablecerFocoEnBtnStart();
+
+        } // BtnInfo_Click>
 
 
         private void BtnAlternarVistaPasoSiguienteAnterior_Click(object sender, RoutedEventArgs e) {
@@ -636,13 +902,16 @@ namespace RTSHelper {
             } else if (Preferencias.ShowPreviousStep) {
                 ActualizarVistaPasoSiguienteAnterior(null, !ForzarMostrarPasoSiguiente, actualizarPaso: true);
             }
+            EstablecerFocoEnBtnStart();
 
         } // BtnAlternarVistaPasoSiguienteAnterior_Click>
 
 
         private void MniBackward_Click(object sender, RoutedEventArgs e) => Backward();
         
+
         private void MniFordward_Click(object sender, RoutedEventArgs e) => Fordward();
+
 
         private void TimerVerificadorVentanaEsVisible_Tick(object? sender, EventArgs e) => EsVentanaVisible();
 
@@ -661,18 +930,31 @@ namespace RTSHelper {
         } // TimerActualizadorDePaquetes_Tick>
 
 
-        private void BtnAddIdleTime_Click(object sender, RoutedEventArgs e) => Delay();
+        private void BtnAddIdleTime_Click(object sender, RoutedEventArgs e) {
+
+            Delay();
+            EstablecerFocoEnBtnStart();
+
+        } // BtnAddIdleTime_Click>
+
 
         private void MniAddIdleTime_Click(object sender, RoutedEventArgs e) => Delay();
 
-        private void BtnRemoveIdleTime_Click(object sender, RoutedEventArgs e) => Rush();
+
+        private void BtnRemoveIdleTime_Click(object sender, RoutedEventArgs e) {
+
+            Rush();
+            EstablecerFocoEnBtnStart();
+
+        } // BtnRemoveIdleTime_Click>
+
 
         private void MniRemoveIdleTime_Click(object sender, RoutedEventArgs e) => Rush();
 
 
         private void MniResetIdleTime_Click(object sender, RoutedEventArgs e) {
 
-            foreach (var paso in OrdenDeEjecución.Pasos) {
+            foreach (var paso in Estrategia.Pasos) {
                 paso.DesfaceAcumulado = null;
             }
             Desfazar(-MilisegundosJuegoDesface, desfazarReloj: false);
@@ -681,9 +963,25 @@ namespace RTSHelper {
         } // MniResetIdleTime_Click>
 
 
-        private void BtnNext_Click(object sender, RoutedEventArgs e) => Next(proporcional: true);
+        private void BtnNext_Click(object sender, RoutedEventArgs e) {
 
-        private void BtnBack_Click(object sender, RoutedEventArgs e) => Back(proporcional: true);
+            if (Estado == EEstado.Stoped) {
+                Start();
+                Pause();
+            } else {
+                Next(proporcional: true);
+            }
+            EstablecerFocoEnBtnStart();
+
+        } // BtnNext_Click>
+
+
+        private void BtnBack_Click(object sender, RoutedEventArgs e) {
+
+            Back(proporcional: true);
+            EstablecerFocoEnBtnStart();
+
+        } // BtnBack_Click>
 
 
         private void MniBackMultipleSteps_Click(object sender, RoutedEventArgs e) {
@@ -697,7 +995,14 @@ namespace RTSHelper {
 
         private void MniNextMultipleSteps_Click(object sender, RoutedEventArgs e) {
 
-            for (int i = 0; i < Preferencias.NextMultipleSteps; i++) {
+            var cantidadPasos = Preferencias.NextMultipleSteps;
+            if (Estado == EEstado.Stoped) {
+                Start();
+                Pause();
+                cantidadPasos--;
+            }
+
+            for (int i = 0; i < cantidadPasos; i++) {
                 Next(proporcional: true);
             }
 
@@ -711,7 +1016,7 @@ namespace RTSHelper {
             var cuentaPaso = 0;
             var desfaces = new List<(int, double)>();
 
-            foreach (var paso in OrdenDeEjecución.Pasos) {
+            foreach (var paso in Estrategia.Pasos) {
 
                 if (paso.DesfaceAcumulado != null && paso.DesfaceAcumulado != últimoDesfaceAcumulado) {
                     desfaces.Add((cuentaPaso - 1, (double)paso.DesfaceAcumulado - últimoDesfaceAcumulado));
@@ -727,6 +1032,7 @@ namespace RTSHelper {
                 textoEstadísticas += $"{kv.Item2:#00} s - Step {kv.Item1}{Environment.NewLine}";
             }
             MessageBox.Show(textoEstadísticas, "Stats");
+            EstablecerFocoEnBtnStart();
 
         } // BtnStats_Click>
 
@@ -738,31 +1044,31 @@ namespace RTSHelper {
         #region Procedimientos y Funciones
 
 
-        private void ActualizarSupervisoresOrdenDeEjecución() {
+        private void ActualizarSupervisoresEstrategia() {
 
-            ActualizarSupervisorOrdenDeEjecución();
-            if (ModoDesarrollo) ActualizarSupervisorOrdenDeEjecuciónEnCódigo();
+            ActualizarSupervisorEstrategia();
+            if (ModoDesarrollo) ActualizarSupervisorEstrategiaEnCódigo();
 
-        } // ActualizarSupervisoresOrdenDeEjecución>
-
-
-        private void ActualizarSupervisorOrdenDeEjecución() {
-
-            if (SupervisorOrdenDeEjecuciónActual == null) return;
-            SupervisorOrdenDeEjecuciónActual.Path = Preferencias.BuildOrdersDirectory;
-            SupervisorOrdenDeEjecuciónActual.Filter = $"{Preferencias.CurrentBuildOrder}.txt";
-
-        } // ActualizarSupervisorOrdenDeEjecución>
+        } // ActualizarSupervisoresEstrategia>
 
 
-        private void ActualizarSupervisorOrdenDeEjecuciónEnCódigo() {
+        private void ActualizarSupervisorEstrategia() {
 
-            if (SupervisorOrdenDeEjecuciónActualEnCódigo == null) return;
-            SupervisorOrdenDeEjecuciónActualEnCódigo.Path 
-                = Settings.ObtenerDirectorioÓrdenesDeEjecución(Global.DirectorioÓrdenesDeEjecuciónCódigo, Preferencias.Game);
-            SupervisorOrdenDeEjecuciónActualEnCódigo.Filter = $"{Preferencias.CurrentBuildOrder}.txt";
+            if (SupervisorEstrategiaActual == null) return;
+            SupervisorEstrategiaActual.Path = Preferencias.BuildOrdersDirectory;
+            SupervisorEstrategiaActual.Filter = $"{Preferencias.CurrentBuildOrder}.txt";
 
-        } // ActualizarSupervisorOrdenDeEjecuciónEnCódigo>
+        } // ActualizarSupervisorEstrategia>
+
+
+        private void ActualizarSupervisorEstrategiaEnCódigo() {
+
+            if (SupervisorEstrategiaActualEnCódigo == null) return;
+            SupervisorEstrategiaActualEnCódigo.Path 
+                = Settings.ObtenerDirectorioEstrategias(Global.DirectorioEstrategiasCódigo, Preferencias.Game);
+            SupervisorEstrategiaActualEnCódigo.Filter = $"{Preferencias.CurrentBuildOrder}.txt";
+
+        } // ActualizarSupervisorEstrategiaEnCódigo>
 
 
         private void RestablecerColor() {
@@ -775,10 +1081,10 @@ namespace RTSHelper {
 
         private void Next(bool proporcional) {
 
-            OrdenDeEjecución.NúmeroPaso++;
-            GuardarDuraciónPaso(OrdenDeEjecución.NúmeroPaso - 1);
+            Estrategia.NúmeroPaso++;
+            GuardarDuraciónPaso(Estrategia.NúmeroPaso - 1);
             if (proporcional) 
-                AjustarProgresoPasoProporcional(OrdenDeEjecución.NúmeroPaso - 1, OrdenDeEjecución.NúmeroPaso, ObtenerMilisegundosTimerPasoActual());
+                AjustarProgresoPasoProporcional(Estrategia.NúmeroPaso - 1, Estrategia.NúmeroPaso, ObtenerMilisegundosTimerPasoActual());
             ActualizarPaso(siguienteOAnterior: true);
             ActualizarUI(forzar: true);
 
@@ -787,14 +1093,21 @@ namespace RTSHelper {
 
         private void Back(bool proporcional) {
 
-            OrdenDeEjecución.NúmeroPaso--;
-            if (OrdenDeEjecución.NúmeroPaso == -1 && Estado == EEstado.Running) {
-                OrdenDeEjecución.NúmeroPaso = 0;
+            if (Estrategia.NúmeroPaso <= 0) return;
+
+            if (Estrategia.NúmeroPaso > Estrategia.Pasos.Count()) {
+                Estrategia.NúmeroPaso-= Estrategia.NúmeroPaso - Estrategia.Pasos.Count() + 2;
+            } else {
+                Estrategia.NúmeroPaso--;
+            }
+            
+            if (Estrategia.NúmeroPaso == -1 && Estado == EEstado.Running) {
+                Estrategia.NúmeroPaso = 0;
                 ReiniciarPasoActual();
             } else {
 
                 if (proporcional) 
-                    AjustarProgresoPasoProporcional(OrdenDeEjecución.NúmeroPaso + 1, OrdenDeEjecución.NúmeroPaso, ObtenerMilisegundosTimerPasoActual());
+                    AjustarProgresoPasoProporcional(Estrategia.NúmeroPaso + 1, Estrategia.NúmeroPaso, ObtenerMilisegundosTimerPasoActual());
                 ActualizarPaso(siguienteOAnterior: true);
                 ActualizarUI(forzar: true);
 
@@ -859,7 +1172,7 @@ namespace RTSHelper {
             var milisegundosTimerPasoActual = ObtenerMilisegundosTimerPasoActual();
             if (milisegundosTimerPasoActual - msTimerDesface < 0) { // Al desfazar está intentando ir más atrás del paso actual.
 
-                var pasoActual = OrdenDeEjecución.NúmeroPaso;
+                var pasoActual = Estrategia.NúmeroPaso;
                 if (!desfazarReloj) MilisegundosJuegoDesface += msJuegoDesface; // Se desfaza antes de aplicar los cambios para no enredar con desfaces en los Desfazar() internos.
 
                 Desfazar(fMsTimerAJuego * (milisegundosTimerPasoActual - 100), desfazarReloj: true);
@@ -908,7 +1221,7 @@ namespace RTSHelper {
                 CpgProgresoPaso.Value = 0;
             }
             BtnStart.Content = "❚❚";
-            BtnStart.ToolTip = "Pause";
+            BtnStart.ToolTip = "Pause (Enter)";
             TxtPaso.IsEnabled = true;
 
         } // EstablecerRunningUI>
@@ -918,7 +1231,7 @@ namespace RTSHelper {
 
             Estado = EEstado.Stoped;
             BtnStart.Content = "▷";
-            BtnStart.ToolTip = "Start";
+            BtnStart.ToolTip = "Start (Enter)";
             ReiniciarVariables();
             ActualizarPaso(stop: true);
             TxtPaso.Text = "";
@@ -931,10 +1244,11 @@ namespace RTSHelper {
             TimerDetecciónProgreso.Stop();
             TimerDetecciónInicioJuego.Start();
             ActualizarUI(forzar: true);
-            BtnNext.IsEnabled = false;
+            BtnNext.IsEnabled = true;
             BtnBack.IsEnabled = false;
             BtnRemoveIdleTime.IsEnabled = false;
             BtnAddIdleTime.IsEnabled = false;
+            LblTiempoEnJuego.Content = "";
             SuspenderBlinkingTiempoJuego();
 
         } // Stop>
@@ -979,7 +1293,7 @@ namespace RTSHelper {
 
             Estado = EEstado.Paused;
             BtnStart.Content = "▷";
-            BtnStart.ToolTip = "Restart";     
+            BtnStart.ToolTip = "Restart (Enter)";     
             MedidorTimer.Stop(); // Lo suspende, pero mantiene el valor de la duración actual.
             Timer?.Stop(); // Lo suspende completamente.
             TimerFlash.Stop(); // Lo suspende completamente.
@@ -993,9 +1307,9 @@ namespace RTSHelper {
         public void Flash() {
 
             TimerFlash.Start();
-            if (!(Preferencias.StopFlashingOnComplete && OrdenDeEjecución.EsDespuésDeÚltimoPaso) && ObtenerFlash(OrdenDeEjecución.NúmeroPaso)) {
-                Application.Current.Resources["ColorFondo"] = ObtenerMediaColor(ObtenerColorFlash(OrdenDeEjecución.NúmeroPaso)) ?? Color.FromRgb(0, 0, 0);
-                Application.Current.Resources["Opacidad"] = ObtenerOpacidadFlash(OrdenDeEjecución.NúmeroPaso);
+            if (!(Preferencias.StopFlashingOnComplete && Estrategia.EsDespuésDeÚltimoPaso) && ObtenerFlash(Estrategia.NúmeroPaso)) {
+                Application.Current.Resources["ColorFondo"] = ObtenerMediaColor(ObtenerColorFlash(Estrategia.NúmeroPaso)) ?? Color.FromRgb(0, 0, 0);
+                Application.Current.Resources["Opacidad"] = ObtenerOpacidadFlash(Estrategia.NúmeroPaso);
             }
 
         } // Flash>
@@ -1005,7 +1319,7 @@ namespace RTSHelper {
 
             EstablecerRunningUI(EEstado.Stoped);
             Estado = EEstado.Running;
-            OrdenDeEjecución.NúmeroPaso = 0;
+            Estrategia.NúmeroPaso = 0;
             ReiniciarPasoActual();
             SuspenderBlinkingTiempoJuego();
             BtnNext.IsEnabled = true;
@@ -1030,7 +1344,7 @@ namespace RTSHelper {
             RestaurarVistaPasoSiguienteAnterior();
             if (!Preferencias.ShowAlwaysStatsButton) {
 
-                if (OrdenDeEjecución.NúmeroPaso >= OrdenDeEjecución.Pasos.Count - 1) {
+                if (Estrategia.NúmeroPaso >= Estrategia.Pasos.Count - 1) {
                     BtnStats.Visibility = Visibility.Visible;
                 } else {
                     BtnStats.Visibility = Visibility.Collapsed;
@@ -1047,9 +1361,9 @@ namespace RTSHelper {
             DuraciónPasoParcialPorCambioDuración = 0;
             LblTiempoEnJuego.Content = "0:00"; // Para evitar un pequeño retraso en la actualización.
             CpgProgresoPaso.Value = 0;
-            OrdenDeEjecución.NúmeroPaso = 0;
+            Estrategia.NúmeroPaso = 0;
             MilisegundosTimerAntesDePausa = 0;
-            foreach (var paso in OrdenDeEjecución.Pasos) {
+            foreach (var paso in Estrategia.Pasos) {
                 paso.DesfaceAcumulado = 0;
             }
 
@@ -1089,7 +1403,7 @@ namespace RTSHelper {
         } // ActualizarVistaPasoSiguienteAnterior>
 
 
-        public void LeerBuildOrders(bool mostrarMensajeNoFavoritas = false) {
+        public void LeerÓrdenesDeEjecución(bool mostrarMensajeNoFavoritas = false) {
 
             EditandoComboBoxEnCódigo = true;
             CmbBuildOrders.Items.Clear();
@@ -1098,15 +1412,21 @@ namespace RTSHelper {
             EditandoComboBoxEnCódigo = false;
 
             var archivosBuildOrders = Directory.GetFiles(Preferencias.BuildOrdersDirectory, "*.txt");
-            foreach (var archivoBuildOrder in archivosBuildOrders) {
+            var dArchivosBuildOrders = new SortedDictionary<string, string>();
+            foreach (var archivoBuildOrder in archivosBuildOrders) { // Los ordena alfabéticamente por el nombre del autor para que los del mismo autor aparezcan cerca.
+                var autor = Regex.Match(archivoBuildOrder, "By [0-9a-z]+.txt", RegexOptions.IgnoreCase).Value;
+                dArchivosBuildOrders.Add(autor + archivoBuildOrder, archivoBuildOrder);
+            }
 
-                var nombreBuildOrder = Path.GetFileNameWithoutExtension(archivoBuildOrder);
+            foreach (var kv in dArchivosBuildOrders) {
+
+                var nombreBuildOrder = Path.GetFileNameWithoutExtension(kv.Value);
                 if (nombreBuildOrder.ToLower() != "tutorial" && RequiereAgregarÓrdenDeEjecución(Preferencias.Game, nombreBuildOrder, out _)) {
 
                     if (ÓrdenesDeEjecuciónAEliminar.Contains(nombreBuildOrder)) {
-                        IntentarEliminar(archivoBuildOrder);
+                        IntentarEliminar(kv.Value);
                     } else {
-                        CmbBuildOrders.Items.Add(nombreBuildOrder);
+                        if (nombreBuildOrder.ToLower() != "new") CmbBuildOrders.Items.Add(nombreBuildOrder);
                     }
                     
                 }
@@ -1140,15 +1460,24 @@ namespace RTSHelper {
             if (!forzarAplicación && !Jugando()) return;
             if (!forzarAplicación && Estado != EEstado.Running) return;
 
-            var pasoActual = OrdenDeEjecución.NúmeroPaso;
+            var pasoActual = Estrategia.NúmeroPaso;
             var progresoActual = (int?)null;
-            if (pasoActual <= OrdenDeEjecución.Pasos.Count - 1) progresoActual = OrdenDeEjecución.Pasos[pasoActual].Comportamiento?.Progreso;
+            if (pasoActual <= Estrategia.Pasos.Count - 1) progresoActual = Estrategia.Pasos[pasoActual].Comportamiento?.Progreso;
             var segundosJuegoPasoActual = ObtenerSegundosJuegoPasoActual(); // Debe obtenerse este valor justo antes de leer el progreso con OCR porque ese procedimiento se tarda decenas de milisegundos. Cuando se asignaba segundosJuegoPasoActual después de él, mientras se hacía la lectura del progreso, por ejemplo la lectura del 8 en el juego y estaba en 7 casi finalizando en el programa, el temporizador pasaba al siguiente paso iniciando (paso 8) y se tomaba como si tuviera segundosJuegoPasoActual casi 0 iniciando el paso anterior (paso 7), esto generaba un desface de un paso hacia adelante incorrecto. El cálculo de segundosJuegoPasoActual debe estar lo más cerca posible del cálculo de progresoActual para que esa situación no suceda.
             var progresoLeído = (int?)null;
             var confianza = -2f;
-            if (forzarAplicación || progresoActual != null) progresoLeído = LeerProgreso(forzarAplicación ? 20 : (int)(progresoActual ?? 0), out confianza); // Si se está forzando la aplicación del progreso, no se está teniendo en cuenta el consecutivo, entonces para abarcar la mayor cantidad de casos se usa un progreso actual de 20 que es un número arbitrario de 2 cifras para que la lectura OCR siempre coincida con 2 cifras. No se soporta la lectura de progreso de 3 cifras en esta función. progresoActual nunca sería cero porque solo es nulo cuando forzarAplicación es verdadero y si forzarAplicación es verdadero el valor que se usa es 20.
-            if (!forzarAplicación && progresoLeído == ÚltimoProgresoLeído) return; // Cuando el progresoLeído es igual al ÚltimoProgresoLeído, no se realiza ninguna acción. 
 
+            var dosDígitos = true;
+reintentarCon1Dígito:
+            if (forzarAplicación || progresoActual != null) 
+                progresoLeído = LeerProgreso(forzarAplicación ? (dosDígitos ? 20 : 5) : (int)(progresoActual ?? 0), out confianza); // Si se está forzando la aplicación del progreso, no se está teniendo en cuenta el consecutivo, entonces para abarcar la mayor cantidad de casos se usa un progreso actual de 20 o 5 que son números arbitrario de 1 o 2 cifras para que la lectura OCR siempre coincida con 1 o 2 cifras. No se soporta la lectura de progreso de 3 cifras en esta función. progresoActual nunca sería cero porque solo es nulo cuando forzarAplicación es verdadero y si forzarAplicación es verdadero el valor que se usa es 20.
+            if (!forzarAplicación && progresoLeído == ÚltimoProgresoLeído) return;  // Cuando el progresoLeído es igual al ÚltimoProgresoLeído, no se realiza ninguna acción. 
+            if (progresoActual == progresoLeído && forzarAplicación) ReiniciarPasoActual(); // Es útil reiniciar el paso actual porque facilita la prueba de estrategias al guardar el juego justo en el momento de cambio de paso. De esta manera cuando se carga una partida guardada y se sincroniza el progreso, queda en el segundo exacto del juego.
+            if (forzarAplicación && dosDígitos && (progresoLeído == null || confianza == -1)) {
+                dosDígitos = false;
+                goto reintentarCon1Dígito;
+            }
+ 
             if (progresoLeído != null) {
 
                 var confiable = confianza > 1 || (confianza > 0 && (progresoLeído == ÚltimoProgresoLeído + 1 || progresoLeído == ÚltimoProgresoLeído - 1));  // Cuando la confianza está entre 0 y 1 es una lectura dudosa que no está en el rango esperado y requiere comprobación con el ÚltimoProgresoLeído para verificar que el último progreso leído era un progreso inmediatamente anterior al progreso actual y confirmar así que la lectura actual es confiable. Esto sucede por ejemplo en el caso de tener 15 aldeanos y en el mismo segundo perder 3 aldeanos (improbable, pero podría suceder), la siguiente lectura serían 11 aldeanos que sería descartada por no estar en el rango esperado 13-14-15-16-17, el RTS Helper pasaría al paso con progreso 16 y la siguente lectura sería 12 que tampoco estaría en el rango 14-15-16-17-18, pero si sería un consecutivo desde el último progreso leído 11, entonces se considerará que es confiable. Se agrega también el consecutivo hacia atrás para considerar el caso de 3 aldeanos muertos seguidos por uno más muerto.      
@@ -1162,7 +1491,7 @@ namespace RTSHelper {
                     ÚltimoProgresoLeído = null;
                 }
 
-                if (confiable || (confianza > 0 && forzarAplicación)) { // Cuando se quiere forzar la aplicación del progreso actual no se tiene en cuenta si es consecutivo o no. Solo se considera si la confianza es mayor que cero para garantizar que haya alta probabilidad que sea el número correcto.
+                if (confiable || (confianza > 0 && forzarAplicación)) { // Cuando se quiere forzar la aplicación del progreso actual, no se tiene en cuenta si es consecutivo o no. Solo se considera si la confianza es mayor que cero para garantizar que haya alta probabilidad que sea el número correcto.
 
                     var desface = 0D;
                     var direcciónBúsqueda = progresoLeído == progresoActual ? 0 : (progresoLeído > progresoActual ? 1 : -1); // Si se está más adelante, se busca en los pasos posteriores y el desface es negativo. Cuando el progresoLeído es igual al progresoActual, no se necesita revisar otros pasos para encontrar el valor de duraciónDesface.
@@ -1171,15 +1500,19 @@ namespace RTSHelper {
                     if (!encontradoPaso) {
 
                         var paso = pasoActual + direcciónBúsqueda;
-                        if (direcciónBúsqueda == -1 && paso > OrdenDeEjecución.Pasos.Count - 1) {
-                            desface = (paso - (OrdenDeEjecución.Pasos.Count - 1)) * ObtenerDuraciónPaso(OrdenDeEjecución.Pasos.Count); // Inicia el desface con la duración de los pasos extra después del fin de la build order. Se usa la cuenta como el parámetro para ObtenerDuraciónPaso porque así esta función devuelve el valor predeterminado en preferencias que es el que siempre se usa para estos pasos extra.
-                            paso = OrdenDeEjecución.Pasos.Count - 1; // Cuando está en pasos superiores al último, se inicia la búsqueda hacia atrás en el último paso.
+                        if (direcciónBúsqueda == -1 && paso > Estrategia.Pasos.Count - 1) {
+                            desface = (paso - (Estrategia.Pasos.Count - 1)) * ObtenerDuraciónPaso(Estrategia.Pasos.Count); // Inicia el desface con la duración de los pasos extra después del fin de la build order. Se usa la cuenta como el parámetro para ObtenerDuraciónPaso porque así esta función devuelve el valor predeterminado en preferencias que es el que siempre se usa para estos pasos extra.
+                            paso = Estrategia.Pasos.Count - 1; // Cuando está en pasos superiores al último, se inicia la búsqueda hacia atrás en el último paso.
                         }
 
-                        while (paso >= 0 && paso <= OrdenDeEjecución.Pasos.Count - 1) {
+                        while (paso >= 0 && paso <= Estrategia.Pasos.Count - 1) {
 
-                            if (progresoLeído == OrdenDeEjecución.Pasos[paso].Comportamiento?.Progreso) {
-                                if (direcciónBúsqueda == -1) desface += -direcciónBúsqueda * ObtenerDuraciónPaso(paso); // Si la búsqueda es hacia atrás, tiene en cuenta el paso final. Por ejemplo, si se está en el inicio del paso de 7 aldeanos y se mueren 3 aldeanos, se debe sumar el largo del paso 6, 5 y 4 (que es el paso en el que se cumple la condición progresoLeído == OrdenDeEjecución.Pasos[paso].Comportamiento?.Progreso). Si la búsqueda es hacia adelante, no se suma el paso en el que se cumple la condición. Por ejemplo, si se tienen 4 aldeanos y se está en el final del paso y se convierten 3 en el mismo momento, se debe sumar la duración del paso de 5 aldeanos y de 6 aldeanos. El de 7 no se suma porque queda al inicio de este. Los ajustes de pasos incompletos para ambos casos se hacen en el condicional siguiente if (encontradoPaso).
+                            if (progresoLeído == Estrategia.Pasos[paso].Comportamiento?.Progreso 
+                                || (paso < Estrategia.Pasos.Count - 1 
+                                && progresoLeído > Estrategia.Pasos[paso].Comportamiento?.Progreso 
+                                && progresoLeído < Estrategia.Pasos[paso + 1].Comportamiento?.Progreso)) { // El segundo condicional es util para coincidir progresos leídos que no están en la estrategia porque en pasos hay saltos de progreso mayores a uno. Esto sucede cuando se crean más de una unidad ecónomica por paso, por ejemplo cuando se está en un boom de Age of Empires II.
+
+                                if (direcciónBúsqueda == -1) desface += -direcciónBúsqueda * ObtenerDuraciónPaso(paso); // Si la búsqueda es hacia atrás, tiene en cuenta el paso final. Por ejemplo, si se está en el inicio del paso de 7 aldeanos y se mueren 3 aldeanos, se debe sumar el largo del paso 6, 5 y 4 (que es el paso en el que se cumple la condición progresoLeído == Estrategia.Pasos[paso].Comportamiento?.Progreso). Si la búsqueda es hacia adelante, no se suma el paso en el que se cumple la condición. Por ejemplo, si se tienen 4 aldeanos y se está en el final del paso y se convierten 3 en el mismo momento, se debe sumar la duración del paso de 5 aldeanos y de 6 aldeanos. El de 7 no se suma porque queda al inicio de este. Los ajustes de pasos incompletos para ambos casos se hacen en el condicional siguiente if (encontradoPaso).
                                 encontradoPaso = true;
                                 break;
                             }
@@ -1198,10 +1531,10 @@ namespace RTSHelper {
                             desface -= (ObtenerDuraciónPaso(pasoActual) - segundosJuegoPasoActual);
                         }
 
-                        if (desface > Preferencias.MinimumDelayToAutoAdjustIdleTime || desface < -Preferencias.MinimumDelayToAutoAdjustIdleTime) {
+                        if (forzarAplicación || desface > Preferencias.MinimumDelayToAutoAdjustIdleTime || desface < -Preferencias.MinimumDelayToAutoAdjustIdleTime) { // Si se está forzando la aplicación, no aplica el mínimo requerido de desface.
 
                             LblDepuración.Content = $"Desface: {desface:##.0} s";
-                            Desfazar(desface * 1000, desfazarReloj: false);
+                            Desfazar(desface * 1000, desfazarReloj: forzarAplicación);
 
                         } else {
                             LblDepuración.Content = $"No Desface";
@@ -1236,7 +1569,7 @@ namespace RTSHelper {
             var actualizar = forzar || (!(Timer is null || !Timer.IsEnabled) && MedidorTimer.IsRunning); // Cuando esté en pausa no debe actualizar ni borrar el temporizador.      
             if (!actualizar) return;
 
-            var segundosPasosAnteriores = Paso.ObtenerDuraciónPasosAnteriores(OrdenDeEjecución.Pasos, OrdenDeEjecución.NúmeroPaso);
+            var segundosPasosAnteriores = Paso.ObtenerDuraciónPasosAnteriores(Estrategia.Pasos, Estrategia.NúmeroPaso);
             var segundosPasoActual = ObtenerSegundosJuegoPasoActual();
             var segundosJuego = segundosPasosAnteriores + segundosPasoActual; // Step duration es en segundos de juego, en cambio el temporizador es en segundos reales, por eso solo se ajusta este último valor a los segundos en el juego que son los que finalmente se muestran.
             var segundos = segundosJuego % 60;
@@ -1246,7 +1579,7 @@ namespace RTSHelper {
             } else {
 
                 CpgProgresoPaso.Value 
-                    = (segundosPasoActual / (ObtenerDuraciónPaso(OrdenDeEjecución.NúmeroPaso) / Preferencias.ExecutionSpeed)) * 100;
+                    = (segundosPasoActual / (ObtenerDuraciónPaso(Estrategia.NúmeroPaso) / Preferencias.ExecutionSpeed)) * 100;
                 var segundosJuegoAMostrar = segundosJuego + MilisegundosJuegoDesface / 1000;
                 var segundosAMostrar = segundosJuegoAMostrar % 60;
                 LblTiempoEnJuego.Content = Math.Floor(segundosJuegoAMostrar / 60).ToString() + ":" 
@@ -1262,21 +1595,21 @@ namespace RTSHelper {
 
 
         private void GuardarDuraciónPaso(int númeroPaso) {
-            if (númeroPaso <= OrdenDeEjecución.Pasos.Count - 1) 
-                OrdenDeEjecución.Pasos[númeroPaso].DuraciónEnJuego = ObtenerDuraciónPaso(númeroPaso) / Preferencias.ExecutionSpeed;
+            if (númeroPaso <= Estrategia.Pasos.Count - 1) 
+                Estrategia.Pasos[númeroPaso].DuraciónEnJuego = ObtenerDuraciónPaso(númeroPaso) / Preferencias.ExecutionSpeed;
         } // GuardarDuraciónPaso>
 
 
         private void GuardarDesfaceAcumulado(int númeroPaso) {
-            if (númeroPaso <= OrdenDeEjecución.Pasos.Count - 1)
-                OrdenDeEjecución.Pasos[númeroPaso].DesfaceAcumulado = MilisegundosJuegoDesface / 1000;
+            if (númeroPaso <= Estrategia.Pasos.Count - 1)
+                Estrategia.Pasos[númeroPaso].DesfaceAcumulado = MilisegundosJuegoDesface / 1000;
         } // GuardarDesfaceAcumulado>
 
 
         private T ObtenerPropiedadDePaso<T>(int númeroPaso, Func<Comportamiento, T?> propiedad, T valorPreferencias) where T : struct {
 
-            if (númeroPaso >= 0 && númeroPaso <= OrdenDeEjecución.Pasos.Count - 1) {
-                return propiedad(OrdenDeEjecución.Pasos[númeroPaso].Comportamiento) ?? valorPreferencias;
+            if (númeroPaso >= 0 && númeroPaso <= Estrategia.Pasos.Count - 1) {
+                return propiedad(Estrategia.Pasos[númeroPaso].Comportamiento) ?? valorPreferencias;
             } else {
                 return valorPreferencias;
             }
@@ -1286,8 +1619,8 @@ namespace RTSHelper {
 
         private T ObtenerPropiedadDePasoClase<T>(int númeroPaso, Func<Comportamiento, T?> propiedad, T valorPreferencias) where T : class {
 
-            if (númeroPaso >= 0 && númeroPaso <= OrdenDeEjecución.Pasos.Count - 1) {
-                return propiedad(OrdenDeEjecución.Pasos[númeroPaso].Comportamiento) ?? valorPreferencias;
+            if (númeroPaso >= 0 && númeroPaso <= Estrategia.Pasos.Count - 1) {
+                return propiedad(Estrategia.Pasos[númeroPaso].Comportamiento) ?? valorPreferencias;
             } else {
                 return valorPreferencias;
             }
@@ -1361,8 +1694,8 @@ namespace RTSHelper {
             Application.Current.Resources["Ancho"] = Preferencias.Width;
             Application.Current.Resources["PosiciónY"] = Preferencias.Top;
             Application.Current.Resources["PosiciónX"] = Preferencias.Left;
-            Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = ObtenerMostrarSiguientePaso(OrdenDeEjecución.NúmeroPaso) 
-                || ObtenerMostrarAnteriorPaso(OrdenDeEjecución.NúmeroPaso) ? Visibility.Visible : Visibility.Collapsed;
+            Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = ObtenerMostrarSiguientePaso(Estrategia.NúmeroPaso) 
+                || ObtenerMostrarAnteriorPaso(Estrategia.NúmeroPaso) ? Visibility.Visible : Visibility.Collapsed;
             Application.Current.Resources["AnchoSelectorBuildOrder"] = Preferencias.BuildOrderSelectorWidth;
             Application.Current.Resources["AnchoSelectorVelocidadEjecución"] = Preferencias.ExecutionSpeedSelectorWidth;
             Application.Current.Resources["BrushFlashingColor"] = (SolidColorBrush)new BrushConverter().ConvertFrom(ObtenerColorFlash(-1)); // Solo se establece para que sea efectivo en la ventana de preferencias.
@@ -1384,15 +1717,15 @@ namespace RTSHelper {
 
             this.Width = Preferencias.Width; // Se deben establecer manualmente porque no funciona el DynamicResource.
             this.Left = Preferencias.Left;
-            this.Height = Preferencias.Height;
-            this.Top = Preferencias.Top;
-            MniBackMultipleSteps.Header = $"|◁      Go Back {Preferencias.BackMultipleSteps} Steps";
-            MniNextMultipleSteps.Header = $"▷|      Advance {Preferencias.NextMultipleSteps} Steps";
-            MniBackward.Header = $"◁◁    Backward {Preferencias.BackwardSeconds} Seconds";
-            MniFordward.Header = $"▷▷    Fordward {Preferencias.ForwardSeconds} Seconds";
+            this.Height = Preferencias.Height + CambioAltoAlMostrarCódigo;
+            this.Top = Preferencias.Top - CambioAltoAlMostrarCódigo;
+            MniBackMultipleSteps.Header = $"|◁      Go Back {Preferencias.BackMultipleSteps} Steps (Ctrl + Left)";
+            MniNextMultipleSteps.Header = $"▷|      Advance {Preferencias.NextMultipleSteps} Steps (Ctrl + Right)";
+            MniBackward.Header = $"◁◁    Backward {Preferencias.BackwardSeconds} Seconds (Shift + Left)";
+            MniFordward.Header = $"▷▷    Fordward {Preferencias.ForwardSeconds} Seconds (Shift + Right)";
 
             EstableciendoTamaño = false;
-            ActualizarSupervisoresOrdenDeEjecución();
+            ActualizarSupervisoresEstrategia();
             RestaurarVistaPasoSiguienteAnterior();
 
             if (!iniciando) ActualizarPaso(stop: false, aplicandoPreferencias: true);
@@ -1485,7 +1818,7 @@ namespace RTSHelper {
             TimerStepEndSound = new DispatcherTimer();
             TimerStepEndSound.Tick += new EventHandler(TimerStepEndSound_Tick);
       
-            ActualizarIntervaloTimer(ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed, OrdenDeEjecución.NúmeroPaso));
+            ActualizarIntervaloTimer(ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed, Estrategia.NúmeroPaso));
             ActualizarPaso();
             if (Estado == EEstado.Paused) ActualizarUI(forzar: true);
 
@@ -1524,7 +1857,7 @@ namespace RTSHelper {
         private void ReiniciarTimerStepEndSound(TimeSpan duraciónTimerPaso) {
 
             if (TimerStepEndSound is null) return; // No debería pasar.
-            var duraciónPresonido = ObtenerDuraciónPresonido(OrdenDeEjecución.NúmeroPaso);
+            var duraciónPresonido = ObtenerDuraciónPresonido(Estrategia.NúmeroPaso);
             if (duraciónTimerPaso.TotalMilliseconds > duraciónPresonido) {
                 TimerStepEndSound.Interval = duraciónTimerPaso.Add(new TimeSpan(0, 0, 0, 0, -duraciónPresonido));
                 TimerStepEndSound.Start();
@@ -1557,7 +1890,7 @@ namespace RTSHelper {
 
             // Al actualizar la duración de Timer.Interval se reinicia. Para evitar este problema se establece la nueva duración del paso en dos pasos.
             // Primero establece un intervalo parcial del tiempo que falta para finalizar el paso actual modificado y después establece la nueva duración del paso completa.
-            var nuevaDuraciónPasoCompleto = ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed, OrdenDeEjecución.NúmeroPaso);
+            var nuevaDuraciónPasoCompleto = ObtenerDuraciónPaso(Preferencias.GameSpeed, Preferencias.ExecutionSpeed, Estrategia.NúmeroPaso);
             var tiempoPasoActual = ObtenerTiempoPasoActual();
             TimeSpan duraciónPasoParcial;
 
@@ -1566,10 +1899,10 @@ namespace RTSHelper {
                 var pasosSaltados = tiempoPasoActual.TotalMilliseconds / nuevaDuraciónPasoCompleto.TotalMilliseconds; // Resta uno porque es el actual.
                 var pasosSaltadosEnteros = (int)Math.Floor(pasosSaltados);
                 var fracciónPasoSaltado = pasosSaltados - pasosSaltadosEnteros;
-                for (int i = OrdenDeEjecución.NúmeroPaso; i < OrdenDeEjecución.NúmeroPaso + pasosSaltadosEnteros; i++) {
-                    OrdenDeEjecución.Pasos[i].DuraciónEnJuego = ObtenerDuraciónPaso(i) / Preferencias.ExecutionSpeed;
+                for (int i = Estrategia.NúmeroPaso; i < Estrategia.NúmeroPaso + pasosSaltadosEnteros; i++) {
+                    Estrategia.Pasos[i].DuraciónEnJuego = ObtenerDuraciónPaso(i) / Preferencias.ExecutionSpeed;
                 }
-                OrdenDeEjecución.NúmeroPaso = OrdenDeEjecución.NúmeroPaso + pasosSaltadosEnteros;
+                Estrategia.NúmeroPaso = Estrategia.NúmeroPaso + pasosSaltadosEnteros;
                 ActualizarPaso();
                 var duraciónTranscurridaPasoActual = tiempoPasoActual.Add(-pasosSaltadosEnteros * nuevaDuraciónPasoCompleto);
                 duraciónPasoParcial = nuevaDuraciónPasoCompleto - duraciónTranscurridaPasoActual; // Es la duración con la que se debe hacer un paso parcial. Es la duración del nuevo paso menos el tiempo que ya ha transcurrido de este.
@@ -1590,7 +1923,7 @@ namespace RTSHelper {
             bool siguienteOAnterior = false, bool cambióTamaño = false, bool alternandoSiguienteAnteriorPaso = false) {
 
             if (stop) {
-                ActualizarContenidoPaso(númeroPaso: null, limpiarErroresAnteriores: true);
+                ActualizarContenidoPaso(númeroPaso: null, limpiarErroresAnteriores: true, simulación: false, out string? errores);
             } else {
 
                 if ((Timer is null || !Timer.IsEnabled) 
@@ -1598,26 +1931,30 @@ namespace RTSHelper {
                 
                 if (!aplicandoPreferencias && Estado != EEstado.Stoped) {
 
-                    if (OrdenDeEjecución.NúmeroPaso < 0) OrdenDeEjecución.NúmeroPaso = 0;
+                    if (Estrategia.NúmeroPaso < 0) Estrategia.NúmeroPaso = 0;
                     CambiandoTxtPasoAutomáticamente = true;
-                    TxtPaso.Text = OrdenDeEjecución.NúmeroPaso.ToString();
+                    TxtPaso.Text = Estrategia.NúmeroPaso.ToString();
                     CambiandoTxtPasoAutomáticamente = false;
 
                 }
 
-                ActualizarContenidoPaso(Estado == EEstado.Stoped ? (int?)null : OrdenDeEjecución.NúmeroPaso, limpiarErroresAnteriores: cargandoBuildOrder);
+                ActualizarContenidoPaso(Estado == EEstado.Stoped ? (int?)null : Estrategia.NúmeroPaso, 
+                    limpiarErroresAnteriores: cargandoBuildOrder || cambióTamaño, simulación: false, out string ? errores);
 
             }
 
         } // ActualizarPaso>
 
 
-        private void ActualizarContenidoPaso(int? númeroPaso, bool limpiarErroresAnteriores) {
+        private void ActualizarContenidoPaso(int? númeroPaso, bool limpiarErroresAnteriores, bool simulación, out string? errores) {
 
-            var errores = (string?)null;
-            SpnPaso.Children.Clear();
-            SpnPasoSiguienteAnterior.Children.Clear();
-            SpnPasoAnterior.Children.Clear();
+            errores = null;
+
+            if (!simulación) {
+                SpnPaso.Children.Clear();
+                SpnPasoSiguienteAnterior.Children.Clear();
+                SpnPasoAnterior.Children.Clear();
+            }
 
             var formatoPaso = new Formato($"{Preferencias.CurrentStepFontColor} {(Preferencias.CurrentStepFontBold ? "b" : "")} " +
                 $"{Preferencias.FontName.Replace(" ", "").ToLowerInvariant()} normalpos M", out _, null, out string? erroresInternos, númeroPaso) 
@@ -1629,18 +1966,20 @@ namespace RTSHelper {
                 { TamañoBaseFuente = Preferencias.NextPreviousStepFontSize, TamañoImagen = Preferencias.ImageSize };
             AgregarErrores(ref errores, erroresInternos2, númeroPaso: null);
 
-            OrdenDeEjecución.MostrarPaso(númeroPaso, formatoPaso, SpnPaso, mostrarSiempreÚltimoPaso: true, 
+            Estrategia.MostrarPaso(númeroPaso, formatoPaso, SpnPaso, mostrarSiempreÚltimoPaso: true, 
                 this.Height - Preferencias.BottomMargenSteps - Preferencias.TopMarginCurrentStep, HorizontalAlignment.Left,
-                Preferencias.BottomMargenSteps, out bool superóAltoPasoActual, out string? erroresInternos3);
+                Preferencias.BottomMargenSteps, TxtCódigoPaso, simulación, out bool superóAltoPasoActual, out string? erroresInternos3);
             AgregarErrores(ref errores, erroresInternos3, númeroPaso: null);
+
+            if (simulación) return; // En el modo simulación se recorren todos los pasos entonces no es necesario verificar los siguientes o anteriores.
 
             var superóAltoSiguientePaso = false;
             if (númeroPaso != null && ((!ForzarMostrarPasoAnterior && ObtenerMostrarSiguientePaso((int)númeroPaso)) || ForzarMostrarPasoSiguiente)) {
 
-                OrdenDeEjecución.MostrarPaso(númeroPaso + 1, formatoSiguienteAnteriorPaso, SpnPasoSiguienteAnterior, mostrarSiempreÚltimoPaso: false,
+                Estrategia.MostrarPaso(númeroPaso + 1, formatoSiguienteAnteriorPaso, SpnPasoSiguienteAnterior, mostrarSiempreÚltimoPaso: false,
                     this.Height - (SpnInferior.ActualHeight == 0 ? 42 : SpnInferior.ActualHeight) - Preferencias.BottomMargenSteps 
-                    - Preferencias.TopMarginNextPreviousStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoSiguientePaso, 
-                    out string? erroresInternos4); // ActualHeight es cero al iniciar antes de cargar la interface, entonces se usa un valor fijo aproximado de 42.
+                    - Preferencias.TopMarginNextPreviousStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, null,
+                    simulación, out superóAltoSiguientePaso, out string? erroresInternos4); // ActualHeight es cero al iniciar antes de cargar la interface, entonces se usa un valor fijo aproximado de 42.
                 Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Visible;
                 AgregarErrores(ref errores, erroresInternos4, númeroPaso: null);
 
@@ -1649,19 +1988,25 @@ namespace RTSHelper {
             }
 
             var superóAltoAnteriorPaso = false;
-            if (númeroPaso != null && númeroPaso > 0 && !OrdenDeEjecución.EsPasoDespuésDeÚltimo && (!ForzarMostrarPasoSiguiente 
+            if (númeroPaso != null && númeroPaso > 0 && !Estrategia.EsPasoDespuésDeÚltimo && (!ForzarMostrarPasoSiguiente 
                 && (ObtenerMostrarAnteriorPaso((int)númeroPaso)) || ForzarMostrarPasoAnterior)) {
 
-                OrdenDeEjecución.MostrarPaso(númeroPaso - 1, formatoSiguienteAnteriorPaso, SpnPasoAnterior, mostrarSiempreÚltimoPaso: false,
+                Estrategia.MostrarPaso(númeroPaso - 1, formatoSiguienteAnteriorPaso, SpnPasoAnterior, mostrarSiempreÚltimoPaso: false,
                     this.Height - (SpnInferior.ActualHeight == 0 ? 42 : SpnInferior.ActualHeight) - Preferencias.BottomMargenSteps
-                    - Preferencias.TopMarginNextPreviousStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, out superóAltoAnteriorPaso,
-                    out string? erroresInternos5);
+                    - Preferencias.TopMarginNextPreviousStep, HorizontalAlignment.Right, Preferencias.BottomMargenSteps, null,
+                    simulación, out superóAltoAnteriorPaso, out string? erroresInternos5);
                 Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Visible;
                 Application.Current.Resources["VisibilidadPasoSiguienteAnterior"] = Visibility.Collapsed;
                 AgregarErrores(ref errores, erroresInternos5, númeroPaso: null);
 
             } else {
                 Application.Current.Resources["VisibilidadPasoAnterior"] = Visibility.Collapsed;
+            }
+
+            if (númeroPaso == null) {
+                ActualizarInformación(Estrategia.Introducción?.Información);
+            } else if (númeroPaso >= 0 && númeroPaso < Estrategia.Pasos.Count) {
+                ActualizarInformación(Estrategia.Pasos[(int)númeroPaso].Información);
             }
 
             if (this.WindowState == WindowState.Normal) 
@@ -1671,10 +2016,19 @@ namespace RTSHelper {
         } // ActualizarContenidoPaso>
 
 
+        public void ActualizarInformación(string? información) {
+
+            BtnInfo.ToolTip = información?.Replace(" \\n\\n ", Environment.NewLine + Environment.NewLine)
+                .Replace("\\n\\n", Environment.NewLine + Environment.NewLine).Replace(" \\n ", Environment.NewLine).Replace("\\n", Environment.NewLine);
+            BtnInfo.Visibility = (!string.IsNullOrEmpty(BtnInfo.ToolTip?.ToString())) ? Visibility.Visible : Visibility.Collapsed;
+
+        } // ActualizarInformación>
+
+
         public void ActualizarAlertaDeErrores(string? errores, bool altoSuperado, bool limpiarErroresAnteriores) {
 
             var códigoAnterior = BtnAlert.Tag?.ToString();
-            var código = Preferencias.CurrentBuildOrder + "|" + OrdenDeEjecución.NúmeroPaso;
+            var código = Preferencias.CurrentBuildOrder + "|" + Estrategia.NúmeroPaso;
             BtnAlert.Tag = código;
             if (códigoAnterior == código && !string.IsNullOrEmpty(BtnAlert.ToolTip.ToString())) {
                 BtnAlert.ToolTip = BtnAlert.ToolTip + Environment.NewLine;
@@ -1691,15 +2045,27 @@ namespace RTSHelper {
         } // ActualizarAlertaDeErrores>
 
 
-        public void CargarBuildOrder(bool iniciando = false) {
+        public void VerificarModoDesarrolloYCargarBuildOrder() {
+
+            if (ModoDesarrollo) {
+                CopiarEstrategiaDeDesarrollo(); // En el modo de desarrollo para permitir que se carguen los cambios realizados a los archivos mientras el RTS Helper no tenía esa estrategia abierta, se debe hacer el procedimiento de copia de la estrategia a la carpeta de la aplicación y allí al detectar el cambio del archivo (sin importar que tenga o no cambios en su texto) se ejecuta CargarBuildOrder().
+            } else {
+                CargarEstrategia(FuenteEstrategia.Archivo);
+            }
+
+        } // VerificarModoDesarrolloYCargarBuildOrder>
+
+
+        public void CargarEstrategia(FuenteEstrategia fuente, bool iniciando = false) {
 
             if (CmbBuildOrders.Text != Preferencias.CurrentBuildOrder) {
                 EditandoComboBoxEnCódigo = true;
                 CmbBuildOrders.Text = Preferencias.CurrentBuildOrder;
+                CmbBuildOrders.SelectedItem = Preferencias.CurrentBuildOrder; // Cuando el texto contiene el texto de otro por ejemplo 'Malian Longswords Flood by Vixark.txt' y 'Malian Longswords Flood by Vixark (Easier).txt' no funciona bien únicamente estableciendo el .Text.
                 EditandoComboBoxEnCódigo = false;
             }
 
-            CargarPasos();
+            CargarPasos(fuente, out _);
             if (!iniciando) ActualizarPaso(stop: Estado == EEstado.Stoped, cargandoBuildOrder: true);
             if (EsFavorita(Preferencias.Game, Preferencias.CurrentBuildOrder)) {
                 MniAdicionarEliminarDeFavoritos.Header = " ★    Remove from Favorites";
@@ -1720,12 +2086,12 @@ namespace RTSHelper {
 
         public void PlaySonidoInicio()
             => MediaPlayer.PlayFile(Path.Combine(DirectorioSonidosCortos, 
-                ObtenerSonido(OrdenDeEjecución.NúmeroPaso)), ObtenerVolumenSonido(OrdenDeEjecución.NúmeroPaso));
+                ObtenerSonido(Estrategia.NúmeroPaso)), ObtenerVolumenSonido(Estrategia.NúmeroPaso));
 
 
         public void PlaySonidoFinal()
             => MediaPlayer.PlayFile(Path.Combine(DirectorioSonidosLargos, 
-                ObtenerPresonido(OrdenDeEjecución.NúmeroPaso)), ObtenerVolumenPresonido(OrdenDeEjecución.NúmeroPaso));
+                ObtenerPresonido(Estrategia.NúmeroPaso)), ObtenerVolumenPresonido(Estrategia.NúmeroPaso));
 
 
         private void EsVentanaVisible() {
@@ -1743,10 +2109,10 @@ namespace RTSHelper {
         } // EsVentanaVisible>
 
 
-        private void CargarPasos() {
+        private void CargarPasos(FuenteEstrategia fuente, out string? errores) {
 
             reintentarConTutorial:
-            OrdenDeEjecución.CargarPasos(Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder, out string? erroresInternos,
+            Estrategia.CargarPasos(fuente, Preferencias.BuildOrdersDirectory, Preferencias.CurrentBuildOrder, out errores,
                 out string? rutaBuildOrder);
 
             if (!File.Exists(rutaBuildOrder) && Preferencias.CurrentBuildOrder != "Tutorial") {
@@ -1761,16 +2127,16 @@ namespace RTSHelper {
                 return; // En el caso de que no esté Tutorial.txt. No debería suceder.
             }
 
-            ActualizarAlertaDeErrores(erroresInternos, altoSuperado: false, limpiarErroresAnteriores: false);
+            ActualizarAlertaDeErrores(errores, altoSuperado: false, limpiarErroresAnteriores: false);
 
         } // CargarPasos>
 
 
-        private void RecargarBuildOrder() {
+        public void RecargarEstrategia(bool mostrarMensajeNoFavoritas = false) {
 
-            LeerBuildOrders();
-            CargarBuildOrder();
-
+            LeerÓrdenesDeEjecución(mostrarMensajeNoFavoritas);
+            VerificarModoDesarrolloYCargarBuildOrder();
+  
         } // RecargarBuildOrder>
 
 
@@ -1781,6 +2147,58 @@ namespace RTSHelper {
             AutoUpdater.Start(ObtenerURLArchivo(TipoArchivoActualización.InformaciónÚltimasVersiones));
 
         } // Actualizar>
+
+
+        private void HacerCopiasDeSeguridadDeÓrdenesDeEjecución() {
+
+            foreach (var juego in Juegos) {
+
+                var directorioÓrdenesDeEjecución = Settings.ObtenerDirectorioEstrategias(DirectorioEstrategias, juego);
+                var archivosBuildOrders = Directory.GetFiles(directorioÓrdenesDeEjecución, "*.txt");
+                var directorioCopiasDeSeguridad = ObtenerRutaCarpeta(Preferencias.BuildOrdersDirectory, "Backups", crearSiNoExiste: true);
+                var directorioCopiasDeSeguridadAyer = ObtenerRutaCarpeta(directorioCopiasDeSeguridad, "Yesterday", crearSiNoExiste: true);
+                var directorioCopiasDeSeguridadSemanaPasada = ObtenerRutaCarpeta(directorioCopiasDeSeguridad, "Last Week", crearSiNoExiste: true);
+                var directorioCopiasDeSeguridadMesPasado = ObtenerRutaCarpeta(directorioCopiasDeSeguridad, "Last Month", crearSiNoExiste: true);
+                var directorioCopiasDeSeguridadAñoPasado = ObtenerRutaCarpeta(directorioCopiasDeSeguridad, "Last Year", crearSiNoExiste: true);
+                var ayer = DateAndTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+                var semanaPasada = DateAndTime.Now.AddDays(Math.Round(-(DateAndTime.Now.Day / 7D - Math.Floor(DateAndTime.Now.Day / 7D)) * 7, 0)).ToString("yyyy-MM-dd");
+                var mesPasado = DateAndTime.Now.AddMonths(-1).ToString("yyyy-MM");
+                var añoPasado = DateAndTime.Now.AddYears(-1).ToString("yyyy");
+
+                var directoriosCopiasDeSeguridadYNombre = new Dictionary<string, string> { {directorioCopiasDeSeguridadAyer, ayer }, 
+                    { directorioCopiasDeSeguridadSemanaPasada, semanaPasada }, { directorioCopiasDeSeguridadMesPasado, mesPasado }, 
+                    { directorioCopiasDeSeguridadAñoPasado, añoPasado } };
+
+                foreach (var kv in directoriosCopiasDeSeguridadYNombre) {
+
+                    var nombre = kv.Value;
+                    var directorio = kv.Key;
+                    var archivoDate = Path.Combine(directorio, $"{nombre}.date");
+                    if (!File.Exists(archivoDate)) {
+
+                        foreach (var archivo in Directory.GetFiles(directorio)) {
+                            IntentarEliminar(archivo);
+                        }
+
+                        File.WriteAllText(archivoDate, "");
+
+                        foreach (var archivoBuildOrder in archivosBuildOrders) {
+
+                            try {
+                                File.Copy(archivoBuildOrder, Path.Combine(directorio, Path.GetFileName(archivoBuildOrder)), overwrite: true);
+                            } catch (Exception) {
+                                // Si sucede un error al intentar copiar, no pasa nada.
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        } // HacerCopiasDeSeguridadDeÓrdenesDeEjecución>
 
 
         private void RecordarDonación() {
@@ -1811,11 +2229,11 @@ namespace RTSHelper {
 
                 try {
 
-                    if (tipoPaquete == TipoArchivoActualización.ÓrdenesDeEjecución) { // Hace la copia de seguridad de las órdenes de ejecución de cada juego soportado. Al ser archivos de texto no importa que se dupliquen las que no se van a cambiar porque no ocuparán mayor espacio.
+                    if (tipoPaquete == TipoArchivoActualización.Estrategias) { // Hace la copia de seguridad de las estrategias de cada juego soportado. Al ser archivos de texto no importa que se dupliquen las que no se van a cambiar porque no ocuparán mayor espacio.
 
                         foreach (var juego in Juegos) {
 
-                            var directorioÓrdenesDeEjecución = Settings.ObtenerDirectorioÓrdenesDeEjecución(DirectorioÓrdenesDeEjecución, juego);
+                            var directorioÓrdenesDeEjecución = Settings.ObtenerDirectorioEstrategias(DirectorioEstrategias, juego);
                             var directorioArchivo = Path.Combine(directorioÓrdenesDeEjecución, "Archive");
                             if (!Directory.Exists(directorioArchivo)) Directory.CreateDirectory(directorioArchivo);
                             var directorioArchivoHoy = Path.Combine(directorioArchivo, $"{DateAndTime.Now:yyyy-MM-dd}");
@@ -1832,7 +2250,7 @@ namespace RTSHelper {
                         }
 
                     }
-                    var directorioAplicación = ModoDesarrollo ? Path.GetDirectoryName(DirectorioÓrdenesDeEjecución) : DirectorioAplicación;
+                    var directorioAplicación = ModoDesarrollo ? Path.GetDirectoryName(DirectorioEstrategias) : DirectorioAplicación;
                     ZipFile.ExtractToDirectory(rutaZip, directorioAplicación, overwriteFiles: true);
                     éxito = true;
 
@@ -1856,14 +2274,14 @@ namespace RTSHelper {
             var tipoArchivoHtml = tipoPaquete switch {
                 TipoArchivoActualización.Imágenes => TipoArchivoActualización.CambiosImágenes,
                 TipoArchivoActualización.Sonidos => TipoArchivoActualización.CambiosSonidos,
-                TipoArchivoActualización.ÓrdenesDeEjecución => TipoArchivoActualización.CambiosÓrdenesDeEjecución,
+                TipoArchivoActualización.Estrategias => TipoArchivoActualización.CambiosEstrategias,
                 _ => throw new Exception("No esperado valor en ObtenerCambiosPaquete()")
             };
 
             var html = "";
-            if (tipoArchivoHtml == TipoArchivoActualización.CambiosÓrdenesDeEjecución) {
+            if (tipoArchivoHtml == TipoArchivoActualización.CambiosEstrategias) {
                 html += "Your custom build orders won't be changed. If you made changes to the included build orders, you can find your modified " +
-                    $@"build orders in:{Environment.NewLine}{Environment.NewLine}{DirectorioÓrdenesDeEjecución}\{Preferencias.Game}\Archive" +
+                    $@"build orders in:{Environment.NewLine}{Environment.NewLine}{DirectorioEstrategias}\{Preferencias.Game}\Archive" +
                     $@"\{DateAndTime.Now:yyyy-MM-dd}";
             }
 
@@ -1905,7 +2323,7 @@ namespace RTSHelper {
                 }
                 ProgresoWindow.Finalizar();
 
-            } else if (tipoPaquete == TipoArchivoActualización.ÓrdenesDeEjecución) { // Las órdenes de ejecución se reemplazan completamente. Esto permite que se puedan 'eliminar' órdenes de ejecución que ya no harán parte del paquete principal y que se reemplacen los cambios realizados por el usuario. Aunque se hace una copia de seguridad antes de reemplazarlos.
+            } else if (tipoPaquete == TipoArchivoActualización.Estrategias) { // Las estrategias se reemplazan completamente. Esto permite que se puedan 'eliminar' estrategias que ya no harán parte del paquete principal y que se reemplacen los cambios realizados por el usuario. Aunque se hace una copia de seguridad antes de reemplazarlos.
 
                 ProgresoWindow.Iniciar($"Downloading {nombrePaquete} Package...", 2, 1);
                 var éxito = await DescargarYDescomprimirPaquete(clienteHtml, versiónActual, últimaVersión, tipoPaquete, archivosAEliminar);
@@ -1918,7 +2336,7 @@ namespace RTSHelper {
 
                 if (tipoPaquete == TipoArchivoActualización.Imágenes) Preferencias.ImagesVersion = últimaVersión;
                 if (tipoPaquete == TipoArchivoActualización.Sonidos) Preferencias.SoundsVersion = últimaVersión;
-                if (tipoPaquete == TipoArchivoActualización.ÓrdenesDeEjecución) Preferencias.BuildOrdersVersion = últimaVersión;
+                if (tipoPaquete == TipoArchivoActualización.Estrategias) Preferencias.BuildOrdersVersion = últimaVersión;
                 Settings.Guardar(Preferencias, RutaPreferencias);
 
             }
@@ -1930,7 +2348,7 @@ namespace RTSHelper {
 
             if (!Directory.Exists(DirectorioTemporal)) Directory.CreateDirectory(DirectorioTemporal);
             var clienteHtml = new HttpClient();
-            var archivosAEliminar = new List<string>(); // Originalmente se incluían aquí las órdenes de ejecución para eliminar, pero se prefirió no incluirlas porque eso habría requerido hacer una consulta adicional al CDN o aumentar el tamaño de last-versions-info.json de manera permantente con las órdenes de ejecución con nombre que ya no se usará. La necesidad de cambiar de nombre a una orden de ejecución es muy eventual, entonces se prefiere evitar esas situaciones y maneja directamente en la actualización del programa. Mientras tanto los usuarios tendrán una órden de ejecución con el nombre antiguo y con contenido vacío. No es tan grave esta situación.
+            var archivosAEliminar = new List<string>(); // Originalmente se incluían aquí las estrategias para eliminar, pero se prefirió no incluirlas porque eso habría requerido hacer una consulta adicional al CDN o aumentar el tamaño de last-versions-info.json de manera permantente con las estrategias con nombre que ya no se usará. La necesidad de cambiar de nombre a una estrategia es muy eventual, entonces se prefiere evitar esas situaciones y maneja directamente en la actualización del programa. Mientras tanto los usuarios tendrán una órden de ejecución con el nombre antiguo y con contenido vacío. No es tan grave esta situación.
 
             if (últimaVersiónImágenes > Preferencias.ImagesVersion) {
                 await ActualizarPaquete(clienteHtml, "Images", últimaVersiónImágenes, Preferencias.ImagesVersion, TipoArchivoActualización.Imágenes);
@@ -1943,8 +2361,8 @@ namespace RTSHelper {
             if (últimaVersiónÓrdenesDeEjecución > Preferencias.BuildOrdersVersion) {
 
                 await ActualizarPaquete(clienteHtml, "Build Orders", últimaVersiónÓrdenesDeEjecución, Preferencias.BuildOrdersVersion,
-                    TipoArchivoActualización.ÓrdenesDeEjecución, archivosAEliminar); // Se menciona solo la carpeta del juego actual por claridad, aunque en realidad esta copia se hace para todos los juegos.
-                RecargarBuildOrder();
+                    TipoArchivoActualización.Estrategias, archivosAEliminar); // Se menciona solo la carpeta del juego actual por claridad, aunque en realidad esta copia se hace para todos los juegos.
+                RecargarEstrategia();
 
             }
 

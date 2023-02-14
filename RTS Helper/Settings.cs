@@ -42,7 +42,7 @@ namespace RTSHelper {
 
         public bool MinimizeOnComplete { get; set; } = false;
 
-        public double LineSpacing { get; set; } = 20;
+        public double LineSpacing { get; set; } = 35; // Se da prioridad a mostrar 3 líneas de instrucciones lo más amplias posibles y una línea de detalles adicionales inferior de fuente más pequeña.
 
         public bool ShowStepProgress { get; set; } = true;
 
@@ -53,6 +53,10 @@ namespace RTSHelper {
         public bool ShowAlwaysStatsButton { get; set; } = true; // Si es falso, solo se muestra al final.
 
         public DateTime LastDateDonationSuggestion { get; set; } = DateTime.MinValue;
+
+        public bool ShowOptionalInstructions1 { get; set; } = true; // Para los juegos de Age of Empires es la creación de aldeanos.
+
+        public bool ShowOptionalInstructions2 { get; set; } = true; // Para los juegos de Age of Empires es la construcción de casas.
 
         #endregion Generales>
 
@@ -107,6 +111,8 @@ namespace RTSHelper {
         #region Fuentes
 
         public string FontName { get; set; } = NombreFuentePredeterminada;
+
+        public string SecondaryFontName { get; set; } = NombreFuenteSecundariaPredeterminada; // Principalmente usada para números y símbolos.
 
         public bool CurrentStepFontBold { get; set; } = CurrentStepFontBoldPredeterminado;
 
@@ -250,9 +256,9 @@ namespace RTSHelper {
 
         public int BackwardSeconds { get; set; } = 10;
 
-        public int NextMultipleSteps { get; set; } = 5;
+        public int NextMultipleSteps { get; set; } = 10; // 10 pasos es para avanzar una cantidad considerable para 3 clics. Antes lo tenía en 5 y no lo usaba porque solo ahorraba 2 clics comparado con usar el botón de siguiente 5 veces.
 
-        public int BackMultipleSteps { get; set; } = 5;
+        public int BackMultipleSteps { get; set; } = 10;
 
         #endregion Control>
 
@@ -305,7 +311,7 @@ namespace RTSHelper {
 
         #region Propiedades Autocalculadas
 
-        public string BuildOrdersDirectory { get => ObtenerDirectorioÓrdenesDeEjecución(DirectorioÓrdenesDeEjecución, Game); }
+        public string BuildOrdersDirectory { get => ObtenerDirectorioEstrategias(DirectorioEstrategias, Game); }
 
         public string NamesDirectory {
             get {
@@ -378,7 +384,7 @@ namespace RTSHelper {
         } // EstablecerGameSpeed>
 
 
-        public static string ObtenerDirectorioÓrdenesDeEjecución(string directorioPadre, string juego) {
+        public static string ObtenerDirectorioEstrategias(string directorioPadre, string juego) {
      
             var directorioÓrdenesDeEjecución = Path.Combine(directorioPadre, juego);
             if (!Directory.Exists(directorioÓrdenesDeEjecución)) Directory.CreateDirectory(directorioÓrdenesDeEjecución);
@@ -435,7 +441,7 @@ namespace RTSHelper {
                 case "3840x2160":
 
                     Height = 195 * CorrecciónEscala;
-                    Width = 662 * CorrecciónEscala; // No cambiar, normalmente uso el minimapa 25% más grande y el valor mi valor sería 635.
+                    Width = 662 * CorrecciónEscala; // No cambiar. Normalmente uso el minimapa 25% más grande y el valor mi valor sería 635.
                     Top = 957 * CorrecciónEscala;
                     Left = 962 * CorrecciónEscala;
                     CurrentStepFontSize = 24.7 * CorrecciónEscala;
@@ -448,7 +454,7 @@ namespace RTSHelper {
                     LeftMarginCurrentStep = 17 * CorrecciónEscala;
                     TopMarginCurrentStep = 5 * CorrecciónEscala;
                     TopMarginNextPreviousStep = 31 * CorrecciónEscala;
-                    BottomMargenSteps = 5 * CorrecciónEscala;
+                    BottomMargenSteps = 3 * CorrecciónEscala;
                     RightMarginNextPreviousStep = 90 * CorrecciónEscala;
                     BuildOrderSelectorWidth = 200 * CorrecciónEscala;
                     ExecutionSpeedSelectorWidth = 75 * CorrecciónEscala;
