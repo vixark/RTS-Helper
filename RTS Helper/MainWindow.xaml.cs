@@ -1711,7 +1711,7 @@ reintentarCon1Dígito:
             TimerDetecciónProgreso.Interval = new TimeSpan(0, 0, Preferencias.AutoAdjustIdleTimeInterval);
             Application.Current.Resources["VisibilidadBotónStats"] = Preferencias.ShowAlwaysStatsButton ? Visibility.Visible : Visibility.Collapsed;
             Application.Current.Resources["VisibilidadBotónVerPasoAnterior"] = Preferencias.ShowAlternateNextPreviousStepButton && 
-                (Preferencias.ShowNextStep || Preferencias.ShowPreviousStep) ? Visibility.Visible : Visibility.Collapsed;
+                (Preferencias.ShowNextStep || Preferencias.ShowPreviousStep) ? Visibility.Visible : Visibility.Collapsed; // Aunque se podría considerar mostrar siempre este botón para habilitar la función de mostrar paso anterior siempre, se consideró que no era tan importante porque es fácil con el teclado presionar hacia atrás y nuevamente hacia adelante cuando este botón esté oculto.
 
             AplicarPreferenciasMuted(iniciando);
 
