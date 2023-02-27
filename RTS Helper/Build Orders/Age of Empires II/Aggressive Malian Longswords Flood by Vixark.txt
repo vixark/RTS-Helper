@@ -104,7 +104,7 @@
 
 || 47 ||  {p=39}  [v]<xt>40-60<>[>][wl2] [3s] [+v]   Start [maa] Production at [3][rax]   Cancel to Afford Tecnologies  /f  <r>8[w]  22[f]  8[g]  1[h]  39[vs]
 
-|| 48 ||  {p=40}  [forging]   [+4h]   [+v]  /f  <r>9[w]  22[f]  8[g]  1[h]  40[vs]
+|| 48 ||  {p=40}  [forging] or [arson]   [+4h]   [+v]  /f  <r>9[w]  22[f]  8[g]  1[h]  40[vs]
 
 || 49 ||  {p=41}  [+v]  /f  <r>10[w]  22[f]  8[g]  1[h]  41[vs]
 
@@ -112,7 +112,7 @@
 
 || 51 ||  {p=43}  [+v]  /f  <r>8[w]  26[f]  8[g]  1[h]  43[vs]
 
-|| 52 ||  {p=44}  [arson]   [+4h]   [+v]   /f  <r>9[w]  26[f]  8[g]  1[h]  44[vs]
+|| 52 ||  {p=44}  [arson] or [forging]   [+4h]   [+v]   /f  <r>9[w]  26[f]  8[g]  1[h]  44[vs]
 
 || 53 ||  {p=45}  [+v]  /f  <r>10[w]  26[f]  8[g]  1[h]  45[vs]
 
