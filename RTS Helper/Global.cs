@@ -34,7 +34,7 @@ namespace RTSHelper {
 
         public static Settings Preferencias = new Settings();
 
-        public static bool ModoDesarrollo = true;
+        public static bool ModoDesarrollo = false;
 
         public const string AOE2Name = "Age of Empires II";
 
