@@ -5,7 +5,6 @@ It supports Age of Empires II and includes <a href="https://www.youtube.com/chan
 
 # Games Supported
 * Age of Empires II
-* Age of Empires IV (soon)
 
 # How to use
 * Download the latest release <a href="http://vixark.com/rts-helper">here</a>.
