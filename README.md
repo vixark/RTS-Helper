@@ -6,12 +6,12 @@ It supports Age of Empires II and includes <a href="https://www.youtube.com/chan
 # Games Supported
 * Age of Empires II
 
-# How to use
+# How to Use
 * Download the latest release <a href="http://vixark.com/rts-helper">here</a>.
 * Unzip, run <i>RTS Helper.exe</i>, select your game and press ▷.
 * To edit and create build orders you can read <a href="http://vixark.com/rts-helper/documentation">the documentation</a> or just open <i>Build Orders\Age of Empires II\Default.txt</i> file and learn by modifing it.
 
-# Running it from code
+# Running it From Code
 * Extract RTS Helper binaries (Zip file) in your computer, for example in D:\Programs\RTS Helper 1.4.0\RTS Helper.
 * Open the code and change the following variables: 
 * Global.cs > DirectorioAOE2 to your AoE2DE Steam folder (it doesn't work with for the Windows Store version of the game).
