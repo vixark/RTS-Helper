@@ -34,22 +34,28 @@ namespace RTSHelper {
 
         public static Settings Preferencias = new Settings();
 
-        public static bool ModoDesarrollo = false;
+        public static bool ModoDesarrollo = true;
 
         public const string AOE2Name = "Age of Empires II";
 
         public const string AOE4Name = "Age of Empires IV";
 
+        public const string AOMName = "Age of Mythology";
+
         public static List<string> NombresVentanasJuegos = new List<string>() { "Age of Empires II: Definitive Edition", "Age of Empires IV", 
-            "Age of Empires II: HD Edition" };
+            "Age of Empires II: HD Edition", "Age of Mythology: Retold" };
 
         public static Dictionary<string, List<string>> TextosPausa = new Dictionary<string, List<string>> { { AOE2Name,  new List<string> 
             { "Game Paused", "Jogo Pausado", "Spiel pausiert", "Partida en pausa", "Partie mise en pause", "Partita sospesa",
-            "Permainan Dijeda", "Partida en pausa", "Gra wstrzymana", "Oyun Duraklatildi", "Van choi bi tam dung", "(F3)" } } }; // No se agregan "गेम रोका गया",  "一時停止", "게임 일시 중지", "遊戲暫停", "Пауза" "游戏暂停" porque Tesseract no reconoce estos carácteres. "Oyun Duraklatıldı", "Ván chơi bị tạm dừng" se llevan a alfabeto latino que es el reconocido por Tesseract. Para AOE2 no se incluye el paréntesis y la tecla usada para pausar (F3) para no incluirla en las verificaciones iniciales del texto con Contains.
+            "Permainan Dijeda", "Partida en pausa", "Gra wstrzymana", "Oyun Duraklatildi", "Van choi bi tam dung", "(F3)" } }, // No se agregan "गेम रोका गया",  "一時停止", "게임 일시 중지", "遊戲暫停", "Пауза" "游戏暂停" porque Tesseract no reconoce estos carácteres. "Oyun Duraklatıldı", "Ván chơi bị tạm dừng" se llevan a alfabeto latino que es el reconocido por Tesseract. Para AOE2 no se incluye el paréntesis y la tecla usada para pausar (F3) para no incluirla en las verificaciones iniciales del texto con Contains.
+            { AOMName, new List<string> { "Game Paused", "Hra pozastavena", "Spillet er sat på pause", "Spel gepauzeerd", "Peli keskeytetty", 
+                "Partie en pause", "Spiel unterbrochen", "A játék szünetel", "Partita sospesa", "Permainan Dijeda", "Spillet er satt på pause", 
+                "Gra wstrzymana", "Jogo pausado", "Partida en pausa", "Spelet är pausat", "Oyun duraklatıldı",  } } // No se agregan "Παιχνίδι σε παύση", "खेल रोका गया", "ポーズ中", "게임 일시정지", "Игра приостановлена", "游戏已暂停", "เกมหยุดชั่วคราว", "遊戲暫停", "Ván chơi tạm dừng" porque Tesseract no reconoce estos carácteres.
+        }; 
 
         public static string OtherName = "Other";
 
-        public static List<string> Juegos = new List<string>() { AOE2Name, AOE4Name, OtherName }; // Al cambiar o agregar un elemento aquí también se debe agregar en SettingsWindows.xaml.
+        public static List<string> Juegos = new List<string>() { AOE2Name, AOMName, AOE4Name, OtherName }; // Al cambiar o agregar un elemento aquí también se debe agregar en SettingsWindows.xaml.
 
         public static string DirectorioAOE2 = @"D:\Juegos\Steam\steamapps\common\AoE2DE";
 
@@ -297,10 +303,18 @@ namespace RTSHelper {
             permitirUnCarácter: false, negativo: true, blancoYNegro: true, escala: 1, luminosidad: 1, contraste: 2, InterpolationMode.NearestNeighbor,
             DImg.PixelFormat.Format8bppIndexed);
 
+        public static ParámetrosExtracción AlfaNumByNL1C2 = new ParámetrosExtracción(soloNúmeros: false,
+            permitirUnCarácter: false, negativo: false, blancoYNegro: true, escala: 1, luminosidad: 1, contraste: 2, InterpolationMode.NearestNeighbor,
+            DImg.PixelFormat.Format8bppIndexed);
+
         public static ParámetrosExtracción AlfaNumNegByNL1_5C2 = new ParámetrosExtracción(soloNúmeros: false,
             permitirUnCarácter: false, negativo: true, blancoYNegro: true, escala: 1, luminosidad: 1.5f, contraste: 2, InterpolationMode.NearestNeighbor,
             DImg.PixelFormat.Format8bppIndexed);
-        
+
+        public static ParámetrosExtracción AlfaNumNegByNL2C4 = new ParámetrosExtracción(soloNúmeros: false,
+            permitirUnCarácter: false, negativo: true, blancoYNegro: true, escala: 1, luminosidad: 2f, contraste: 4, InterpolationMode.NearestNeighbor,
+            DImg.PixelFormat.Format8bppIndexed);
+
         public enum ScreenCaptureText : int { // Por facilidad y flexibilidad se agregan todos los posibles textos en la misma enumeración. El prefijo es el nombre del juego usando _ en vez de espacios para poder filtrarlo fácilmente en opciones.
             Age_of_Empires_II_PauseF3XS, Age_of_Empires_II_PauseF3S, Age_of_Empires_II_PauseF3M, Age_of_Empires_II_PauseF3L, Age_of_Empires_II_PauseF3XL,
             Age_of_Empires_II_PauseM, Age_of_Empires_II_PauseL,
@@ -308,7 +322,8 @@ namespace RTSHelper {
             Age_of_Empires_II_Wood, Age_of_Empires_II_Food, Age_of_Empires_II_Gold, Age_of_Empires_II_Stone, Age_of_Empires_II_Population,
             Age_of_Empires_II_Maximum_Population, Age_of_Empires_II_Villagers_on_Wood, Age_of_Empires_II_Villagers_on_Food, 
             Age_of_Empires_II_Villagers_on_Gold, Age_of_Empires_II_Villagers_on_Stone, Age_of_Empires_II_Timer, Age_of_Empires_II_Speed, 
-            Age_of_Empires_II_Age, Age_of_Empires_II_Game_Start
+            Age_of_Empires_II_Age, Age_of_Empires_II_Game_Start,
+            Age_of_Mythology_Pause, Age_of_Mythology_Villagers_0_to_9, Age_of_Mythology_Villagers_10_to_99, Age_of_Mythology_Game_Start
         }
 
         public enum UIMod : int { // Nunca cambiar el nombre, se almacenan como texto en preferencias. Al agregarlo aquí también se debe agregar a UIMods y a CrearOCompletarScreenCaptureRectangles(). No se usará el nombre del juego en el nombre del mod de manera predeterminada porque es improbable que se repita en otros juegos. De todas maneras si se llegara a repetir, no hay problema porque los valores se manejan diferentes según el juego.
@@ -325,19 +340,28 @@ namespace RTSHelper {
             ScreenCaptureText.Age_of_Empires_II_Maximum_Population, ScreenCaptureText.Age_of_Empires_II_Villagers_on_Wood,
             ScreenCaptureText.Age_of_Empires_II_Villagers_on_Food, ScreenCaptureText.Age_of_Empires_II_Villagers_on_Gold,
             ScreenCaptureText.Age_of_Empires_II_Villagers_on_Stone, ScreenCaptureText.Age_of_Empires_II_Timer, ScreenCaptureText.Age_of_Empires_II_Speed,
-            ScreenCaptureText.Age_of_Empires_II_Age };
+            ScreenCaptureText.Age_of_Empires_II_Age};
+
+        public static Dictionary<ScreenCaptureText, float> RectángulosSuperioresADerechaDePanelCentradoPorEscalaUI = new Dictionary<ScreenCaptureText, float>() {
+            {  ScreenCaptureText.Age_of_Mythology_Villagers_0_to_9, 0.4195f }, { ScreenCaptureText.Age_of_Mythology_Villagers_10_to_99, 0.415f } }; //  El valor es el ancho de un panel central en el que los rectangulos RectángulosSuperioresADerechaDePanelCentradoPorEscalaUI están ubicados a la derecha de este. Se mide iniciando más o menos donde iniciarían los rectángulos de RectángulosSuperioresADerechaDePanelCentradoPorEscalaUI y se termina de ajustar su valor para que se pueda calcular correctamente la nueva X con la escala más pequeña. XRectEscalaMásPequeña = (X100% - ((AnchoFraccionalPanelCentradoAOM * (1 - %Escala))/2))
 
         public static List<ScreenCaptureText> RectángulosCentradosAfectadosPorEscalaUI = new List<ScreenCaptureText> {
             ScreenCaptureText.Age_of_Empires_II_PauseF3XS, ScreenCaptureText.Age_of_Empires_II_PauseF3S, ScreenCaptureText.Age_of_Empires_II_PauseF3M, 
             ScreenCaptureText.Age_of_Empires_II_PauseF3L, ScreenCaptureText.Age_of_Empires_II_PauseF3XL,
-            ScreenCaptureText.Age_of_Empires_II_PauseM, ScreenCaptureText.Age_of_Empires_II_PauseL,
+            ScreenCaptureText.Age_of_Empires_II_PauseM, ScreenCaptureText.Age_of_Empires_II_PauseL
+        };
+
+        public static List<ScreenCaptureText> RectángulosCentradosHorizontalmenteAfectadosPorEscalaUI = new List<ScreenCaptureText> {
+            ScreenCaptureText.Age_of_Mythology_Game_Start
         };
 
         public static List<ScreenCaptureText> RectángulosActivos = new List<ScreenCaptureText> { ScreenCaptureText.Age_of_Empires_II_PauseF3XS,
             ScreenCaptureText.Age_of_Empires_II_PauseF3S, ScreenCaptureText.Age_of_Empires_II_PauseF3M, ScreenCaptureText.Age_of_Empires_II_PauseF3L,
             ScreenCaptureText.Age_of_Empires_II_PauseF3XL, ScreenCaptureText.Age_of_Empires_II_PauseM, ScreenCaptureText.Age_of_Empires_II_PauseL,
             ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9, ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99, 
-            ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, ScreenCaptureText.Age_of_Empires_II_Game_Start }; // Los rectángulos que actualmente se están usando en el programa y deben mostrarse en los la sección de preferencias para ser poder ser personalizados por el usuario.
+            ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999, ScreenCaptureText.Age_of_Empires_II_Game_Start, 
+            ScreenCaptureText.Age_of_Mythology_Pause, ScreenCaptureText.Age_of_Mythology_Villagers_0_to_9, 
+            ScreenCaptureText.Age_of_Mythology_Villagers_10_to_99, ScreenCaptureText.Age_of_Mythology_Game_Start }; // Los rectángulos que actualmente se están usando en el programa y deben mostrarse en los la sección de preferencias para ser poder ser personalizados por el usuario.
 
         public static Dictionary<string, List<UIMod>> UIMods = new Dictionary<string, List<UIMod>> { { AOE2Name, new List<UIMod> { UIMod.No_Mod,
             UIMod.Anne_HK_Better_Resource_Panel_and_Idle_Villager_Icon, UIMod.Anne_HK_Better_Resource_Panel_TheViper_Version,
@@ -354,7 +378,7 @@ namespace RTSHelper {
 
         public static string EnlaceDonación = "http://vixark.com/donate";
 
-        public static List<string> ÓrdenesDeEjecuciónAEliminar = new List<string> { }; // A estas estrategias se les cambió el nombre por otro, y el archivo con este nombre fue sobreescrito con un TXT vacío y se quiere que sea eliminado al iniciar.
+        public static List<string> ÓrdenesDeEjecuciónAEliminar = new List<string> { "Malian Men-at-Arms and Towers by Vixark", "Constant Scouts into Knights by Vixark" }; // A estas estrategias se les cambió el nombre por otro, y el archivo con este nombre fue sobreescrito con un TXT vacío y se quiere que sea eliminado al iniciar.
 
         public static List<char> CarácteresComoImágenes = new List<char> { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '=', '%', '>', '<', '&', '$', '#', '@', '*', '_', '^', '!', '¡', '?', '¿', '\\', '/', '|' }; // Algunos carácteres se pueden también escribir como imágenes si se quiere generar una personalización especial de ese carácter. Estas imágenes de carácteres no tendrán el alto de las imágenes sino de la fuente.
 
@@ -1370,6 +1394,936 @@ namespace RTSHelper {
                 types["Type"].Add("Go Back to Work", "Action");
                 types["Type"].Add("Woodline", "Resource");
 
+            } else if (Preferencias.Game == AOMName) {
+
+                types["Type"].Add("Attack Move", "Actions");
+                types["Type"].Add("Back To Work", "Actions");
+                types["Type"].Add("Build Dock", "Actions");
+                types["Type"].Add("Build Farm", "Actions");
+                types["Type"].Add("Build Granary", "Actions");
+                types["Type"].Add("Build Lumber Camp", "Actions");
+                types["Type"].Add("Build Mining Camp", "Actions");
+                types["Type"].Add("Build Storehouse", "Actions");
+                types["Type"].Add("Delete", "Actions");
+                types["Type"].Add("Eco Nearby Gather Point", "Actions");
+                types["Type"].Add("Eject Back To Work", "Actions");
+                types["Type"].Add("Flare", "Actions");
+                types["Type"].Add("Flare Selection", "Actions");
+                types["Type"].Add("Garrison", "Actions");
+                types["Type"].Add("Gather Point", "Actions");
+                types["Type"].Add("Guard", "Actions");
+                types["Type"].Add("Livestock Return", "Actions");
+                types["Type"].Add("Mil Nearby Gather Point", "Actions");
+                types["Type"].Add("Patrol", "Actions");
+                types["Type"].Add("Repair", "Actions");
+                types["Type"].Add("Return Resources", "Actions");
+                types["Type"].Add("Seek Shelter", "Actions");
+                types["Type"].Add("Send Fishing Ship", "Actions");
+                types["Type"].Add("Send Fishing Ship To Build", "Actions");
+                types["Type"].Add("Send Heroes", "Actions");
+                types["Type"].Add("Send Military", "Actions");
+                types["Type"].Add("Send Navy", "Actions");
+                types["Type"].Add("Send Priest", "Actions");
+                types["Type"].Add("Send Priest To Build", "Actions");
+                types["Type"].Add("Send Siege", "Actions");
+                types["Type"].Add("Send Transport Ship", "Actions");
+                types["Type"].Add("Send Villagers", "Actions");
+                types["Type"].Add("Send Villagers To Build", "Actions");
+                types["Type"].Add("Stop", "Actions");
+                types["Type"].Add("Town Bell", "Actions");
+                types["Type"].Add("Ungarrison", "Actions");
+                types["Type"].Add("Attac Building", "Actions");
+                types["Type"].Add("Attack", "Actions");
+                types["Type"].Add("Attack Forbidden", "Actions");
+                types["Type"].Add("Attack Move Cursor", "Actions");
+                types["Type"].Add("Auto Assign On Dropsite", "Actions");
+                types["Type"].Add("Board", "Actions");
+                types["Type"].Add("Build", "Actions");
+                types["Type"].Add("Favor", "Actions");
+                types["Type"].Add("Fish Cursor", "Actions");
+                types["Type"].Add("Food Aggro Huntable", "Actions");
+                types["Type"].Add("Food Berryfarm", "Actions");
+                types["Type"].Add("Food Herdable", "Actions");
+                types["Type"].Add("Food Huntable", "Actions");
+                types["Type"].Add("Garrison Cursor", "Actions");
+                types["Type"].Add("Godpower", "Actions");
+                types["Type"].Add("Godpower Forbidden", "Actions");
+                types["Type"].Add("Gold", "Actions");
+                types["Type"].Add("Gold Trade", "Actions");
+                types["Type"].Add("Heal", "Actions");
+                types["Type"].Add("Herdable", "Actions");
+                types["Type"].Add("Priest Empower", "Actions");
+                types["Type"].Add("Rally", "Actions");
+                types["Type"].Add("Relic Dropoff", "Actions");
+                types["Type"].Add("Relic Pickup", "Actions");
+                types["Type"].Add("Repair Cursor", "Actions");
+                types["Type"].Add("Res Drop All", "Actions");
+                types["Type"].Add("Res Drop Food", "Actions");
+                types["Type"].Add("Res Drop Gold", "Actions");
+                types["Type"].Add("Res Drop Other", "Actions");
+                types["Type"].Add("Res Drop Wood", "Actions");
+                types["Type"].Add("Standard", "Actions");
+                types["Type"].Add("Unboard", "Actions");
+                types["Type"].Add("Walk", "Actions");
+                types["Type"].Add("Wood Gathering", "Actions");
+                types["Type"].Add("Market Buy Food", "Actions");
+                types["Type"].Add("Market Buy Wood", "Actions");
+                types["Type"].Add("Market Sell Food", "Actions");
+                types["Type"].Add("Market Sell Wood", "Actions");
+                types["Type"].Add("Mode Box", "Actions");
+                types["Type"].Add("Mode Box On", "Actions");
+                types["Type"].Add("Mode Line", "Actions");
+                types["Type"].Add("Mode Line On", "Actions");
+                types["Type"].Add("Mode Spread", "Actions");
+                types["Type"].Add("Mode Spread On", "Actions");
+                types["Type"].Add("Mode Ui Economic", "Actions");
+                types["Type"].Add("Mode Ui Military", "Actions");
+                types["Type"].Add("Mode Villager Build", "Actions");
+                types["Type"].Add("Mode Wedge", "Actions");
+                types["Type"].Add("Mode Wedge On", "Actions");
+                types["Type"].Add("Reticule Attack", "Actions");
+                types["Type"].Add("Reticule Null", "Actions");
+                types["Type"].Add("Reticule Select A", "Actions");
+                types["Type"].Add("Reticule Select B", "Actions");
+                types["Type"].Add("Stance Aggressive", "Actions");
+                types["Type"].Add("Stance Aggressive On", "Actions");
+                types["Type"].Add("Stance Defensive", "Actions");
+                types["Type"].Add("Stance Defensive On", "Actions");
+                types["Type"].Add("Stance Passive", "Actions");
+                types["Type"].Add("Stance Passive On", "Actions");
+                types["Type"].Add("Stance Stand Ground", "Actions");
+                types["Type"].Add("Stance Stand Ground On", "Actions");
+                types["Type"].Add("Temple Spawnpoint", "Actions");
+                types["Type"].Add("Wall To Gate", "Actions");
+                types["Type"].Add("Classical Age", "Ages");
+                types["Type"].Add("Heroic Age", "Ages");
+                types["Type"].Add("Mythic Age", "Ages");
+                types["Type"].Add("Score Age 1", "Ages");
+                types["Type"].Add("Score Age 2", "Ages");
+                types["Type"].Add("Score Age 3", "Ages");
+                types["Type"].Add("Score Age 4", "Ages");
+                types["Type"].Add("Score Age 5", "Ages");
+                types["Type"].Add("Wonder Age", "Ages");
+                types["Type"].Add("Archery Range", "Buildings");
+                types["Type"].Add("Armory", "Buildings");
+                types["Type"].Add("Asgardian Hill Fort", "Buildings");
+                types["Type"].Add("Barracks", "Buildings");
+                types["Type"].Add("Citadel Center Atlantean", "Buildings");
+                types["Type"].Add("Citadel Center Egyptian", "Buildings");
+                types["Type"].Add("Citadel Center Greek", "Buildings");
+                types["Type"].Add("Citadel Center Norse", "Buildings");
+                types["Type"].Add("Columns", "Buildings");
+                types["Type"].Add("Counter Barracks", "Buildings");
+                types["Type"].Add("Dock", "Buildings");
+                types["Type"].Add("Dwarven Armory", "Buildings");
+                types["Type"].Add("Economic Guild", "Buildings");
+                types["Type"].Add("Farm", "Buildings");
+                types["Type"].Add("Fortress", "Buildings");
+                types["Type"].Add("Fountain", "Buildings");
+                types["Type"].Add("Gate", "Buildings");
+                types["Type"].Add("Granary", "Buildings");
+                types["Type"].Add("Great Hall", "Buildings");
+                types["Type"].Add("Healing Spring Building", "Buildings");
+                types["Type"].Add("Hesperides Building", "Buildings");
+                types["Type"].Add("Hill Fort", "Buildings");
+                types["Type"].Add("House", "Buildings");
+                types["Type"].Add("Lighthouse", "Buildings");
+                types["Type"].Add("Longhouse", "Buildings");
+                types["Type"].Add("Lumber Camp", "Buildings");
+                types["Type"].Add("Lure Building", "Buildings");
+                types["Type"].Add("Manor", "Buildings");
+                types["Type"].Add("Market", "Buildings");
+                types["Type"].Add("Migdol Stronghold", "Buildings");
+                types["Type"].Add("Military Academy", "Buildings");
+                types["Type"].Add("Military Barracks", "Buildings");
+                types["Type"].Add("Mining Camp", "Buildings");
+                types["Type"].Add("Mirror Tower", "Buildings");
+                types["Type"].Add("Monument To Gods", "Buildings");
+                types["Type"].Add("Monument To Pharaohs", "Buildings");
+                types["Type"].Add("Monument To Priests", "Buildings");
+                types["Type"].Add("Monument To Soldiers", "Buildings");
+                types["Type"].Add("Monument To Villagers", "Buildings");
+                types["Type"].Add("Obelisk", "Buildings");
+                types["Type"].Add("Palace", "Buildings");
+                types["Type"].Add("Ruins", "Buildings");
+                types["Type"].Add("Sentry Tower", "Buildings");
+                types["Type"].Add("Siege Works", "Buildings");
+                types["Type"].Add("Sign", "Buildings");
+                types["Type"].Add("Sky Passage", "Buildings");
+                types["Type"].Add("Stable", "Buildings");
+                types["Type"].Add("Storehouse", "Buildings");
+                types["Type"].Add("Tartarian Gate Building", "Buildings");
+                types["Type"].Add("Temple", "Buildings");
+                types["Type"].Add("Titan Gate", "Buildings");
+                types["Type"].Add("Town Center Atlantean", "Buildings");
+                types["Type"].Add("Town Center Egyptian", "Buildings");
+                types["Type"].Add("Town Center Greek", "Buildings");
+                types["Type"].Add("Town Center Norse", "Buildings");
+                types["Type"].Add("Village Center Atlantean", "Buildings");
+                types["Type"].Add("Village Center Egyptian", "Buildings");
+                types["Type"].Add("Village Center Greek", "Buildings");
+                types["Type"].Add("Village Center Norse", "Buildings");
+                types["Type"].Add("Wonder", "Buildings");
+                types["Type"].Add("Wood Pile", "Buildings");
+                types["Type"].Add("Wooden Wall", "Buildings");
+                types["Type"].Add("Ancestors", "God Powers");
+                types["Type"].Add("Asgardian Bastion", "God Powers");
+                types["Type"].Add("Bolt", "God Powers");
+                types["Type"].Add("Bronze", "God Powers");
+                types["Type"].Add("Carnivora", "God Powers");
+                types["Type"].Add("Ceasefire", "God Powers");
+                types["Type"].Add("Chaos", "God Powers");
+                types["Type"].Add("Citadel", "God Powers");
+                types["Type"].Add("Curse", "God Powers");
+                types["Type"].Add("Deconstruction", "God Powers");
+                types["Type"].Add("Dwarven Mine", "God Powers");
+                types["Type"].Add("Earthquake", "God Powers");
+                types["Type"].Add("Eclipse", "God Powers");
+                types["Type"].Add("Fimbulwinter", "God Powers");
+                types["Type"].Add("Flaming Weapons", "God Powers");
+                types["Type"].Add("Forest Fire", "God Powers");
+                types["Type"].Add("Frost", "God Powers");
+                types["Type"].Add("Gaia Forest", "God Powers");
+                types["Type"].Add("Great Hunt", "God Powers");
+                types["Type"].Add("Gullinbursti", "God Powers");
+                types["Type"].Add("Healing Spring", "God Powers");
+                types["Type"].Add("Hesperides", "God Powers");
+                types["Type"].Add("Implode", "God Powers");
+                types["Type"].Add("Inferno", "God Powers");
+                types["Type"].Add("Lightning Storm", "God Powers");
+                types["Type"].Add("Locust Swarm", "God Powers");
+                types["Type"].Add("Lure", "God Powers");
+                types["Type"].Add("Meteor", "God Powers");
+                types["Type"].Add("Nidhogg", "God Powers");
+                types["Type"].Add("Pestilence", "God Powers");
+                types["Type"].Add("Plague Of Serpents", "God Powers");
+                types["Type"].Add("Plenty Vault", "God Powers");
+                types["Type"].Add("Prosperity", "God Powers");
+                types["Type"].Add("Ragnarok", "God Powers");
+                types["Type"].Add("Rain", "God Powers");
+                types["Type"].Add("Restoration", "God Powers");
+                types["Type"].Add("Sentinel", "God Powers");
+                types["Type"].Add("Shifting Sands", "God Powers");
+                types["Type"].Add("Shockwave", "God Powers");
+                types["Type"].Add("Son Of Osiris", "God Powers");
+                types["Type"].Add("Spider Lair", "God Powers");
+                types["Type"].Add("Spy", "God Powers");
+                types["Type"].Add("Tartarian Gate", "God Powers");
+                types["Type"].Add("Tempest", "God Powers");
+                types["Type"].Add("Tornado", "God Powers");
+                types["Type"].Add("Traitor", "God Powers");
+                types["Type"].Add("Undermine", "God Powers");
+                types["Type"].Add("Underworld Passage", "God Powers");
+                types["Type"].Add("Valor", "God Powers");
+                types["Type"].Add("Vision", "God Powers");
+                types["Type"].Add("Vortex", "God Powers");
+                types["Type"].Add("Walking Woods", "God Powers");
+                types["Type"].Add("Aegir", "Gods");
+                types["Type"].Add("Anubis", "Gods");
+                types["Type"].Add("Aphrodite Beta", "Gods");
+                types["Type"].Add("Aphrodite", "Gods");
+                types["Type"].Add("Apollo Beta", "Gods");
+                types["Type"].Add("Apollo", "Gods");
+                types["Type"].Add("Ares", "Gods");
+                types["Type"].Add("Artemis", "Gods");
+                types["Type"].Add("Athena Beta", "Gods");
+                types["Type"].Add("Athena", "Gods");
+                types["Type"].Add("Atlas", "Gods");
+                types["Type"].Add("Baldr Beta", "Gods");
+                types["Type"].Add("Baldr", "Gods");
+                types["Type"].Add("Bast", "Gods");
+                types["Type"].Add("Bragi", "Gods");
+                types["Type"].Add("Dionysus Beta", "Gods");
+                types["Type"].Add("Dionysus", "Gods");
+                types["Type"].Add("Forseti", "Gods");
+                types["Type"].Add("Freyja Beta", "Gods");
+                types["Type"].Add("Freyja", "Gods");
+                types["Type"].Add("Freyr", "Gods");
+                types["Type"].Add("Gaia Custom", "Gods");
+                types["Type"].Add("Gaia", "Gods");
+                types["Type"].Add("Hades", "Gods");
+                types["Type"].Add("Heimdall", "Gods");
+                types["Type"].Add("Hekate", "Gods");
+                types["Type"].Add("Hel", "Gods");
+                types["Type"].Add("Helios", "Gods");
+                types["Type"].Add("Hephaestus", "Gods");
+                types["Type"].Add("Hera", "Gods");
+                types["Type"].Add("Hermes Beta", "Gods");
+                types["Type"].Add("Hermes", "Gods");
+                types["Type"].Add("Horus", "Gods");
+                types["Type"].Add("Hyperion", "Gods");
+                types["Type"].Add("Isis", "Gods");
+                types["Type"].Add("Kronos", "Gods");
+                types["Type"].Add("Leto Beta", "Gods");
+                types["Type"].Add("Leto", "Gods");
+                types["Type"].Add("Loki Beta", "Gods");
+                types["Type"].Add("Loki", "Gods");
+                types["Type"].Add("Nephthys Beta", "Gods");
+                types["Type"].Add("Nephthys", "Gods");
+                types["Type"].Add("Njord", "Gods");
+                types["Type"].Add("Oceanus Beta", "Gods");
+                types["Type"].Add("Oceanus", "Gods");
+                types["Type"].Add("Odin", "Gods");
+                types["Type"].Add("Oranos Beta", "Gods");
+                types["Type"].Add("Oranos", "Gods");
+                types["Type"].Add("Osiris", "Gods");
+                types["Type"].Add("Poseidon Beta", "Gods");
+                types["Type"].Add("Poseidon", "Gods");
+                types["Type"].Add("Prometheus Beta", "Gods");
+                types["Type"].Add("Prometheus", "Gods");
+                types["Type"].Add("Ptah", "Gods");
+                types["Type"].Add("Ra", "Gods");
+                types["Type"].Add("Rheia Beta", "Gods");
+                types["Type"].Add("Rheia", "Gods");
+                types["Type"].Add("Sekhmet", "Gods");
+                types["Type"].Add("Set Beta", "Gods");
+                types["Type"].Add("Set", "Gods");
+                types["Type"].Add("Skadi", "Gods");
+                types["Type"].Add("Sobek", "Gods");
+                types["Type"].Add("Theia Beta", "Gods");
+                types["Type"].Add("Theia", "Gods");
+                types["Type"].Add("Thor Beta", "Gods");
+                types["Type"].Add("Thor", "Gods");
+                types["Type"].Add("Thoth", "Gods");
+                types["Type"].Add("Tyr", "Gods");
+                types["Type"].Add("Ullr", "Gods");
+                types["Type"].Add("Vidar", "Gods");
+                types["Type"].Add("Zeus Beta", "Gods");
+                types["Type"].Add("Zeus", "Gods");
+                types["Type"].Add("Acropolis", "Maps");
+                types["Type"].Add("Air", "Maps");
+                types["Type"].Add("Alfheim", "Maps");
+                types["Type"].Add("All Maps", "Maps");
+                types["Type"].Add("Anatolia", "Maps");
+                types["Type"].Add("Archipelago", "Maps");
+                types["Type"].Add("Arena", "Maps");
+                types["Type"].Add("Black Sea", "Maps");
+                types["Type"].Add("Blue Lagoon", "Maps");
+                types["Type"].Add("Elysium", "Maps");
+                types["Type"].Add("Erebus", "Maps");
+                types["Type"].Add("Ghost Lake", "Maps");
+                types["Type"].Add("Giza", "Maps");
+                types["Type"].Add("Gold Rush", "Maps");
+                types["Type"].Add("Highland", "Maps");
+                types["Type"].Add("Ironwood", "Maps");
+                types["Type"].Add("Islands", "Maps");
+                types["Type"].Add("Jotunheim", "Maps");
+                types["Type"].Add("Kerlaugar", "Maps");
+                types["Type"].Add("Land Unknown", "Maps");
+                types["Type"].Add("Mapthumb Land", "Maps");
+                types["Type"].Add("Mapthumb Navy", "Maps");
+                types["Type"].Add("Mapthumb Standard", "Maps");
+                types["Type"].Add("Marsh", "Maps");
+                types["Type"].Add("Mediterranean", "Maps");
+                types["Type"].Add("Megalopolis", "Maps");
+                types["Type"].Add("Midgard", "Maps");
+                types["Type"].Add("Mirage", "Maps");
+                types["Type"].Add("Mirkwood", "Maps");
+                types["Type"].Add("Mount Olympus", "Maps");
+                types["Type"].Add("Muspellheim", "Maps");
+                types["Type"].Add("Nile Shallows", "Maps");
+                types["Type"].Add("Nomad", "Maps");
+                types["Type"].Add("Oasis", "Maps");
+                types["Type"].Add("River Nile", "Maps");
+                types["Type"].Add("River Styx", "Maps");
+                types["Type"].Add("Savannah", "Maps");
+                types["Type"].Add("Sea Of Worms", "Maps");
+                types["Type"].Add("Team Migration", "Maps");
+                types["Type"].Add("The Unknown", "Maps");
+                types["Type"].Add("Tiny", "Maps");
+                types["Type"].Add("Treasury Black Map", "Maps");
+                types["Type"].Add("Tundra", "Maps");
+                types["Type"].Add("Valley Of Kings", "Maps");
+                types["Type"].Add("Vinlandsaga", "Maps");
+                types["Type"].Add("Watering Hole", "Maps");
+                types["Type"].Add("Standard Difficulty", "Others");
+                types["Type"].Add("Moderate Difficulty", "Others");
+                types["Type"].Add("Hard Difficulty", "Others");
+                types["Type"].Add("Titan Difficulty", "Others");
+                types["Type"].Add("Area", "Others");
+                types["Type"].Add("Crush Armor", "Others");
+                types["Type"].Add("Crush Dmg", "Others");
+                types["Type"].Add("Divine Dmg", "Others");
+                types["Type"].Add("Garrison Stat", "Others");
+                types["Type"].Add("Hack Armor", "Others");
+                types["Type"].Add("Hack Dmg", "Others");
+                types["Type"].Add("Hp", "Others");
+                types["Type"].Add("Hp Regen", "Others");
+                types["Type"].Add("Pierce Armor", "Others");
+                types["Type"].Add("Pierce Dmg", "Others");
+                types["Type"].Add("Projectile", "Others");
+                types["Type"].Add("Range", "Others");
+                types["Type"].Add("Rof", "Others");
+                types["Type"].Add("Speed", "Others");
+                types["Type"].Add("Time", "Others");
+                types["Type"].Add("Arctic Wolf", "Resources");
+                types["Type"].Add("Aurochs", "Resources");
+                types["Type"].Add("Baboon", "Resources");
+                types["Type"].Add("Bear", "Resources");
+                types["Type"].Add("Berry Bush", "Resources");
+                types["Type"].Add("Boar", "Resources");
+                types["Type"].Add("Caribou", "Resources");
+                types["Type"].Add("Chicken", "Resources");
+                types["Type"].Add("Cow", "Resources");
+                types["Type"].Add("Crocodile", "Resources");
+                types["Type"].Add("Crowned Crane", "Resources");
+                types["Type"].Add("Deer", "Resources");
+                types["Type"].Add("Elephant", "Resources");
+                types["Type"].Add("Elk", "Resources");
+                types["Type"].Add("Fish", "Resources");
+                types["Type"].Add("Gazelle", "Resources");
+                types["Type"].Add("Giraffe", "Resources");
+                types["Type"].Add("Goat", "Resources");
+                types["Type"].Add("Gold Mine", "Resources");
+                types["Type"].Add("Hippopotamus", "Resources");
+                types["Type"].Add("Hyena", "Resources");
+                types["Type"].Add("Lion", "Resources");
+                types["Type"].Add("Monkey", "Resources");
+                types["Type"].Add("Monkey Raft", "Resources");
+                types["Type"].Add("Pig", "Resources");
+                types["Type"].Add("Polar Bear", "Resources");
+                types["Type"].Add("Res Favor", "Resources");
+                types["Type"].Add("Res Food", "Resources");
+                types["Type"].Add("Res Gold", "Resources");
+                types["Type"].Add("Res Military", "Resources");
+                types["Type"].Add("Res Pop", "Resources");
+                types["Type"].Add("Res Population", "Resources");
+                types["Type"].Add("Res Wood", "Resources");
+                types["Type"].Add("Rhinoceros", "Resources");
+                types["Type"].Add("Settlement", "Resources");
+                types["Type"].Add("Summoning", "Resources");
+                types["Type"].Add("Tamarisk", "Resources");
+                types["Type"].Add("Cypress", "Resources");
+                types["Type"].Add("Cypress Snow", "Resources");
+                types["Type"].Add("Gaia Tree", "Resources");
+                types["Type"].Add("Hades Tree", "Resources");
+                types["Type"].Add("Marsh Tree", "Resources");
+                types["Type"].Add("Oak Autumn", "Resources");
+                types["Type"].Add("Oak", "Resources");
+                types["Type"].Add("Olive", "Resources");
+                types["Type"].Add("Palm", "Resources");
+                types["Type"].Add("Straggler", "Resources");
+                types["Type"].Add("Pine Dead", "Resources");
+                types["Type"].Add("Pine", "Resources");
+                types["Type"].Add("Pine Snow", "Resources");
+                types["Type"].Add("Savannah Tree", "Resources");
+                types["Type"].Add("Tundra Tree", "Resources");
+                types["Type"].Add("Tundra Snow", "Resources");
+                types["Type"].Add("Walrus", "Resources");
+                types["Type"].Add("Water Buffalo", "Resources");
+                types["Type"].Add("Wolf", "Resources");
+                types["Type"].Add("Zebra", "Resources");
+                types["Type"].Add("Adze Of Wepwawet", "Technologies");
+                types["Type"].Add("Aegis Shield", "Technologies");
+                types["Type"].Add("Alluvial Clay", "Technologies");
+                types["Type"].Add("Ambassadors", "Technologies");
+                types["Type"].Add("Anastrophe", "Technologies");
+                types["Type"].Add("Archaic Age", "Technologies");
+                types["Type"].Add("Architects", "Technologies");
+                types["Type"].Add("Arctic Gale", "Technologies");
+                types["Type"].Add("Arctic Winds", "Technologies");
+                types["Type"].Add("Argive Patronage", "Technologies");
+                types["Type"].Add("Argonauts", "Technologies");
+                types["Type"].Add("Asper Blood", "Technologies");
+                types["Type"].Add("Atef Crown", "Technologies");
+                types["Type"].Add("Avenging Spirit", "Technologies");
+                types["Type"].Add("Axe Of Vengeance", "Technologies");
+                types["Type"].Add("Ballista Tower", "Technologies");
+                types["Type"].Add("Ballistics", "Technologies");
+                types["Type"].Add("Beast Slayer", "Technologies");
+                types["Type"].Add("Berserkergang", "Technologies");
+                types["Type"].Add("Bite Of The Shark", "Technologies");
+                types["Type"].Add("Boiling Oil", "Technologies");
+                types["Type"].Add("Bone Bow", "Technologies");
+                types["Type"].Add("Book Of Thoth", "Technologies");
+                types["Type"].Add("Bow Saw", "Technologies");
+                types["Type"].Add("Bravery", "Technologies");
+                types["Type"].Add("Bronze Armor", "Technologies");
+                types["Type"].Add("Bronze Shields", "Technologies");
+                types["Type"].Add("Bronze Wall", "Technologies");
+                types["Type"].Add("Bronze Weapons", "Technologies");
+                types["Type"].Add("Burning Pitch", "Technologies");
+                types["Type"].Add("Call Of Valhalla", "Technologies");
+                types["Type"].Add("Carpenters", "Technologies");
+                types["Type"].Add("Carrier Pigeons", "Technologies");
+                types["Type"].Add("Cave Troll", "Technologies");
+                types["Type"].Add("Celerity", "Technologies");
+                types["Type"].Add("Champion Archers", "Technologies");
+                types["Type"].Add("Champion Axemen", "Technologies");
+                types["Type"].Add("Champion Camel Riders", "Technologies");
+                types["Type"].Add("Champion Cavalry", "Technologies");
+                types["Type"].Add("Champion Chariot Archers", "Technologies");
+                types["Type"].Add("Champion Infantry", "Technologies");
+                types["Type"].Add("Champion Infantry Norse", "Technologies");
+                types["Type"].Add("Champion Slingers", "Technologies");
+                types["Type"].Add("Champion Spearmen", "Technologies");
+                types["Type"].Add("Champion War Elephants", "Technologies");
+                types["Type"].Add("Champion Warships", "Technologies");
+                types["Type"].Add("Channels", "Technologies");
+                types["Type"].Add("Chthonic Rites", "Technologies");
+                types["Type"].Add("Citadel Wall", "Technologies");
+                types["Type"].Add("Clairvoyance", "Technologies");
+                types["Type"].Add("Coinage", "Technologies");
+                types["Type"].Add("Conscript Barracks Soldiers", "Technologies");
+                types["Type"].Add("Conscript Cavalry", "Technologies");
+                types["Type"].Add("Conscript Counter Soldiers", "Technologies");
+                types["Type"].Add("Conscript Great Hall Soldiers", "Technologies");
+                types["Type"].Add("Conscript Hill Fort Soldiers", "Technologies");
+                types["Type"].Add("Conscript Infantry", "Technologies");
+                types["Type"].Add("Conscript Longhouse Soldiers", "Technologies");
+                types["Type"].Add("Conscript Mainline Soldiers", "Technologies");
+                types["Type"].Add("Conscript Migdol Soldiers", "Technologies");
+                types["Type"].Add("Conscript Palace Soldiers", "Technologies");
+                types["Type"].Add("Conscript Ranged Soldiers", "Technologies");
+                types["Type"].Add("Conscript Sailors", "Technologies");
+                types["Type"].Add("Copper Armor", "Technologies");
+                types["Type"].Add("Copper Shields", "Technologies");
+                types["Type"].Add("Copper Weapons", "Technologies");
+                types["Type"].Add("Crenellations", "Technologies");
+                types["Type"].Add("Crimson Linen", "Technologies");
+                types["Type"].Add("Criosphinx", "Technologies");
+                types["Type"].Add("Crocodilopolis", "Technologies");
+                types["Type"].Add("Daktyloi", "Technologies");
+                types["Type"].Add("Dark Water", "Technologies");
+                types["Type"].Add("Daughters Of The Sea", "Technologies");
+                types["Type"].Add("Deimos Sword Of Dread", "Technologies");
+                types["Type"].Add("Desert Wind", "Technologies");
+                types["Type"].Add("Devotees Of Atlas", "Technologies");
+                types["Type"].Add("Dionysia", "Technologies");
+                types["Type"].Add("Disablot", "Technologies");
+                types["Type"].Add("Divine Blood", "Technologies");
+                types["Type"].Add("Draft Horses", "Technologies");
+                types["Type"].Add("Dragonscale Shields", "Technologies");
+                types["Type"].Add("Dwarven Auger", "Technologies");
+                types["Type"].Add("Dwarven Breastplate", "Technologies");
+                types["Type"].Add("Dwarven Weapons", "Technologies");
+                types["Type"].Add("Electrum Bullets", "Technologies");
+                types["Type"].Add("Empyrean Speed", "Technologies");
+                types["Type"].Add("Enclosed Deck", "Technologies");
+                types["Type"].Add("Engineers", "Technologies");
+                types["Type"].Add("Enyos Bow Of Horror", "Technologies");
+                types["Type"].Add("Eyes In The Forest", "Technologies");
+                types["Type"].Add("Face Of The Gorgon", "Technologies");
+                types["Type"].Add("Feasts Of Renown", "Technologies");
+                types["Type"].Add("Feet Of The Jackal", "Technologies");
+                types["Type"].Add("Flames Of Typhon", "Technologies");
+                types["Type"].Add("Flood Control", "Technologies");
+                types["Type"].Add("Flood Of The Nile", "Technologies");
+                types["Type"].Add("Force Of The West Wind", "Technologies");
+                types["Type"].Add("Forge Of Olympus", "Technologies");
+                types["Type"].Add("Fortified Town Center", "Technologies");
+                types["Type"].Add("Fortified Wall Egyptian", "Technologies");
+                types["Type"].Add("Fortified Wall Greek", "Technologies");
+                types["Type"].Add("Freyrs Gift", "Technologies");
+                types["Type"].Add("Frontline Heroics", "Technologies");
+                types["Type"].Add("Funeral Barge", "Technologies");
+                types["Type"].Add("Funeral Rites", "Technologies");
+                types["Type"].Add("Fury Of The Fallen", "Technologies");
+                types["Type"].Add("Gemini", "Technologies");
+                types["Type"].Add("Gjallarhorn", "Technologies");
+                types["Type"].Add("Golden Apples", "Technologies");
+                types["Type"].Add("Granite Blood", "Technologies");
+                types["Type"].Add("Granite Maw", "Technologies");
+                types["Type"].Add("Grasp Of Ran", "Technologies");
+                types["Type"].Add("Greatest Of Fifty", "Technologies");
+                types["Type"].Add("Guard Tower Atlantean", "Technologies");
+                types["Type"].Add("Guard Tower Egyptian", "Technologies");
+                types["Type"].Add("Guard Tower Greek", "Technologies");
+                types["Type"].Add("Guardian Of Io", "Technologies");
+                types["Type"].Add("Hall Of Thanes", "Technologies");
+                types["Type"].Add("Halo Of The Sun", "Technologies");
+                types["Type"].Add("Hamask", "Technologies");
+                types["Type"].Add("Hammer Of Thunder", "Technologies");
+                types["Type"].Add("Hand Axe", "Technologies");
+                types["Type"].Add("Hand Of Talos", "Technologies");
+                types["Type"].Add("Hands Of The Pharaoh", "Technologies");
+                types["Type"].Add("Heart Of The Titans", "Technologies");
+                types["Type"].Add("Heavy Archers", "Technologies");
+                types["Type"].Add("Heavy Axemen", "Technologies");
+                types["Type"].Add("Heavy Camel Riders", "Technologies");
+                types["Type"].Add("Heavy Cavalry", "Technologies");
+                types["Type"].Add("Heavy Chariot Archers", "Technologies");
+                types["Type"].Add("Heavy Infantry", "Technologies");
+                types["Type"].Add("Heavy Infantry Norse", "Technologies");
+                types["Type"].Add("Heavy Slingers", "Technologies");
+                types["Type"].Add("Heavy Spearmen", "Technologies");
+                types["Type"].Add("Heavy War Elephants", "Technologies");
+                types["Type"].Add("Heavy Warships", "Technologies");
+                types["Type"].Add("Hephaestus Revenge", "Technologies");
+                types["Type"].Add("Heroic Fleet", "Technologies");
+                types["Type"].Add("Heroic Renewal", "Technologies");
+                types["Type"].Add("Hieracosphinx", "Technologies");
+                types["Type"].Add("Horns Of Consecration", "Technologies");
+                types["Type"].Add("Hunting Equipment", "Technologies");
+                types["Type"].Add("Huntress Axe", "Technologies");
+                types["Type"].Add("Husbandry", "Technologies");
+                types["Type"].Add("Iron Armor", "Technologies");
+                types["Type"].Add("Iron Shields", "Technologies");
+                types["Type"].Add("Iron Wall", "Technologies");
+                types["Type"].Add("Iron Weapons", "Technologies");
+                types["Type"].Add("Irrigation", "Technologies");
+                types["Type"].Add("Jotuns", "Technologies");
+                types["Type"].Add("Labyrinth Of Minos", "Technologies");
+                types["Type"].Add("Lance Of Stone", "Technologies");
+                types["Type"].Add("Leather Frame Shield", "Technologies");
+                types["Type"].Add("Levy Barracks Soldiers", "Technologies");
+                types["Type"].Add("Levy Cavalry", "Technologies");
+                types["Type"].Add("Levy Counter Soldiers", "Technologies");
+                types["Type"].Add("Levy Great Hall Soldiers", "Technologies");
+                types["Type"].Add("Levy Hill Fort Soldiers", "Technologies");
+                types["Type"].Add("Levy Infantry", "Technologies");
+                types["Type"].Add("Levy Longhouse Soldiers", "Technologies");
+                types["Type"].Add("Levy Mainline Soldiers", "Technologies");
+                types["Type"].Add("Levy Migdol Soldiers", "Technologies");
+                types["Type"].Add("Levy Palace Soldiers", "Technologies");
+                types["Type"].Add("Levy Ranged Soldiers", "Technologies");
+                types["Type"].Add("Long Serpent", "Technologies");
+                types["Type"].Add("Lord Of Horses", "Technologies");
+                types["Type"].Add("Masons", "Technologies");
+                types["Type"].Add("Medium Archers", "Technologies");
+                types["Type"].Add("Medium Axemen", "Technologies");
+                types["Type"].Add("Medium Cavalry", "Technologies");
+                types["Type"].Add("Medium Infantry", "Technologies");
+                types["Type"].Add("Medium Infantry Norse", "Technologies");
+                types["Type"].Add("Medium Slingers", "Technologies");
+                types["Type"].Add("Medium Spearmen", "Technologies");
+                types["Type"].Add("Medjay", "Technologies");
+                types["Type"].Add("Meteoric Iron Armor", "Technologies");
+                types["Type"].Add("Monstrous Rage", "Technologies");
+                types["Type"].Add("Mythic Rejuvenation", "Technologies");
+                types["Type"].Add("Nebty", "Technologies");
+                types["Type"].Add("Necropolis", "Technologies");
+                types["Type"].Add("New Kingdom", "Technologies");
+                types["Type"].Add("Nine Waves", "Technologies");
+                types["Type"].Add("Olympian Parentage", "Technologies");
+                types["Type"].Add("Olympian Weapons", "Technologies");
+                types["Type"].Add("Omniscience", "Technologies");
+                types["Type"].Add("Oracle", "Technologies");
+                types["Type"].Add("Orichalcum Mail", "Technologies");
+                types["Type"].Add("Orichalcum Wall", "Technologies");
+                types["Type"].Add("Perception", "Technologies");
+                types["Type"].Add("Petrification", "Technologies");
+                types["Type"].Add("Phobos Spear Of Panic", "Technologies");
+                types["Type"].Add("Pickaxe", "Technologies");
+                types["Type"].Add("Pioneer Of The Skies", "Technologies");
+                types["Type"].Add("Plow", "Technologies");
+                types["Type"].Add("Poseidons Secret", "Technologies");
+                types["Type"].Add("Prophetic Sight", "Technologies");
+                types["Type"].Add("Purse Seine", "Technologies");
+                types["Type"].Add("Quarry", "Technologies");
+                types["Type"].Add("Rampage", "Technologies");
+                types["Type"].Add("Rheias Gift", "Technologies");
+                types["Type"].Add("Rigsthula", "Technologies");
+                types["Type"].Add("Rime", "Technologies");
+                types["Type"].Add("Ring Giver", "Technologies");
+                types["Type"].Add("Ring Oath", "Technologies");
+                types["Type"].Add("Roar Of Orthus", "Technologies");
+                types["Type"].Add("Sacred Cats", "Technologies");
+                types["Type"].Add("Safeguard", "Technologies");
+                types["Type"].Add("Salt Amphora", "Technologies");
+                types["Type"].Add("Sarissa", "Technologies");
+                types["Type"].Add("Scalloped Axe", "Technologies");
+                types["Type"].Add("Secrets Of The Titans", "Technologies");
+                types["Type"].Add("Serpent Spear", "Technologies");
+                types["Type"].Add("Servants Of Glory", "Technologies");
+                types["Type"].Add("Sessrumnir", "Technologies");
+                types["Type"].Add("Shaduf", "Technologies");
+                types["Type"].Add("Shaft Mine", "Technologies");
+                types["Type"].Add("Shafts Of Plague", "Technologies");
+                types["Type"].Add("Shoulder Of Talos", "Technologies");
+                types["Type"].Add("Signal Fires", "Technologies");
+                types["Type"].Add("Silent Resolve", "Technologies");
+                types["Type"].Add("Skin Of The Rhino", "Technologies");
+                types["Type"].Add("Slings Of The Sun", "Technologies");
+                types["Type"].Add("Solar Barque", "Technologies");
+                types["Type"].Add("Sons Of Sleipnir", "Technologies");
+                types["Type"].Add("Sons Of The Sun", "Technologies");
+                types["Type"].Add("Spear Of Horus", "Technologies");
+                types["Type"].Add("Spirit Of Maat", "Technologies");
+                types["Type"].Add("Spirited Charge", "Technologies");
+                types["Type"].Add("Stone Wall Atlantean", "Technologies");
+                types["Type"].Add("Stone Wall Egyptian", "Technologies");
+                types["Type"].Add("Stone Wall Greek", "Technologies");
+                types["Type"].Add("Stone Wall Norse", "Technologies");
+                types["Type"].Add("Sun Ray", "Technologies");
+                types["Type"].Add("Sundried Mud Brick", "Technologies");
+                types["Type"].Add("Swine Array", "Technologies");
+                types["Type"].Add("Sylvan Lore", "Technologies");
+                types["Type"].Add("Tax Collectors", "Technologies");
+                types["Type"].Add("Temple Of Healing", "Technologies");
+                types["Type"].Add("Temporal Chaos", "Technologies");
+                types["Type"].Add("Theft Of Fire", "Technologies");
+                types["Type"].Add("Thracian Horses", "Technologies");
+                types["Type"].Add("Thundering Hooves", "Technologies");
+                types["Type"].Add("Thurisaz Rune", "Technologies");
+                types["Type"].Add("Titan Shield", "Technologies");
+                types["Type"].Add("Titanomachy", "Technologies");
+                types["Type"].Add("Tusks Of Apedemak", "Technologies");
+                types["Type"].Add("Twilight Of The Gods", "Technologies");
+                types["Type"].Add("Valgaldr", "Technologies");
+                types["Type"].Add("Valley Of The Kings", "Technologies");
+                types["Type"].Add("Vaults Of Erebus", "Technologies");
+                types["Type"].Add("Vikings", "Technologies");
+                types["Type"].Add("Volcanic Forge", "Technologies");
+                types["Type"].Add("Watch Tower Atlantean", "Technologies");
+                types["Type"].Add("Watch Tower Egyptian", "Technologies");
+                types["Type"].Add("Watch Tower Greek", "Technologies");
+                types["Type"].Add("Watch Tower Norse", "Technologies");
+                types["Type"].Add("Weightless Mace", "Technologies");
+                types["Type"].Add("Will Of Kronos", "Technologies");
+                types["Type"].Add("Winged Messenger", "Technologies");
+                types["Type"].Add("Winter Harvest", "Technologies");
+                types["Type"].Add("Wrath Of The Deep", "Technologies");
+                types["Type"].Add("Ydalir", "Technologies");
+                types["Type"].Add("Achilles", "Units");
+                types["Type"].Add("Ajax", "Units");
+                types["Type"].Add("Anubite", "Units");
+                types["Type"].Add("Arctic Wolf Of Set", "Units");
+                types["Type"].Add("Arcus Hero", "Units");
+                types["Type"].Add("Arcus", "Units");
+                types["Type"].Add("Argus", "Units");
+                types["Type"].Add("Atalanta", "Units");
+                types["Type"].Add("Aurochs Of Set", "Units");
+                types["Type"].Add("Automaton", "Units");
+                types["Type"].Add("Avenger", "Units");
+                types["Type"].Add("Axeman", "Units");
+                types["Type"].Add("Baboon Of Set", "Units");
+                types["Type"].Add("Ballista", "Units");
+                types["Type"].Add("Battle Boar", "Units");
+                types["Type"].Add("Bear Of Set", "Units");
+                types["Type"].Add("Behemoth", "Units");
+                types["Type"].Add("Bellerophon", "Units");
+                types["Type"].Add("Berserk", "Units");
+                types["Type"].Add("Bireme", "Units");
+                types["Type"].Add("Boar Of Set", "Units");
+                types["Type"].Add("Caladria", "Units");
+                types["Type"].Add("Camel Rider", "Units");
+                types["Type"].Add("Caravan Atlantean", "Units");
+                types["Type"].Add("Caravan Egyptian", "Units");
+                types["Type"].Add("Caravan Greek", "Units");
+                types["Type"].Add("Caravan Norse", "Units");
+                types["Type"].Add("Carcinos", "Units");
+                types["Type"].Add("Caribou Of Set", "Units");
+                types["Type"].Add("Carnivora Unit", "Units");
+                types["Type"].Add("Catapult", "Units");
+                types["Type"].Add("Centaur", "Units");
+                types["Type"].Add("Centimanus", "Units");
+                types["Type"].Add("Chariot Archer", "Units");
+                types["Type"].Add("Cheiroballista Hero", "Units");
+                types["Type"].Add("Cheiroballista", "Units");
+                types["Type"].Add("Chicken Of Set", "Units");
+                types["Type"].Add("Chimera", "Units");
+                types["Type"].Add("Chiron", "Units");
+                types["Type"].Add("Colossus", "Units");
+                types["Type"].Add("Contarius Hero", "Units");
+                types["Type"].Add("Contarius", "Units");
+                types["Type"].Add("Crocodile Of Set", "Units");
+                types["Type"].Add("Crowned Crane Of Set", "Units");
+                types["Type"].Add("Cyclops", "Units");
+                types["Type"].Add("Deer Of Set", "Units");
+                types["Type"].Add("Destroyer Hero", "Units");
+                types["Type"].Add("Destroyer", "Units");
+                types["Type"].Add("Dragon Ship", "Units");
+                types["Type"].Add("Draugr", "Units");
+                types["Type"].Add("Dreki", "Units");
+                types["Type"].Add("Dryad", "Units");
+                types["Type"].Add("Einheri", "Units");
+                types["Type"].Add("Elephant Of Set", "Units");
+                types["Type"].Add("Elk Of Set", "Units");
+                types["Type"].Add("Fafnir", "Units");
+                types["Type"].Add("Fanatic Hero", "Units");
+                types["Type"].Add("Fanatic", "Units");
+                types["Type"].Add("Fenris Wolf Brood", "Units");
+                types["Type"].Add("Fimbulwinter Wolf", "Units");
+                types["Type"].Add("Fire Giant", "Units");
+                types["Type"].Add("Fire Ship", "Units");
+                types["Type"].Add("Fire Siphon", "Units");
+                types["Type"].Add("Fishing Ship Atlantean", "Units");
+                types["Type"].Add("Fishing Ship Egyptian", "Units");
+                types["Type"].Add("Fishing Ship Greek", "Units");
+                types["Type"].Add("Fishing Ship Norse", "Units");
+                types["Type"].Add("Frost Giant", "Units");
+                types["Type"].Add("Gastraphetoros", "Units");
+                types["Type"].Add("Gazelle Of Set", "Units");
+                types["Type"].Add("Giraffe Of Set", "Units");
+                types["Type"].Add("Godi", "Units");
+                types["Type"].Add("Gullinbursti Unit", "Units");
+                types["Type"].Add("Hades Shade", "Units");
+                types["Type"].Add("Helepolis", "Units");
+                types["Type"].Add("Heracles", "Units");
+                types["Type"].Add("Hero Of Ragnarok Dwarf", "Units");
+                types["Type"].Add("Hero Of Ragnarok", "Units");
+                types["Type"].Add("Hersir", "Units");
+                types["Type"].Add("Hetairos", "Units");
+                types["Type"].Add("Hippeus", "Units");
+                types["Type"].Add("Hippocampus", "Units");
+                types["Type"].Add("Hippolyta", "Units");
+                types["Type"].Add("Hippopotamus Of Set", "Units");
+                types["Type"].Add("Hirdman", "Units");
+                types["Type"].Add("Hoplite", "Units");
+                types["Type"].Add("Huskarl", "Units");
+                types["Type"].Add("Hydra", "Units");
+                types["Type"].Add("Hyena Of Set", "Units");
+                types["Type"].Add("Hypaspist", "Units");
+                types["Type"].Add("Jarl", "Units");
+                types["Type"].Add("Jason", "Units");
+                types["Type"].Add("Jormun Elver", "Units");
+                types["Type"].Add("Juggernaut", "Units");
+                types["Type"].Add("Katapeltes Hero", "Units");
+                types["Type"].Add("Katapeltes", "Units");
+                types["Type"].Add("Kataskopos", "Units");
+                types["Type"].Add("Kebenit", "Units");
+                types["Type"].Add("Kraken", "Units");
+                types["Type"].Add("Lampades", "Units");
+                types["Type"].Add("Leviathan", "Units");
+                types["Type"].Add("Lion Of Set", "Units");
+                types["Type"].Add("Longboat", "Units");
+                types["Type"].Add("Lost Ship", "Units");
+                types["Type"].Add("Man O War", "Units");
+                types["Type"].Add("Manticore", "Units");
+                types["Type"].Add("Medusa", "Units");
+                types["Type"].Add("Mercenary Cavalry", "Units");
+                types["Type"].Add("Mercenary", "Units");
+                types["Type"].Add("Militia", "Units");
+                types["Type"].Add("Minion", "Units");
+                types["Type"].Add("Minotaur", "Units");
+                types["Type"].Add("Monkey Of Set", "Units");
+                types["Type"].Add("Mountain Giant", "Units");
+                types["Type"].Add("Mummy", "Units");
+                types["Type"].Add("Murmillo Hero", "Units");
+                types["Type"].Add("Murmillo", "Units");
+                types["Type"].Add("Myrmidon", "Units");
+                types["Type"].Add("Nemean Lion", "Units");
+                types["Type"].Add("Nereid", "Units");
+                types["Type"].Add("Nidhogg Unit", "Units");
+                types["Type"].Add("Odysseus", "Units");
+                types["Type"].Add("Oracle Hero", "Units");
+                types["Type"].Add("Oracle Unit", "Units");
+                types["Type"].Add("Ox Cart", "Units");
+                types["Type"].Add("Pegasus", "Units");
+                types["Type"].Add("Peltast", "Units");
+                types["Type"].Add("Pentekonter", "Units");
+                types["Type"].Add("Perseus", "Units");
+                types["Type"].Add("Petrobolos", "Units");
+                types["Type"].Add("Petsuchos", "Units");
+                types["Type"].Add("Pharaoh", "Units");
+                types["Type"].Add("Phoenix Egg", "Units");
+                types["Type"].Add("Phoenix", "Units");
+                types["Type"].Add("Polar Bear Of Set", "Units");
+                types["Type"].Add("Polyphemus", "Units");
+                types["Type"].Add("Portable Ram", "Units");
+                types["Type"].Add("Priest", "Units");
+                types["Type"].Add("Prodromos", "Units");
+                types["Type"].Add("Promethean", "Units");
+                types["Type"].Add("Promethean Offspring", "Units");
+                types["Type"].Add("Raiding Cavalry", "Units");
+                types["Type"].Add("Ramming Galley", "Units");
+                types["Type"].Add("Raven", "Units");
+                types["Type"].Add("Rhinoceros Of Set", "Units");
+                types["Type"].Add("Roc", "Units");
+                types["Type"].Add("Rock Giant", "Units");
+                types["Type"].Add("Satyr", "Units");
+                types["Type"].Add("Scarab", "Units");
+                types["Type"].Add("Scorpion Man", "Units");
+                types["Type"].Add("Scylla", "Units");
+                types["Type"].Add("Sea Snake", "Units");
+                types["Type"].Add("Sentinel Unit", "Units");
+                types["Type"].Add("Serpent", "Units");
+                types["Type"].Add("Servant", "Units");
+                types["Type"].Add("Siege Bireme", "Units");
+                types["Type"].Add("Siege Tower", "Units");
+                types["Type"].Add("Slinger", "Units");
+                types["Type"].Add("Son Of Osiris Unit", "Units");
+                types["Type"].Add("Spearman", "Units");
+                types["Type"].Add("Sphinx", "Units");
+                types["Type"].Add("Spider Egg", "Units");
+                types["Type"].Add("Stymphalian Bird", "Units");
+                types["Type"].Add("Tartarian Spawn", "Units");
+                types["Type"].Add("The Argo", "Units");
+                types["Type"].Add("Theseus", "Units");
+                types["Type"].Add("Throwing Axeman", "Units");
+                types["Type"].Add("Titan Atlantean", "Units");
+                types["Type"].Add("Titan Egyptian", "Units");
+                types["Type"].Add("Titan Greek", "Units");
+                types["Type"].Add("Titan Norse", "Units");
+                types["Type"].Add("Toxotes", "Units");
+                types["Type"].Add("Transport Ship Atlantean", "Units");
+                types["Type"].Add("Transport Ship Egyptian", "Units");
+                types["Type"].Add("Transport Ship Greek", "Units");
+                types["Type"].Add("Transport Ship Norse", "Units");
+                types["Type"].Add("Trireme", "Units");
+                types["Type"].Add("Troll", "Units");
+                types["Type"].Add("Turma Hero", "Units");
+                types["Type"].Add("Turma", "Units");
+                types["Type"].Add("Archer", "Units");
+                types["Type"].Add("Archer Ship", "Units");
+                types["Type"].Add("Building", "Units");
+                types["Type"].Add("Cavalry", "Units");
+                types["Type"].Add("Close Combat Ship", "Units");
+                types["Type"].Add("Flying Unit", "Units");
+                types["Type"].Add("Hero", "Units");
+                types["Type"].Add("Human Soldier", "Units");
+                types["Type"].Add("Infantry", "Units");
+                types["Type"].Add("Myth Unit", "Units");
+                types["Type"].Add("Ship", "Units");
+                types["Type"].Add("Siege Ship", "Units");
+                types["Type"].Add("Siege Weapon", "Units");
+                types["Type"].Add("Titan", "Units");
+                types["Type"].Add("Tower", "Units");
+                types["Type"].Add("Villager", "Units");
+                types["Type"].Add("Wall", "Units");
+                types["Type"].Add("Valkyrie", "Units");
+                types["Type"].Add("Villager Atlantean Hero", "Units");
+                types["Type"].Add("Villager Atlantean", "Units");
+                types["Type"].Add("Villager Dwarf", "Units");
+                types["Type"].Add("Villager Egyptian", "Units");
+                types["Type"].Add("Villager Greek", "Units");
+                types["Type"].Add("Villager Norse", "Units");
+                types["Type"].Add("Wadjet", "Units");
+                types["Type"].Add("Walking Woods Unit", "Units");
+                types["Type"].Add("Walrus Of Set", "Units");
+                types["Type"].Add("War Barge", "Units");
+                types["Type"].Add("War Elephant", "Units");
+                types["Type"].Add("War Turtle", "Units");
+                types["Type"].Add("Water Buffalo Of Set", "Units");
+                types["Type"].Add("Water Carnivora", "Units");
+                types["Type"].Add("Wolf Of Set", "Units");
+                types["Type"].Add("Zebra Of Set", "Units");
+                types["Type"].Add("Auto Scout Ability", "Abilities");
+                types["Type"].Add("Idle", "Others");
+                types["Type"].Add("1S", "Other");
+                types["Type"].Add("2S", "Other");
+                types["Type"].Add("3S", "Other");
+                types["Type"].Add("4S", "Other");
+                types["Type"].Add("5S", "Other");
+                types["Type"].Add("6S", "Other");
+                types["Type"].Add("7S", "Other");
+                types["Type"].Add("8S", "Other");
+                types["Type"].Add("9S", "Other");
+                types["Type"].Add("10S", "Other");
+                types["Type"].Add("Less Than", "Other");
+                types["Type"].Add("Open Square Bracket", "Other");
+                types["Type"].Add("Close Square Bracket", "Other");
+                types["Type"].Add("0S", "Other");
+                types["Type"].Add("Up", "Other");
+                types["Type"].Add("Right", "Other");
+                types["Type"].Add("Left", "Other");
+                types["Type"].Add("Down", "Other");
+                types["Type"].Add("Question", "Other");
+                types["Type"].Add("Atlanteans", "Civilizations");
+                types["Type"].Add("Egyptians", "Civilizations");
+                types["Type"].Add("Greeks", "Civilizations");
+                types["Type"].Add("Norse", "Civilizations");
+                types["Type"].Add("Atlanteans Circular", "Civilizations");
+                types["Type"].Add("Egyptians Circular", "Civilizations");
+                types["Type"].Add("Greeks Circular", "Civilizations");
+                types["Type"].Add("Norse Circular", "Civilizations");
+                types["Type"].Add("Woodline", "Resources");
+                types["Type"].Add("Pray", "Actions");
+                types["Type"].Add("Explore", "Actions");
+                types["Type"].Add("Autoqueue", "Actions");
+                types["Type"].Add("Relic", "Relics");
+
             }
 
             File.WriteAllText(Preferencias.TypesDefaultPath, SerializarNombres(types));
@@ -2272,7 +3226,937 @@ namespace RTSHelper {
                 autogeneración("Tech: Elite", uE, upgradeElite, new List<string>(), out List<string> códigosTechToElite); // Autogeneración de los Tech: Elite.                                                                                                       // 
                 autogeneración("Upgrade to", u, upgrade, códigosUpgradeToElite, out _); // Autogeneración de los Upgrade.
 
-            } // AOE2>
+            } else if (Preferencias.Game == AOMName) {
+
+                names[NameType.Complete].Add("1", "Attack Move");
+                names[NameType.Complete].Add("2", "Back To Work");
+                names[NameType.Complete].Add("3", "Build Dock");
+                names[NameType.Complete].Add("4", "Build Farm");
+                names[NameType.Complete].Add("5", "Build Granary");
+                names[NameType.Complete].Add("6", "Build Lumber Camp");
+                names[NameType.Complete].Add("7", "Build Mining Camp");
+                names[NameType.Complete].Add("8", "Build Storehouse");
+                names[NameType.Complete].Add("9", "Delete");
+                names[NameType.Complete].Add("10", "Eco Nearby Gather Point");
+                names[NameType.Complete].Add("11", "Eject Back To Work");
+                names[NameType.Complete].Add("12", "Flare");
+                names[NameType.Complete].Add("13", "Flare Selection");
+                names[NameType.Complete].Add("14", "Garrison"); names[NameType.Abbreviation].Add("14", "GRR");
+                names[NameType.Complete].Add("15", "Gather Point"); names[NameType.Abbreviation].Add("15", "gp");
+                names[NameType.Complete].Add("16", "Guard");
+                names[NameType.Complete].Add("17", "Livestock Return");
+                names[NameType.Complete].Add("18", "Mil Nearby Gather Point");
+                names[NameType.Complete].Add("19", "Patrol");
+                names[NameType.Complete].Add("20", "Repair");
+                names[NameType.Complete].Add("21", "Return Resources");
+                names[NameType.Complete].Add("22", "Seek Shelter"); names[NameType.Abbreviation].Add("22", "Shelter");
+                names[NameType.Complete].Add("23", "Send Fishing Ship");
+                names[NameType.Complete].Add("24", "Send Fishing Ship To Build");
+                names[NameType.Complete].Add("25", "Send Heroes");
+                names[NameType.Complete].Add("26", "Send Military");
+                names[NameType.Complete].Add("27", "Send Navy");
+                names[NameType.Complete].Add("28", "Send Priest");
+                names[NameType.Complete].Add("29", "Send Priest To Build");
+                names[NameType.Complete].Add("30", "Send Siege");
+                names[NameType.Complete].Add("31", "Send Transport Ship");
+                names[NameType.Complete].Add("32", "Send Villagers");
+                names[NameType.Complete].Add("33", "Send Villagers To Build");
+                names[NameType.Complete].Add("34", "Stop");
+                names[NameType.Complete].Add("35", "Town Bell");
+                names[NameType.Complete].Add("36", "Ungarrison"); names[NameType.Abbreviation].Add("36", "UG");
+                names[NameType.Complete].Add("37", "Attac Building");
+                names[NameType.Complete].Add("38", "Attack"); names[NameType.Abbreviation].Add("38", "ATK");
+                names[NameType.Complete].Add("39", "Attack Forbidden");
+                names[NameType.Complete].Add("40", "Attack Move Cursor");
+                names[NameType.Complete].Add("41", "Auto Assign On Dropsite");
+                names[NameType.Complete].Add("42", "Board");
+                names[NameType.Complete].Add("43", "Build");
+                names[NameType.Complete].Add("44", "Favor");
+                names[NameType.Complete].Add("45", "Fish Cursor");
+                names[NameType.Complete].Add("46", "Food Aggro Huntable");
+                names[NameType.Complete].Add("47", "Food Berryfarm");
+                names[NameType.Complete].Add("48", "Food Herdable");
+                names[NameType.Complete].Add("49", "Food Huntable");
+                names[NameType.Complete].Add("50", "Garrison Cursor");
+                names[NameType.Complete].Add("51", "Godpower");
+                names[NameType.Complete].Add("52", "Godpower Forbidden");
+                names[NameType.Complete].Add("53", "Gold");
+                names[NameType.Complete].Add("54", "Gold Trade");
+                names[NameType.Complete].Add("55", "Heal");
+                names[NameType.Complete].Add("56", "Herdable");
+                names[NameType.Complete].Add("57", "Priest Empower"); names[NameType.Abbreviation].Add("57", "Empower|E");
+                names[NameType.Complete].Add("58", "Rally"); names[NameType.Abbreviation].Add("58", "RLL");
+                names[NameType.Complete].Add("59", "Relic Dropoff");
+                names[NameType.Complete].Add("60", "Relic Pickup");
+                names[NameType.Complete].Add("61", "Repair Cursor");
+                names[NameType.Complete].Add("62", "Res Drop All");
+                names[NameType.Complete].Add("63", "Res Drop Food"); names[NameType.Abbreviation].Add("63", "DF");
+                names[NameType.Complete].Add("64", "Res Drop Gold"); names[NameType.Abbreviation].Add("64", "DG");
+                names[NameType.Complete].Add("65", "Res Drop Other");
+                names[NameType.Complete].Add("66", "Res Drop Wood"); names[NameType.Abbreviation].Add("66", "DW");
+                names[NameType.Complete].Add("67", "Standard");
+                names[NameType.Complete].Add("68", "Unboard");
+                names[NameType.Complete].Add("69", "Walk");
+                names[NameType.Complete].Add("70", "Wood Gathering");
+                names[NameType.Complete].Add("71", "Market Buy Food");
+                names[NameType.Complete].Add("72", "Market Buy Wood");
+                names[NameType.Complete].Add("73", "Market Sell Food");
+                names[NameType.Complete].Add("74", "Market Sell Wood");
+                names[NameType.Complete].Add("75", "Mode Box");
+                names[NameType.Complete].Add("76", "Mode Box On");
+                names[NameType.Complete].Add("77", "Mode Line");
+                names[NameType.Complete].Add("78", "Mode Line On");
+                names[NameType.Complete].Add("79", "Mode Spread");
+                names[NameType.Complete].Add("80", "Mode Spread On");
+                names[NameType.Complete].Add("81", "Mode Ui Economic");
+                names[NameType.Complete].Add("82", "Mode Ui Military");
+                names[NameType.Complete].Add("83", "Mode Villager Build");
+                names[NameType.Complete].Add("84", "Mode Wedge");
+                names[NameType.Complete].Add("85", "Mode Wedge On");
+                names[NameType.Complete].Add("86", "Reticule Attack");
+                names[NameType.Complete].Add("87", "Reticule Null");
+                names[NameType.Complete].Add("88", "Reticule Select A");
+                names[NameType.Complete].Add("89", "Reticule Select B");
+                names[NameType.Complete].Add("90", "Stance Aggressive");
+                names[NameType.Complete].Add("91", "Stance Aggressive On");
+                names[NameType.Complete].Add("92", "Stance Defensive");
+                names[NameType.Complete].Add("93", "Stance Defensive On");
+                names[NameType.Complete].Add("94", "Stance Passive");
+                names[NameType.Complete].Add("95", "Stance Passive On");
+                names[NameType.Complete].Add("96", "Stance Stand Ground");
+                names[NameType.Complete].Add("97", "Stance Stand Ground On");
+                names[NameType.Complete].Add("98", "Temple Spawnpoint");
+                names[NameType.Complete].Add("99", "Wall To Gate");
+                names[NameType.Complete].Add("100", "Classical Age");
+                names[NameType.Complete].Add("101", "Heroic Age");
+                names[NameType.Complete].Add("102", "Mythic Age");
+                names[NameType.Complete].Add("103", "Score Age 1"); names[NameType.Abbreviation].Add("103", "AGE1");
+                names[NameType.Complete].Add("104", "Score Age 2"); names[NameType.Abbreviation].Add("104", "AGE2");
+                names[NameType.Complete].Add("105", "Score Age 3"); names[NameType.Abbreviation].Add("105", "AGE3");
+                names[NameType.Complete].Add("106", "Score Age 4"); names[NameType.Abbreviation].Add("106", "AGE4");
+                names[NameType.Complete].Add("107", "Score Age 5"); names[NameType.Abbreviation].Add("107", "AGE5");
+                names[NameType.Complete].Add("108", "Wonder Age");
+                names[NameType.Complete].Add("109", "Archery Range"); names[NameType.Abbreviation].Add("109", "Range|R|AR");
+                names[NameType.Complete].Add("110", "Armory"); names[NameType.Abbreviation].Add("110", "A");
+                names[NameType.Complete].Add("111", "Asgardian Hill Fort"); names[NameType.Abbreviation].Add("111", "ASGHF");
+                names[NameType.Complete].Add("112", "Barracks"); names[NameType.Abbreviation].Add("112", "RAX");
+                names[NameType.Complete].Add("113", "Citadel Center Atlantean");
+                names[NameType.Complete].Add("114", "Citadel Center Egyptian");
+                names[NameType.Complete].Add("115", "Citadel Center Greek");
+                names[NameType.Complete].Add("116", "Citadel Center Norse");
+                names[NameType.Complete].Add("117", "Columns");
+                names[NameType.Complete].Add("118", "Counter Barracks"); names[NameType.Abbreviation].Add("118", "CB|CRAX");
+                names[NameType.Complete].Add("119", "Dock"); names[NameType.Abbreviation].Add("119", "DK");
+                names[NameType.Complete].Add("120", "Dwarven Armory"); names[NameType.Abbreviation].Add("120", "DA");
+                names[NameType.Complete].Add("121", "Economic Guild"); names[NameType.Abbreviation].Add("121", "EG");
+                names[NameType.Complete].Add("122", "Farm");
+                names[NameType.Complete].Add("123", "Fortress"); names[NameType.Abbreviation].Add("123", "FRT");
+                names[NameType.Complete].Add("124", "Fountain");
+                names[NameType.Complete].Add("125", "Gate");
+                names[NameType.Complete].Add("126", "Granary"); names[NameType.Abbreviation].Add("126", "GR");
+                names[NameType.Complete].Add("127", "Great Hall"); names[NameType.Abbreviation].Add("127", "GH");
+                names[NameType.Complete].Add("128", "Healing Spring Building");
+                names[NameType.Complete].Add("129", "Hesperides Building");
+                names[NameType.Complete].Add("130", "Hill Fort"); names[NameType.Abbreviation].Add("130", "HF");
+                names[NameType.Complete].Add("131", "House"); names[NameType.Abbreviation].Add("131", "H");
+                names[NameType.Complete].Add("132", "Lighthouse");
+                names[NameType.Complete].Add("133", "Longhouse"); names[NameType.Abbreviation].Add("133", "LH");
+                names[NameType.Complete].Add("134", "Lumber Camp"); names[NameType.Abbreviation].Add("134", "LC");
+                names[NameType.Complete].Add("135", "Lure Building");
+                names[NameType.Complete].Add("136", "Manor"); names[NameType.Abbreviation].Add("136", "M");
+                names[NameType.Complete].Add("137", "Market"); names[NameType.Abbreviation].Add("137", "MKT");
+                names[NameType.Complete].Add("138", "Migdol Stronghold"); names[NameType.Abbreviation].Add("138", "MS");
+                names[NameType.Complete].Add("139", "Military Academy"); names[NameType.Abbreviation].Add("139", "MA");
+                names[NameType.Complete].Add("140", "Military Barracks"); names[NameType.Abbreviation].Add("140", "MRAX");
+                names[NameType.Complete].Add("141", "Mining Camp"); names[NameType.Abbreviation].Add("141", "MC");
+                names[NameType.Complete].Add("142", "Mirror Tower"); names[NameType.Abbreviation].Add("142", "MTWR");
+                names[NameType.Complete].Add("143", "Monument To Gods"); names[NameType.Abbreviation].Add("143", "MG");
+                names[NameType.Complete].Add("144", "Monument To Pharaohs"); names[NameType.Abbreviation].Add("144", "MPH");
+                names[NameType.Complete].Add("145", "Monument To Priests"); names[NameType.Abbreviation].Add("145", "MPR");
+                names[NameType.Complete].Add("146", "Monument To Soldiers"); names[NameType.Abbreviation].Add("146", "MSO");
+                names[NameType.Complete].Add("147", "Monument To Villagers"); names[NameType.Abbreviation].Add("147", "MV");
+                names[NameType.Complete].Add("148", "Obelisk"); names[NameType.Abbreviation].Add("148", "OBK");
+                names[NameType.Complete].Add("149", "Palace"); names[NameType.Abbreviation].Add("149", "PLC");
+                names[NameType.Complete].Add("150", "Ruins");
+                names[NameType.Complete].Add("151", "Sentry Tower"); names[NameType.Abbreviation].Add("151", "ST");
+                names[NameType.Complete].Add("152", "Siege Works"); names[NameType.Abbreviation].Add("152", "SW");
+                names[NameType.Complete].Add("153", "Sign");
+                names[NameType.Complete].Add("154", "Sky Passage"); names[NameType.Abbreviation].Add("154", "SP");
+                names[NameType.Complete].Add("155", "Stable"); names[NameType.Abbreviation].Add("155", "S|STB|STBL");
+                names[NameType.Complete].Add("156", "Storehouse"); names[NameType.Abbreviation].Add("156", "SH");
+                names[NameType.Complete].Add("157", "Tartarian Gate Building");
+                names[NameType.Complete].Add("158", "Temple"); names[NameType.Abbreviation].Add("158", "T");
+                names[NameType.Complete].Add("159", "Titan Gate");
+                names[NameType.Complete].Add("160", "Town Center Atlantean"); names[NameType.Abbreviation].Add("160", "TCA");
+                names[NameType.Complete].Add("161", "Town Center Egyptian"); names[NameType.Abbreviation].Add("161", "TCE");
+                names[NameType.Complete].Add("162", "Town Center Greek"); names[NameType.Abbreviation].Add("162", "TCG");
+                names[NameType.Complete].Add("163", "Town Center Norse"); names[NameType.Abbreviation].Add("163", "TCN");
+                names[NameType.Complete].Add("164", "Village Center Atlantean"); names[NameType.Abbreviation].Add("164", "VCA");
+                names[NameType.Complete].Add("165", "Village Center Egyptian"); names[NameType.Abbreviation].Add("165", "VCE");
+                names[NameType.Complete].Add("166", "Village Center Greek"); names[NameType.Abbreviation].Add("166", "VCG");
+                names[NameType.Complete].Add("167", "Village Center Norse"); names[NameType.Abbreviation].Add("167", "VCN");
+                names[NameType.Complete].Add("168", "Wonder");
+                names[NameType.Complete].Add("169", "Wood Pile");
+                names[NameType.Complete].Add("170", "Wooden Wall"); names[NameType.Abbreviation].Add("170", "WW");
+                names[NameType.Complete].Add("171", "Ancestors");
+                names[NameType.Complete].Add("172", "Asgardian Bastion");
+                names[NameType.Complete].Add("173", "Bolt");
+                names[NameType.Complete].Add("174", "Bronze");
+                names[NameType.Complete].Add("175", "Carnivora");
+                names[NameType.Complete].Add("176", "Ceasefire");
+                names[NameType.Complete].Add("177", "Chaos");
+                names[NameType.Complete].Add("178", "Citadel");
+                names[NameType.Complete].Add("179", "Curse");
+                names[NameType.Complete].Add("180", "Deconstruction");
+                names[NameType.Complete].Add("181", "Dwarven Mine");
+                names[NameType.Complete].Add("182", "Earthquake");
+                names[NameType.Complete].Add("183", "Eclipse");
+                names[NameType.Complete].Add("184", "Fimbulwinter");
+                names[NameType.Complete].Add("185", "Flaming Weapons");
+                names[NameType.Complete].Add("186", "Forest Fire");
+                names[NameType.Complete].Add("187", "Frost");
+                names[NameType.Complete].Add("188", "Gaia Forest");
+                names[NameType.Complete].Add("189", "Great Hunt");
+                names[NameType.Complete].Add("190", "Gullinbursti");
+                names[NameType.Complete].Add("191", "Healing Spring");
+                names[NameType.Complete].Add("192", "Hesperides");
+                names[NameType.Complete].Add("193", "Implode");
+                names[NameType.Complete].Add("194", "Inferno");
+                names[NameType.Complete].Add("195", "Lightning Storm");
+                names[NameType.Complete].Add("196", "Locust Swarm");
+                names[NameType.Complete].Add("197", "Lure");
+                names[NameType.Complete].Add("198", "Meteor");
+                names[NameType.Complete].Add("199", "Nidhogg");
+                names[NameType.Complete].Add("200", "Pestilence");
+                names[NameType.Complete].Add("201", "Plague Of Serpents");
+                names[NameType.Complete].Add("202", "Plenty Vault");
+                names[NameType.Complete].Add("203", "Prosperity");
+                names[NameType.Complete].Add("204", "Ragnarok");
+                names[NameType.Complete].Add("205", "Rain");
+                names[NameType.Complete].Add("206", "Restoration");
+                names[NameType.Complete].Add("207", "Sentinel");
+                names[NameType.Complete].Add("208", "Shifting Sands");
+                names[NameType.Complete].Add("209", "Shockwave");
+                names[NameType.Complete].Add("210", "Son Of Osiris");
+                names[NameType.Complete].Add("211", "Spider Lair");
+                names[NameType.Complete].Add("212", "Spy");
+                names[NameType.Complete].Add("213", "Tartarian Gate");
+                names[NameType.Complete].Add("214", "Tempest");
+                names[NameType.Complete].Add("215", "Tornado");
+                names[NameType.Complete].Add("216", "Traitor");
+                names[NameType.Complete].Add("217", "Undermine");
+                names[NameType.Complete].Add("218", "Underworld Passage");
+                names[NameType.Complete].Add("219", "Valor");
+                names[NameType.Complete].Add("220", "Vision");
+                names[NameType.Complete].Add("221", "Vortex");
+                names[NameType.Complete].Add("222", "Walking Woods");
+                names[NameType.Complete].Add("223", "Aegir");
+                names[NameType.Complete].Add("224", "Anubis");
+                names[NameType.Complete].Add("225", "Aphrodite Beta");
+                names[NameType.Complete].Add("226", "Aphrodite");
+                names[NameType.Complete].Add("227", "Apollo Beta");
+                names[NameType.Complete].Add("228", "Apollo");
+                names[NameType.Complete].Add("229", "Ares");
+                names[NameType.Complete].Add("230", "Artemis");
+                names[NameType.Complete].Add("231", "Athena Beta");
+                names[NameType.Complete].Add("232", "Athena");
+                names[NameType.Complete].Add("233", "Atlas");
+                names[NameType.Complete].Add("234", "Baldr Beta");
+                names[NameType.Complete].Add("235", "Baldr");
+                names[NameType.Complete].Add("236", "Bast");
+                names[NameType.Complete].Add("237", "Bragi");
+                names[NameType.Complete].Add("238", "Dionysus Beta");
+                names[NameType.Complete].Add("239", "Dionysus");
+                names[NameType.Complete].Add("240", "Forseti");
+                names[NameType.Complete].Add("241", "Freyja Beta");
+                names[NameType.Complete].Add("242", "Freyja");
+                names[NameType.Complete].Add("243", "Freyr");
+                names[NameType.Complete].Add("244", "Gaia Custom");
+                names[NameType.Complete].Add("245", "Gaia");
+                names[NameType.Complete].Add("246", "Hades");
+                names[NameType.Complete].Add("247", "Heimdall");
+                names[NameType.Complete].Add("248", "Hekate");
+                names[NameType.Complete].Add("249", "Hel");
+                names[NameType.Complete].Add("250", "Helios");
+                names[NameType.Complete].Add("251", "Hephaestus");
+                names[NameType.Complete].Add("252", "Hera");
+                names[NameType.Complete].Add("253", "Hermes Beta");
+                names[NameType.Complete].Add("254", "Hermes");
+                names[NameType.Complete].Add("255", "Horus");
+                names[NameType.Complete].Add("256", "Hyperion");
+                names[NameType.Complete].Add("257", "Isis");
+                names[NameType.Complete].Add("258", "Kronos");
+                names[NameType.Complete].Add("259", "Leto Beta");
+                names[NameType.Complete].Add("260", "Leto");
+                names[NameType.Complete].Add("261", "Loki Beta");
+                names[NameType.Complete].Add("262", "Loki");
+                names[NameType.Complete].Add("263", "Nephthys Beta");
+                names[NameType.Complete].Add("264", "Nephthys");
+                names[NameType.Complete].Add("265", "Njord");
+                names[NameType.Complete].Add("266", "Oceanus Beta");
+                names[NameType.Complete].Add("267", "Oceanus");
+                names[NameType.Complete].Add("268", "Odin");
+                names[NameType.Complete].Add("269", "Oranos Beta");
+                names[NameType.Complete].Add("270", "Oranos");
+                names[NameType.Complete].Add("271", "Osiris");
+                names[NameType.Complete].Add("272", "Poseidon Beta");
+                names[NameType.Complete].Add("273", "Poseidon");
+                names[NameType.Complete].Add("274", "Prometheus Beta");
+                names[NameType.Complete].Add("275", "Prometheus");
+                names[NameType.Complete].Add("276", "Ptah");
+                names[NameType.Complete].Add("277", "Ra");
+                names[NameType.Complete].Add("278", "Rheia Beta");
+                names[NameType.Complete].Add("279", "Rheia");
+                names[NameType.Complete].Add("280", "Sekhmet");
+                names[NameType.Complete].Add("281", "Set Beta");
+                names[NameType.Complete].Add("282", "Set");
+                names[NameType.Complete].Add("283", "Skadi");
+                names[NameType.Complete].Add("284", "Sobek");
+                names[NameType.Complete].Add("285", "Theia Beta");
+                names[NameType.Complete].Add("286", "Theia");
+                names[NameType.Complete].Add("287", "Thor Beta");
+                names[NameType.Complete].Add("288", "Thor");
+                names[NameType.Complete].Add("289", "Thoth");
+                names[NameType.Complete].Add("290", "Tyr");
+                names[NameType.Complete].Add("291", "Ullr");
+                names[NameType.Complete].Add("292", "Vidar");
+                names[NameType.Complete].Add("293", "Zeus Beta");
+                names[NameType.Complete].Add("294", "Zeus");
+                names[NameType.Complete].Add("295", "Acropolis");
+                names[NameType.Complete].Add("296", "Air");
+                names[NameType.Complete].Add("297", "Alfheim");
+                names[NameType.Complete].Add("298", "All Maps");
+                names[NameType.Complete].Add("299", "Anatolia");
+                names[NameType.Complete].Add("300", "Archipelago");
+                names[NameType.Complete].Add("301", "Arena");
+                names[NameType.Complete].Add("302", "Black Sea");
+                names[NameType.Complete].Add("303", "Blue Lagoon");
+                names[NameType.Complete].Add("304", "Elysium");
+                names[NameType.Complete].Add("305", "Erebus");
+                names[NameType.Complete].Add("306", "Ghost Lake");
+                names[NameType.Complete].Add("307", "Giza");
+                names[NameType.Complete].Add("308", "Gold Rush");
+                names[NameType.Complete].Add("309", "Highland");
+                names[NameType.Complete].Add("310", "Ironwood");
+                names[NameType.Complete].Add("311", "Islands");
+                names[NameType.Complete].Add("312", "Jotunheim");
+                names[NameType.Complete].Add("313", "Kerlaugar");
+                names[NameType.Complete].Add("314", "Land Unknown");
+                names[NameType.Complete].Add("315", "Mapthumb Land"); names[NameType.Abbreviation].Add("315", "Land Map");
+                names[NameType.Complete].Add("316", "Mapthumb Navy"); names[NameType.Abbreviation].Add("316", "Water Map");
+                names[NameType.Complete].Add("317", "Mapthumb Standard"); names[NameType.Abbreviation].Add("317", "Standard Map");
+                names[NameType.Complete].Add("318", "Marsh");
+                names[NameType.Complete].Add("319", "Mediterranean");
+                names[NameType.Complete].Add("320", "Megalopolis");
+                names[NameType.Complete].Add("321", "Midgard");
+                names[NameType.Complete].Add("322", "Mirage");
+                names[NameType.Complete].Add("323", "Mirkwood");
+                names[NameType.Complete].Add("324", "Mount Olympus");
+                names[NameType.Complete].Add("325", "Muspellheim");
+                names[NameType.Complete].Add("326", "Nile Shallows");
+                names[NameType.Complete].Add("327", "Nomad");
+                names[NameType.Complete].Add("328", "Oasis");
+                names[NameType.Complete].Add("329", "River Nile");
+                names[NameType.Complete].Add("330", "River Styx");
+                names[NameType.Complete].Add("331", "Savannah");
+                names[NameType.Complete].Add("332", "Sea Of Worms");
+                names[NameType.Complete].Add("333", "Team Migration");
+                names[NameType.Complete].Add("334", "The Unknown");
+                names[NameType.Complete].Add("335", "Tiny");
+                names[NameType.Complete].Add("336", "Treasury Black Map");
+                names[NameType.Complete].Add("337", "Tundra");
+                names[NameType.Complete].Add("338", "Valley Of Kings");
+                names[NameType.Complete].Add("339", "Vinlandsaga");
+                names[NameType.Complete].Add("340", "Watering Hole");
+                names[NameType.Complete].Add("341", "Standard Difficulty");
+                names[NameType.Complete].Add("342", "Moderate Difficulty");
+                names[NameType.Complete].Add("343", "Hard Difficulty");
+                names[NameType.Complete].Add("344", "Titan Difficulty");
+                names[NameType.Complete].Add("345", "Area");
+                names[NameType.Complete].Add("346", "Crush Armor");
+                names[NameType.Complete].Add("347", "Crush Dmg");
+                names[NameType.Complete].Add("348", "Divine Dmg");
+                names[NameType.Complete].Add("349", "Garrison Stat");
+                names[NameType.Complete].Add("350", "Hack Armor");
+                names[NameType.Complete].Add("351", "Hack Dmg");
+                names[NameType.Complete].Add("352", "Hp");
+                names[NameType.Complete].Add("353", "Hp Regen");
+                names[NameType.Complete].Add("354", "Pierce Armor");
+                names[NameType.Complete].Add("355", "Pierce Dmg");
+                names[NameType.Complete].Add("356", "Projectile");
+                names[NameType.Complete].Add("357", "Range");
+                names[NameType.Complete].Add("358", "Rof");
+                names[NameType.Complete].Add("359", "Speed");
+                names[NameType.Complete].Add("360", "Time");
+                names[NameType.Complete].Add("361", "Arctic Wolf");
+                names[NameType.Complete].Add("362", "Aurochs");
+                names[NameType.Complete].Add("363", "Baboon");
+                names[NameType.Complete].Add("364", "Bear");
+                names[NameType.Complete].Add("365", "Berry Bush"); names[NameType.Abbreviation].Add("365", "Berry|B");
+                names[NameType.Complete].Add("366", "Boar");
+                names[NameType.Complete].Add("367", "Caribou");
+                names[NameType.Complete].Add("368", "Chicken"); names[NameType.Abbreviation].Add("368", "CHK");
+                names[NameType.Complete].Add("369", "Cow");
+                names[NameType.Complete].Add("370", "Crocodile");
+                names[NameType.Complete].Add("371", "Crowned Crane");
+                names[NameType.Complete].Add("372", "Deer");
+                names[NameType.Complete].Add("373", "Elephant"); names[NameType.Abbreviation].Add("373", "Ele");
+                names[NameType.Complete].Add("374", "Elk");
+                names[NameType.Complete].Add("375", "Fish");
+                names[NameType.Complete].Add("376", "Gazelle");
+                names[NameType.Complete].Add("377", "Giraffe");
+                names[NameType.Complete].Add("378", "Goat");
+                names[NameType.Complete].Add("379", "Gold Mine"); names[NameType.Abbreviation].Add("379", "GM");
+                names[NameType.Complete].Add("380", "Hippopotamus"); names[NameType.Abbreviation].Add("380", "Hippo");
+                names[NameType.Complete].Add("381", "Hyena");
+                names[NameType.Complete].Add("382", "Lion");
+                names[NameType.Complete].Add("383", "Monkey");
+                names[NameType.Complete].Add("384", "Monkey Raft");
+                names[NameType.Complete].Add("385", "Pig");
+                names[NameType.Complete].Add("386", "Polar Bear");
+                names[NameType.Complete].Add("387", "Res Favor"); names[NameType.Abbreviation].Add("387", "FV");
+                names[NameType.Complete].Add("388", "Res Food"); names[NameType.Abbreviation].Add("388", "F");
+                names[NameType.Complete].Add("389", "Res Gold"); names[NameType.Abbreviation].Add("389", "G");
+                names[NameType.Complete].Add("390", "Res Military");
+                names[NameType.Complete].Add("391", "Res Pop");
+                names[NameType.Complete].Add("392", "Res Population"); names[NameType.Abbreviation].Add("392", "P");
+                names[NameType.Complete].Add("393", "Res Wood"); names[NameType.Abbreviation].Add("393", "W");
+                names[NameType.Complete].Add("394", "Rhinoceros"); names[NameType.Abbreviation].Add("394", "Rhino");
+                names[NameType.Complete].Add("395", "Settlement");
+                names[NameType.Complete].Add("396", "Summoning");
+                names[NameType.Complete].Add("397", "Tamarisk");
+                names[NameType.Complete].Add("398", "Cypress");
+                names[NameType.Complete].Add("399", "Cypress Snow");
+                names[NameType.Complete].Add("400", "Gaia Tree");
+                names[NameType.Complete].Add("401", "Hades Tree");
+                names[NameType.Complete].Add("402", "Marsh Tree");
+                names[NameType.Complete].Add("403", "Oak Autumn");
+                names[NameType.Complete].Add("404", "Oak");
+                names[NameType.Complete].Add("405", "Olive");
+                names[NameType.Complete].Add("406", "Palm");
+                names[NameType.Complete].Add("407", "Straggler"); names[NameType.Abbreviation].Add("407", "STR");
+                names[NameType.Complete].Add("408", "Pine Dead");
+                names[NameType.Complete].Add("409", "Pine");
+                names[NameType.Complete].Add("410", "Pine Snow");
+                names[NameType.Complete].Add("411", "Savannah Tree");
+                names[NameType.Complete].Add("412", "Tundra Tree");
+                names[NameType.Complete].Add("413", "Tundra Snow");
+                names[NameType.Complete].Add("414", "Walrus");
+                names[NameType.Complete].Add("415", "Water Buffalo");
+                names[NameType.Complete].Add("416", "Wolf");
+                names[NameType.Complete].Add("417", "Zebra");
+                names[NameType.Complete].Add("418", "Adze Of Wepwawet");
+                names[NameType.Complete].Add("419", "Aegis Shield");
+                names[NameType.Complete].Add("420", "Alluvial Clay");
+                names[NameType.Complete].Add("421", "Ambassadors");
+                names[NameType.Complete].Add("422", "Anastrophe");
+                names[NameType.Complete].Add("423", "Archaic Age");
+                names[NameType.Complete].Add("424", "Architects");
+                names[NameType.Complete].Add("425", "Arctic Gale");
+                names[NameType.Complete].Add("426", "Arctic Winds");
+                names[NameType.Complete].Add("427", "Argive Patronage");
+                names[NameType.Complete].Add("428", "Argonauts");
+                names[NameType.Complete].Add("429", "Asper Blood");
+                names[NameType.Complete].Add("430", "Atef Crown");
+                names[NameType.Complete].Add("431", "Avenging Spirit");
+                names[NameType.Complete].Add("432", "Axe Of Vengeance");
+                names[NameType.Complete].Add("433", "Ballista Tower");
+                names[NameType.Complete].Add("434", "Ballistics");
+                names[NameType.Complete].Add("435", "Beast Slayer");
+                names[NameType.Complete].Add("436", "Berserkergang");
+                names[NameType.Complete].Add("437", "Bite Of The Shark");
+                names[NameType.Complete].Add("438", "Boiling Oil");
+                names[NameType.Complete].Add("439", "Bone Bow");
+                names[NameType.Complete].Add("440", "Book Of Thoth");
+                names[NameType.Complete].Add("441", "Bow Saw");
+                names[NameType.Complete].Add("442", "Bravery");
+                names[NameType.Complete].Add("443", "Bronze Armor");
+                names[NameType.Complete].Add("444", "Bronze Shields");
+                names[NameType.Complete].Add("445", "Bronze Wall");
+                names[NameType.Complete].Add("446", "Bronze Weapons");
+                names[NameType.Complete].Add("447", "Burning Pitch");
+                names[NameType.Complete].Add("448", "Call Of Valhalla");
+                names[NameType.Complete].Add("449", "Carpenters");
+                names[NameType.Complete].Add("450", "Carrier Pigeons");
+                names[NameType.Complete].Add("451", "Cave Troll");
+                names[NameType.Complete].Add("452", "Celerity");
+                names[NameType.Complete].Add("453", "Champion Archers");
+                names[NameType.Complete].Add("454", "Champion Axemen");
+                names[NameType.Complete].Add("455", "Champion Camel Riders");
+                names[NameType.Complete].Add("456", "Champion Cavalry");
+                names[NameType.Complete].Add("457", "Champion Chariot Archers");
+                names[NameType.Complete].Add("458", "Champion Infantry");
+                names[NameType.Complete].Add("459", "Champion Infantry Norse");
+                names[NameType.Complete].Add("460", "Champion Slingers");
+                names[NameType.Complete].Add("461", "Champion Spearmen");
+                names[NameType.Complete].Add("462", "Champion War Elephants");
+                names[NameType.Complete].Add("463", "Champion Warships");
+                names[NameType.Complete].Add("464", "Channels");
+                names[NameType.Complete].Add("465", "Chthonic Rites");
+                names[NameType.Complete].Add("466", "Citadel Wall");
+                names[NameType.Complete].Add("467", "Clairvoyance");
+                names[NameType.Complete].Add("468", "Coinage");
+                names[NameType.Complete].Add("469", "Conscript Barracks Soldiers");
+                names[NameType.Complete].Add("470", "Conscript Cavalry");
+                names[NameType.Complete].Add("471", "Conscript Counter Soldiers");
+                names[NameType.Complete].Add("472", "Conscript Great Hall Soldiers");
+                names[NameType.Complete].Add("473", "Conscript Hill Fort Soldiers");
+                names[NameType.Complete].Add("474", "Conscript Infantry");
+                names[NameType.Complete].Add("475", "Conscript Longhouse Soldiers");
+                names[NameType.Complete].Add("476", "Conscript Mainline Soldiers");
+                names[NameType.Complete].Add("477", "Conscript Migdol Soldiers");
+                names[NameType.Complete].Add("478", "Conscript Palace Soldiers");
+                names[NameType.Complete].Add("479", "Conscript Ranged Soldiers");
+                names[NameType.Complete].Add("480", "Conscript Sailors");
+                names[NameType.Complete].Add("481", "Copper Armor");
+                names[NameType.Complete].Add("482", "Copper Shields");
+                names[NameType.Complete].Add("483", "Copper Weapons");
+                names[NameType.Complete].Add("484", "Crenellations");
+                names[NameType.Complete].Add("485", "Crimson Linen");
+                names[NameType.Complete].Add("486", "Criosphinx");
+                names[NameType.Complete].Add("487", "Crocodilopolis");
+                names[NameType.Complete].Add("488", "Daktyloi");
+                names[NameType.Complete].Add("489", "Dark Water");
+                names[NameType.Complete].Add("490", "Daughters Of The Sea");
+                names[NameType.Complete].Add("491", "Deimos Sword Of Dread");
+                names[NameType.Complete].Add("492", "Desert Wind");
+                names[NameType.Complete].Add("493", "Devotees Of Atlas");
+                names[NameType.Complete].Add("494", "Dionysia");
+                names[NameType.Complete].Add("495", "Disablot");
+                names[NameType.Complete].Add("496", "Divine Blood");
+                names[NameType.Complete].Add("497", "Draft Horses");
+                names[NameType.Complete].Add("498", "Dragonscale Shields");
+                names[NameType.Complete].Add("499", "Dwarven Auger");
+                names[NameType.Complete].Add("500", "Dwarven Breastplate");
+                names[NameType.Complete].Add("501", "Dwarven Weapons");
+                names[NameType.Complete].Add("502", "Electrum Bullets");
+                names[NameType.Complete].Add("503", "Empyrean Speed");
+                names[NameType.Complete].Add("504", "Enclosed Deck");
+                names[NameType.Complete].Add("505", "Engineers");
+                names[NameType.Complete].Add("506", "Enyos Bow Of Horror");
+                names[NameType.Complete].Add("507", "Eyes In The Forest");
+                names[NameType.Complete].Add("508", "Face Of The Gorgon");
+                names[NameType.Complete].Add("509", "Feasts Of Renown");
+                names[NameType.Complete].Add("510", "Feet Of The Jackal");
+                names[NameType.Complete].Add("511", "Flames Of Typhon");
+                names[NameType.Complete].Add("512", "Flood Control");
+                names[NameType.Complete].Add("513", "Flood Of The Nile");
+                names[NameType.Complete].Add("514", "Force Of The West Wind");
+                names[NameType.Complete].Add("515", "Forge Of Olympus");
+                names[NameType.Complete].Add("516", "Fortified Town Center");
+                names[NameType.Complete].Add("517", "Fortified Wall Egyptian");
+                names[NameType.Complete].Add("518", "Fortified Wall Greek");
+                names[NameType.Complete].Add("519", "Freyrs Gift");
+                names[NameType.Complete].Add("520", "Frontline Heroics");
+                names[NameType.Complete].Add("521", "Funeral Barge");
+                names[NameType.Complete].Add("522", "Funeral Rites");
+                names[NameType.Complete].Add("523", "Fury Of The Fallen");
+                names[NameType.Complete].Add("524", "Gemini");
+                names[NameType.Complete].Add("525", "Gjallarhorn");
+                names[NameType.Complete].Add("526", "Golden Apples");
+                names[NameType.Complete].Add("527", "Granite Blood");
+                names[NameType.Complete].Add("528", "Granite Maw");
+                names[NameType.Complete].Add("529", "Grasp Of Ran");
+                names[NameType.Complete].Add("530", "Greatest Of Fifty");
+                names[NameType.Complete].Add("531", "Guard Tower Atlantean");
+                names[NameType.Complete].Add("532", "Guard Tower Egyptian");
+                names[NameType.Complete].Add("533", "Guard Tower Greek");
+                names[NameType.Complete].Add("534", "Guardian Of Io");
+                names[NameType.Complete].Add("535", "Hall Of Thanes");
+                names[NameType.Complete].Add("536", "Halo Of The Sun");
+                names[NameType.Complete].Add("537", "Hamask");
+                names[NameType.Complete].Add("538", "Hammer Of Thunder");
+                names[NameType.Complete].Add("539", "Hand Axe");
+                names[NameType.Complete].Add("540", "Hand Of Talos");
+                names[NameType.Complete].Add("541", "Hands Of The Pharaoh");
+                names[NameType.Complete].Add("542", "Heart Of The Titans");
+                names[NameType.Complete].Add("543", "Heavy Archers");
+                names[NameType.Complete].Add("544", "Heavy Axemen");
+                names[NameType.Complete].Add("545", "Heavy Camel Riders");
+                names[NameType.Complete].Add("546", "Heavy Cavalry");
+                names[NameType.Complete].Add("547", "Heavy Chariot Archers");
+                names[NameType.Complete].Add("548", "Heavy Infantry");
+                names[NameType.Complete].Add("549", "Heavy Infantry Norse");
+                names[NameType.Complete].Add("550", "Heavy Slingers");
+                names[NameType.Complete].Add("551", "Heavy Spearmen");
+                names[NameType.Complete].Add("552", "Heavy War Elephants");
+                names[NameType.Complete].Add("553", "Heavy Warships");
+                names[NameType.Complete].Add("554", "Hephaestus Revenge");
+                names[NameType.Complete].Add("555", "Heroic Fleet");
+                names[NameType.Complete].Add("556", "Heroic Renewal");
+                names[NameType.Complete].Add("557", "Hieracosphinx");
+                names[NameType.Complete].Add("558", "Horns Of Consecration");
+                names[NameType.Complete].Add("559", "Hunting Equipment");
+                names[NameType.Complete].Add("560", "Huntress Axe");
+                names[NameType.Complete].Add("561", "Husbandry");
+                names[NameType.Complete].Add("562", "Iron Armor");
+                names[NameType.Complete].Add("563", "Iron Shields");
+                names[NameType.Complete].Add("564", "Iron Wall");
+                names[NameType.Complete].Add("565", "Iron Weapons");
+                names[NameType.Complete].Add("566", "Irrigation");
+                names[NameType.Complete].Add("567", "Jotuns");
+                names[NameType.Complete].Add("568", "Labyrinth Of Minos");
+                names[NameType.Complete].Add("569", "Lance Of Stone");
+                names[NameType.Complete].Add("570", "Leather Frame Shield");
+                names[NameType.Complete].Add("571", "Levy Barracks Soldiers");
+                names[NameType.Complete].Add("572", "Levy Cavalry");
+                names[NameType.Complete].Add("573", "Levy Counter Soldiers");
+                names[NameType.Complete].Add("574", "Levy Great Hall Soldiers");
+                names[NameType.Complete].Add("575", "Levy Hill Fort Soldiers");
+                names[NameType.Complete].Add("576", "Levy Infantry");
+                names[NameType.Complete].Add("577", "Levy Longhouse Soldiers");
+                names[NameType.Complete].Add("578", "Levy Mainline Soldiers");
+                names[NameType.Complete].Add("579", "Levy Migdol Soldiers");
+                names[NameType.Complete].Add("580", "Levy Palace Soldiers");
+                names[NameType.Complete].Add("581", "Levy Ranged Soldiers");
+                names[NameType.Complete].Add("582", "Long Serpent");
+                names[NameType.Complete].Add("583", "Lord Of Horses");
+                names[NameType.Complete].Add("584", "Masons");
+                names[NameType.Complete].Add("585", "Medium Archers");
+                names[NameType.Complete].Add("586", "Medium Axemen");
+                names[NameType.Complete].Add("587", "Medium Cavalry");
+                names[NameType.Complete].Add("588", "Medium Infantry");
+                names[NameType.Complete].Add("589", "Medium Infantry Norse");
+                names[NameType.Complete].Add("590", "Medium Slingers");
+                names[NameType.Complete].Add("591", "Medium Spearmen");
+                names[NameType.Complete].Add("592", "Medjay");
+                names[NameType.Complete].Add("593", "Meteoric Iron Armor");
+                names[NameType.Complete].Add("594", "Monstrous Rage");
+                names[NameType.Complete].Add("595", "Mythic Rejuvenation");
+                names[NameType.Complete].Add("596", "Nebty");
+                names[NameType.Complete].Add("597", "Necropolis");
+                names[NameType.Complete].Add("598", "New Kingdom");
+                names[NameType.Complete].Add("599", "Nine Waves");
+                names[NameType.Complete].Add("600", "Olympian Parentage");
+                names[NameType.Complete].Add("601", "Olympian Weapons");
+                names[NameType.Complete].Add("602", "Omniscience");
+                names[NameType.Complete].Add("603", "Oracle");
+                names[NameType.Complete].Add("604", "Orichalcum Mail");
+                names[NameType.Complete].Add("605", "Orichalcum Wall");
+                names[NameType.Complete].Add("606", "Perception");
+                names[NameType.Complete].Add("607", "Petrification");
+                names[NameType.Complete].Add("608", "Phobos Spear Of Panic");
+                names[NameType.Complete].Add("609", "Pickaxe");
+                names[NameType.Complete].Add("610", "Pioneer Of The Skies");
+                names[NameType.Complete].Add("611", "Plow");
+                names[NameType.Complete].Add("612", "Poseidons Secret");
+                names[NameType.Complete].Add("613", "Prophetic Sight");
+                names[NameType.Complete].Add("614", "Purse Seine");
+                names[NameType.Complete].Add("615", "Quarry");
+                names[NameType.Complete].Add("616", "Rampage");
+                names[NameType.Complete].Add("617", "Rheias Gift");
+                names[NameType.Complete].Add("618", "Rigsthula");
+                names[NameType.Complete].Add("619", "Rime");
+                names[NameType.Complete].Add("620", "Ring Giver");
+                names[NameType.Complete].Add("621", "Ring Oath");
+                names[NameType.Complete].Add("622", "Roar Of Orthus");
+                names[NameType.Complete].Add("623", "Sacred Cats");
+                names[NameType.Complete].Add("624", "Safeguard");
+                names[NameType.Complete].Add("625", "Salt Amphora");
+                names[NameType.Complete].Add("626", "Sarissa");
+                names[NameType.Complete].Add("627", "Scalloped Axe");
+                names[NameType.Complete].Add("628", "Secrets Of The Titans");
+                names[NameType.Complete].Add("629", "Serpent Spear");
+                names[NameType.Complete].Add("630", "Servants Of Glory");
+                names[NameType.Complete].Add("631", "Sessrumnir");
+                names[NameType.Complete].Add("632", "Shaduf");
+                names[NameType.Complete].Add("633", "Shaft Mine");
+                names[NameType.Complete].Add("634", "Shafts Of Plague");
+                names[NameType.Complete].Add("635", "Shoulder Of Talos");
+                names[NameType.Complete].Add("636", "Signal Fires");
+                names[NameType.Complete].Add("637", "Silent Resolve");
+                names[NameType.Complete].Add("638", "Skin Of The Rhino");
+                names[NameType.Complete].Add("639", "Slings Of The Sun");
+                names[NameType.Complete].Add("640", "Solar Barque");
+                names[NameType.Complete].Add("641", "Sons Of Sleipnir");
+                names[NameType.Complete].Add("642", "Sons Of The Sun");
+                names[NameType.Complete].Add("643", "Spear Of Horus");
+                names[NameType.Complete].Add("644", "Spirit Of Maat");
+                names[NameType.Complete].Add("645", "Spirited Charge");
+                names[NameType.Complete].Add("646", "Stone Wall Atlantean"); names[NameType.Abbreviation].Add("646", "SWA");
+                names[NameType.Complete].Add("647", "Stone Wall Egyptian"); names[NameType.Abbreviation].Add("647", "SWE");
+                names[NameType.Complete].Add("648", "Stone Wall Greek"); names[NameType.Abbreviation].Add("648", "SWG");
+                names[NameType.Complete].Add("649", "Stone Wall Norse"); names[NameType.Abbreviation].Add("649", "SWN");
+                names[NameType.Complete].Add("650", "Sun Ray");
+                names[NameType.Complete].Add("651", "Sundried Mud Brick");
+                names[NameType.Complete].Add("652", "Swine Array");
+                names[NameType.Complete].Add("653", "Sylvan Lore");
+                names[NameType.Complete].Add("654", "Tax Collectors");
+                names[NameType.Complete].Add("655", "Temple Of Healing");
+                names[NameType.Complete].Add("656", "Temporal Chaos");
+                names[NameType.Complete].Add("657", "Theft Of Fire");
+                names[NameType.Complete].Add("658", "Thracian Horses");
+                names[NameType.Complete].Add("659", "Thundering Hooves");
+                names[NameType.Complete].Add("660", "Thurisaz Rune");
+                names[NameType.Complete].Add("661", "Titan Shield");
+                names[NameType.Complete].Add("662", "Titanomachy");
+                names[NameType.Complete].Add("663", "Tusks Of Apedemak");
+                names[NameType.Complete].Add("664", "Twilight Of The Gods");
+                names[NameType.Complete].Add("665", "Valgaldr");
+                names[NameType.Complete].Add("666", "Valley Of The Kings");
+                names[NameType.Complete].Add("667", "Vaults Of Erebus");
+                names[NameType.Complete].Add("668", "Vikings");
+                names[NameType.Complete].Add("669", "Volcanic Forge");
+                names[NameType.Complete].Add("670", "Watch Tower Atlantean"); names[NameType.Abbreviation].Add("670", "WTA");
+                names[NameType.Complete].Add("671", "Watch Tower Egyptian"); names[NameType.Abbreviation].Add("671", "WTE");
+                names[NameType.Complete].Add("672", "Watch Tower Greek"); names[NameType.Abbreviation].Add("672", "WTG");
+                names[NameType.Complete].Add("673", "Watch Tower Norse"); names[NameType.Abbreviation].Add("673", "WTN");
+                names[NameType.Complete].Add("674", "Weightless Mace");
+                names[NameType.Complete].Add("675", "Will Of Kronos");
+                names[NameType.Complete].Add("676", "Winged Messenger");
+                names[NameType.Complete].Add("677", "Winter Harvest");
+                names[NameType.Complete].Add("678", "Wrath Of The Deep");
+                names[NameType.Complete].Add("679", "Ydalir");
+                names[NameType.Complete].Add("680", "Achilles");
+                names[NameType.Complete].Add("681", "Ajax");
+                names[NameType.Complete].Add("682", "Anubite");
+                names[NameType.Complete].Add("683", "Arctic Wolf Of Set");
+                names[NameType.Complete].Add("684", "Arcus Hero");
+                names[NameType.Complete].Add("685", "Arcus");
+                names[NameType.Complete].Add("686", "Argus");
+                names[NameType.Complete].Add("687", "Atalanta");
+                names[NameType.Complete].Add("688", "Aurochs Of Set");
+                names[NameType.Complete].Add("689", "Automaton");
+                names[NameType.Complete].Add("690", "Avenger");
+                names[NameType.Complete].Add("691", "Axeman");
+                names[NameType.Complete].Add("692", "Baboon Of Set");
+                names[NameType.Complete].Add("693", "Ballista");
+                names[NameType.Complete].Add("694", "Battle Boar");
+                names[NameType.Complete].Add("695", "Bear Of Set");
+                names[NameType.Complete].Add("696", "Behemoth");
+                names[NameType.Complete].Add("697", "Bellerophon");
+                names[NameType.Complete].Add("698", "Berserk"); names[NameType.Abbreviation].Add("698", "BK");
+                names[NameType.Complete].Add("699", "Bireme");
+                names[NameType.Complete].Add("700", "Boar Of Set");
+                names[NameType.Complete].Add("701", "Caladria");
+                names[NameType.Complete].Add("702", "Camel Rider");
+                names[NameType.Complete].Add("703", "Caravan Atlantean");
+                names[NameType.Complete].Add("704", "Caravan Egyptian");
+                names[NameType.Complete].Add("705", "Caravan Greek");
+                names[NameType.Complete].Add("706", "Caravan Norse");
+                names[NameType.Complete].Add("707", "Carcinos");
+                names[NameType.Complete].Add("708", "Caribou Of Set");
+                names[NameType.Complete].Add("709", "Carnivora Unit");
+                names[NameType.Complete].Add("710", "Catapult");
+                names[NameType.Complete].Add("711", "Centaur");
+                names[NameType.Complete].Add("712", "Centimanus");
+                names[NameType.Complete].Add("713", "Chariot Archer");
+                names[NameType.Complete].Add("714", "Cheiroballista Hero");
+                names[NameType.Complete].Add("715", "Cheiroballista");
+                names[NameType.Complete].Add("716", "Chicken Of Set");
+                names[NameType.Complete].Add("717", "Chimera");
+                names[NameType.Complete].Add("718", "Chiron");
+                names[NameType.Complete].Add("719", "Colossus");
+                names[NameType.Complete].Add("720", "Contarius Hero");
+                names[NameType.Complete].Add("721", "Contarius");
+                names[NameType.Complete].Add("722", "Crocodile Of Set");
+                names[NameType.Complete].Add("723", "Crowned Crane Of Set");
+                names[NameType.Complete].Add("724", "Cyclops");
+                names[NameType.Complete].Add("725", "Deer Of Set");
+                names[NameType.Complete].Add("726", "Destroyer Hero");
+                names[NameType.Complete].Add("727", "Destroyer");
+                names[NameType.Complete].Add("728", "Dragon Ship");
+                names[NameType.Complete].Add("729", "Draugr");
+                names[NameType.Complete].Add("730", "Dreki");
+                names[NameType.Complete].Add("731", "Dryad");
+                names[NameType.Complete].Add("732", "Einheri");
+                names[NameType.Complete].Add("733", "Elephant Of Set");
+                names[NameType.Complete].Add("734", "Elk Of Set");
+                names[NameType.Complete].Add("735", "Fafnir");
+                names[NameType.Complete].Add("736", "Fanatic Hero");
+                names[NameType.Complete].Add("737", "Fanatic");
+                names[NameType.Complete].Add("738", "Fenris Wolf Brood");
+                names[NameType.Complete].Add("739", "Fimbulwinter Wolf");
+                names[NameType.Complete].Add("740", "Fire Giant");
+                names[NameType.Complete].Add("741", "Fire Ship");
+                names[NameType.Complete].Add("742", "Fire Siphon");
+                names[NameType.Complete].Add("743", "Fishing Ship Atlantean"); names[NameType.Abbreviation].Add("743", "FSA");
+                names[NameType.Complete].Add("744", "Fishing Ship Egyptian"); names[NameType.Abbreviation].Add("744", "FSE");
+                names[NameType.Complete].Add("745", "Fishing Ship Greek"); names[NameType.Abbreviation].Add("745", "FSG");
+                names[NameType.Complete].Add("746", "Fishing Ship Norse"); names[NameType.Abbreviation].Add("746", "FSN");
+                names[NameType.Complete].Add("747", "Frost Giant");
+                names[NameType.Complete].Add("748", "Gastraphetoros");
+                names[NameType.Complete].Add("749", "Gazelle Of Set");
+                names[NameType.Complete].Add("750", "Giraffe Of Set");
+                names[NameType.Complete].Add("751", "Godi");
+                names[NameType.Complete].Add("752", "Gullinbursti Unit");
+                names[NameType.Complete].Add("753", "Hades Shade");
+                names[NameType.Complete].Add("754", "Helepolis");
+                names[NameType.Complete].Add("755", "Heracles");
+                names[NameType.Complete].Add("756", "Hero Of Ragnarok Dwarf");
+                names[NameType.Complete].Add("757", "Hero Of Ragnarok");
+                names[NameType.Complete].Add("758", "Hersir");
+                names[NameType.Complete].Add("759", "Hetairos");
+                names[NameType.Complete].Add("760", "Hippeus");
+                names[NameType.Complete].Add("761", "Hippocampus");
+                names[NameType.Complete].Add("762", "Hippolyta");
+                names[NameType.Complete].Add("763", "Hippopotamus Of Set");
+                names[NameType.Complete].Add("764", "Hirdman");
+                names[NameType.Complete].Add("765", "Hoplite");
+                names[NameType.Complete].Add("766", "Huskarl");
+                names[NameType.Complete].Add("767", "Hydra");
+                names[NameType.Complete].Add("768", "Hyena Of Set");
+                names[NameType.Complete].Add("769", "Hypaspist");
+                names[NameType.Complete].Add("770", "Jarl");
+                names[NameType.Complete].Add("771", "Jason");
+                names[NameType.Complete].Add("772", "Jormun Elver");
+                names[NameType.Complete].Add("773", "Juggernaut");
+                names[NameType.Complete].Add("774", "Katapeltes Hero");
+                names[NameType.Complete].Add("775", "Katapeltes");
+                names[NameType.Complete].Add("776", "Kataskopos"); names[NameType.Abbreviation].Add("776", "KK");
+                names[NameType.Complete].Add("777", "Kebenit");
+                names[NameType.Complete].Add("778", "Kraken");
+                names[NameType.Complete].Add("779", "Lampades");
+                names[NameType.Complete].Add("780", "Leviathan");
+                names[NameType.Complete].Add("781", "Lion Of Set");
+                names[NameType.Complete].Add("782", "Longboat");
+                names[NameType.Complete].Add("783", "Lost Ship");
+                names[NameType.Complete].Add("784", "Man O War");
+                names[NameType.Complete].Add("785", "Manticore");
+                names[NameType.Complete].Add("786", "Medusa");
+                names[NameType.Complete].Add("787", "Mercenary Cavalry");
+                names[NameType.Complete].Add("788", "Mercenary");
+                names[NameType.Complete].Add("789", "Militia");
+                names[NameType.Complete].Add("790", "Minion");
+                names[NameType.Complete].Add("791", "Minotaur"); names[NameType.Abbreviation].Add("791", "MT");
+                names[NameType.Complete].Add("792", "Monkey Of Set");
+                names[NameType.Complete].Add("793", "Mountain Giant");
+                names[NameType.Complete].Add("794", "Mummy");
+                names[NameType.Complete].Add("795", "Murmillo Hero");
+                names[NameType.Complete].Add("796", "Murmillo");
+                names[NameType.Complete].Add("797", "Myrmidon");
+                names[NameType.Complete].Add("798", "Nemean Lion");
+                names[NameType.Complete].Add("799", "Nereid");
+                names[NameType.Complete].Add("800", "Nidhogg Unit");
+                names[NameType.Complete].Add("801", "Odysseus");
+                names[NameType.Complete].Add("802", "Oracle Hero");
+                names[NameType.Complete].Add("803", "Oracle Unit"); names[NameType.Abbreviation].Add("803", "O");
+                names[NameType.Complete].Add("804", "Ox Cart"); names[NameType.Abbreviation].Add("804", "Ox");
+                names[NameType.Complete].Add("805", "Pegasus");
+                names[NameType.Complete].Add("806", "Peltast");
+                names[NameType.Complete].Add("807", "Pentekonter");
+                names[NameType.Complete].Add("808", "Perseus");
+                names[NameType.Complete].Add("809", "Petrobolos");
+                names[NameType.Complete].Add("810", "Petsuchos");
+                names[NameType.Complete].Add("811", "Pharaoh"); names[NameType.Abbreviation].Add("811", "PH");
+                names[NameType.Complete].Add("812", "Phoenix Egg");
+                names[NameType.Complete].Add("813", "Phoenix");
+                names[NameType.Complete].Add("814", "Polar Bear Of Set");
+                names[NameType.Complete].Add("815", "Polyphemus");
+                names[NameType.Complete].Add("816", "Portable Ram");
+                names[NameType.Complete].Add("817", "Priest"); names[NameType.Abbreviation].Add("817", "PR");
+                names[NameType.Complete].Add("818", "Prodromos");
+                names[NameType.Complete].Add("819", "Promethean");
+                names[NameType.Complete].Add("820", "Promethean Offspring");
+                names[NameType.Complete].Add("821", "Raiding Cavalry");
+                names[NameType.Complete].Add("822", "Ramming Galley");
+                names[NameType.Complete].Add("823", "Raven");
+                names[NameType.Complete].Add("824", "Rhinoceros Of Set");
+                names[NameType.Complete].Add("825", "Roc");
+                names[NameType.Complete].Add("826", "Rock Giant");
+                names[NameType.Complete].Add("827", "Satyr");
+                names[NameType.Complete].Add("828", "Scarab");
+                names[NameType.Complete].Add("829", "Scorpion Man");
+                names[NameType.Complete].Add("830", "Scylla");
+                names[NameType.Complete].Add("831", "Sea Snake");
+                names[NameType.Complete].Add("832", "Sentinel Unit");
+                names[NameType.Complete].Add("833", "Serpent");
+                names[NameType.Complete].Add("834", "Servant");
+                names[NameType.Complete].Add("835", "Siege Bireme");
+                names[NameType.Complete].Add("836", "Siege Tower");
+                names[NameType.Complete].Add("837", "Slinger");
+                names[NameType.Complete].Add("838", "Son Of Osiris Unit");
+                names[NameType.Complete].Add("839", "Spearman");
+                names[NameType.Complete].Add("840", "Sphinx");
+                names[NameType.Complete].Add("841", "Spider Egg");
+                names[NameType.Complete].Add("842", "Stymphalian Bird");
+                names[NameType.Complete].Add("843", "Tartarian Spawn");
+                names[NameType.Complete].Add("844", "The Argo");
+                names[NameType.Complete].Add("845", "Theseus");
+                names[NameType.Complete].Add("846", "Throwing Axeman"); names[NameType.Abbreviation].Add("846", "TA");
+                names[NameType.Complete].Add("847", "Titan Atlantean");
+                names[NameType.Complete].Add("848", "Titan Egyptian");
+                names[NameType.Complete].Add("849", "Titan Greek");
+                names[NameType.Complete].Add("850", "Titan Norse");
+                names[NameType.Complete].Add("851", "Toxotes"); names[NameType.Abbreviation].Add("851", "tx");
+                names[NameType.Complete].Add("852", "Transport Ship Atlantean");
+                names[NameType.Complete].Add("853", "Transport Ship Egyptian");
+                names[NameType.Complete].Add("854", "Transport Ship Greek");
+                names[NameType.Complete].Add("855", "Transport Ship Norse");
+                names[NameType.Complete].Add("856", "Trireme");
+                names[NameType.Complete].Add("857", "Troll");
+                names[NameType.Complete].Add("858", "Turma Hero");
+                names[NameType.Complete].Add("859", "Turma");
+                names[NameType.Complete].Add("860", "Archer");
+                names[NameType.Complete].Add("861", "Archer Ship");
+                names[NameType.Complete].Add("862", "Building");
+                names[NameType.Complete].Add("863", "Cavalry");
+                names[NameType.Complete].Add("864", "Close Combat Ship");
+                names[NameType.Complete].Add("865", "Flying Unit");
+                names[NameType.Complete].Add("866", "Hero");
+                names[NameType.Complete].Add("867", "Human Soldier");
+                names[NameType.Complete].Add("868", "Infantry");
+                names[NameType.Complete].Add("869", "Myth Unit");
+                names[NameType.Complete].Add("870", "Ship");
+                names[NameType.Complete].Add("871", "Siege Ship");
+                names[NameType.Complete].Add("872", "Siege Weapon");
+                names[NameType.Complete].Add("873", "Titan");
+                names[NameType.Complete].Add("874", "Tower");
+                names[NameType.Complete].Add("875", "Villager");
+                names[NameType.Complete].Add("876", "Wall");
+                names[NameType.Complete].Add("877", "Valkyrie");
+                names[NameType.Complete].Add("878", "Villager Atlantean Hero"); names[NameType.Abbreviation].Add("878", "Citizen Hero|CH");
+                names[NameType.Complete].Add("879", "Villager Atlantean"); names[NameType.Abbreviation].Add("879", "Citizen|C");
+                names[NameType.Complete].Add("880", "Villager Dwarf"); names[NameType.Abbreviation].Add("880", "Dwarf|D");
+                names[NameType.Complete].Add("881", "Villager Egyptian"); names[NameType.Abbreviation].Add("881", "Laborer|L");
+                names[NameType.Complete].Add("882", "Villager Greek"); names[NameType.Abbreviation].Add("882", "Villager|V");
+                names[NameType.Complete].Add("883", "Villager Norse"); names[NameType.Abbreviation].Add("883", "Gatherer|GT");
+                names[NameType.Complete].Add("884", "Wadjet");
+                names[NameType.Complete].Add("885", "Walking Woods Unit");
+                names[NameType.Complete].Add("886", "Walrus Of Set");
+                names[NameType.Complete].Add("887", "War Barge");
+                names[NameType.Complete].Add("888", "War Elephant");
+                names[NameType.Complete].Add("889", "War Turtle");
+                names[NameType.Complete].Add("890", "Water Buffalo Of Set");
+                names[NameType.Complete].Add("891", "Water Carnivora");
+                names[NameType.Complete].Add("892", "Wolf Of Set");
+                names[NameType.Complete].Add("893", "Zebra Of Set");
+                names[NameType.Complete].Add("894", "Auto Scout Ability"); names[NameType.Abbreviation].Add("894", "Auto Scout|as");
+                names[NameType.Complete].Add("895", "Idle");
+                names[NameType.Complete].Add("896", "1S"); names[NameType.Abbreviation].Add("896", " ");
+                names[NameType.Complete].Add("897", "2S"); names[NameType.Abbreviation].Add("897", "  ");
+                names[NameType.Complete].Add("898", "3S"); names[NameType.Abbreviation].Add("898", "   ");
+                names[NameType.Complete].Add("899", "4S"); names[NameType.Abbreviation].Add("899", "    ");
+                names[NameType.Complete].Add("900", "5S"); names[NameType.Abbreviation].Add("900", "     ");
+                names[NameType.Complete].Add("901", "6S"); names[NameType.Abbreviation].Add("901", "      ");
+                names[NameType.Complete].Add("902", "7S"); names[NameType.Abbreviation].Add("902", "       ");
+                names[NameType.Complete].Add("903", "8S"); names[NameType.Abbreviation].Add("903", "        ");
+                names[NameType.Complete].Add("904", "9S"); names[NameType.Abbreviation].Add("904", "         ");
+                names[NameType.Complete].Add("905", "10S"); names[NameType.Abbreviation].Add("905", "          ");
+                names[NameType.Complete].Add("906", "Less Than"); names[NameType.Abbreviation].Add("906", "<");
+                names[NameType.Complete].Add("907", "Open Square Bracket"); names[NameType.Abbreviation].Add("907", "[");
+                names[NameType.Complete].Add("908", "Close Square Bracket"); names[NameType.Abbreviation].Add("908", "]");
+                names[NameType.Complete].Add("909", "0S"); names[NameType.Abbreviation].Add("909", "");
+                names[NameType.Complete].Add("910", "Up");
+                names[NameType.Complete].Add("911", "Right");
+                names[NameType.Complete].Add("912", "Left");
+                names[NameType.Complete].Add("913", "Down");
+                names[NameType.Complete].Add("914", "Question");
+                names[NameType.Complete].Add("915", "Atlanteans");
+                names[NameType.Complete].Add("916", "Egyptians");
+                names[NameType.Complete].Add("917", "Greeks");
+                names[NameType.Complete].Add("918", "Norse");
+                names[NameType.Complete].Add("919", "Atlanteans Circular");
+                names[NameType.Complete].Add("920", "Egyptians Circular");
+                names[NameType.Complete].Add("921", "Greeks Circular");
+                names[NameType.Complete].Add("922", "Norse Circular");
+                names[NameType.Complete].Add("923", "Woodline"); names[NameType.Abbreviation].Add("923", "wl");
+                names[NameType.Complete].Add("924", "Pray");
+                names[NameType.Complete].Add("925", "Explore"); names[NameType.Abbreviation].Add("925", "EXP");
+                names[NameType.Complete].Add("926", "Autoqueue"); names[NameType.Abbreviation].Add("926", "aq");
+                names[NameType.Complete].Add("927", "Relic");
+
+            } // AOM>
 
             File.WriteAllText(Preferencias.EnglishNamesPath, SerializarNombres(names));
 
@@ -2405,7 +4289,7 @@ namespace RTSHelper {
             coloresEsquinas.Add(bmp.GetPixel(bmp.Width - 1, 0));
             return ObtenerColorPromedio(coloresEsquinas);
 
-        } // ExtraerColorPromedioEsquinas>
+        } // ExtraerColorFondo>
 
 
         public static ScreenCaptureText ObtenerTipoPausa() {
@@ -2445,6 +4329,45 @@ namespace RTSHelper {
                         break;
                     case "VI":
                         tipo = ScreenCaptureText.Age_of_Empires_II_PauseF3XL;
+                        break;
+                    default:
+                        break;
+                }
+
+            } else if (Preferencias.Game == AOMName) {
+
+                switch (Preferencias.GameLanguage) {
+
+                    case "EN":
+                    case "IT":
+                    case "DE":
+                    case "BR":
+                        tipo = ScreenCaptureText.Age_of_Mythology_Pause;
+                        break;
+                    case "ES":
+                    case "MX":
+                    case "PL":
+                    case "MS":
+                    case "FR":
+                    case "TR":
+                        tipo = ScreenCaptureText.Age_of_Mythology_Pause;
+                        break;
+                    case "ZH":
+                    case "TW":
+                    case "JP":
+                        tipo = ScreenCaptureText.Age_of_Mythology_Pause;
+                        break;
+                    case "RU":
+                        tipo = ScreenCaptureText.Age_of_Mythology_Pause;
+                        break;
+                    case "HI":
+                        tipo = ScreenCaptureText.Age_of_Mythology_Pause;
+                        break;
+                    case "KO":
+                        tipo = ScreenCaptureText.Age_of_Mythology_Pause;
+                        break;
+                    case "VI":
+                        tipo = ScreenCaptureText.Age_of_Mythology_Pause;
                         break;
                     default:
                         break;
@@ -2560,6 +4483,41 @@ namespace RTSHelper {
 
                 }
 
+            } else if (Preferencias.Game == AOMName) {
+
+                if (progresoActual < 9) {
+
+                    texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Mythology_Villagers_0_to_9, new List<string>(), out confianza); 
+                    if (confianza != -1) confianza += 1; // Se suma 1 a la confianza para evitar que en el intervalo de 0 a 9 se consideren lecturas no confiables por no proveer la lista de valores esperados y se retrase el ajuste innecesariamente un paso más.
+
+                } else if (progresoActual == 9 || progresoActual == 10) {
+
+                    var texto2n = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Mythology_Villagers_10_to_99, valoresEsperados, out float c2n);
+                    var leído2n = false;
+                    if (c2n > ConfianzaOCRAceptable) {
+
+                        var éxito2 = int.TryParse(texto2n, out int progreso2);
+                        if (progreso2 < 15) { // Leer comentario en AOE2, se deja igual la misma lógica.
+                            leído2n = true;
+                            texto = texto2n;
+                            confianza = c2n;
+                        }
+
+                    }
+
+                    if (!leído2n) {
+
+                        var texto1n = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Mythology_Villagers_0_to_9, new List<string>(), out float c1n,
+                            extraConfianzaRequerida: 0.3f);
+                        texto = texto1n;
+                        confianza = c1n + (confianza == -1 ? 0 : 1); // Ver confianza += 1;
+
+                    }
+
+                } else if (progresoActual > 10 && progresoActual < 99) {
+                    texto = ExtraerTextoDePantalla(ScreenCaptureText.Age_of_Mythology_Villagers_10_to_99, valoresEsperados, out confianza);
+                }
+
             }
 
             var éxito = int.TryParse(texto, out int progreso);
@@ -2595,6 +4553,11 @@ namespace RTSHelper {
                     var factorAltura = (float)altura16a9 / (float)Preferencias.HeightScreenResolution; // Este factor es 1 para todas las pantallas con proporción 16:9 (1.77) que es con las que se crearon originalmente los rectángulos.
                     return new SDrw.RectangleF(r.X * e, r.Y * e * factorAltura, r.Width * e, r.Height * e * factorAltura);
 
+                } else if (RectángulosSuperioresADerechaDePanelCentradoPorEscalaUI.ContainsKey(tipo)) {
+                    return new SDrw.RectangleF((r.X - ((RectángulosSuperioresADerechaDePanelCentradoPorEscalaUI[tipo] * (1 - e)) / 2)), 
+                        r.Y * e, r.Width * e, r.Height * e);
+                } else if (RectángulosCentradosHorizontalmenteAfectadosPorEscalaUI.Contains(tipo)) {
+                    return new SDrw.RectangleF(r.X - r.Width * (e - 1) / 2, r.Y * e, r.Width * e, r.Height * e);
                 } else {
                     return r;
                 }
@@ -2686,6 +4649,26 @@ namespace RTSHelper {
             if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Empires_II_PauseF3XL)) {
                 cambió = true;
                 agregarRectángulo(ScreenCaptureText.Age_of_Empires_II_PauseF3XL);
+            }
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Mythology_Pause)) {
+                cambió = true;
+                agregarRectángulo(ScreenCaptureText.Age_of_Mythology_Pause);
+            }
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Mythology_Villagers_0_to_9)) {
+                cambió = true;
+                agregarRectángulo(ScreenCaptureText.Age_of_Mythology_Villagers_0_to_9);
+            }
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Mythology_Villagers_10_to_99)) {
+                cambió = true;
+                agregarRectángulo(ScreenCaptureText.Age_of_Mythology_Villagers_10_to_99);
+            }
+
+            if (!Preferencias.ScreenCaptureRectangles.ContainsKey(ScreenCaptureText.Age_of_Mythology_Game_Start)) {
+                cambió = true;
+                agregarRectángulo(ScreenCaptureText.Age_of_Mythology_Game_Start);
             }
 
             if (cambió) Settings.Guardar(Preferencias, RutaPreferencias);
@@ -2901,6 +4884,18 @@ namespace RTSHelper {
                 case ScreenCaptureText.Age_of_Empires_II_Game_Start:
                     rectángulo = new SDrw.RectangleF(2F / 2560, 1416F / 1440, 22F / 2560, 22F / 1440);
                     break;
+                case ScreenCaptureText.Age_of_Mythology_Pause:
+                    rectángulo = new SDrw.RectangleF(0.423F, 0.48F, 0.152F, 0.04F);
+                    break;
+                case ScreenCaptureText.Age_of_Mythology_Villagers_0_to_9:
+                    rectángulo = new SDrw.RectangleF(0.71F, 0.01F, 0.006F, 0.015F);
+                    break;
+                case ScreenCaptureText.Age_of_Mythology_Villagers_10_to_99:
+                    rectángulo = new SDrw.RectangleF(0.7075F, 0.01F, 0.0115F, 0.015F);
+                    break;
+                case ScreenCaptureText.Age_of_Mythology_Game_Start:
+                    rectángulo = new SDrw.RectangleF(0.49306F, 0.06714F, 0.01429F, 0.01286F);
+                    break;
                 default:
                     break;
             }
@@ -2913,13 +4908,19 @@ namespace RTSHelper {
         public static ParámetrosExtracción ObtenerParámetrosOCR(ScreenCaptureText tipo, int númeroRecomendado) {
 
             switch (tipo) {
+                case ScreenCaptureText.Age_of_Mythology_Pause:
+                    return AlfaNumNegByNL2C4;
+                case ScreenCaptureText.Age_of_Mythology_Villagers_0_to_9:
+                    return HQBCL1_5C2x16; 
+                case ScreenCaptureText.Age_of_Mythology_Villagers_10_to_99:
+                    return HQBCL1_5C2x16; 
                 case ScreenCaptureText.Age_of_Empires_II_PauseM:
                 case ScreenCaptureText.Age_of_Empires_II_PauseL:
                 case ScreenCaptureText.Age_of_Empires_II_PauseF3XS:
                 case ScreenCaptureText.Age_of_Empires_II_PauseF3S:
                 case ScreenCaptureText.Age_of_Empires_II_PauseF3M:
                 case ScreenCaptureText.Age_of_Empires_II_PauseF3L:
-                case ScreenCaptureText.Age_of_Empires_II_PauseF3XL:
+                case ScreenCaptureText.Age_of_Empires_II_PauseF3XL: 
                     return AlfaNumNegByNL2C2; // Para Smooth Serif: AlfaNumNegByNL1_5C2. El cambio de fuente a Smooth Serif en 1920x1080 solo aplica para los números de recursos y la cantidad de aldeanos, no aplica para la fuente del texto de pausa.
                 case ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9:
 
@@ -3170,6 +5171,8 @@ namespace RTSHelper {
                 case ScreenCaptureText.Age_of_Empires_II_Villagers_0_to_9:
                 case ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99:
                 case ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999:
+                case ScreenCaptureText.Age_of_Mythology_Villagers_0_to_9:
+                case ScreenCaptureText.Age_of_Mythology_Villagers_10_to_99:
                     máximosIntentosDiferentesExtracción = 3;
                     break;
                 default:

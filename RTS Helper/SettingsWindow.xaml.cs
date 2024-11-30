@@ -190,7 +190,7 @@ namespace RTSHelper {
 
             if (MostrandoPreferenciasOCR) {
 
-                if (Preferencias.Game == AOE2Name) {
+                if (Preferencias.Game == AOE2Name ) {
 
                     void obtenerBitmapYMostrar(ScreenCaptureText tipoRectángulo) {
 
@@ -206,6 +206,22 @@ namespace RTSHelper {
                     obtenerBitmapYMostrar(ScreenCaptureText.Age_of_Empires_II_Villagers_10_to_99);
                     obtenerBitmapYMostrar(ScreenCaptureText.Age_of_Empires_II_Villagers_100_to_999);
                     obtenerBitmapYMostrar(ScreenCaptureText.Age_of_Empires_II_Game_Start);
+
+                } else if (Preferencias.Game == AOMName) {
+
+                    void obtenerBitmapYMostrar(ScreenCaptureText tipoRectángulo) {
+
+                        using var bmp = CapturaDePantalla.ObtenerBitmap(ObtenerRectángulo(tipoRectángulo), false, false, 1, 1, 1,
+                            InterpolationMode.HighQualityBicubic, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        if (RectángulosImágenesPrueba.ContainsKey(tipoRectángulo))
+                            RectángulosImágenesPrueba[tipoRectángulo].Source = ObtenerImageSource(bmp);
+
+                    } // obtenerBitmapYMostrar>
+
+                    obtenerBitmapYMostrar(ObtenerTipoPausa());
+                    obtenerBitmapYMostrar(ScreenCaptureText.Age_of_Mythology_Villagers_0_to_9);
+                    obtenerBitmapYMostrar(ScreenCaptureText.Age_of_Mythology_Villagers_10_to_99);
+                    obtenerBitmapYMostrar(ScreenCaptureText.Age_of_Mythology_Game_Start);
 
                 }
                 return;
@@ -230,7 +246,7 @@ namespace RTSHelper {
                 LblShowOptionalInstructions1.Content = "Show Villagers: ";
                 LblShowOptionalInstructions2.Content = "Show Houses: ";
 
-            } else {
+            } else { // Para Age of Mythology no es necesario las opciones de esconder instrucciones de nuevas casas y aldeanos.
 
                 LblOptionalInstructions.Visibility = Visibility.Hidden;
                 LblShowOptionalInstructions1.Visibility = Visibility.Hidden;
@@ -337,6 +353,12 @@ namespace RTSHelper {
             if (Preferencias.Game == AOE2Name) {
 
                 enlaceNombres.NavigateUri = new Uri("https://docs.google.com/spreadsheets/d/1N98XMYNNlUOlA45B3NKTJ54Fhuo53PFYSsnt_F2S7nU");
+                enlaceNombres.RequestNavigate += Lnk_Click;
+                enlaceNombres.Inlines.Add($"See here the supported names for {Preferencias.Game}.");
+
+            } else if (Preferencias.Game == AOMName) {
+
+                enlaceNombres.NavigateUri = new Uri("https://docs.google.com/spreadsheets/d/1YekY3hWAK08tWPWndnDq7AdAKJfLo-8x6VCeyv8Dp4o");
                 enlaceNombres.RequestNavigate += Lnk_Click;
                 enlaceNombres.Inlines.Add($"See here the supported names for {Preferencias.Game}.");
 
@@ -914,7 +936,10 @@ namespace RTSHelper {
 
             VentanaPrincipal.AplicarPreferencias();
             CrearEntidadesYNombres();
+            Preferencias.CurrentBuildOrder = "Tutorial";
+            VentanaPrincipal.CmbBuildOrders.SelectedValue = "Tutorial";
             VentanaPrincipal.RecargarEstrategia();
+
             ActualizarDuraciónPasoAlSalir = true;
 
         } // CmbGame_SelectionChanged>

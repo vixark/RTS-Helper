@@ -133,7 +133,7 @@ namespace RTSHelper {
             foreach (var instrucciónTexto in instruccionesTexto) {
 
                 string instrucciónTextoLimpia;
-                if (Preferencias.Game == AOE2Name || Preferencias.Game == AOE4Name) {
+                if (Preferencias.Game == AOE2Name || Preferencias.Game == AOE4Name) { // Eliminación de aldeanos y casas no es necesario para Age of Mythology.
 
                     instrucciónTextoLimpia = instrucciónTexto;
 

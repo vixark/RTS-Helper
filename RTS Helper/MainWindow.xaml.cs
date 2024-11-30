@@ -474,8 +474,55 @@ namespace RTSHelper {
 
                 }
 
+            } else if (Preferencias.Game == AOMName) {
+
+                var color = ExtraerColorFondo(ScreenCaptureText.Age_of_Mythology_Game_Start);
+
+                var coloresFondo = new List<Color> {
+                    Color.FromArgb(0, 39, 41, 44), // Promedio del gris del fondo sin letras con 70% de escala (46-49-51) y con 100% de escala (32-34-37).
+                    Color.FromArgb(0, 91, 88, 75), // Fondo con una letra en una esquina.
+                    Color.FromArgb(0, 144, 134, 107), // Fondo con letras en dos esquinas.
+                    Color.FromArgb(0, 196, 181, 138), // Fondo con letras en tres esquinas.
+                    Color.FromArgb(0, 248, 227, 169), // Letra: beige claro.
+                };
+
+                var coloresJuego = new List<Color> {
+                    Color.FromArgb(0, 144, 79, 38), // Age I: 904f26 Café 144-79-38.
+                    Color.FromArgb(0, 147, 137, 133), // Age II: aba6a3 Gris 147-137-133.
+                    Color.FromArgb(0, 231, 209, 100), // Age III: e7d164 Amarillo 231-209-100.
+                    Color.FromArgb(0, 98, 164, 82), // Age IV: 62a452 Verde 98-164-82.
+                };
+
+                bool estáColorSimilar(List<Color> colores, System.Drawing.Color color) {
+
+                    foreach (var c in colores) {
+                        if (Math.Abs(color.R - c.R) < 20 && Math.Abs(color.G - c.G) < 20 && Math.Abs(color.B - c.B) < 15) { // Solo el azul (B) se hace con 15 porque es el que permite diferenciar entre el color de Age II y el color del fondo con tres letras en cada esquina.
+                            return true;
+                        }
+                    }
+                    return false;
+
+                } // estáColorSimilar>
+
+                if (estáColorSimilar(coloresFondo, color)) { 
+
+                    ContadorPantallaCarga++;
+                    if (Preferencias.OCRTestMode) LblDepuración.Content = "Loading Screen Detected";
+                    if (ContadorPantallaCarga == 2) EnPantallaCarga = true;
+
+                } else if (estáColorSimilar(coloresJuego, color)) {
+
+                    if (EnPantallaCarga) Start();
+                    EnPantallaCarga = false;
+                    ContadorPantallaCarga = 0;
+                    if (Preferencias.OCRTestMode) LblDepuración.Content = "Game Running";
+
+                } else {
+                    if (Preferencias.OCRTestMode) LblDepuración.Content = "No Loading Screen Detected and Game Not Running";
+                }
+
             }
-            
+
         } // TimerDetecciónInicioJuego_Tick>
 
 
@@ -2155,7 +2202,8 @@ reintentarCon1Dígito:
 
                 var directorioÓrdenesDeEjecución = Settings.ObtenerDirectorioEstrategias(DirectorioEstrategias, juego);
                 var archivosBuildOrders = Directory.GetFiles(directorioÓrdenesDeEjecución, "*.txt");
-                var directorioCopiasDeSeguridad = ObtenerRutaCarpeta(Preferencias.BuildOrdersDirectory, "Backups", crearSiNoExiste: true);
+                var directorioCopiasDeSeguridad = ObtenerRutaCarpeta(Settings.ObtenerDirectorioEstrategias(DirectorioEstrategias, juego), 
+                    "Backups", crearSiNoExiste: true);
                 var directorioCopiasDeSeguridadAyer = ObtenerRutaCarpeta(directorioCopiasDeSeguridad, "Yesterday", crearSiNoExiste: true);
                 var directorioCopiasDeSeguridadSemanaPasada = ObtenerRutaCarpeta(directorioCopiasDeSeguridad, "Last Week", crearSiNoExiste: true);
                 var directorioCopiasDeSeguridadMesPasado = ObtenerRutaCarpeta(directorioCopiasDeSeguridad, "Last Month", crearSiNoExiste: true);

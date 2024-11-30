@@ -31,9 +31,10 @@
 
                                 <ComboBox SelectionChanged="CmbGame_SelectionChanged" HorizontalAlignment="Stretch" Margin="4" x:Name="CmbGame">
                                     <ComboBoxItem>Age of Empires II</ComboBoxItem>
+                                    <ComboBoxItem>Age of Mythology</ComboBoxItem>
                                     <ComboBoxItem>Age of Empires IV</ComboBoxItem>
                                     <ComboBoxItem>Other</ComboBoxItem>
-                                    <!--Al agregar un elemento aquí también se debe agreegar en Global.Juegos-->
+                                    <!--Al agregar un elemento aquí también se debe agregar en Global.Juegos-->
                                 </ComboBox>
 
                                 <ComboBox SelectionChanged="CmbGameSpeed_SelectionChanged" x:Name="CmbGameSpeed" Margin="4">
@@ -41,6 +42,8 @@
                                     <ComboBoxItem>Normal</ComboBoxItem>
                                     <ComboBoxItem>Casual</ComboBoxItem>
                                     <ComboBoxItem>Slow</ComboBoxItem>
+                                    <ComboBoxItem>Consider the internet</ComboBoxItem>
+                                    <ComboBoxItem>Lets go! now!</ComboBoxItem>
                                 </ComboBox>
 
                                 <ComboBox SelectionChanged="CmbResolution_SelectionChanged" x:Name="CmbResolution" Margin="4">
@@ -62,6 +65,11 @@
                                 </ComboBox>
                                 
                                 <ComboBox SelectionChanged="CmbGameInterfaceScale_SelectionChanged" x:Name="CmbGameInterfaceScale" Margin="4">
+                                    <ComboBoxItem Tag="70">70%</ComboBoxItem>
+                                    <ComboBoxItem Tag="71">71%</ComboBoxItem>
+                                    <ComboBoxItem Tag="72">72%</ComboBoxItem>
+                                    <ComboBoxItem Tag="73">73%</ComboBoxItem>
+                                    <ComboBoxItem Tag="74">74%</ComboBoxItem>
                                     <ComboBoxItem Tag="75">75%</ComboBoxItem>
                                     <ComboBoxItem Tag="76">76%</ComboBoxItem>
                                     <ComboBoxItem Tag="77">77%</ComboBoxItem>
@@ -797,10 +805,10 @@
                         </StackPanel>
 
                         <TextBlock TextWrapping="Wrap" Margin="0 0 0 10">
-                                Age of Empires II © Microsoft Corporation.
+                                Age of Empires II © Microsoft Corporation. Age of Mythology © Microsoft Corporation.
                                 RTS Helper was created under Microsoft's "<Hyperlink Click="Lnk_Click" 
                                 NavigateUri="https://www.xbox.com/en-us/developers/rules">Game Content Usage Rules</Hyperlink>" 
-                                using assets from Age of Empires II, and it is not endorsed by or affiliated with Microsoft.
+                                using assets from Age of Empires II and Age of Mythology, and it is not endorsed by or affiliated with Microsoft.
                         </TextBlock>
 
                         <TextBlock TextWrapping="Wrap">

@@ -360,6 +360,12 @@ namespace RTSHelper {
 
             if (game == AOE2Name) {
                 return (GameSpeed == 1.7 ? "Normal" : (GameSpeed == 1 ? "Slow" : (GameSpeed == 1.5 ? "Casual" : (GameSpeed == 2 ? "Fast" : "Other"))));
+            } else if (game == AOMName) {
+                return (GameSpeed == 1 * 1.0018785* 1.0008 ? "Normal" : 
+                    (GameSpeed == 0.5 ? "Slow" : 
+                    (GameSpeed == 2 ? "Fast" : 
+                    (GameSpeed == 0.3333 * 1.020408 ? "Consider the internet" 
+                    : (GameSpeed == 2.5 ? "Lets go! now!" : "Other")))));
             } else {
                 return "Normal";
             }
@@ -374,13 +380,20 @@ namespace RTSHelper {
         public void EstablecerGameSpeed(string gameSpeedText, string game) {
 
             if (game == AOE2Name) {
-                GameSpeed = (gameSpeedText == "Normal" ? 1.7 : (gameSpeedText == "Slow" ? 1 : (gameSpeedText == "Casual" ? 1.5 : (gameSpeedText == "Fast" ? 2 : 1))));
+                GameSpeed = (gameSpeedText == "Normal" ? 1.7 : (gameSpeedText == "Slow" ? 1 : (gameSpeedText == "Casual" ? 1.5 :
+                    (gameSpeedText == "Fast" ? 2 : 1.7))));
+            } else if (game == AOMName) {
+                GameSpeed = (gameSpeedText == "Normal" ? 1 * 1.0018785 * 1.0008 : // 1200 segundos en juego dieron 19:57.75 en RTS Helper. El juego estaba más rápido por 1200/1197,75 = 1,00187852222918.
+                    (gameSpeedText == "Slow" ? 0.5 : 
+                    (gameSpeedText == "Consider the internet" ? 0.3333 * 1.020408 : // 1200 segundos del juego dieron 1176 segundos dieron RTS Helper. El juego estaba más rapido por 1,020408163265306.
+                    (gameSpeedText == "Fast" ? 2 : 
+                    (gameSpeedText == "Lets go! now!" ? 2.5 : 1)))));
             } else {
                 if (gameSpeedText != "Normal")
                     MostrarInformación($"The game {game} doesn't have speed options other than normal. Normal speed will be used.");
                 GameSpeed = 1;
             }
-
+            
         } // EstablecerGameSpeed>
 
 
@@ -440,7 +453,7 @@ namespace RTSHelper {
                 case "2560x1440":
                 case "3840x2160":
 
-                    Height = 195 * CorrecciónEscala;
+                    Height = 200 * CorrecciónEscala;
                     Width = 662 * CorrecciónEscala; // No cambiar. Normalmente uso el minimapa 25% más grande y el valor mi valor sería 635.
                     Top = 957 * CorrecciónEscala;
                     Left = 962 * CorrecciónEscala;
@@ -460,6 +473,33 @@ namespace RTSHelper {
                     ExecutionSpeedSelectorWidth = 75 * CorrecciónEscala;
                     ThicknessCircularProgressBar = 8 * CorrecciónEscala;
                     RightMarginCircularProgressBar = 7 * CorrecciónEscala;
+
+                    if (resolución == "3840x2160") {
+
+                        var factorIncrementoVs1440p = 1.25; // Un valor intermedio entre 1 y 1.5 para darle más tamaño, pero tampoco incrementarlo proporcional a la resolución.
+                        Height*= factorIncrementoVs1440p;
+                        Width *= factorIncrementoVs1440p; // No cambiar. Normalmente uso el minimapa 25% más grande y el valor mi valor sería 635.
+                        Top *= factorIncrementoVs1440p;
+                        Left *= factorIncrementoVs1440p;
+                        CurrentStepFontSize *= factorIncrementoVs1440p;
+                        NextPreviousStepFontSize *= factorIncrementoVs1440p;
+                        ButtonsSize *= factorIncrementoVs1440p;
+                        ButtonsMargin *= factorIncrementoVs1440p;
+                        ButtonsPadding *= factorIncrementoVs1440p;
+                        LargeFontSize *= factorIncrementoVs1440p;
+                        MediumFontSize *= factorIncrementoVs1440p;
+                        LeftMarginCurrentStep *= factorIncrementoVs1440p;
+                        TopMarginCurrentStep *= factorIncrementoVs1440p;
+                        TopMarginNextPreviousStep *= factorIncrementoVs1440p;
+                        BottomMargenSteps *= factorIncrementoVs1440p;
+                        RightMarginNextPreviousStep *= factorIncrementoVs1440p;
+                        BuildOrderSelectorWidth *= factorIncrementoVs1440p;
+                        ExecutionSpeedSelectorWidth *= factorIncrementoVs1440p;
+                        ThicknessCircularProgressBar *= factorIncrementoVs1440p;
+                        RightMarginCircularProgressBar *= factorIncrementoVs1440p;
+
+                    }
+
                     break;
 
                 case "1366x768":
@@ -604,6 +644,57 @@ namespace RTSHelper {
                         Left = 894 * CorrecciónEscala;
                         CurrentStepFontSize = 12.3 * CorrecciónEscala;
                         BuildOrderSelectorWidth = 119 * CorrecciónEscala;
+                        break;
+
+                    default:
+                        break;
+                }
+
+            } else if (juego == AOMName) {
+
+                if (cambióJuego) {
+                    GameSpeed = 1;
+                    ShowNextStep = false;
+                    ShowPreviousStep = true;
+                    StepDuration = 15; // 15 es el tiempo de creación de 1 aldeano.
+                }
+
+                var factorAnchoAOE2aAOM = 1.3;
+
+                switch (resolución) {
+                    case "1920x1080":
+                    case "1680x1050":
+                    case "1920x1200":
+
+                        Top = 718 * CorrecciónEscala;
+                        Left = 1044 * CorrecciónEscala;
+                        Width = 495 * CorrecciónEscala * factorAnchoAOE2aAOM;
+                        break;
+
+                    case "2560x1440":
+                    case "3840x2160":
+
+                        Left = 1389 * CorrecciónEscala;
+                        Top = 957 * CorrecciónEscala;
+                        Width = 662 * CorrecciónEscala * factorAnchoAOE2aAOM;
+                        break;
+
+                    case "1366x768":
+                    case "1280x720":
+                    case "1360x768":
+                    case "1280x800":
+
+                        Top = 510 * CorrecciónEscala;
+                        Left = 743 * CorrecciónEscala;
+                        Width = 354 * CorrecciónEscala * factorAnchoAOE2aAOM;
+                        break;
+
+                    case "1600x900":
+                    case "1440x900":
+
+                        Top = 614 * CorrecciónEscala;
+                        Left = 894 * CorrecciónEscala;
+                        Width = 424 * CorrecciónEscala * factorAnchoAOE2aAOM;
                         break;
 
                     default:

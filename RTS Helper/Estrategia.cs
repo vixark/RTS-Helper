@@ -78,6 +78,7 @@ namespace RTSHelper {
             var correcto = true;
             var últimaLíneaVacía = false;
             var tieneLíneaInformativa = false;
+            var yaPasóPorLíneaInformativa = false;
             int? cuentaAsignaciónUnidadesEconómicas = -1;
 
             void agregarInconsistencia(string inconsistencia) {
@@ -92,7 +93,7 @@ namespace RTSHelper {
 
                     var descripciónLínea = $"Line {cuentaLínea}";
                     if (string.IsNullOrEmpty(línea)) {
-                        if (últimaLíneaVacía) agregarInconsistencia($"{descripciónLínea} is an empty line and previous line was also empty.");
+                        if (últimaLíneaVacía && yaPasóPorLíneaInformativa) agregarInconsistencia($"{descripciónLínea} is an empty line and previous line was also empty.");
                         últimaLíneaVacía = true;
                     } else {
                         últimaLíneaVacía = false;
@@ -146,7 +147,7 @@ namespace RTSHelper {
                                 var palabraTotal = "";
                                 var textoOrdenTareas = "";
                                 var prioridadTareas = new List<string>();
-                                var palabraUnidadEconómica = "";
+                                var patrónUnidadEconómica = "";
 
                                 if (Preferencias.Game == AOE2Name) {
 
@@ -154,7 +155,16 @@ namespace RTSHelper {
                                     textoOrdenTareas = "w, f, g, s, h, tc, town center, farm, lc, mill, mc, barracks, rax, range, archery, ar, stable, stb, stbl, blacksmith, blk, mkt, market, uni, university, " +
                                         "monastery, mst, tower, twr, pw, sw, arrow, idle, ?";
                                     prioridadTareas.AddRange(textoOrdenTareas.Split(", "));
-                                    palabraUnidadEconómica = "v";
+                                    patrónUnidadEconómica = "(v)";
+
+                                } else if (Preferencias.Game == AOMName) {
+
+                                    palabraTotal = "p";
+                                    textoOrdenTareas = "f, w, g, fv, str, olive, b, ch, pig, goat, deer, cow, boar, rhino, ele, h, m, t, tca, tce, tcg, " +
+                                        "tcn, tcc, farm, dk, mv, ms, mp, mph, mg, eg, lc, gr, sh, eg, mc, rax, crax, range, ar, ma, mrax, stb, stbl, s, a, " +
+                                        "da, gh, hf, lh, ms, plc, mkt, sp, stwr, twr, ww, sw, up, down, left, right, idle, question, ?";
+                                    prioridadTareas.AddRange(textoOrdenTareas.Split(", "));
+                                    patrónUnidadEconómica = "(v|l|c|ch|g|d)"; // Verificar funcionamiento.
 
                                 }
 
@@ -234,17 +244,17 @@ namespace RTSHelper {
                                     agregarInconsistencia($"{descripciónPaso} has a white space longer than 3 characters. To create longer spaces use [#s].");
               
                                 var cAsignaciónUnidadesEconómicas = Regex.Matches(línea, 
-                                    $"}}  \\[{palabraUnidadEconómica}\\]<xt?>([0-9][0-9]?[0-9]?)-?([0-9.]?[0-9.]?[0-9.]?)<>", RegexOptions.IgnoreCase);
+                                    $"  \\[{patrónUnidadEconómica}\\]<xt?>([0-9][0-9]?[0-9]?)-?([0-9.]?[0-9.]?[0-9.]?)<>", RegexOptions.IgnoreCase);
                                 if (cAsignaciónUnidadesEconómicas.Count > 0) {
 
-                                    var númeroInicial = int.Parse(cAsignaciónUnidadesEconómicas[0].Groups[1].Value);
-                                    var textoNúmeroFinal = cAsignaciónUnidadesEconómicas[0].Groups[2].Value;
+                                    var númeroInicial = int.Parse(cAsignaciónUnidadesEconómicas[0].Groups[2].Value);
+                                    var textoNúmeroFinal = cAsignaciónUnidadesEconómicas[0].Groups[3].Value;
                                     var númeroFinal = textoNúmeroFinal == "..." ? (int?)null : 
                                         (string.IsNullOrEmpty(textoNúmeroFinal) ? númeroInicial : int.Parse(textoNúmeroFinal));
 
-                                    if (cuentaAsignaciónUnidadesEconómicas == null) { // Si ya estaba en el final no se esperaban más rangos.
+                                    if (cuentaAsignaciónUnidadesEconómicas == null) { // Si ya estaba en el final, no se esperaban más rangos.
                                         agregarInconsistencia($"{descripciónPaso} has an economic unit assignment instruction, but an earlier step had already " +
-                                            $"finshed the assignment like this '[{palabraUnidadEconómica}]<xt>[##]-...<>'.");
+                                            $"finshed the assignment like this '[{patrónUnidadEconómica}]<xt>[##]-...<>'.");
                                     } else {
 
                                         if (cuentaAsignaciónUnidadesEconómicas != -1 && númeroInicial != cuentaAsignaciónUnidadesEconómicas + 1) 
@@ -263,7 +273,7 @@ namespace RTSHelper {
                                 cuentaPaso++;
 
                             } else {
-                                agregarInconsistencia($"{descripciónLínea} doesn't have step number in initial comment.");
+                                if (yaPasóPorLíneaInformativa) agregarInconsistencia($"{descripciónLínea} doesn't have step number in initial comment.");
                             }
                             
                         } else {
@@ -271,7 +281,12 @@ namespace RTSHelper {
                         }
 
                     } else {
-                        if (línea.StartsWith("((")) tieneLíneaInformativa = true;
+
+                        if (línea.StartsWith("((")) {
+                            tieneLíneaInformativa = true;
+                            yaPasóPorLíneaInformativa = true;
+                        }
+
                     }
 
                 }
@@ -299,7 +314,57 @@ namespace RTSHelper {
             if (!ObtenerArchivoLibre(rutaEstrategia)) return false;
             try {
 
-                File.WriteAllLines(rutaEstrategia, LíneasCódigo);
+                var líneasCódigoArchivo = new List<string>();
+                foreach (var líneaCódigo in LíneasCódigo) {
+
+                    var corchetes = líneaCódigo.StartsWith("[[ ") && líneaCódigo.EndsWith(" ]]");
+                    var llaves = líneaCódigo.StartsWith("{{ ") && líneaCódigo.EndsWith(" }}");
+                    var angulares = líneaCódigo.StartsWith("<< ") && líneaCódigo.EndsWith(" >>");
+                    var aperturas = "[{<";
+                    var cierres = "]}>";
+
+                    if (corchetes || llaves || angulares) {
+
+                        var apertura = corchetes ? '[' : (llaves ? '{' : (angulares ? '<' : '?'));
+                        var cierre = corchetes ? ']' : (llaves ? '}' : (angulares ? '>' : '?'));
+                        var líneaCódigoArchivo = new StringBuilder();
+                        var profundidadSignos = 0;
+
+                        líneasCódigoArchivo.Add($"{apertura}{apertura}");
+                        var índice = 3;
+                        foreach (char c in líneaCódigo[3..^2]) {
+
+                            if (aperturas.Contains(c)) {
+                                profundidadSignos++;
+                                líneaCódigoArchivo.Append(c);
+                            } else if (cierres.Contains(c)) {
+                                if (profundidadSignos > 0) profundidadSignos--;
+                                líneaCódigoArchivo.Append(c);
+                            } else if (c == ' ' && profundidadSignos == 0) {
+
+                                if (líneaCódigo[índice + 1] == '[') { // Un caso especial en el que se está usando un espacio el valor del grupo. En teoría debería tener una lógica más compleja para omitir agregar salto de línea incluso si después hay una letra o número, pero en ese caso sería difícil diferenciarlo de un correcto fin del grupo e inicio del nombre del siguiente grupo. Por el momento, para el uso que se le quiere dar que es usar un espacio entre grupos ya existentes, funciona aceptable.
+                                    líneaCódigoArchivo.Append(c);
+                                } else {
+                                    líneasCódigoArchivo.Add(líneaCódigoArchivo.ToString());
+                                    líneaCódigoArchivo.Clear();
+                                }
+
+                            } else {
+                                líneaCódigoArchivo.Append(c);
+                            }
+
+                            índice++;
+
+                        }
+                        líneasCódigoArchivo.Add($"{cierre}{cierre}");
+
+                    } else {
+                        líneasCódigoArchivo.Add(líneaCódigo);
+                    }
+
+                }
+
+                File.WriteAllLines(rutaEstrategia, líneasCódigoArchivo);
                 return true;
 
             } catch (Exception) {
@@ -328,13 +393,65 @@ namespace RTSHelper {
             if (!File.Exists(rutaEstrategia)) return false;
             if (!ObtenerArchivoLibre(rutaEstrategia)) return true; // Si pasado el tiempo máximo permitido, el archivo no está libre, entonces no carga los pasos.
 
-            if (fuente == FuenteEstrategia.Archivo) LíneasCódigo = File.ReadAllLines(rutaEstrategia);
-
             Formato? formatoGlobal = null;
             Comportamiento? comportamientoGlobal = null;
             var grupos = new Dictionary<string, string>(); // Almacena el nombre de un nombre grupo y su contenido. El contenido será reemplazado directamente en el lugar que se use el nombre del grupo.
             var númeroPaso = 0;
             var númeroLínea = 0;
+
+            if (fuente == FuenteEstrategia.Archivo) {
+
+                var líneasCódigoArchivo = File.ReadAllLines(rutaEstrategia).ToList();
+                var líneasCódigo = new List<string>();
+                var consolidandoAngulares = false;
+                var consolidandoCorchetes = false;
+                var consolidandoLlaves = false;
+                var líneaCorchetesConsolidadada = new StringBuilder();
+                var líneaLlavesConsolidadada = new StringBuilder();
+                var líneaAngularesConsolidadada = new StringBuilder();
+
+                foreach (var líneaCódigoDirecta in líneasCódigoArchivo) { // Consolida las líneas separadas con << >>, [[ ]] y {{ }} en una sola línea.
+
+                    var consolidandoSección = consolidandoCorchetes || consolidandoLlaves || consolidandoAngulares;
+                    var líneaCódigoDirectaLimpia = líneaCódigoDirecta.Trim();
+                    if (líneaCódigoDirectaLimpia == "<<" && !consolidandoSección) consolidandoAngulares = true;
+                    if (líneaCódigoDirectaLimpia == "[[" && !consolidandoSección) consolidandoCorchetes = true;
+                    if (líneaCódigoDirectaLimpia == "{{" && !consolidandoSección) consolidandoLlaves = true;
+                    consolidandoSección = consolidandoCorchetes || consolidandoLlaves || consolidandoAngulares;
+
+                    if (consolidandoSección) {
+
+                        if (consolidandoCorchetes) líneaCorchetesConsolidadada.Append($"{líneaCódigoDirecta} ");
+                        if (consolidandoAngulares) líneaAngularesConsolidadada.Append($"{líneaCódigoDirecta} ");
+                        if (consolidandoLlaves) líneaLlavesConsolidadada.Append($"{líneaCódigoDirecta} ");
+
+                    } else {
+                        líneasCódigo.Add(líneaCódigoDirecta);
+                    }
+
+                    if (líneaCódigoDirectaLimpia == ">>" && consolidandoAngulares) {
+                        líneasCódigo.Add(líneaAngularesConsolidadada.ToString().TrimEnd());
+                        consolidandoAngulares = false;
+                        líneaAngularesConsolidadada.Clear();
+                    }
+
+                    if (líneaCódigoDirectaLimpia == "]]" && consolidandoCorchetes) {
+                        líneasCódigo.Add(líneaCorchetesConsolidadada.ToString().TrimEnd());
+                        consolidandoCorchetes = false;
+                        líneaCorchetesConsolidadada.Clear();
+                    }
+
+                    if (líneaCódigoDirectaLimpia == "}}" && consolidandoLlaves) {
+                        líneasCódigo.Add(líneaLlavesConsolidadada.ToString().TrimEnd());
+                        consolidandoLlaves = false;
+                        líneaLlavesConsolidadada.Clear();
+                    }
+
+                }
+
+                LíneasCódigo = líneasCódigo.ToArray();
+
+            } // fuente == FuenteEstrategia.Archivo>
 
             foreach (var códigoLínea in LíneasCódigo) {
 
@@ -536,7 +653,7 @@ namespace RTSHelper {
                         if (formato.Negrita == null || formato.Cursiva == null || formato.NombreFuente == null || formato.Subrayado == null
                             || formato.TamañoFuenteEfectiva == null || formato.Color == null || formato.ColorHexadecimal == null ||
                             formato.TamañoImagen == null || formato.ObtenerTamañoImagenEfectiva((double)formato.TamañoImagen) == null) {
-                            AgregarErrores(ref errores, "To Developer: Unespected null value in formato in MostrarPaso().", númeroPaso);
+                            AgregarErrores(ref errores, "To Developer: Unexpected null value in formato in MostrarPaso().", númeroPaso);
                             continue;
                         }
 
