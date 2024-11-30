@@ -9,10 +9,8 @@ It supports Age of Empires II and Age of Mythology and includes <a href="https:/
 * To edit and create build orders you can read <a href="http://vixark.com/rts-helper/documentation">the documentation</a> or just open <i>Build Orders\Age of Empires II\Default.txt</i> file and learn by modifing it.
 
 # Running it From Code
-* Extract RTS Helper binaries (Zip file) in your computer, for example in D:\Programs\RTS Helper 1.4.0\RTS Helper.
-* Open the code and change the following variables: 
-* Global.cs > DirectorioAOE2 to your AoE2DE Steam folder (it doesn't work with for the Windows Store version of the game).
-* Global.cs > DirectorioAplicaciónReal to your RTS Helper folder, for example: D:\Programs\RTS Helper 1.4.0\RTS Helper.
+* Extract RTS Helper binaries (Zip file) in your computer, for example in D:\Programs\RTS Helper 1.7.0\RTS Helper.
+* (Only needed for AOE2) Open the code and change the following variables: Global.cs > DirectorioAOE2 to your AoE2DE Steam folder (running it from code doesn't work with for the Windows Store version of the game, but the executable does work with any version). Global.cs > DirectorioAplicaciónReal to your RTS Helper folder, for example: D:\Programs\RTS Helper 1.7.0\RTS Helper.
 * Global.cs > ModoDesarrollo to true.
 * Run RTS Helper from your development enviroment.
 
