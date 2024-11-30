@@ -484,6 +484,7 @@ namespace RTSHelper {
                     Color.FromArgb(0, 144, 134, 107), // Fondo con letras en dos esquinas.
                     Color.FromArgb(0, 196, 181, 138), // Fondo con letras en tres esquinas.
                     Color.FromArgb(0, 248, 227, 169), // Letra: beige claro.
+                    Color.FromArgb(0, 66, 68, 66), // Jothunheim y Midgard con 70% de escala.
                 };
 
                 var coloresJuego = new List<Color> {
@@ -507,18 +508,26 @@ namespace RTSHelper {
                 if (estáColorSimilar(coloresFondo, color)) { 
 
                     ContadorPantallaCarga++;
-                    if (Preferencias.OCRTestMode) LblDepuración.Content = "Loading Screen Detected";
-                    if (ContadorPantallaCarga == 2) EnPantallaCarga = true;
+                    if (ContadorPantallaCarga == 1) EnPantallaCarga = true; // Age of Mythology es muy rapido en la pantalla de carga. Se aceptará con una sola aparición del color. De todas maneras no es grave porque no molestaría durante el juego. Si se está reproduciendo la estrategia, no la para si detecta una pantalla de carga falsa. Además, durante el juego ese lugar de la pantalla es de colores fijos con los colores de las edades, entonces es menos problemático aún.
+                    if (Preferencias.OCRTestMode) LblDepuración.Content = $"Loading Screen Detected c:{ContadorPantallaCarga} EnPC:{EnPantallaCarga}" +
+                            $"{Environment.NewLine} {color}";
+                    // TimerDetecciónInicioJuego.Interval = TimeSpan.FromMilliseconds(333); // Después de detectar la pantalla de carga toma capturas más frecuentemente. Esto es una buena idea y funciona muy bien, pero el juego tiene un leve retraso al iniciar, entonces ser tan preciso no aporta mejora y antes lo que hace es que se muestra la notificación de cambio de aldeano antes de que salga el aldeano. Se prefiere dejar con el segundo de intervalo que se tenía antes y esto más o menos compensa el retraso del temporizador del juego. No da exacto porque depende de muchas variables, pero es suficiente.
 
                 } else if (estáColorSimilar(coloresJuego, color)) {
 
                     if (EnPantallaCarga) Start();
                     EnPantallaCarga = false;
                     ContadorPantallaCarga = 0;
-                    if (Preferencias.OCRTestMode) LblDepuración.Content = "Game Running";
+                    if (Preferencias.OCRTestMode) LblDepuración.Content = $"Game Running c: {ContadorPantallaCarga} EnPC: {EnPantallaCarga}" +
+                            $"{Environment.NewLine} {color}";
+                    // TimerDetecciónInicioJuego.Interval = TimeSpan.FromMilliseconds(1000);
 
                 } else {
-                    if (Preferencias.OCRTestMode) LblDepuración.Content = "No Loading Screen Detected and Game Not Running";
+
+                    if (Preferencias.OCRTestMode) LblDepuración.Content = $"No Loading Screen Detected and Game Not Running c: {ContadorPantallaCarga} " +
+                            $"EnPC: {EnPantallaCarga}{Environment.NewLine} {color}";
+                    // TimerDetecciónInicioJuego.Interval = TimeSpan.FromMilliseconds(1000);
+
                 }
 
             }

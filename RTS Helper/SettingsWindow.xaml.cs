@@ -545,7 +545,7 @@ namespace RTSHelper {
                 var tipo = kv.Key;
                 var rectánguloRecomendado = ObtenerRectánguloRecomendado(tipo, Preferencias.ScreenResolution, Preferencias.UIMod.ToString());
                 var rectángulo = ObtenerRectánguloSinAjustes(tipo);
-                if (rectánguloRecomendado != rectángulo) return false;
+                if (rectánguloRecomendado != rectángulo && rectángulo != null) return false;
 
             }
 
@@ -1335,6 +1335,11 @@ namespace RTSHelper {
 
             if (!Activado) return;
             Preferencias.GameLanguage = ObtenerSeleccionadoEnCombobox(e, tag: true);
+            if (Preferencias.Game == AOMName && Preferencias.GameLanguage != "EN") {
+                MostrarInformación("Currently only english is supported for pauses detection. You can still use the app, only that it won't " +
+                    "automatically pause when you pause the game. Alternatively, you can change your game to english if you want to try the auto pause " +
+                    "detection feature.");
+            }
 
         } // CmbGameLanguage_SelectionChanged>
 

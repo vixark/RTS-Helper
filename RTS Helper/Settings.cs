@@ -361,8 +361,8 @@ namespace RTSHelper {
             if (game == AOE2Name) {
                 return (GameSpeed == 1.7 ? "Normal" : (GameSpeed == 1 ? "Slow" : (GameSpeed == 1.5 ? "Casual" : (GameSpeed == 2 ? "Fast" : "Other"))));
             } else if (game == AOMName) {
-                return (GameSpeed == 1 * 1.0018785* 1.0008 ? "Normal" : 
-                    (GameSpeed == 0.5 ? "Slow" : 
+                return (GameSpeed == AOMNormalSpeed ? "Normal" : 
+                    (GameSpeed == AOMNormalSpeed * 0.5 ? "Slow" : 
                     (GameSpeed == 2 ? "Fast" : 
                     (GameSpeed == 0.3333 * 1.020408 ? "Consider the internet" 
                     : (GameSpeed == 2.5 ? "Lets go! now!" : "Other")))));
@@ -383,8 +383,8 @@ namespace RTSHelper {
                 GameSpeed = (gameSpeedText == "Normal" ? 1.7 : (gameSpeedText == "Slow" ? 1 : (gameSpeedText == "Casual" ? 1.5 :
                     (gameSpeedText == "Fast" ? 2 : 1.7))));
             } else if (game == AOMName) {
-                GameSpeed = (gameSpeedText == "Normal" ? 1 * 1.0018785 * 1.0008 : // 1200 segundos en juego dieron 19:57.75 en RTS Helper. El juego estaba más rápido por 1200/1197,75 = 1,00187852222918.
-                    (gameSpeedText == "Slow" ? 0.5 : 
+                GameSpeed = (gameSpeedText == "Normal" ? AOMNormalSpeed :
+                    (gameSpeedText == "Slow" ? AOMNormalSpeed * 0.5 : 
                     (gameSpeedText == "Consider the internet" ? 0.3333 * 1.020408 : // 1200 segundos del juego dieron 1176 segundos dieron RTS Helper. El juego estaba más rapido por 1,020408163265306.
                     (gameSpeedText == "Fast" ? 2 : 
                     (gameSpeedText == "Lets go! now!" ? 2.5 : 1)))));
@@ -412,6 +412,7 @@ namespace RTSHelper {
                 ShowNextStep = false;
                 ShowPreviousStep = true;
                 GameSpeed = 1.7;
+                ShowAlwaysStatsButton = true;
                 StepDuration = 25; // El tiempo de creación de 1 aldeano.
             }
 
@@ -591,6 +592,7 @@ namespace RTSHelper {
                     GameSpeed = 1;
                     ShowNextStep = false;
                     ShowPreviousStep = false;
+                    ShowAlwaysStatsButton = true;
                     StepDuration = 60; // 60 es el tiempo de creación de 3 aldeanos.
                 }
 
@@ -653,9 +655,10 @@ namespace RTSHelper {
             } else if (juego == AOMName) {
 
                 if (cambióJuego) {
-                    GameSpeed = 1;
+                    GameSpeed = AOMNormalSpeed;
                     ShowNextStep = false;
                     ShowPreviousStep = true;
+                    ShowAlwaysStatsButton = false;
                     StepDuration = 15; // 15 es el tiempo de creación de 1 aldeano.
                 }
 
@@ -668,7 +671,7 @@ namespace RTSHelper {
 
                         Top = 718 * CorrecciónEscala;
                         Left = 1044 * CorrecciónEscala;
-                        Width = 495 * CorrecciónEscala * factorAnchoAOE2aAOM;
+                        Width = 662 * CorrecciónEscala * factorAnchoAOE2aAOM;
                         break;
 
                     case "2560x1440":
@@ -686,7 +689,7 @@ namespace RTSHelper {
 
                         Top = 510 * CorrecciónEscala;
                         Left = 743 * CorrecciónEscala;
-                        Width = 354 * CorrecciónEscala * factorAnchoAOE2aAOM;
+                        Width = 662 * CorrecciónEscala * factorAnchoAOE2aAOM;
                         break;
 
                     case "1600x900":
@@ -694,7 +697,7 @@ namespace RTSHelper {
 
                         Top = 614 * CorrecciónEscala;
                         Left = 894 * CorrecciónEscala;
-                        Width = 424 * CorrecciónEscala * factorAnchoAOE2aAOM;
+                        Width = 662 * CorrecciónEscala * factorAnchoAOE2aAOM;
                         break;
 
                     default:

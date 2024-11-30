@@ -42,6 +42,8 @@ namespace RTSHelper {
 
         public const string AOMName = "Age of Mythology";
 
+        public const double AOMNormalSpeed = 1 * 1.0018785 * 1.0008; // 1200 segundos en juego dieron 19:57.75 en RTS Helper. El juego estaba más rápido por 1200/1197,75 = 1,00187852222918.
+
         public static List<string> NombresVentanasJuegos = new List<string>() { "Age of Empires II: Definitive Edition", "Age of Empires IV", 
             "Age of Empires II: HD Edition", "Age of Mythology: Retold" };
 

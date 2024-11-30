@@ -161,9 +161,9 @@
                                     <Label Margin="2" x:Name="LblFontColor">Fore Color:</Label>
                                     <Label Margin="2" x:Name="LblOpacity">Opacity:</Label>
                                     <Label Margin="2" FontWeight="Bold">Current Step</Label>
+                                    <Label Margin="2">Elements Size:</Label>
                                     <Label Margin="2">Font:</Label>
                                     <Label Margin="2" ToolTip="Usually used for numbers.">Secondary Font:</Label>
-                                    <Label Margin="2">Font Size:</Label>
                                     <Label Margin="2">Font Color:</Label>
                                     <Label Margin="2">Font Bold:</Label>
                                     <Label Margin="2">Line Spacing:</Label>
@@ -182,106 +182,106 @@
 
                                     <TextBox TextChanged="TxtOpacity_TextChanged" x:Name="TxtOpacity" Margin="4 2 4 2" HorizontalAlignment="Left"
                                              HorizontalContentAlignment="Center" Height="25" Width="40" VerticalContentAlignment="Center"></TextBox>
-                                      
-                                    <ComboBox SelectionChanged="CmbFontName_SelectionChanged" HorizontalAlignment="Stretch" Margin="4 34 4 7" x:Name="CmbFontName">
-                                        <ComboBoxItem>Arial</ComboBoxItem>
-                                        <ComboBoxItem>Arial Black</ComboBoxItem>
-                                        <ComboBoxItem>Calibri</ComboBoxItem>
-                                        <ComboBoxItem>Cambria</ComboBoxItem>
-                                        <ComboBoxItem>Cambria Math</ComboBoxItem>
-                                        <ComboBoxItem>Candara</ComboBoxItem>
-                                        <ComboBoxItem>Comic Sans MS</ComboBoxItem>
-                                        <ComboBoxItem>Consolas</ComboBoxItem>
-                                        <ComboBoxItem>Constantia</ComboBoxItem>
-                                        <ComboBoxItem>Corbel</ComboBoxItem>
-                                        <ComboBoxItem>Courier New</ComboBoxItem>
-                                        <ComboBoxItem>Ebrima</ComboBoxItem>
-                                        <ComboBoxItem>Franklin Gothic Medium</ComboBoxItem>
-                                        <ComboBoxItem>Gabriola</ComboBoxItem>
-                                        <ComboBoxItem>Georgia</ComboBoxItem>
-                                        <ComboBoxItem>Impact</ComboBoxItem>
-                                        <ComboBoxItem>Lucida Console</ComboBoxItem>
-                                        <ComboBoxItem>Lucida Sans Unicode</ComboBoxItem>
-                                        <ComboBoxItem>Malgun Gothic</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft Himalaya</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft JhengHei</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft New Tai Lue</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft PhagsPa</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft Sans Serif</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft Tai Le</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft YaHei</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft Yi Baiti</ComboBoxItem>
-                                        <ComboBoxItem>Mongolian Baiti</ComboBoxItem>
-                                        <ComboBoxItem>MS Gothic</ComboBoxItem>
-                                        <ComboBoxItem>MV Boli</ComboBoxItem>
-                                        <ComboBoxItem>Palatino Linotype</ComboBoxItem>
-                                        <ComboBoxItem>Segoe Print</ComboBoxItem>
-                                        <ComboBoxItem>Segoe Script</ComboBoxItem>
-                                        <ComboBoxItem>Segoe UI</ComboBoxItem>
-                                        <ComboBoxItem>Segoe UI Symbol</ComboBoxItem>
-                                        <ComboBoxItem>SimSun</ComboBoxItem>
-                                        <ComboBoxItem>Sylfaen</ComboBoxItem>
-                                        <ComboBoxItem>Symbol</ComboBoxItem>
-                                        <ComboBoxItem>Tahoma</ComboBoxItem>
-                                        <ComboBoxItem>Times New Roman</ComboBoxItem>
-                                        <ComboBoxItem>Trebuchet MS</ComboBoxItem>
-                                        <ComboBoxItem>Verdana</ComboBoxItem>
-                                        <ComboBoxItem>Webdings</ComboBoxItem>
-                                        <ComboBoxItem>Wingdings</ComboBoxItem>
-                                    </ComboBox>
 
-                                    <ComboBox SelectionChanged="CmbSecondaryFontName_SelectionChanged" HorizontalAlignment="Stretch" Margin="4 2 4 7" x:Name="CmbSecondaryFontName" ToolTip="Usually used for numbers.">
-                                        <ComboBoxItem>Arial</ComboBoxItem>
-                                        <ComboBoxItem>Arial Black</ComboBoxItem>
-                                        <ComboBoxItem>Calibri</ComboBoxItem>
-                                        <ComboBoxItem>Cambria</ComboBoxItem>
-                                        <ComboBoxItem>Cambria Math</ComboBoxItem>
-                                        <ComboBoxItem>Candara</ComboBoxItem>
-                                        <ComboBoxItem>Comic Sans MS</ComboBoxItem>
-                                        <ComboBoxItem>Consolas</ComboBoxItem>
-                                        <ComboBoxItem>Constantia</ComboBoxItem>
-                                        <ComboBoxItem>Corbel</ComboBoxItem>
-                                        <ComboBoxItem>Courier New</ComboBoxItem>
-                                        <ComboBoxItem>Ebrima</ComboBoxItem>
-                                        <ComboBoxItem>Franklin Gothic Medium</ComboBoxItem>
-                                        <ComboBoxItem>Gabriola</ComboBoxItem>
-                                        <ComboBoxItem>Georgia</ComboBoxItem>
-                                        <ComboBoxItem>Impact</ComboBoxItem>
-                                        <ComboBoxItem>Lucida Console</ComboBoxItem>
-                                        <ComboBoxItem>Lucida Sans Unicode</ComboBoxItem>
-                                        <ComboBoxItem>Malgun Gothic</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft Himalaya</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft JhengHei</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft New Tai Lue</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft PhagsPa</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft Sans Serif</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft Tai Le</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft YaHei</ComboBoxItem>
-                                        <ComboBoxItem>Microsoft Yi Baiti</ComboBoxItem>
-                                        <ComboBoxItem>Mongolian Baiti</ComboBoxItem>
-                                        <ComboBoxItem>MS Gothic</ComboBoxItem>
-                                        <ComboBoxItem>MV Boli</ComboBoxItem>
-                                        <ComboBoxItem>Palatino Linotype</ComboBoxItem>
-                                        <ComboBoxItem>Segoe Print</ComboBoxItem>
-                                        <ComboBoxItem>Segoe Script</ComboBoxItem>
-                                        <ComboBoxItem>Segoe UI</ComboBoxItem>
-                                        <ComboBoxItem>Segoe UI Symbol</ComboBoxItem>
-                                        <ComboBoxItem>SimSun</ComboBoxItem>
-                                        <ComboBoxItem>Sylfaen</ComboBoxItem>
-                                        <ComboBoxItem>Symbol</ComboBoxItem>
-                                        <ComboBoxItem>Tahoma</ComboBoxItem>
-                                        <ComboBoxItem>Times New Roman</ComboBoxItem>
-                                        <ComboBoxItem>Trebuchet MS</ComboBoxItem>
-                                        <ComboBoxItem>Verdana</ComboBoxItem>
-                                        <ComboBoxItem>Webdings</ComboBoxItem>
-                                        <ComboBoxItem>Wingdings</ComboBoxItem>
-                                    </ComboBox>
-                                    
-                                    <TextBox TextChanged="TxtStepFontSize_TextChanged" x:Name="TxtStepFontSize" Margin="4 1 4 1" 
+                                    <TextBox TextChanged="TxtStepFontSize_TextChanged" x:Name="TxtStepFontSize" Margin="4 34 4 4" 
                                              HorizontalContentAlignment="Center" Width="40" Height="25" HorizontalAlignment="Left" 
                                              VerticalContentAlignment="Center" />
+                                    
+                                    <ComboBox SelectionChanged="CmbFontName_SelectionChanged" HorizontalAlignment="Stretch" Margin="4 2 4 5" x:Name="CmbFontName">
+                                        <ComboBoxItem>Arial</ComboBoxItem>
+                                        <ComboBoxItem>Arial Black</ComboBoxItem>
+                                        <ComboBoxItem>Calibri</ComboBoxItem>
+                                        <ComboBoxItem>Cambria</ComboBoxItem>
+                                        <ComboBoxItem>Cambria Math</ComboBoxItem>
+                                        <ComboBoxItem>Candara</ComboBoxItem>
+                                        <ComboBoxItem>Comic Sans MS</ComboBoxItem>
+                                        <ComboBoxItem>Consolas</ComboBoxItem>
+                                        <ComboBoxItem>Constantia</ComboBoxItem>
+                                        <ComboBoxItem>Corbel</ComboBoxItem>
+                                        <ComboBoxItem>Courier New</ComboBoxItem>
+                                        <ComboBoxItem>Ebrima</ComboBoxItem>
+                                        <ComboBoxItem>Franklin Gothic Medium</ComboBoxItem>
+                                        <ComboBoxItem>Gabriola</ComboBoxItem>
+                                        <ComboBoxItem>Georgia</ComboBoxItem>
+                                        <ComboBoxItem>Impact</ComboBoxItem>
+                                        <ComboBoxItem>Lucida Console</ComboBoxItem>
+                                        <ComboBoxItem>Lucida Sans Unicode</ComboBoxItem>
+                                        <ComboBoxItem>Malgun Gothic</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Himalaya</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft JhengHei</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft New Tai Lue</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft PhagsPa</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Sans Serif</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Tai Le</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft YaHei</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Yi Baiti</ComboBoxItem>
+                                        <ComboBoxItem>Mongolian Baiti</ComboBoxItem>
+                                        <ComboBoxItem>MS Gothic</ComboBoxItem>
+                                        <ComboBoxItem>MV Boli</ComboBoxItem>
+                                        <ComboBoxItem>Palatino Linotype</ComboBoxItem>
+                                        <ComboBoxItem>Segoe Print</ComboBoxItem>
+                                        <ComboBoxItem>Segoe Script</ComboBoxItem>
+                                        <ComboBoxItem>Segoe UI</ComboBoxItem>
+                                        <ComboBoxItem>Segoe UI Symbol</ComboBoxItem>
+                                        <ComboBoxItem>SimSun</ComboBoxItem>
+                                        <ComboBoxItem>Sylfaen</ComboBoxItem>
+                                        <ComboBoxItem>Symbol</ComboBoxItem>
+                                        <ComboBoxItem>Tahoma</ComboBoxItem>
+                                        <ComboBoxItem>Times New Roman</ComboBoxItem>
+                                        <ComboBoxItem>Trebuchet MS</ComboBoxItem>
+                                        <ComboBoxItem>Verdana</ComboBoxItem>
+                                        <ComboBoxItem>Webdings</ComboBoxItem>
+                                        <ComboBoxItem>Wingdings</ComboBoxItem>
+                                    </ComboBox>
 
-                                    <Button Click="BtnStepFontColor_Click" x:Name="BtnStepFontColor" Margin="4" Height="22" 
+                                    <ComboBox SelectionChanged="CmbSecondaryFontName_SelectionChanged" HorizontalAlignment="Stretch" Margin="4 2 4 5" x:Name="CmbSecondaryFontName" ToolTip="Usually used for numbers.">
+                                        <ComboBoxItem>Arial</ComboBoxItem>
+                                        <ComboBoxItem>Arial Black</ComboBoxItem>
+                                        <ComboBoxItem>Calibri</ComboBoxItem>
+                                        <ComboBoxItem>Cambria</ComboBoxItem>
+                                        <ComboBoxItem>Cambria Math</ComboBoxItem>
+                                        <ComboBoxItem>Candara</ComboBoxItem>
+                                        <ComboBoxItem>Comic Sans MS</ComboBoxItem>
+                                        <ComboBoxItem>Consolas</ComboBoxItem>
+                                        <ComboBoxItem>Constantia</ComboBoxItem>
+                                        <ComboBoxItem>Corbel</ComboBoxItem>
+                                        <ComboBoxItem>Courier New</ComboBoxItem>
+                                        <ComboBoxItem>Ebrima</ComboBoxItem>
+                                        <ComboBoxItem>Franklin Gothic Medium</ComboBoxItem>
+                                        <ComboBoxItem>Gabriola</ComboBoxItem>
+                                        <ComboBoxItem>Georgia</ComboBoxItem>
+                                        <ComboBoxItem>Impact</ComboBoxItem>
+                                        <ComboBoxItem>Lucida Console</ComboBoxItem>
+                                        <ComboBoxItem>Lucida Sans Unicode</ComboBoxItem>
+                                        <ComboBoxItem>Malgun Gothic</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Himalaya</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft JhengHei</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft New Tai Lue</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft PhagsPa</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Sans Serif</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Tai Le</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft YaHei</ComboBoxItem>
+                                        <ComboBoxItem>Microsoft Yi Baiti</ComboBoxItem>
+                                        <ComboBoxItem>Mongolian Baiti</ComboBoxItem>
+                                        <ComboBoxItem>MS Gothic</ComboBoxItem>
+                                        <ComboBoxItem>MV Boli</ComboBoxItem>
+                                        <ComboBoxItem>Palatino Linotype</ComboBoxItem>
+                                        <ComboBoxItem>Segoe Print</ComboBoxItem>
+                                        <ComboBoxItem>Segoe Script</ComboBoxItem>
+                                        <ComboBoxItem>Segoe UI</ComboBoxItem>
+                                        <ComboBoxItem>Segoe UI Symbol</ComboBoxItem>
+                                        <ComboBoxItem>SimSun</ComboBoxItem>
+                                        <ComboBoxItem>Sylfaen</ComboBoxItem>
+                                        <ComboBoxItem>Symbol</ComboBoxItem>
+                                        <ComboBoxItem>Tahoma</ComboBoxItem>
+                                        <ComboBoxItem>Times New Roman</ComboBoxItem>
+                                        <ComboBoxItem>Trebuchet MS</ComboBoxItem>
+                                        <ComboBoxItem>Verdana</ComboBoxItem>
+                                        <ComboBoxItem>Webdings</ComboBoxItem>
+                                        <ComboBoxItem>Wingdings</ComboBoxItem>
+                                    </ComboBox>
+
+                                    <Button Click="BtnStepFontColor_Click" x:Name="BtnStepFontColor" Margin="4 3 4 4" Height="22" 
                                     Foreground="{DynamicResource BrushPaso}" Background="{DynamicResource BrushFondo}">Change</Button>
 
                                     <CheckBox Checked="ChkCurrentStepFontBold_Checked" Unchecked="ChkCurrentStepFontBold_Checked" x:Name="ChkCurrentStepFontBold" 
@@ -307,7 +307,7 @@
                             <StackPanel x:Name="SpnLabels3" Orientation="Vertical">
                                 <Label FontWeight="Bold">Previous/Next Step</Label>
                                 <Label Margin="2">Show:</Label>
-                                <Label Margin="2">Font Size:</Label>
+                                <Label Margin="2">Elements Size:</Label>
                                 <Label Margin="2">Font Color:</Label>
                                 <Label Margin="2">Font Bold:</Label>
                                 <Label FontWeight="Bold">Buttons:</Label>
