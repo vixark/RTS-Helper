@@ -160,8 +160,8 @@ namespace RTSHelper {
                                 } else if (Preferencias.Game == AOMName) {
 
                                     palabraTotal = "p";
-                                    textoOrdenTareas = "f, w, g, fv, str, olive, b, ch, pig, goat, deer, cow, boar, rhino, ele, h, m, t, tca, tce, tcg, " +
-                                        "tcn, tcc, farm, dk, mv, ms, mp, mph, mg, eg, lc, gr, sh, eg, mc, rax, crax, range, ar, ma, mrax, stb, stbl, s, a, " +
+                                    textoOrdenTareas = "f, w, g, fv, str, olive, b, ch, pig, goat, deer, cow, boar, rhino, ele, h, m, tca, tce, tcg, " +
+                                        "tcn, tcc, farm, dk, mv, ms, mp, mph, mg, eg, lc, gr, sh, eg, mc, t, rax, crax, range, ar, ma, mrax, stb, stbl, s, a, " +
                                         "da, gh, hf, lh, ms, plc, mkt, sp, stwr, twr, ww, sw, up, down, left, right, idle, question, ?";
                                     prioridadTareas.AddRange(textoOrdenTareas.Split(", "));
                                     patrónUnidadEconómica = "(v|l|c|ch|g|d)"; // Verificar funcionamiento.
