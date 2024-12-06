@@ -860,13 +860,13 @@ qage5=[[age5][xaq]]
 
 || 6 ||  {p=10}  /f  <r>6[f]  2[w]  2[g]  10[p]
 
-|| 7 ||  {p=11}  [v]<xt>12<>[>][pray]<x>Near [gm]<>  /f  <r>7[f]  2[w]  2[g]  11[p]
+|| 7 ||  {p=11}  [v]<xt>12<>[>][t]<x>Near [gm]<>  /f  <r>7[f]  2[w]  2[g]  11[p]
 
-|| 8 ||  {p=12}  [vtopray][>][t]   [v]<xt>13-18<>[>][pray]  /f  <r>7[f]  2[w]  2[g]  1[t]  12[p]
+|| 8 ||  {p=12}  [v]<xt>13-18<>[>][pray]  /f  <r>7[f]  2[w]  2[g]  1[t]  12[p]
 
-|| 9 ||  {p=13}  [vtopray][>][h][>][temple][xf]   [all][vdg][>][pray]   [svaq] [3s] [+][v]  /f  <r>7[f]  2[w]  1[h]  3[t]  13[p] || Stop villager autoqueue and add a single villager to the queue so in next step you can queue the age advance before having required food and avoid any any town center idle time.
+|| 9 ||  {p=13}  [vtopray][>][h][>][temple][xf]   [all][vdg][>][pray]  /f  <r>7[f]  2[w]  1[h]  3[t]  13[p]
 
-|| 10 ||  {p=14}  [age2] [athena beta][xaq]   [v][x15]<x>Out <>:  [all][vddeer]   /f  <r>7[f]  2[w]  5[fv]  14[p] || Autoqueue the age advance with right click so it starts as soon as you get the 400 food, usually this happens when you drop the food from deer in the granary. If you get the 400 food before the villager #15 comes out, be quick to cancel it and queue it normally with left click or hotkey so it starts the age advance after the villager #15 comes out. Alternatively, you can just gauge how close or far you are from 400 food and if you feel you are close, you can drop the food earlier and queue the age advance normally or if you feel you are far from 400 food, you can wait until the villager #15 comes out to drop the food and quickly use hotkeys to advance to classical age. Either way, the goal is to minimize town center's idle time and get the villager #15 out. 
+|| 10 ||  {p=14}  [svaq]   [age2] [athena beta][xaq]   [v][x15]<x>Out <>:  [all][vddeer]   /f  <r>7[f]  2[w]  5[fv]  14[p] || Autoqueue the age advance with right click so it starts as soon as you get the 400 food, usually this happens when you drop the food from deer in the granary. If you get the 400 food before the villager #15 comes out, be quick to cancel it and queue it normally with left click or hotkey so it starts the age advance after the villager #15 comes out. Alternatively, you can just gauge how close or far you are from 400 food and if you feel you are close, you can drop the food earlier and queue the age advance normally or if you feel you are far from 400 food, you can wait until the villager #15 comes out to drop the food and quickly use hotkeys to advance to classical age. Either way, the goal is to minimize town center's idle time and get the villager #15 out. 
 
 || 11 ||  {p=15}  [5][vi@deer][4][>][deer]   [15s][3][>][wl]  /f  <r>4[f]  5[w]  6[fv]  15[p]
 
