@@ -1,5 +1,6 @@
 || Read the documentation if you want to create your own build orders: http://vixark.com/rts-helper/documentation.
 || The sections {{ }} << >> and [[  ]] usually don't need to be modified. If you need to update them, also update them in New.txt file with the app closed so the changes made also apply to future build orders.
+|| See changes and earlier versions in https://github.com/vixark/RTS-Helper/blob/master/RTS%20Helper/Build%20Orders/Age%20of%20Mythology/Tutorial.txt
 
 
 || Global Format and Format Classes: http://vixark.com/rts-helper/documentation#globalformat and http://vixark.com/rts-helper/documentation#formatclasses.
