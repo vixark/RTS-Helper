@@ -1,8 +1,47 @@
-{{t=15 es="none" s="none" sns="no" sps="no" short={t=5 s="default"} long={t=30}}}
+|| Author: Vixark, Version: 1.0. Read the documentation if you want to create your own build orders: http://vixark.com/rts-helper/documentation.
+|| The sections {{ }} << >> and [[  ]] usually don't need to be modified. If you need to update them, also update them in New.txt file with the app closed so the changes made also apply to future build orders.
 
-<<title=<b L> r=<b xs is100> x=<sub> p=<sup> t=<b font2 xl> xt=<sub b font2 xl> pt=<sup b font2>>>
 
-[[>=[ → ] +=[<b>+<> ] 5=[<t>5<> ] v@shp=[[v]<x>[shp]<>] v@w=[[v]<x>[wl]<>] boar1=[[boar]<xt>1<>]]
+|| Global Behaviors and Behavior Classes: http://vixark.com/rts-helper/documentation#globalbehaviors and http://vixark.com/rts-helper/documentation#behaviorclasses.
+{{
+
+t=15
+es="none"
+s="none"
+sns="no"
+sps="no"
+short={t=5 s="default"}
+long={t=30}
+
+}}
+
+
+|| Global Format and Format Classes: http://vixark.com/rts-helper/documentation#globalformat and http://vixark.com/rts-helper/documentation#formatclasses.
+<<
+
+title=<b L>
+r=<b xs is100>
+x=<sub>
+p=<sup>
+t=<b font2 xl>
+xt=<sub b font2 xl>
+pt=<sup b font2>
+
+>>
+
+
+|| Groups: http://vixark.com/rts-helper/documentation#groups.
+[[
+
+>=[ → ]
++=[<b>+<> ]
+5=[<t>5<> ]
+v@shp=[[v]<x>[shp]<>]
+v@w=[[v]<x>[wl]<>]
+boar2=[[boar]<xt>2<>]
+
+]]
+
 
 ((<title>Welcome to RTS Helper!   <>This a tutorial build order.   <b>Game:<> Age of Empires II [1s] <b>Duration:<> 5 minutes   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark [3s] Click ▷ to start.))
 
@@ -34,7 +73,7 @@
 
 || 13 ||  Keep reading if you   want to see other examples.
 
-|| 14 ||  {s="AOE2 Gold.mp3"}  [v]<xt>18<>[>][gm]   [v@shp][>][drop food][>][boar1]   [v@w]<x>[g][berries]<>[>][rax][>][h][>][h]  /f  <r>12[w]  5[f]  3[g]  2[s]  22[vs]
+|| 14 ||  {s="AOE2 Gold.mp3"}  [v]<xt>18<>[>][gm]   [v@shp][>][drop food][>][boar2]   [v@w]<x>[g][berries]<>[>][rax][>][h][>][h]  /f  <r>12[w]  5[f]  2[g]  2[s]  22[vs]
 
 || 15 ||  {s="AOE2 Attack an Enemy Now.mp3"}  [double-bit axe] [1s] [hrc] [1s] [wheelbarrow]     [5][militia][>][attack]   <t>20<>[geno][>][attack][kt]  /f  <r>12[w]  15[f]  7[g]  1[h]  34[vs]
 
