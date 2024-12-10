@@ -10,8 +10,9 @@ It supports Age of Empires II and Age of Mythology and includes <a href="https:/
 
 # Running it From Code
 * Extract RTS Helper binaries (Zip file) in your computer, for example in D:\Programs\RTS Helper 1.7.0\RTS Helper.
-* (Only needed for AOE2) Open the code and change the following variables: Global.cs > DirectorioAOE2 to your AoE2DE Steam folder (running it from code doesn't work with for the Windows Store version of the game, but the executable does work with any version). Global.cs > DirectorioAplicaciónReal to your RTS Helper folder, for example: D:\Programs\RTS Helper 1.7.0\RTS Helper.
-* Global.cs > ModoDesarrollo to true.
+* (Only needed for AOE2) Open the code and change the following variable: Global.cs > DirectorioAOE2 to your AoE2DE Steam folder (running it from code doesn't work with for the Windows Store version of the game, but the executable does work with any version).
+* Change Global.cs > DirectorioAplicaciónReal to your RTS Helper folder, for example: D:\Programs\RTS Helper 1.7.0\RTS Helper.
+* Change Global.cs > ModoDesarrollo to true.
 * Run RTS Helper from your development enviroment.
 
 # Donate
