@@ -654,54 +654,17 @@ namespace RTSHelper {
 
             } else if (juego == AOMName) {
 
+                EstablecerValoresRecomendadosAOE2(resolución, cambióJuego); // Para evitar enredos con los tamaños y posiciones, se usa casi lo mismo que en AOE2, solo se incrementa ligeramente el ancho.
+                var factorAnchoAOE2aAOM = 1.05;
+                Width = Width * factorAnchoAOE2aAOM;
+
                 if (cambióJuego) {
                     GameSpeed = AOMNormalSpeed;
                     ShowNextStep = false;
                     ShowPreviousStep = true;
                     ShowAlwaysStatsButton = false;
-                    StepDuration = 15; // 15 es el tiempo de creación de 1 aldeano.
-                }
-
-                var factorAnchoAOE2aAOM = 1.3;
-
-                switch (resolución) {
-                    case "1920x1080":
-                    case "1680x1050":
-                    case "1920x1200":
-
-                        Top = 718 * CorrecciónEscala;
-                        Left = 1044 * CorrecciónEscala;
-                        Width = 662 * CorrecciónEscala * factorAnchoAOE2aAOM;
-                        break;
-
-                    case "2560x1440":
-                    case "3840x2160":
-
-                        Left = 1389 * CorrecciónEscala;
-                        Top = 957 * CorrecciónEscala;
-                        Width = 662 * CorrecciónEscala * factorAnchoAOE2aAOM;
-                        break;
-
-                    case "1366x768":
-                    case "1280x720":
-                    case "1360x768":
-                    case "1280x800":
-
-                        Top = 510 * CorrecciónEscala;
-                        Left = 743 * CorrecciónEscala;
-                        Width = 662 * CorrecciónEscala * factorAnchoAOE2aAOM;
-                        break;
-
-                    case "1600x900":
-                    case "1440x900":
-
-                        Top = 614 * CorrecciónEscala;
-                        Left = 894 * CorrecciónEscala;
-                        Width = 662 * CorrecciónEscala * factorAnchoAOE2aAOM;
-                        break;
-
-                    default:
-                        break;
+                    StepDuration = 15; // 15 es el tiempo de creación de 1 aldeano de los griegos.
+                    BuildOrderSelectorWidth = 250 * CorrecciónEscala;
                 }
 
             } else if (juego == OtherName) {

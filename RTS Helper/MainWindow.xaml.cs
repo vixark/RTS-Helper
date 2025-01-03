@@ -714,8 +714,9 @@ namespace RTSHelper {
                         ActualizarSupervisoresEstrategia();
                         RecargarEstrategia();
 
-                    } catch (Exception) {
-                        MostrarError("Error trying to create new build order file.");
+                    } catch (Exception ex) {
+                        MostrarError("Error trying to create new build order file." 
+                            + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace + Environment.NewLine + ex.Source);
                         throw;
                     }
                     

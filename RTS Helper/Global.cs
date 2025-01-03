@@ -223,7 +223,7 @@ namespace RTSHelper {
 
         public static string FontColorPredeterminado = Color.FromRgb(150, 150, 150).ToString();
 
-        public static double OpacityPredeterminado = 0.8;
+        public static double OpacityPredeterminado = 0.85; // El valor anterior 0.8 es un poco muy transparente. 0.85 es un buen equilibrio. Igual el usuario lo puede personalizar después.
 
         public static string CurrentStepFontColorPredeterminado = Color.FromRgb(220, 220, 220).ToString();
 

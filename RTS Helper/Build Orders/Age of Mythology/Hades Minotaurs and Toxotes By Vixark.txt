@@ -1,4 +1,4 @@
-|| Read the documentation if you want to create your own build orders: http://vixark.com/rts-helper/documentation.
+|| If you want to create your own build orders read this article https://www.reddit.com/r/AgeofMythology/comments/1h9ulf4/how_to_make_build_orders/ and the RTS Documentation: http://vixark.com/rts-helper/documentation.
 || The sections {{ }} << >> and [[  ]] usually don't need to be modified. If you need to update them, also update them in New.txt file with the app closed so the changes made also apply to future build orders.
 || See changes and earlier versions in https://github.com/vixark/RTS-Helper/blob/master/RTS%20Helper/Build%20Orders/Age%20of%20Mythology/Hades%20Minotaurs%20and%20Toxotes%20By%20Vixark.txt
 
@@ -849,7 +849,7 @@ qage5=[[age5][xaq]]
 
 || 0 ||  {p=4}  [v]<xt>1-4<>[>][gr@deer]   [v]<xt>5-6<>[>][wl]  /f  <r>4[gr]  4[p] || Kill 3 deer with the town center and place the granary between them so you can save villager time. Keep 4 or less villagers per deer to increase gather efficiency. Kill deer with the town center when you see them close to the granary and villagers will need to gather from it soon. If any deer is too far away from the granary, you can use a goat to push it closer to it and kill it with villagers or the town center. Be careful when you kill deer with the town center, because the gather point will be moved to deer, if that's not what you need, you need to reset it to the correct resource afterwards. You can use the same build order with aggressive huntables like boars, but modify it slightly. If you have only aggressive huntables, you can lure them to your town center with villagers and you won't need a granary, so you can send the villager #5 to food and the villager #9 to wood. If you have a mix of aggressive huntables and non aggressive huntables, make the granary normally, but be carefull to not put many villagers in the same animal. You can use a goat to push the aggressive animal closer to the villagers so they don't need to walk to attack it.
 
-|| 1 ||  {p=5 sps="no"}  [bsh@w]  /f  <r>4[f]  1[sh]  5[p] || Build the storehouse next to the woodline without leaving any space. Since you'll have few villagers in wood for a while, you won't have any problem with overcrowding and by the time you need add more villagers to wood, the woodline will have enough space for them. Don't trust the villager to start chopping wood automatically, shift queue him to a tree after building the storehouse. If you don't do it, he may decide that he wants to mine gold instead.
+|| 1 ||  {p=5}  [bsh@w]  /f  <r>4[f]  1[sh]  5[p] || Build the storehouse next to the woodline without leaving any space. Since you'll have few villagers in wood for a while, you won't have any problem with overcrowding and by the time you need add more villagers to wood, the woodline will have enough space for them. Don't trust the villager to start chopping wood automatically, shift queue him to a tree after building the storehouse. If you don't do it, he may decide that he wants to mine gold instead.
 
 || 2 ||  {p=6}  [v]<xt>7-8<>[>][gm]  /f  <r>4[f]  2[w]  6[p]
 
@@ -879,7 +879,7 @@ qage5=[[age5][xaq]]
 
 || 15 ||  {p=15}  [v@w][>][ar][>w]   [shv@w]   [9s]or [v@goat]  /f  <r>4[f]  3[w]  5[g]  1[fv]  1[h]  1[ar]  15[p] || Make a new house with a villager gathering wood when the game notifies that you are close to population cap. If you that feel you are short in wood and have enough food to support villager production, you could build some houses with a villager gathering goat.
 
-|| 16 ||  {p=16}  [gp]<x>[t]<>[>][mt]<x>Group 3<>   [mt][xaq]   [tx][xaq]  /f  <r>4[f]  4[w]  5[g]  2[fv]  1[ar]  16[p] || Setting the temple's gather point on the first minotaur allows you too keep all minotaurs in the same group 3 as long as at least one survives, this works even if the first minotaur dies.
+|| 16 ||  {p=16}  [gp]<x>[t]<>[>][mt]<x>Group 3<>   [mt][xaq]   [tx][xaq]  /f  <r>4[f]  4[w]  5[g]  2[fv]  1[ar]  16[p] || Setting the temple's gather point on the first minotaur allows you too keep all minotaurs in the same group 3 as long as at least one survives, this works even if the first minotaur dies. If you are playing without military autoqueue, you need to press frequently the 'Find All Production Buildings' hotkey and W + E to keep producing minotaurs and toxotes as soon as the resources are coming.
 
 || 17 ||  {p=17}  /f  <r>4[f]  5[w]  5[g]  3[fv]  17[p]
 
@@ -917,6 +917,6 @@ qage5=[[age5][xaq]]
 
 || 34 ||  {p=34}  [v]<xt>35-...<>[>] It Depends  /f  <r>18[f]  9[w]  5[g]  1[h]  1[a]  34[p]
 
-|| 35 ||  {p=35 sps="no"}  [age3][xaq] or [tcg][x2]   [vdberry][vdgoat][vdchk][vdw][>] It Depends  /f  <r>18[f]  11[w]  5[g]  1[?]  35[p]
+|| 35 ||  {p=35}  [age3][xaq] or [tcg][x2]   [vdberry][vdgoat][vdchk][vdw][>] It Depends  /f  <r>18[f]  11[w]  5[g]  1[?]  35[p]
 
 || 36 ||  {sps="no"}  [pickaxe] [hand axe] [plow] [husbandry] [sh]<x>[wl]<pt>2<> [golden apples] [divine blood]   [copper weapons] [copper armor] [copper shields] [heavy archers] [levy ranged soldiers] [bronze weapons] [bronze armor] [bronze shields]   [mt] [tx] [ajax] [achilles] [chiron] [catapult] [sun ray] [temple of healing] /f  <r>18+[f]  11+[w]  5+[g]  0+[fv]  35+[p]
