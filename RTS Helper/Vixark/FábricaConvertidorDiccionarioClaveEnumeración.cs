@@ -116,9 +116,9 @@ namespace Vixark {
                     TValue valor; // Get the value.
                     if (_valueConverter != null) {
                         reader.Read();
-                        valor = _valueConverter.Read(ref reader, _valueType, options);
+                        valor = _valueConverter.Read(ref reader, _valueType, options)!;
                     } else {
-                        valor = JsonSerializer.Deserialize<TValue>(ref reader, options);
+                        valor = JsonSerializer.Deserialize<TValue>(ref reader, options)!;
                     }
 
                     dictionary.Add(clave, valor); // Add to dictionary.

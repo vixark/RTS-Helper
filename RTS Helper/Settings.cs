@@ -298,11 +298,11 @@ namespace RTSHelper {
 
         #region Actualizaciones
 
-        public int ImagesVersion { get; set; } = 3; // 3. Primeras imágenes de Age of Mythology.
+        public int ImagesVersion { get; set; } = 4; // 3. Primeras imágenes de Age of Mythology. 4. Imagen de gallinas y drop resources para AOE2.
 
         public int SoundsVersion { get; set; } = 1; // 1. Primeros sonidos.
 
-        public int BuildOrdersVersion { get; set; } = 4; // 4. Primeras estrategias de Age of Mythology.
+        public int BuildOrdersVersion { get; set; } = 5; // 4. Primeras estrategias de Age of Mythology. 5. Una estrategia con gallinas para AOE2.
 
         public string UpdatesBaseUrl = "https://vixark.b-cdn.net/rts-helper"; // Es cambiada cuando se lee desde el Json. Este valor solo sirve para la ejecución inicial. Debería ser cambiado cuando se cambie la ruta del CDN para que los usuarios que lo instalen por primera vez puedan acceder a las actualizaciones automáticas.
 

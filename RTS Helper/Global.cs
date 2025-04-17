@@ -34,7 +34,7 @@ namespace RTSHelper {
 
         public static Settings Preferencias = new Settings();
 
-        public static bool ModoDesarrollo = true;
+        public static bool ModoDesarrollo = false;
 
         public const string AOE2Name = "Age of Empires II";
 
@@ -101,7 +101,7 @@ namespace RTSHelper {
 
         public static string NuevaLíneaId = "\n";
 
-        public static double CorrecciónEscala = 1.25 / (WForms.Screen.PrimaryScreen.Bounds.Width / SystemParameters.PrimaryScreenWidth); // Todos los valores son calculados experimentalmente en mi computador que tiene una escala de 125, entonces para ser usado en computadores de otra escala se debe ajustar todos los valores con este factor.
+        public static double CorrecciónEscala = 1.25 / (WForms.Screen.PrimaryScreen!.Bounds.Width / SystemParameters.PrimaryScreenWidth); // Todos los valores son calculados experimentalmente en mi computador que tiene una escala de 125, entonces para ser usado en computadores de otra escala se debe ajustar todos los valores con este factor.
 
         public static string SeparadorDecimales = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
 
@@ -537,12 +537,12 @@ namespace RTSHelper {
 
         public static Dictionary<NameType, Dictionary<string, string>> DeserializarNombres(string ruta)
             => JsonSerializer.Deserialize<Dictionary<NameType, Dictionary<string, string>>>(File.ReadAllText(ruta),
-                ObtenerOpcionesSerialización(Serialización.DiccionarioClaveEnumeración | Serialización.EnumeraciónEnTexto | Serialización.UTF8));
+                ObtenerOpcionesSerialización(Serialización.DiccionarioClaveEnumeración | Serialización.EnumeraciónEnTexto | Serialización.UTF8))!;
 
 
         public static Dictionary<string, Dictionary<string, string>> DeserializarTipos(string ruta)
             => JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(File.ReadAllText(ruta),
-                ObtenerOpcionesSerialización(Serialización.DiccionarioClaveEnumeración | Serialización.EnumeraciónEnTexto | Serialización.UTF8));
+                ObtenerOpcionesSerialización(Serialización.DiccionarioClaveEnumeración | Serialización.EnumeraciónEnTexto | Serialización.UTF8))!;
 
 
         public static string SerializarNombres<T>(T nombres)
@@ -1395,6 +1395,8 @@ namespace RTSHelper {
                 types["Type"].Add("Random Civilization", "Civilization");
                 types["Type"].Add("Go Back to Work", "Action");
                 types["Type"].Add("Woodline", "Resource");
+                types["Type"].Add("Chicken", "Resource");
+                types["Type"].Add("Drop Off Resources", "Action");
 
             } else if (Preferencias.Game == AOMName) {
 
@@ -3151,6 +3153,8 @@ namespace RTSHelper {
                 names[NameType.Complete].Add("400063", "Random Civilization");
                 names[NameType.Complete].Add("19324", "Go Back to Work"); names[NameType.Common].Add("19324", "Back to Work");
                 names[NameType.Complete].Add("400065", "Woodline"); names[NameType.Acronym].Add("400065", "WL");
+                names[NameType.Complete].Add("400066", "Chicken"); names[NameType.Acronym].Add("400066", "CHK");
+                names[NameType.Complete].Add("400067", "Drop Off Resources"); names[NameType.Acronym].Add("400067", "DR");
 
                 string elite(string original) => "Elite " + original.Replace("|", $"|Elite ");
 

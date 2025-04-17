@@ -1739,11 +1739,11 @@ reintentarCon1Dígito:
             Application.Current.Resources["MargenBotones"] = new Thickness(Preferencias.ButtonsMargin);
             Application.Current.Resources["PaddingBotones"] = new Thickness(Preferencias.ButtonsPadding);
             Application.Current.Resources["TamañoBotones"] = Preferencias.ButtonsSize;
-            Application.Current.Resources["BrushFuente"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.FontColor);
-            Application.Current.Resources["BrushFondo"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.BackColor);
+            Application.Current.Resources["BrushFuente"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.FontColor)!;
+            Application.Current.Resources["BrushFondo"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.BackColor)!;
             Application.Current.Resources["ColorFondo"] = ObtenerMediaColor(Preferencias.BackColor) ?? Color.FromRgb(0, 0, 0);
-            Application.Current.Resources["BrushPaso"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.CurrentStepFontColor);
-            Application.Current.Resources["BrushPasoSiguiente"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.NextPreviousStepFontColor);
+            Application.Current.Resources["BrushPaso"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.CurrentStepFontColor)!;
+            Application.Current.Resources["BrushPasoSiguiente"] = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.NextPreviousStepFontColor)!;
             Application.Current.Resources["Opacidad"] = Preferencias.Opacity;
             Application.Current.Resources["MargenPaso"] = new Thickness(Preferencias.LeftMarginCurrentStep, Preferencias.TopMarginCurrentStep, 0, 0);
             Application.Current.Resources["MargenPasoSiguiente"] = new Thickness(0, Preferencias.TopMarginNextPreviousStep, Preferencias.RightMarginNextPreviousStep, 0);
@@ -1755,9 +1755,9 @@ reintentarCon1Dígito:
                 || ObtenerMostrarAnteriorPaso(Estrategia.NúmeroPaso) ? Visibility.Visible : Visibility.Collapsed;
             Application.Current.Resources["AnchoSelectorBuildOrder"] = Preferencias.BuildOrderSelectorWidth;
             Application.Current.Resources["AnchoSelectorVelocidadEjecución"] = Preferencias.ExecutionSpeedSelectorWidth;
-            Application.Current.Resources["BrushFlashingColor"] = (SolidColorBrush)new BrushConverter().ConvertFrom(ObtenerColorFlash(-1)); // Solo se establece para que sea efectivo en la ventana de preferencias.
+            Application.Current.Resources["BrushFlashingColor"] = (SolidColorBrush)new BrushConverter().ConvertFrom(ObtenerColorFlash(-1))!; // Solo se establece para que sea efectivo en la ventana de preferencias.
             Application.Current.Resources["BrushImageBackgroundColor"] 
-                = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.ImageBackgroundColor);
+                = (SolidColorBrush)new BrushConverter().ConvertFrom(Preferencias.ImageBackgroundColor)!;
             Application.Current.Resources["GrosorBarraProgresoCircularDelPaso"] = Preferencias.ThicknessCircularProgressBar;
             Application.Current.Resources["MargenBarraProgresoCircularDelPaso"] = new Thickness(0, 0, Preferencias.RightMarginCircularProgressBar, 0);
             Application.Current.Resources["VisibilidadProgresoPaso"] = Preferencias.ShowStepProgress ? Visibility.Visible : Visibility.Collapsed;
@@ -2308,7 +2308,7 @@ reintentarCon1Dígito:
                         }
 
                     }
-                    var directorioAplicación = ModoDesarrollo ? Path.GetDirectoryName(DirectorioEstrategias) : DirectorioAplicación;
+                    var directorioAplicación = ModoDesarrollo ? Path.GetDirectoryName(DirectorioEstrategias)! : DirectorioAplicación;
                     ZipFile.ExtractToDirectory(rutaZip, directorioAplicación, overwriteFiles: true);
                     éxito = true;
 
@@ -2430,12 +2430,12 @@ reintentarCon1Dígito:
         private void AutoUpdaterOnParseUpdateInfoEvent(ParseUpdateInfoEventArgs args) {
 
             Global.InformaciónÚltimasVersiones = JsonSerializer.Deserialize<InformaciónÚltimasVersiones>(args.RemoteData); // Al cargar los valores en esta variable global, permite que el TimerActualizadorDePaquetes detecte cuando se cargaron y verifique si es necesario actualizar los paquetes. Se hace de esta manera porque cuando se incluía la detección de esos paquetes en este evento, se presentaban varios conflictos de hilos.
-            if (Global.InformaciónÚltimasVersiones.BaseUrl != null) Preferencias.UpdatesBaseUrl = Global.InformaciónÚltimasVersiones.BaseUrl;
+            if (Global.InformaciónÚltimasVersiones?.BaseUrl != null) Preferencias.UpdatesBaseUrl = Global.InformaciónÚltimasVersiones.BaseUrl;
 
             args.UpdateInfo = new UpdateInfoEventArgs {
-                CurrentVersion = Global.InformaciónÚltimasVersiones.Version,
-                ChangelogURL = Global.InformaciónÚltimasVersiones.ChangelogUrl,
-                DownloadURL = Global.InformaciónÚltimasVersiones.Url, // Mandatory = new Mandatory { Value = json.mandatory.value, UpdateMode = json.mandatory.mode, MinimumVersion = json.mandatory.minVersion }, // CheckSum = new CheckSum { Value = json.checksum.value, HashingAlgorithm = json.checksum.hashingAlgorithm }
+                CurrentVersion = Global.InformaciónÚltimasVersiones?.Version,
+                ChangelogURL = Global.InformaciónÚltimasVersiones?.ChangelogUrl,
+                DownloadURL = Global.InformaciónÚltimasVersiones?.Url, // Mandatory = new Mandatory { Value = json.mandatory.value, UpdateMode = json.mandatory.mode, MinimumVersion = json.mandatory.minVersion }, // CheckSum = new CheckSum { Value = json.checksum.value, HashingAlgorithm = json.checksum.hashingAlgorithm }
             };
 
         } // AutoUpdaterOnParseUpdateInfoEvent>
