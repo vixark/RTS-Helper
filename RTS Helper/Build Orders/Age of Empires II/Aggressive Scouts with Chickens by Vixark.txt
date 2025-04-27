@@ -248,104 +248,102 @@ vdstrlh=[[vdstr]<x>Low[health]<>]
 
 (([6]<b>[sc]<b>[>][kt]<xt> 2<x>[stb]<> on<> [green arabia] with [chk]<>   <b>18 Pop<>   <b>Author:<> http://vixark.com/age-of-empires-ii:Vixark [1s] http://vixark.com/donate:Donate   <b>Difficulty:<> Moderate || A fast and aggressive strategy without walling. \n\n You need to do good damage with the first three scouts, otherwise you'll be very vulnerable because your weaker economy and late walling. ))
 
-|| 0 ||  {p=3 sns="no"}  [+4v] [2s] [2][v][>][h] [2s] [v][>][h]   [shp1][>][tc] [3s] [sc][>][shp]<xt>2-4<>   [3][v@h][>shp1] [3s] [v]<xt>4-6<>[>][shp1]  /f  <r>3[h]  3[vs] || If you are fast, wait until the sheep #1 is reaching its final position under the town center to place the gather point on it so the new villagers spawn near it. \n\n You can consider sending to sheep #1 one the villagers in the first house before finishing it, but you should be careful with the timing so you don't get housed.
+|| 0 ||  {p=3 sns="no"}  [+4v] [2s] [2][v][>][h] [2s] [v][>][h]   [shp1][>][tc] [3s] [sc][>][shp]<xt>2-4<>   [3][v@h][>shp1] [3s] [v]<xt>4-6<>[>][shp1]  /f  <r>3[h]  3[vs] || If you are fast, wait until the sheep #1 is reaching its final position under the town center to place the gather point on it so the new villagers spawn near it.
 
-|| 1 ||  {p=4}  [sc][>][explore]<x>[chk][shp]<>   [shp]<xt>2-3<>[>][tc]   [shp]<xt>4<>[>][explore]<x>Near [tc]<>  /f  <r>4[f]  4[vs] || Use shift queuing to make the initial scout's scouting path. Since you'll also scout with sheep and won't push deer, it's ok to have less scoutting efficiency so you can focus in your economy. \n\n If you are in one side of the map, don't go twice behind your base at the edge of the map. Make one circle around your town center, moving closer to the edge of the map when near it, and then make a U shaped path around the first circle avoiding the edge of the map. \n\n If you are in a corner of the map, you usually spawn at a greater distance from the edges so making two circles with the scout is fine. \n\n The two layers of scoutting should be enough to find all your sheep and the chickens. After that, you can manually task the scout to explore the opponent's town. \n\n For exploring the opponent's town faster and easier without running into the town center, you can use the mod 'Minimap TC Orbit' and make a scoutting path inside the circle. \n\n Use sheep #4 to explore in the surroundings of town center, use it only to help you find the first boar if the scout hasn't found it yet.
+|| 1 ||  {p=4}  [sc][>][explore]<x>[chk][shp]<>   /f  <r>4[f]  4[vs] || Use shift queuing to make the initial scout's scouting path. Since you'll also scout with sheep and won't push deer, it's ok to have less scoutting efficiency so you can focus in your economy. \n\n If you are in one side of the map, don't go twice behind your base at the edge of the map. Make one circle around your town center, moving closer to the edge of the map when near it, and then make a U shaped path around the first circle avoiding the edge of the map. \n\n If you are in a corner of the map, you usually spawn at a greater distance from the edges so making two circles with the scout is fine. \n\n The two layers of scoutting should be enough to find all your sheep and the chickens. After that, you can manually task the scout to explore the opponent's town. \n\n For exploring the opponent's town faster and easier without running into the town center, you can use the mod 'Minimap TC Orbit' and make a scoutting path inside the circle.
 
-|| 2 ||  {p=5}  /f  <r>5[f]  5[vs]
+|| 2 ||  {p=5}  [shp]<xt>2-3<>[>][tc]   [shp]<xt>4<>[>][explore]<x>Near [tc]<>  /f  <r>5[f]  5[vs] || Use sheep #4 to explore in the surroundings of town center, use it only to help you find the first boar if the scout hasn't found it yet.
 
 || 3 ||  {p=6}  [v]<xt>7<>[>][shp2]   [all][v@shp]<xt s>1<>[>shp2]   [+v]  /f  <r>6[f]  6[vs] || If you shift queue the villagers to the next sheep, the pathing will be better.
 
 || 4 ||  {p=7}  [v]<xt>8-9<>[>][shp3]   [all][v@shp]<xt s>2<>[>shp3]   [+v]  /f  <r>7[f]  7[vs] || Don't put sheep #3 on top of sheep #2 because if you do, sometimes the eigth villager won't be able to gather from it. If they still get stuck, select all shepherds and move them away from the sheep for a second and then back to the sheep, they usually make room so all of them can gather food.
 
-|| 5 ||  {p=8}  [50v@tc][>][vdshp][>][boar1]   [+v]  /f  <r>8[f]  8[vs] || Hunt the boar in your town's front to avoid laming. Shoot the boar once and retreat to the opposite side of town center. Don't kill it next to the solid part of the town center (upper corner), kill it near the left, right or bottom corner so many villagers can gather food from it unrestricted.
+|| 5 ||  {p=8}  [vdshp][>][boar1]   [+v]  /f  <r>8[f]  8[vs] || Hunt the boar in your town's front to avoid laming. Shoot the boar once and retreat to the opposite side of town center. Don't kill it next to the solid part of the town center (upper corner), kill it near the left, right or bottom corner so many villagers can gather food from it unrestricted. The boar may arrive early if it's close to the town center. If this happens, kill it with the villagers in sheep and move most of them to it, then queue to it the rest of villagers left in the sheep. Alternatively, if you see that the boar is close to the town center, wait a little before sending the villager to lure it.
 
-|| 6 ||  {p=9}  [v]<xt>10-11<>[>][wl]   [all][v@shp][>boar1]   [+v]  /f  <r>9[f]  9[vs]
+|| 6 ||  {p=9}  [v]<xt>10-12<>[>][wl]   [all][v@shp][>boar1]   [+v]  /f  <r>9[f]  9[vs]
 
-|| 7 ||  {p=10}  [vtowl][>][lc]   [+v]  /f  <r>9[f]  1[lc]  10[vs]  || Make the lumber camp adjacent to the woodline. Queue the lumber camp builder to a tree behind the lumber camp and the villager #11 to the other tree behind. \n\n You can consider making the lumber camp one tile away from woodline if you plan to put many lumberjacks early, but you'd have an inneficient lumber camp in middle feudal age. Usually it's better to open up the one tile gap to the woodline with the first 3-4th lumberjacks while you have the extra lumberjacks in efficient stragglers (two tiles away from town center). When the one tile gap is open, send the villagers in stragglers to the lumber camp, since it can now support efficiently many villagers.
+|| 7 ||  {p=10}  [vtowl][>][lc]   [+v]   [shp]<xt>4-5<>[>][tc]  /f  <r>9[f]  1[lc]  10[vs]  || Make the lumber camp adjacent to the woodline. Queue the lumber camp builder to a tree behind the lumber camp and the villager #11 to the other tree behind. \n\n You can consider making the lumber camp one tile away from woodline if you plan to put many lumberjacks early, but you'd have an inneficient lumber camp in middle feudal age. Usually it's better to open up the one tile gap to the woodline with the first 3-4th lumberjacks while you have the extra lumberjacks in efficient stragglers (two tiles away from town center). When the one tile gap is open, send the villagers in stragglers to the lumber camp, since it can now support efficiently many villagers.
 
-|| 8 ||  {p=11}  [v]<xt>12<>[>][boar1]   [vtowl][>][h][>wl]   [all][vdboar] [3s] [+2v]   /f  <r>9[f]  1[h]  1[lc]  11[vs]
+|| 8 ||  {p=11}  [vtowl][>][h][>wl]   [all][vdboar]   [+2v]   /f  <r>9[f]  1[h]  1[lc]  11[vs]
 
-|| 9 ||  {p=12}  [v]<xt>13-15<>[>][boar2]   [4][vdboar]:  [3][>][chk1]   [9s] [2s] [1][>][chk2]   /f  <r>2[w]  10[f]  12[vs] || Prefer to send full health villagers to chickens. Send first 4 villagers to chicken #1 and while they are walking to it, select one villager and send it to chicken #2.
+|| 9 ||  {p=12}  [v]<xt>13-15<>[>][boar2]   [4][vdboar][>][shp4][>shp5]  /f  <r>2[w]  10[f]  12[vs]
 
-|| 10 ||  {p=13}  [all][vdboar][>boar2]   [+3v]   [sc][>][explore]<x>Opponent<>  /f  <r>2[w]  11[f]  13[vs] || Shoot the boar once, wait a second and retreat to the opposite side of town center. Don't kill it next to the solid part of the town center (upper corner), kill it near the left, right or bottom corner so many villagers can gather food from it unrestricted.
+|| 10 ||  {p=13}  [all][vdboar][>boar2]   [+3v]   [sc][>][explore]<x>Opponent<>  /f  <r>3[w]  10[f]  13[vs] || Shoot the boar once, wait a second and retreat to the opposite side of town center. Don't kill it next to the solid part of the town center (upper corner), kill it near the left, right or bottom corner so many villagers can gather food from it unrestricted.
 
-|| 11 ||  {p=14}  [f]<x>[chk]<xt s>2<t>[less than] 15<>   [5s] [>][3][v@chk]<xt s>2<>[>][chk3]   /f  <r>2[w]  12[f]  14[vs]
+|| 11 ||  {p=14}  /f  <r>3[w]  11[f]  14[vs]
 
-|| 12 ||  {p=15}  [v]<xt>16-17<>[>][mill@berry]   [shp]<xt>4-8<>[>][tc]  /f  <r>2[w]  13[f]  15[vs] || Place the sheep close to the town center so they are safe of being converted by opponent's scout, but not so close that they interfere with villagers. Around the top corner of the town center could be a good spot for them.  
+|| 12 ||  {p=15}  [v]<xt>16-23<>[>][berry]  /f  <r>3[w]  12[f]  15[vs]
 
-|| 13 ||  {p=16}  [all][vdwl][>][w]<t> = 100<>   [v]<x>[arrow]<>[>][mill@berry]   [loom]   /f  <r>2[w]  13[f]  1[mill]  16[vs]
+|| 13 ||  {p=16}  [v@berry][>][mill]   [loom]   /f  <r>3[w]  12[f]  1[mill]  16[vs]
 
-|| 14 ||  {p=17 sps="no"}  [4][vdchk] [+] [vdboar][>chk4]   [8][v@boar]:  [3][>str1] [0s] [3][>str2] [0s] [2][>str3]   [feudal age]  /f  <r>10[w]  7[f]  17[vs] || The boar should be finished just in time to advance to feudal age. The villager #17 should help to finish the mill/mining camp, otherwise the timings may be too tight.  \n\n Prefer to send villagers to the straggler trees that are two tiles away from the town center.
+|| 14 ||  {p=17}  [4][v@shp] :  [3][>chk1] [3s] [1][>boar2]   [all][vdboar]   [feudal age]  /f  <r>3[w]  14[f]  17[vs]
 
-|| 15 ||  {p=17 t=30 sps="no"}  /f  <r>10[w]  7[f]  17[vs]
+|| 15 ||  {p=17 t=30 sps="no"}  [9][v@boar]:  [3][>chk2] [1s] [2][>str1]   [9s] [2s] [2][>str2] [1s] [2][>str3]     [shp]<xt>6-8<>[>][tc]  /f  <r>9[w]  8[f]  17[vs] || Prefer to send villagers to the straggler trees that are two tiles away from the town center.
 
-|| 16 ||  {p=17 t=25}  [f]<x>[chk]<>[less than] 5<> [>][all][v@chk][>][chk5]   /f  <r>10[w]  7[f]  17[vs] || The 5 villagers in chickens should gather the last 3 chickens in one trip.
+|| 16 ||  {p=17 t=60 sps="no"}  [vdstr][>][rax]<x>[sw]<>[>h][>][sw][pw][xf]   Save 100[s]   [f]<x>[chk]<t> = 18<> :  [3][v@chk][>][chk]<xt s>Next<>   /f  <r>8[w]  8[f]  1[rax]  17[vs] || If the villager on straggler tree only carries 1-4 wood, you can ignore that and go straight to build the barracks. \n\n If you wait until the current gathered chicken has less than 16 food left, the villagers would hold more than 15 food in their hands and the next chicken won't be consumed completely. Avoiding this helps with the micro because you can just task the villagers to another task before the last chicken is consumed. If you leave food in the last chicken, you won't be able to queue a following action and you'd need to task manually the villager to drop the food in the town center and then the other action in order to avoid them to go back to gather the leftovers of the chicken. \n\n While advancing to castle age you can adjust your strategy to gather 100 stone if you decide to build two town centers when arriving to castle age. The 200 stone is somewhat 'free' if you are not going to use it for town centers right away in castle age, so expending just 100 stone seems like an acceptable compromise. You'd be very short in wood so any wood saving is nice to have.
 
-|| 17 ||  {p=17 t=35}  [vdstr][>][rax]<x>[pw]<>[>wl]   [f]<x>[chk]<>[less than] 5<>   [3s] [>][all][v@chk][>][chk6]   /f  <r>9[w]  7[f]  1[rax]  17[vs]
+|| 17 ||  {p=17 t=40 sps="no"}  [+v]   [3][v@chk][>][shp][pf]<xt>6-8<>   [3][v@chk][>chk5]  /f  <r>8[w]  8[f]  1[rax]  17[vs]
 
-|| 18 ||  {p=17 t=40}  [v]<xt>18-22<>[>][berry]   [all][v@chk][>shp4]   [+v]  /f  <r>9[w]  7[f]  1[rax]  17[vs]
+|| 18 ||  {p=17 sps="no"}  [2][v@str][>][stbl][>][drop wood][pf]<x>[tc]<>[>][shp][pf]<xt>6-8<>   [+v]   /f  <r>6[w]  8[f]  1[h]  2[stb]  17[vs]
 
-|| 19 ||  {p=17}  [2][v@str][>][stb][>][drop wood][>shp4]   [v@str][>][h][>][drop wood][>shp4]   [+2v]  /f  <r>7[w]  7[f]  1[h]  2[stb]  17[vs]
+|| 19 ||  {p=18}  [+v]   [+][2][sc]   /f  <r>6[w]  11[f]  1[h]  18[vs]
 
-|| 20 ||  {p=18}  [+][sc]   [hrc]   [drop food]<xt s>When Needed<>  /f  <r>7[w]  11[f]  18[vs]
+|| 20 ||  {p=19}  [2hv@sw]   [+v]   [f]<x>[chk]<t> = 18<> :  [3][v@chk][>][chk]<xt s>Next<>   /f  <r>6[w]  12[f]  1[h]  19[vs]
 
-|| 21 ||  {p=19}  [1hv@wl]   [+v]  /f  <r>6[w]  12[f]  1[h]  19[vs]
+|| 21 ||  {p=20}  [+v]   [drop food]<xt s>When Needed<>   [3][v@chk][>str]   /f  <r>6[w]  13[f]  1[h]  20[vs]
 
-|| 22 ||  {p=20}  [+][sc]   [+v]   Any [v@str][>][farm] Until <t>5<> [v@farm]   /f  <r>5[w]  13[f]  2[farm]  20[vs]
+|| 22 ||  {p=21}  [hrc]   [+v]   [3][sc][>][attack]<x s>Opponent's[chk][berry]<>   /f  <r>6[w]  14[f]  1[h]  21[vs]
 
-|| 23 ||  {p=21}  [+][sc]   [+v]   [3][sc][>][attack]<x>[berry]<>  /f  <r>5[w]  16[f]  21[vs]
+|| 23 ||  {p=22}  [+v]   [+][sc]   Any [v@str][>][farm] Until <t>8<> [v@farm]<p>[tc]<>   /f  <r>7[w]  12[f]  2[farm]  1[sw]  22[vs]
 
-|| 24 ||  {p=22}  [v]<xt>23-28<>[>][wl]   [vdshp][>][h][>str]   [+v]   /f  <r>4[w]  16[f]  1[h]  1[farm]  22[vs]
+|| 24 ||  {p=23}  [v]<xt>24-25<>[>][str]   [+][sc]   [+v]  /f  <r>7[w]  15[f]  1[sw]  23[vs]
 
-|| 25 ||  {p=23}  [+][sc]   [+v]  /f  <r>6[w]  17[f]  23[vs]
+|| 25 ||  {p=24}  [5][v@shp][>wl]   [+][sc]   [+v]  /f  <r>7[w]  15[f]  1[farm]  1[sw]  24[vs]
 
-|| 26 ||  {p=24}  [+][sc]   [+v]  /f  <r>6[w]  17[f]  1[farm]  24[vs]
+|| 26 ||  {p=25}  [v]<xt>26-29<>[>][wl]   [+v]  /f  <r>13[w]  11[f]  1[sw]  25[vs]
 
-|| 27 ||  {p=25}  [+v]   [all][v@shp][>][lc]<xt>2<>[pf]  /f  <r>7[w]  18[f]  25[vs]
+|| 27 ||  {p=26}  [+v]   [6][sc][>][attack]<x s>Opponent's[chk][berry]<>  /f  <r>12[w]  11[f]  2[farm]  1[sw]  26[vs]
 
-|| 28 ||  {p=26}  [+v]  /f  <r>8[w]  11[f]  7[lc]  26[vs]
+|| 28 ||  {p=27}  [+v]   [1hv@sw]   /f  <r>12[w]  13[f]  1[h]  1[farm]  27[vs]
 
-|| 29 ||  {p=27}  [+v]   [vtowl][>h][>pw]   /f  <r>15[w]  10[f]  1[h]  1[farm]  27[vs]
+|| 29 ||  {p=28}  [dba]   [+v]  /f  <r>11[w]  14[f]  2[farm]  1[sw]  28[vs]
 
-|| 30 ||  {p=28}  [v]<xt>29-33<>[>][str]   [dba] [3s] [+v]   Any [v@str][>][farm] Until <t>10<> [v@farm]<p s>[tc]<>  /f  <r>15[w]  12[f]  1[pw]  28[vs]
+|| 30 ||  {p=29}  [v]<xt>30-39<>[>][gm]   [+v]  /f  <r>12[w]  16[f]  1[sw]  29[vs]
 
-|| 31 ||  {p=29}  [+v]   [3][vdwl][>][2][h]<x>[pw]<>[>pw]   /f  <r>13[w]  12[f]  3[h]  1[pw]  29[vs]
+|| 31 ||  {p=30}  [v@gm][>][mc]   [+2v]   Any [v@berry][>][farm] Until <t>8<> [v@farm]<p>[mill]<>  /f  <r>12[w]  16[f]  1[mc]  1[sw]  30[vs]
 
-|| 32 ||  {p=30}  [+2v]   /f  <r>12[w]  12[f]  3[h]  2[farm]  1[pw]  30[vs]
+|| 32 ||  {p=31}  /f  <r>12[w]  13[f]  2[g]  3[farm]  1[sw]  31[vs]
 
-|| 33 ||  {p=31}  /f  <r>13[w]  14[f]  4[pw]  31[vs]
+|| 33 ||  {p=32}  [+2v]   [2hv@sw]  /f  <r>12[w]  14[f]  3[g]  1[h]  2[farm]  32[vs]
 
-|| 34 ||  {p=32}  [+2v]   [4][v@berry][>][4][farm]  /f  <r>12[w]  10[f]  6[farm]  4[pw]  32[vs]
+|| 34 ||  {p=33}  /f  <r>12[w]  14[f]  4[g]  1[h]  2[farm]  33[vs]
 
-|| 35 ||  {p=33}  [v]<xt>34-...<>[>][wl]  /f  <r>12[w]  16[f]  1[farm]  4[pw]  33[vs]
+|| 35 ||  {p=34}  [+2v]  /f  <r>12[w]  14[f]  5[g]  1[h]  2[farm]  34[vs]
 
-|| 36 ||  {p=34}  [+2v]   [3][v@berry][>][3][farm][xf]  /f  <r>13[w]  14[f]  3[farm]  4[pw]  34[vs]
+|| 36 ||  {p=35}  /f  <r>12[w]  16[f]  6[g]  1[pw]  35[vs]
 
-|| 37 ||  {p=35}  [v@pw][>][mkt][>pw]  /f  <r>14[w]  17[f]  1[mkt]  3[pw]  35[vs]
+|| 37 ||  {p=36}  [v@pw][>][blk][>pw]   [+2v]  /f  <r>12[w]  16[f]  7[g]  1[blk]  36[vs]
 
-|| 38 ||  {p=36}  Any [v@pw][pi][>][wl]   [+2v]  /f  <r>18[w]  17[f]  1[mkt]  36[vs]
+|| 38 ||  {p=37}  /f  <r>12[w]  16[f]  8[g]  1[blk]  37[vs]
 
-|| 39 ||  {p=37}  /f  <r>19[w]  16[f]  1[farm]  1[mkt]  37[vs]
+|| 39 ||  {p=38}  [castle age]   /f  <r>12[w]  16[f]  9[g]  1[pw]  38[vs]
 
-|| 40 ||  {p=38}  Sell <t>200<> [s] [1s] Sell <t>200<> [w]   Buy <t>100<> [f]   [castle age]   /f  <r>21[w]  17[f]  38[vs]
+|| 40 ||  {p=39 t=50}  [v@pw][>][stbl][>][h][>]...   [sba]   /f  <r>12[w]  16[f]  10[g]  1[stb]  39[vs]
 
-|| 41 ||  {p=39 t=50}  [vtowl][>][farm]  /f  <r>21[w]  17[f]  1[farm]  39[vs]
+|| 41 ||  {p=39 t=55}  [4][v@wl][>][mill] + [4][farm]   [forging]   [wb]  /f  <r>8[w]  16[f]  10[g]  1[h]  4[farm]  39[vs]
 
-|| 42 ||  {p=39 t=55}  [wb]   [v@wl][>][stb][>wl]   [v@wl][>][blk][>wl]  /f  <r>19[w]  18[f]  1[stb]  1[blk]  39[vs]
+|| 42 ||  {p=39 t=55}  [v]<xt>40-...<>[>][wl]   [all][v@wl][>][lc]<xt s>1 Tile from [wl]<>   /f  <r>8[w]  20[f]  10[g]  1[h]  39[vs] || Since you have many villagers in wood it's better for the short term to build the lumber camp one tile away from the woodline.
 
-|| 43 ||  {p=39 t=55}  [6][v@wl]<xt s>1<>[>][mc@gm]   [6][v@wl]<xt s>2<>[>][mc@gm]   Sell <t>300<> [f]   /f  <r>9[w]  18[f]  12[mc]  39[vs]
+|| 43 ||  {p=39}  Start [kt] Production at 2 [stbl]   [cba]  /f  <r>8[w]  20[f]  10[g]  1[h]  39[vs]
 
-|| 44 ||  {p=39}  Start [kt] Production at 2[stb]   [sba]  /f  <r>9[w]  18[f]  12[g]  39[vs]
+|| 44 ||  {p=39}  /f  <r>8[w]  20[f]  10[g]  1[h]  39[vs]
 
-|| 45 ||  {p=39}  [vdwl][>][h][>]...   /f  <r>8[w]  18[f]  12[g]  1[h]  39[vs]
+|| 45 ||  {p=39}  [+2v]   /f  <r>8[w]  20[f]  10[g]  1[h]  39[vs]
 
-|| 46 ||  {p=39}  [+v]   [gmg]  /f  <r>8[w]  18[f]  12[g]  1[h]  39[vs]
+|| 46 ||  {p=39}  /f  <r>8[w]  20[f]  10[g]  1[h]  39[vs]
 
-|| 47 ||  {p=39}  [+v]  /f  <r>8[w]  18[f]  12[g]  1[h]  39[vs]
+|| 47 ||  {p=40}  [+2v]   Consider [4][v@wl][>][tc]<pt>[wl]<><xt>2<>  /f  <r>8[w]  20[f]  11[g]  1[h]  40[vs]
 
-|| 48 ||  {p=40}  [+v]   [4][vdwl][>][gm]   [bs]  /f  <r>5[w]  18[f]  16[g]  1[h]  40[vs]
+|| 48 ||  {p=41}  [8][kt][>][attack]  /f  <r>8[w]  20[f]  12[g]  1[h]  41[vs]
 
-|| 49 ||  {p=41}  [bloodlines]   [+v]   [8][kt][>][attack]  /f  <r>6[w]  18[f]  16[g]  1[h]  41[vs]
-
-|| 50 ||  {sps="no"}  [+][kt]<xt> 2<x>[stb]<> [3s] <b b>+<> [v]<xt>1<x>[tc]<>   [cba] [3s] [forging] [3s] [husbandry] [3s] [ic] [3s] [hp]   [mst][>][monk] [3s] [sws][>][mango]  /f  <r>7+[w]  18+[f]  16+[g]  1[h]  42+[vs]
+|| 49 ||  {sps="no"}  [+][kt]<xt> 2<x>[stb]<> [3s] [+][v]   [bloodlines] [1s] [ic] [1s] [bs] [1s] [gmg] [1s] [husbandry] [1s] [hp]   [mst][>][monk] [3s] [sws][>][mango]  /f  <r>8+[w]  20+[f]  13+[g]  1[h]  42+[vs]
