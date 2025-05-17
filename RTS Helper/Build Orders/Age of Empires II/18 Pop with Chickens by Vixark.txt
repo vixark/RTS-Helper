@@ -252,7 +252,7 @@ vdstrlh=[[vdstr]<x>Low[health]<>]
 
 || 1 ||  {p=4}  [sc][>][explore]<x>[chk][shp][boar]<>   /f  <r>4[f]  4[vs] || Use shift queuing to make the initial scout's scouting path. Since you'll also scout with sheep and won't push deer, it's ok to have less scoutting efficiency so you can focus in your economy. \n\n If you are in one side of the map, don't go twice behind your base at the edge of the map. Make one circle around your town center, moving closer to the edge of the map when near it, and then make a U shaped path around the first circle avoiding the edge of the map. \n\n If you are in a corner of the map, you usually spawn at a greater distance from the edges so making two circles with the scout is fine. \n\n The two layers of scoutting should be enough to find all your sheep and the chickens. After that, you can manually task the scout to explore the opponent's town. \n\n For exploring the opponent's town faster and easier without running into the town center, you can use the mod 'Minimap TC Orbit' and make a scoutting path inside the circle.
 
-|| 2 ||  {p=5}  [shp]<xt>2-3<>[>][tc]   [shp]<xt>4<>[>][explore]<x>Near [tc]<>  /f  <r>5[f]  5[vs] || Use sheep #4 to explore in the surroundings of town center. Use it only to help you find the first boar if the scout hasn't found it yet.
+|| 2 ||  {p=5}  [shp]<xt>2-3<>[>][tc]   [shp]<xt>4<>[>][explore]<x s>[boar] Near [tc]<>  /f  <r>5[f]  5[vs] || Use sheep #4 to explore in the surroundings of town center. Use it only to help you find the first boar if the scout hasn't found it yet.
 
 || 3 ||  {p=6}  [v]<xt>7<>[>][shp2]   [all][v@shp][>shp2]   [+v]  /f  <r>6[f]  6[vs] || If you shift queue the villagers to the next sheep, the pathing will be better.
 

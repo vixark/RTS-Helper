@@ -189,7 +189,7 @@ namespace RTSHelper {
             for (int i = 0; i < pasoFinalSuma; i++) {
                 sumaDuración += pasos[i].DuraciónEnJuego;
             }
-            return sumaDuración + pasosExceso * pasos[pasoFinalSuma].DuraciónEnJuego; // Se aproxima que los siguientes pasos después de finalizar los que están en Pasos sean a la misma velocidad de ejeución del último paso, esto puede que no sea exacto si el usuario empieza a mover la velocidad de ejeución después de finalizados todos los pasos, pero es aceptable porque se prefiere no agregar pasos 'ficticios' para poder guardar la duración de estos pasos de exceso porque mucha lógica está condicionada al largo de Pasos.
+            return sumaDuración + pasosExceso * Preferencias.StepDuration; // Se corrige a Preferencias.StepDuration que viene siendo el predeterminado del juego actual porque aunque no sea lo más intuitivo si la estrategia actual tiene un tiempo predeterminado es el tiempo que usa el temporizador de duración de paso para los pasos extra, entonces se prefiere no tocar ese código y cambiarlo aquí que me aseguro que solo aplica para efectos del tiempo mostrado. Valor anterior: pasos[pasoFinalSuma].DuraciónEnJuego; Se aproxima que los siguientes pasos después de finalizar los que están en Pasos sean a la misma velocidad de ejeución del último paso, esto puede que no sea exacto si el usuario empieza a mover la velocidad de ejeución después de finalizados todos los pasos, pero es aceptable porque se prefiere no agregar pasos 'ficticios' para poder guardar la duración de estos pasos de exceso porque mucha lógica está condicionada al largo de Pasos.
 
         } // ObtenerDuraciónPasosAnteriores>
 

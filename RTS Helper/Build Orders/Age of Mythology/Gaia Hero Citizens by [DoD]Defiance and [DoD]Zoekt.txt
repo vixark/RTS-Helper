@@ -1,12 +1,12 @@
 || If you want to create your own build orders read this article https://www.reddit.com/r/AgeofMythology/comments/1h9ulf4/how_to_make_build_orders/ and the RTS Documentation: http://vixark.com/rts-helper/documentation.
 || The sections {{ }} << >> and [[  ]] usually don't need to be modified. If you need to update them, also update them in New.txt file with the app closed so the changes made also apply to future build orders.
-|| See changes and earlier versions in https://github.com/vixark/RTS-Helper/blob/master/RTS%20Helper/Build%20Orders/Age%20of%20Mythology
+|| See changes and earlier versions in https://github.com/vixark/RTS-Helper/blob/master/RTS%20Helper/Build%20Orders/Age%20of%20Mythology/Zeus%20Minotaurs%20and%20Toxotes%20By%20Vixark.txt
 
 
 || Global Format and Format Classes: http://vixark.com/rts-helper/documentation#globalformat and http://vixark.com/rts-helper/documentation#formatclasses.
 {{
 
-t=15
+t=25
 empty={fc="none" s="none"}
 
 }}
@@ -108,16 +108,6 @@ xs6=[<xt s>6<>]
 xs7=[<xt s>7<>]
 xs8=[<xt s>8<>]
 xs9=[<xt s>9<>]
-11s=[[10s][1s]]
-12s=[[10s][2s]]
-13s=[[10s][3s]]
-14s=[[10s][4s]]
-15s=[[10s][5s]]
-16s=[[10s][6s]]
-17s=[[10s][7s]]
-18s=[[10s][8s]]
-19s=[[10s][9s]]
-20s=[[10s][10s]]
 xf=[<x>[rll]<>]
 pf=[<p>[rll]<>]
 xi=[<x>[idle]<>]
@@ -129,6 +119,16 @@ dgp=[<p>[dg]<>]
 dwp=[<p>[dw]<>]
 rp=[<p>[right]<>]
 xaq=[<x>[aq]<>]
+11s=[[10s][1s]]
+12s=[[10s][2s]]
+13s=[[10s][3s]]
+14s=[[10s][4s]]
+15s=[[10s][5s]]
+16s=[[10s][6s]]
+17s=[[10s][7s]]
+18s=[[10s][8s]]
+19s=[[10s][9s]]
+20s=[[10s][10s]]
 
 v@goat=[[v]<x>[goat]<>]
 l@goat=[[l]<x>[goat]<>]
@@ -845,78 +845,24 @@ qage5=[[age5][xaq]]
 ]]
 
 
-(([ajax] [0s] [5][mt]<x>[labyrinth of minos]<> [0s] [15][tx]<x>[medium archers]<> [0s]   <b>for [0s] [hades] [0s]on[0s] [land map]   Author: <>http://vixark.com/:Vixark  [1s] http://vixark.com/donate:Donate   <b>Difficulty:<> Moderate))
+(([5][citizen hero] [0s] [hand axe] [0s] [pickaxe] [0s] <b>for [0s] [gaia] [0s]on[0s] [land map]   <b>By: <>[Open Square Bracket]DoD[Close Square Bracket]Defiance and [Open Square Bracket]DoD[Close Square Bracket]Zoekt [1s] <>https://discord.gg/G9JUrrxc:DoD_Discord   <>Converted by [Open Square Bracket]DoD[Close Square Bracket]Joeybadz/Kries/Godschalk<>   <b>Difficulty:<> Hard [3s] <>https://youtu.be/EEoQYdaNi0k:See_Video))
 
-|| 0 ||  {p=4}  [v]<xt>1-4<>[>][gr@deer]   [v]<xt>5-6<>[>][wl]  /f  <r>4[gr]  4[p] || Kill 3 deer with the town center and place the granary between them so you can save villager time. Keep 4 or less villagers per deer to increase gather efficiency. Kill deer with the town center when you see them close to the granary and villagers will need to gather from it soon. If any deer is too far away from the granary, you can use a goat to push it closer to it and kill it with villagers or the town center. Be careful when you kill deer with the town center, because the gather point will be moved to deer, if that's not what you need, you need to reset it to the correct resource afterwards. You can use the same build order with aggressive huntables like boars, but modify it slightly. If you have only aggressive huntables, you can lure them to your town center with villagers and you won't need a granary, so you can send the villager #5 to food and the villager #9 to wood. If you have a mix of aggressive huntables and non aggressive huntables, make the granary normally, but be carefull to not put many villagers in the same animal. You can use a goat to push the aggressive animal closer to the villagers so they don't need to walk to attack it.
+|| 0 ||  {p=4}  [ch][x1][>][deer]   [ch][x2][>][eg][>deer]   [c]<xt>3<>[>][deer] [3s] [hand axe] [1s] [pickaxe]/f  <r>2[f]  4[p]
 
-|| 1 ||  {p=5}  [bsh@w]  /f  <r>4[f]  1[sh]  5[p] || Build the storehouse next to the woodline without leaving any space. Since you'll have few villagers in wood for a while, you won't have any problem with overcrowding and by the time you need add more villagers to wood, the woodline will have enough space for them. Don't trust the villager to start chopping wood automatically, shift queue him to a tree after building the storehouse. If you don't do it, he may decide that he wants to mine gold instead.
+|| 1 ||  {p=6}  [c]<xt>4-5<>[>][gaia tree]   [gaia forest]<x> Next to [tca]and near [gm]<>  /f  <r>3[f]  6[p] || Wait a little until the gaia forest has a few trees and put the gather point for next citizen as late as possible in the tree closest to the gold mine.
 
-|| 2 ||  {p=6}  [v]<xt>7-8<>[>][gm]  /f  <r>4[f]  2[w]  6[p]
+|| 2 ||  {p=8}  [c]<x>[gaia tree]<>[>][ch]   [w]= <t>95<> :   [9s] [ch]<x>[gaia tree]<>[>][manor][>g]  /f  <r>3[f]  1[m]  8[p] || Heroize the gold villager as soon as you can. Then build a manor as soon as you can
 
-|| 3 ||  {p=7}  [bsh@g]  /f  <r>4[f]  2[w]  1[sh]  7[p] || Build the storehouse leaving a small space between it and the gold mine, so the villagers can fit there. Don't trust the villager to start mining gold automatically, shift queue it to gold after building the storehouse. If you don't do it, he may decide that he wants to chop wood instead.
+|| 3 ||  {p=10}  [c][x6][>][deer]   [c]<x>[gaia tree]<>[>][ch]  /f  <r>3[f]  1[w]  1[g]  10[p]
 
-|| 4 ||  {p=8}  [v]<xt>9-11<>[>][deer]  /f  <r>4[f]  2[w]  2[g]  8[p]
+|| 4 ||  {p=12}  [c][x7][>][gaia tree]   [ctodeer][>][ch]  /f  <r>4[f]  1[w]  1[g]  12[p] || Start to spread out the new food citizens to different food sources to minimize walking time.
 
-|| 5 ||  {p=9}  /f  <r>5[f]  2[w]  2[g]  9[p]
+|| 5 ||  {p=14}  [c]<xt>8-9<>[>][berry]   [goat][>][ch]<x>[gaia tree]<>  /f  <r>4[f]  2[w]  1[g]  14[p]
 
-|| 6 ||  {p=10}  /f  <r>6[f]  2[w]  2[g]  10[p]
+|| 6 ||  {p=16 sps="no"}  [w] = <t>140<> :  [ch]<x>[gaia tree]<>[>][goat]    [ch]<x>[gm]<>[>][t][>g]   [w] = <t>15<> :  [c]<x>[gaia tree]<>[>][goat] or [temple][>][gaia tree][xf] /f  <r>6[f]  1[w]  1[t]  16[p] || Use the non-hero citizen in the gaia forest to help to rush the temple or to gather more food depending on what is tighter. If you can start the temple with the hero citizen before the citizen 9th comes out of the town center, you'll make it on time, otherwise you'll need 2 citizen to finish it on time.
 
-|| 7 ||  {p=11}  [v]<xt>12<>[>][t]<x>Near [gm]<>  /f  <r>7[f]  2[w]  2[g]  11[p]
+|| 7 ||  {p=18}  [c][x10][>][gm]   [stop][c][xaq]   [classical age] @ <t>3:20<>  /f  <r>7[f]  1[w]  1[g]  18[p]
 
-|| 8 ||  {p=12}  [v]<xt>13-18<>[>][pray]  /f  <r>7[f]  2[w]  2[g]  1[t]  12[p]
+|| 8 ||  {p=20 t=60}  [c][xaq]   [+][o]  /f  <r>8[f]  1[w]  1[g]  20[p]
 
-|| 9 ||  {p=13}  [vtopray][>][h][>][temple][xf]   [all][vdg][>][pray]  /f  <r>7[f]  2[w]  1[h]  3[t]  13[p]
-
-|| 10 ||  {p=14}  [svaq]   [age2] [athena beta][xaq]   [v][x15]<x>Out <>:  [all][vddeer]   /f  <r>7[f]  2[w]  5[fv]  14[p] || Autoqueue the age advance with right click so it starts as soon as you get the 400 food, usually this happens when you drop the food from deer in the granary. If you get the 400 food before the villager #15 comes out, be quick to cancel it and queue it normally with left click so it starts the age advance after the villager #15 comes out. Alternatively, you can just gauge how close or far you are from 400 food and if you feel you are close, you can drop the food earlier and queue the age advance normally or if you feel you are far from 400 food, you can wait until the villager #15 comes out to drop the food and quickly use hotkeys to advance to classical age. Either way, the goal is to minimize town center's idle time and get the villager #15 out. 
-
-|| 11 ||  {p=15}  [5][vi@deer][4][>][deer]   [15s][3][>][wl]  /f  <r>4[f]  5[w]  6[fv]  15[p]
-
-|| 12 ||  {p=15}  [vaq]   [vaults of erebus][xaq]  /f  <r>4[f]  5[w]  6[fv]  15[p]
-
-|| 13 ||  {p=15}  [+][ajax]   [ajax]<x s>Group 1<>[>][relic][right][t][xf]  /f  <r>4[f]  5[w]  6[fv]  15[p]
-
-|| 14 ||  {p=15}  [vdeertogoat]   [fv]= [10]:  [5][v@pray][>][gm]  /f  <r>4[f]  5[w]  5[g]  1[fv]  15[p] || Line up the following goats in front of the town center so the villagers don't have to walk a lot to get to them. Make sure the villagers end up well distribuited between the gold mine and the storehouse and not clumped in a corner.
-
-|| 15 ||  {p=15}  [v@w][>][ar][>w]   [shv@w]   [9s]or [v@goat]  /f  <r>4[f]  3[w]  5[g]  1[fv]  1[h]  1[ar]  15[p] || Make a new house with a villager gathering wood when the game notifies that you are close to population cap. If you that feel you are short in wood and have enough food to support villager production, you could build some houses with a villager gathering goat.
-
-|| 16 ||  {p=16}  [gp]<x>[t]<>[>][mt]<x s>Group 3<>   [mt][xaq]   [tx][xaq]  /f  <r>4[f]  4[w]  5[g]  2[fv]  1[ar]  16[p] || Setting the temple's gather point on the first minotaur allows you too keep all minotaurs in the same group 3 as long as at least one survives, this works even if the first minotaur dies. If you are playing without military autoqueue, you need to press frequently the 'Find All Production Buildings' hotkey and W + E to keep producing minotaurs and toxotes as soon as the resources are coming.
-
-|| 17 ||  {p=17}  /f  <r>4[f]  5[w]  5[g]  3[fv]  17[p]
-
-|| 18 ||  {p=18}  [v]<xt>19-22<>[>][wl]   [gp]<x>[ar]<>[>][tx]<x s>Group 2<>   [atk]<x s> Opponent<>  /f  <r>4[f]  5[w]  5[g]  4[fv]  18[p]
-
-|| 19 ||  {p=19}  /f  <r>4[f]  5[w]  5[g]  4[fv]  1[h]  19[p]
-
-|| 20 ||  {p=20}  /f  <r>4[f]  7[w]  5[g]  4[fv]  20[p]
-
-|| 21 ||  {p=21}  /f  <r>4[f]  8[w]  5[g]  4[fv]  21[p]
-
-|| 22 ||  {p=22}  [v]<xt>23-24<>[>][gm]  /f  <r>4[f]  8[w]  5[g]  4[fv]  1[h]  22[p]
-
-|| 23 ||  {p=23}  /f  <r>4[f]  9[w]  6[g]  4[fv]  23[p]
-
-|| 24 ||  {p=24}  [v]<xt>25-26<>[>][wl]  /f  <r>4[f]  8[w]  7[g]  4[fv]  1[h]  24[p]
-
-|| 25 ||  {p=25}  [medium archers][xaq]   [2][vdg][>][pray]   /f  <r>4[f]  10[w]  5[g]  6[fv]  25[p]
-
-|| 26 ||  {p=26}  [v]<xt>27-30<>[>][chk]  /f  <r>4[f]  11[w]  5[g]  6[fv]  26[p]
-
-|| 27 ||  {p=27}  [vtochk][>][gr]   [stop][mt][xaq]  /f  <r>4[f]  11[w]  5[g]  6[fv]  1[gr]  27[p]
-
-|| 28 ||  {p=28}  /f  <r>6[f]  10[w]  5[g]  6[fv]  1[h]  28[p]
-
-|| 29 ||  {p=29}  [3][mt]<x>Alive<> :  [labyrinth of minos]   [all][v@pray][>][gr@berry]  /f  <r>7[f]  11[w]  5[g]  6[gr]  29[p]
-
-|| 30 ||  {p=30}  [v]<xt>31-34<>[>][berry]  /f  <r>14[f]  10[w]  5[g]  1[h]  30[p]
-
-|| 31 ||  {p=31}  /f  <r>15[f]  11[w]  5[g]  31[p]
-
-|| 32 ||  {p=32}  [v@w][>][a][>w]   [stop][tx][xaq]   /f  <r>16[f]  10[w]  5[g]  1[a]  32[p]
-
-|| 33 ||  {p=33}  /f  <r>17[f]  9[w]  5[g]  1[h]  1[a]  33[p]
-
-|| 34 ||  {p=34}  [v]<xt>35-...<>[>] It Depends  /f  <r>18[f]  9[w]  5[g]  1[h]  1[a]  34[p]
-
-|| 35 ||  {p=35}  [age3][xaq] or [tcg][x2]   [vdberry][vdgoat][vdchk][vdw][>] It Depends  /f  <r>18[f]  11[w]  5[g]  1[?]  35[p]
-
-|| 36 ||  {sps="no"}  [pickaxe]  [hand axe]  [plow] [husbandry]  [sh]<x>[wl]<pt>2<>  [golden apples]  [divine blood]   [copper weapons]  [copper armor]  [copper shields]  [heavy archers]  [levy ranged soldiers]  [bronze weapons]  [bronze armor]  [bronze shields]   [mt]  [tx]  [ajax]  [achilles]  [chiron]  [catapult]  [sun ray]  [temple of healing] /f  <r>18+[f]  11+[w]  5+[g]  0+[fv]  35+[p]
+|| 9 ||  {sps="no"}  [leto]: [automaton] [hephaestus revenge] [volcanic forge] [3s] [oceanus]: [caladria] [bite of the shark] [weightless mace] [frontline heroics]   [murmillo] [turma] [katapeltes] [copper weapons] [copper armor] [copper shields] [medium infantry] [medium archers]   [tca][x2] [shaft mine] [bow saw] [husbandry]  /f  <r>8+[f]  1+[w]  1+[g]  20+[p]

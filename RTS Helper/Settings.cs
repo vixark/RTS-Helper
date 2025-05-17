@@ -298,11 +298,11 @@ namespace RTSHelper {
 
         #region Actualizaciones
 
-        public int ImagesVersion { get; set; } = 4; // 3. Primeras imágenes de Age of Mythology. 4. Imagen de gallinas y drop resources para AOE2.
+        public int ImagesVersion { get; set; } = 5; // 3. Primeras imágenes de AOM. 4. Imagen de gallinas y drop resources para AOE2. 5. Imágenes de China de AOM.
 
         public int SoundsVersion { get; set; } = 1; // 1. Primeros sonidos.
 
-        public int BuildOrdersVersion { get; set; } = 5; // 4. Primeras estrategias de Age of Mythology. 5. Una estrategia con gallinas para AOE2.
+        public int BuildOrdersVersion { get; set; } = 7; // 4. Primeras estrategias de AOM. 5. Una estrategia con gallinas para AOE2. 6. Estrategia de con gallinas para Malian MAA para AOE2. 7. Estrategias para AOM de DoD Clan.
 
         public string UpdatesBaseUrl = "https://vixark.b-cdn.net/rts-helper"; // Es cambiada cuando se lee desde el Json. Este valor solo sirve para la ejecución inicial. Debería ser cambiado cuando se cambie la ruta del CDN para que los usuarios que lo instalen por primera vez puedan acceder a las actualizaciones automáticas.
 
@@ -362,7 +362,7 @@ namespace RTSHelper {
                 return (GameSpeed == 1.7 ? "Normal" : (GameSpeed == 1 ? "Slow" : (GameSpeed == 1.5 ? "Casual" : (GameSpeed == 2 ? "Fast" : "Other"))));
             } else if (game == AOMName) {
                 return (GameSpeed == AOMNormalSpeed ? "Normal" : 
-                    (GameSpeed == AOMNormalSpeed * 0.5 ? "Slow" : 
+                    (GameSpeed == AOMNormalSpeed * 0.5 * (599 / 600) ? "Slow" : // Este valor no se pudo conseguir de manera muy consistente. Sospecho que hay causas que hacen que esto sea algo aleatoria y dependiendo de cierto 'lag'. Se usa un factor relativamente burdo de 1 segundo de extra velocidad de RTS Helper por 10 minutos de juego.
                     (GameSpeed == 2 ? "Fast" : 
                     (GameSpeed == 0.3333 * 1.020408 ? "Consider the internet" 
                     : (GameSpeed == 2.5 ? "Lets go! now!" : "Other")))));
@@ -477,27 +477,28 @@ namespace RTSHelper {
 
                     if (resolución == "3840x2160") {
 
-                        var factorIncrementoVs1440p = 1.25; // Un valor intermedio entre 1 y 1.5 para darle más tamaño, pero tampoco incrementarlo proporcional a la resolución.
+                        var factorIncrementoVs1440p = 1.5;
+                        var factorIncrementoUIVs1440p = 1.25; // Los elementos de interface no es necesario incrementarlos en la misma proporción, pueden ser más pequeños.
                         Height*= factorIncrementoVs1440p;
                         Width *= factorIncrementoVs1440p; // No cambiar. Normalmente uso el minimapa 25% más grande y el valor mi valor sería 635.
                         Top *= factorIncrementoVs1440p;
                         Left *= factorIncrementoVs1440p;
                         CurrentStepFontSize *= factorIncrementoVs1440p;
                         NextPreviousStepFontSize *= factorIncrementoVs1440p;
-                        ButtonsSize *= factorIncrementoVs1440p;
-                        ButtonsMargin *= factorIncrementoVs1440p;
-                        ButtonsPadding *= factorIncrementoVs1440p;
-                        LargeFontSize *= factorIncrementoVs1440p;
-                        MediumFontSize *= factorIncrementoVs1440p;
+                        ButtonsSize *= factorIncrementoUIVs1440p;
+                        ButtonsMargin *= factorIncrementoUIVs1440p;
+                        ButtonsPadding *= factorIncrementoUIVs1440p;
+                        LargeFontSize *= factorIncrementoUIVs1440p;
+                        MediumFontSize *= factorIncrementoUIVs1440p;
                         LeftMarginCurrentStep *= factorIncrementoVs1440p;
                         TopMarginCurrentStep *= factorIncrementoVs1440p;
-                        TopMarginNextPreviousStep *= factorIncrementoVs1440p;
-                        BottomMargenSteps *= factorIncrementoVs1440p;
-                        RightMarginNextPreviousStep *= factorIncrementoVs1440p;
-                        BuildOrderSelectorWidth *= factorIncrementoVs1440p;
-                        ExecutionSpeedSelectorWidth *= factorIncrementoVs1440p;
-                        ThicknessCircularProgressBar *= factorIncrementoVs1440p;
-                        RightMarginCircularProgressBar *= factorIncrementoVs1440p;
+                        TopMarginNextPreviousStep *= factorIncrementoUIVs1440p;
+                        BottomMargenSteps *= factorIncrementoUIVs1440p;
+                        RightMarginNextPreviousStep *= factorIncrementoUIVs1440p;
+                        BuildOrderSelectorWidth *= factorIncrementoUIVs1440p;
+                        ExecutionSpeedSelectorWidth *= factorIncrementoUIVs1440p;
+                        ThicknessCircularProgressBar *= factorIncrementoUIVs1440p;
+                        RightMarginCircularProgressBar *= factorIncrementoUIVs1440p;
 
                     }
 
@@ -655,8 +656,11 @@ namespace RTSHelper {
             } else if (juego == AOMName) {
 
                 EstablecerValoresRecomendadosAOE2(resolución, cambióJuego); // Para evitar enredos con los tamaños y posiciones, se usa casi lo mismo que en AOE2, solo se incrementa ligeramente el ancho.
-                var factorAnchoAOE2aAOM = 1.05;
+                var factorAnchoAOE2aAOM = 1; // Arbitrario. Inicialmente se quería poner un valor mayor a uno para aprovechar que hay más espacio en AOM, pero se prefirió dejar los tamaños iguales por consistencia.
                 Width = Width * factorAnchoAOE2aAOM;
+
+                var factorIzquierdaAOE2aAOM = 1.172; // Establecido iterando usando mi pantalla para que quede justo al lado izquierdo del mapa partiendo del punto optimo de Age of Empires II. Este factor depende de ambos juegos. Si cambia la interface de uno de ellos, se debe cambiar.
+                Left = Left * factorIzquierdaAOE2aAOM;
 
                 if (cambióJuego) {
                     GameSpeed = AOMNormalSpeed;

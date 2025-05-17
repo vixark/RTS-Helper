@@ -793,11 +793,11 @@
                         <StackPanel Orientation="Horizontal" Margin="-5 10 0 0">
                             <Label FontSize="{DynamicResource FuenteGrande}" FontWeight="Bold">Thanks</Label>
                         </StackPanel>
-                         <TextBlock TextWrapping="Wrap" Margin="0 0 0 10">
+                        <TextBlock TextWrapping="Wrap" Margin="0 0 0 10">
                             Thanks to Shorcle and Bryan for their help with testing and ideas.
                         </TextBlock>
                         <TextBlock TextWrapping="Wrap" Margin="0 0 0 10">
-                            Thanks to Hera and Survivalist for allowing me to include their build orders.
+                            Thanks to Deities of Death Clan, Hera and Survivalist for allowing me to include their build orders.
                         </TextBlock>
                         
                         <StackPanel Orientation="Horizontal">

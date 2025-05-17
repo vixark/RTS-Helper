@@ -252,7 +252,7 @@ vdstrlh=[[vdstr]<x>Low[health]<>]
 
 || 1 ||  {p=4}  [sc][>][explore]<x>[chk][shp][boar]<>   /f  <r>4[f]  4[vs] || Use shift queuing to make the initial scout's scouting path. Since you'll also scout with sheep and won't push deer, it's ok to have less scoutting efficiency so you can focus in your economy. \n\n If you are in one side of the map, don't go twice behind your base at the edge of the map. Make one circle around your town center, moving closer to the edge of the map when near it, and then make a U shaped path around the first circle avoiding the edge of the map. \n\n If you are in a corner of the map, you usually spawn at a greater distance from the edges so making two circles with the scout is fine. \n\n The two layers of scoutting should be enough to find all your sheep and the chickens. After that, you can manually task the scout to explore the opponent's town. \n\n For exploring the opponent's town faster and easier without running into the town center, you can use the mod 'Minimap TC Orbit' and make a scoutting path inside the circle.
 
-|| 2 ||  {p=5}  [shp]<xt>2-3<>[>][tc]   [shp]<xt>4<>[>][explore]<x>Near [tc]<>  /f  <r>5[f]  5[vs] || Use sheep #4 to explore in the surroundings of town center. Use it only to help you find the first boar if the scout hasn't found it yet.
+|| 2 ||  {p=5}  [shp]<xt>2-3<>[>][tc]   [shp]<xt>4<>[>][explore]<x s>[boar] Near [tc]<>  /f  <r>5[f]  5[vs] || Use sheep #4 to explore in the surroundings of town center. Use it only to help you find the first boar if the scout hasn't found it yet.
 
 || 3 ||  {p=6}  [v]<xt>7<>[>][shp2]   [all][v@shp][>shp2]   [+v]  /f  <r>6[f]  6[vs] || If you shift queue the villagers to the next sheep, the pathing will be better.
 
@@ -286,7 +286,7 @@ vdstrlh=[[vdstr]<x>Low[health]<>]
 
 || 18 ||  {p=17 t=40 sps="no"}  [v]<xt>18-22<>[>][str]   [6][vdchk] :  [3][>][berry][xf] [3s] [3][>chk5]   [+v] [3s] [3][mil][sc][>][attack]<x>[gm][chk][berry]<>  /f  <r>3[w]  11[f]  3[g]  17[vs]
 
-|| 19 ||  {p=17}  [all][vdgm] [3s] [maa u] [3s] [+v]   [3][v@berry][>][mill]<x s>1 Tile from [berry]<>   [5][v@shp][>berry]  /f  <r>3[w]  8[f]  3[g]  3[mill]  17[vs] || You'll have 8 villagers in berries very soon so it's better to leave 1 tile gap between the mill and the berries to improve gather efficiency.
+|| 19 ||  {p=17 sps="no"}  [all][vdgm] [3s] [maa u] [3s] [+v]   [3][v@berry][>][mill]<x s>1 Tile from [berry]<>   [5][v@shp][>berry]  /f  <r>3[w]  8[f]  3[g]  3[mill]  17[vs] || You'll have 8 villagers in berries very soon so it's better to leave 1 tile gap between the mill and the berries to improve gather efficiency.
 
 || 20 ||  {p=18}  [vdgm][>][h]<x>[sw]<>[>sw]   [+][mil]   [+v]  /f  <r>4[w]  11[f]  2[g]  1[h]  18[vs]
 
@@ -340,7 +340,7 @@ vdstrlh=[[vdstr]<x>Low[health]<>]
 
 || 45 ||  {p=39}  Start [ls] Production at [3][rax]   Cancel to Afford Tecnologies   [+4h]   /f  <r>12[w]  20[f]  6[g]  1[h]  39[vs]
 
-|| 46 ||  {p=39}  [v]<xt>40-57<>[>][wl2] [3s] [+v]   [w] <t>> 325<> :   [6s] [4][v@wl][>][4][farm]  /f  <r>8[w]  20[f]  6[g]  1[h]  4[farm]  39[vs]
+|| 46 ||  {p=39}  [v]<xt>40-57<>[>][wl2] [3s] [+v]   [w] <t>> 325<> :   [6s] [4][v@wl]<xt s>1<>[>][4][farm]  /f  <r>8[w]  20[f]  6[g]  1[h]  4[farm]  39[vs]
 
 || 47 ||  {p=39}  [+v]  /f  <r>8[w]  24[f]  6[g]  1[h]  39[vs]
 
@@ -370,9 +370,9 @@ vdstrlh=[[vdstr]<x>Low[health]<>]
 
 || 60 ||  {p=52}  Cancel [ls] Queue and Stop Production   [v@farm][pi][>][uni][>farm]   [+2v]   /f  <r>10[w]  27[f]  6[g]  1[h]  7[mc]  1[uni]  52[vs]
 
-|| 61 ||  {p=53}  [v@h][>][mst][>][h][xf]  /f  <r>11[w]  27[f]  13[g]  1[uni]  1[mst]  53[vs]
+|| 61 ||  {p=53}  [v@h][>][mst][>][h][xf]   Enable [autofarm]   /f  <r>11[w]  27[f]  13[g]  1[uni]  1[mst]  53[vs]
 
-|| 62 ||  {p=54}  Enable [autofarm]   [+2v]   /f  <r>12[w]  27[f]  13[g]  1[uni]  1[mst]  54[vs]
+|| 62 ||  {p=54}  [+2v]   /f  <r>12[w]  27[f]  13[g]  1[uni]  1[mst]  54[vs]
 
 || 63 ||  {p=55}  [+2h]  /f  <r>13[w]  28[f]  13[g]  1[h]  55[vs]
 
@@ -394,9 +394,9 @@ vdstrlh=[[vdstr]<x>Low[health]<>]
 
 || 72 ||  {p=61}  /f  <r>11[w]  32[f]  13[g]  4[s]  1[h]  61[vs]
 
-|| 73 ||  {p=62}  [+2v]   [+3h][>][wl]  /f  <r>11[w]  32[f]  13[g]  5[s]  1[h]  62[vs]
+|| 73 ||  {p=62}  [+2v]   [+2h][>][wl]  /f  <r>11[w]  32[f]  13[g]  5[s]  1[h]  62[vs]
 
-|| 74 ||  {p=63}  Consider Buy [f][>][chmp u]  /f  <r>11[w]  32[f]  13[g]  6[s]  1[h]  63[vs]
+|| 74 ||  {p=63}  Consider Buying [f][>][chmp u]  /f  <r>11[w]  32[f]  13[g]  6[s]  1[h]  63[vs]
 
 || 75 ||  {p=64 sns="no"}  [+2v]   Consider [4][v@wl][>][tc]<p>[wl]<xt>2<> [+4][farm]  /f  <r>11[w]  32[f]  13[g]  7[s]  1[h]  64[vs]
 
