@@ -34,7 +34,7 @@ namespace RTSHelper {
 
         public static Settings Preferencias = new Settings();
 
-        public static bool ModoDesarrollo = false;
+        public static bool ModoDesarrollo = true;
 
         public const string AOE2Name = "Age of Empires II";
 
@@ -130,7 +130,8 @@ namespace RTSHelper {
 
         public enum PosiciónTexto { Indeterminado, Normal, Subíndice, Superíndice }
 
-        public enum TamañosFuente { Indeterminado, XXXS, XXS, XS, S, M, L, XL, XXL, XXXL }
+        public enum TamañosFuente { Indeterminado, XXXSMINUS, XXXS, XXXSPLUS, XXSMINUS, XXS, XXSPLUS, XSMINUS, XS, XSPLUS, SMINUS, S, SPLUS, MMINUS, M,
+            MPLUS, LMINUS, L, LPLUS, XLMINUS, XL, XLPLUS, XXLMINUS, XXL, XXLPLUS, XXXLMINUS, XXXL, XXXLPLUS }
 
         public enum TipoFuente { Sans, SansNegrita, Serif, SerifCuadrada, Caligráfica, Símbolos }
 
@@ -149,7 +150,9 @@ namespace RTSHelper {
 
         public static List<string> Estilos { get; set; } = new List<string> { "b", "i", "u", "nb" };
 
-        public static List<string> Tamaños { get; set; } = new List<string> { "xxxs", "xxs", "xs", "s", "m", "l", "xl", "xxl", "xxxl" }; // xxxl x3, xxl x2, xl x1.5, l x1.3, m x1, s x1/1,3, xs x1/1,5, xxs x1/2, xxxs x1/3. 
+        public static List<string> Tamaños { get; set; } = new List<string> { "xxxsminus", "xxxs", "xxxsplus", "xxsminus", "xxs", "xxsplus", 
+            "xsminus", "xs", "xsplus", "sminus", "s", "splus", "mminus", "m", "mplus", "lminus", "l", "lplus", "xlminus", "xl", "xlplus", "xxlminus", "xxl",
+            "xxlplus", "xxxlminus", "xxxl", "xxxlplus" }; // xxxl x3, xxl x2, xl x1.5, l x1.3, m x1, s x1/1,3, xs x1/1,5, xxs x1/2, xxxs x1/3. 
 
         public static List<string> Posiciones { get; set; } = new List<string> { "sup", "sub", "normalpos" };
 
@@ -425,15 +428,33 @@ namespace RTSHelper {
 
 
         public static double? ObtenerFactorTamañoFuente(TamañosFuente tamañoFuente) => tamañoFuente switch {
+            TamañosFuente.XXXLPLUS => 2.3D,
             TamañosFuente.XXXL => 2D,
+            TamañosFuente.XXXLMINUS => 1.85D,
+            TamañosFuente.XXLPLUS => 1.65D,
             TamañosFuente.XXL => 1.5D,
+            TamañosFuente.XXLMINUS => 1.44D,
+            TamañosFuente.XLPLUS => 1.36D,
             TamañosFuente.XL => 1.3D,
+            TamañosFuente.XLMINUS => 1.25D,
+            TamañosFuente.LPLUS => 1.2D,
             TamañosFuente.L => 1.15D,
+            TamañosFuente.LMINUS => 1.1D,
+            TamañosFuente.MPLUS => 1.05D,
             TamañosFuente.M => 1,
+            TamañosFuente.MMINUS => (1D / 1.06),
+            TamañosFuente.SPLUS => (1D / 1.14),
             TamañosFuente.S => (1D / 1.2),
+            TamañosFuente.SMINUS => (1D / 1.3),
+            TamañosFuente.XSPLUS => (1D / 1.4),
             TamañosFuente.XS => (1D / 1.5),
+            TamañosFuente.XSMINUS => (1D / 1.66),
+            TamañosFuente.XXSPLUS => (1D / 1.84),
             TamañosFuente.XXS => (1D / 2),
+            TamañosFuente.XXSMINUS => (1D / 2.33),
+            TamañosFuente.XXXSPLUS => (1D / 2.66),
             TamañosFuente.XXXS => (1D / 3),
+            TamañosFuente.XXXSMINUS => (1D / 3.3),
             TamañosFuente.Indeterminado => null
         };
 

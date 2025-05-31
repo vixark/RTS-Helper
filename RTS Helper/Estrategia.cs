@@ -728,6 +728,7 @@ namespace RTSHelper {
                         var margenAdicionalSubYSuperíndices = (formatoPredeterminado.TamañoFuenteEfectiva ?? 25) * 10 / 60;
                         var alineación = VerticalAlignment.Center;
                         var radioEsquinas = tamañoImagen * (Preferencias.ImageBackgroundRoundedCornersRadius / 100);
+                        if (radioEsquinas < 5) radioEsquinas = 5; // Cuando es menos de 5 no se siente redondeado. Esta línea se agregó principalmente para mejorar la apariencia en las imágenes compuestas más compactas que usan la funcionalidad de desface vertical y horizontal.
                         var radioEsquinasIzquierdas = radioEsquinas;
                         var radioEsquinasDerechas = radioEsquinas;
                         var ambosÍndices = false;
@@ -796,14 +797,28 @@ namespace RTSHelper {
 
                         } // formato.Posición != PosiciónTexto.Normal>
 
+                        if (formato.DesfaceHorizontal != null && Math.Abs((double)formato.DesfaceHorizontal) > 0) {
+
+                            if (formato.DesfaceHorizontal > 0) {
+                                margenIzquierda = margenIzquierda - tamañoImagen * ((double)formato.DesfaceHorizontal! / 100);
+                            } else {
+                                margenDerecha = margenDerecha + tamañoImagen * ((double)formato.DesfaceHorizontal! / 100);
+                            }                    
+
+                        }
+                            
+                        var margenSuperior = 0D;
+                        if (formato.DesfaceVertical != null && Math.Abs((double)formato.DesfaceVertical) > 0)
+                            margenSuperior = tamañoImagen * (((double)formato.DesfaceVertical! + 2) / 100); // El + 2 es un pequeño ajuste para un caso de uso común para generar subíndices compactos, donde estaba quedando un espacio final sin rellenar en la parte inferior. Por ejemplo para [v]<xxs ho100  vo100>[boar]<>.
+                                                    
                         var anchoSegmentosEfectivos = 0.0;
 
                         var grilla = new Grid { Margin = new Thickness(0), VerticalAlignment = alineación };
                         var borde = new Border {
                             Height = tamañoImagen, CornerRadius = new CornerRadius(radioEsquinasIzquierdas,
                             radioEsquinasDerechas, radioEsquinasDerechas, radioEsquinasIzquierdas),
-                            Opacity = Preferencias.ImageBackgroundOpacity, Background = ObtenerBrocha(Preferencias.ImageBackgroundColor),
-                            Margin = new Thickness(margenIzquierda, 0, margenDerecha, 0)
+                            Opacity = formato.OpacidadFondoImagen ?? Preferencias.ImageBackgroundOpacity, Background = ObtenerBrocha(Preferencias.ImageBackgroundColor),
+                            Margin = new Thickness(margenIzquierda, margenSuperior, margenDerecha, 0)
                         };
 
                         var cuentaSegmentosEfectivos = 0;
@@ -815,7 +830,7 @@ namespace RTSHelper {
 
                                 var imagen = new Image {
                                     Source = ObtenerImagen(segmentoEfectivo.Texto), Height = tamañoImagen,
-                                    Margin = new Thickness(margenIzquierda, 0, margenDerecha, 0)
+                                    Margin = new Thickness(margenIzquierda, margenSuperior, margenDerecha, 0)
                                 }; // El texto del segmentoEfectivo es el nombre de la imagen.
 
                                 if (formato.Posición == PosiciónTexto.Normal && CarácteresComoImágenes.Contains(segmentoEfectivo.Texto[0])) {

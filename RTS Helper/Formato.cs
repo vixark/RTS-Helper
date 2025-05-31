@@ -39,6 +39,12 @@ namespace RTSHelper {
 
         public double? TamañoImagen { get; set; }
 
+        public double? DesfaceHorizontal { get; set; }
+
+        public double? DesfaceVertical { get; set; }
+
+        public double? OpacidadFondoImagen { get; set; }
+
         #endregion Propiedades>
 
 
@@ -64,7 +70,7 @@ namespace RTSHelper {
             palabrasClave.AddRange(Fuentes.Keys);
             palabrasClave.AddRange(new List<string> { "font1", "font2" });
 
-            var iniciosPalabrasClave = new List<string> { "#", "is" };
+            var iniciosPalabrasClave = new List<string> { "#", "is", "ho", "vo", "bo" };
        
             var coincidenciasClases = Regex.Matches(códigoMinúscula, @"([áéíóúüa-z0-9_-]+)=<(.+?)>"); // Primero extrae las coincidencias de clases de formato y las elimina del texto.
             if (coincidenciasClases.Count > 0) {
@@ -186,6 +192,48 @@ namespace RTSHelper {
 
                 }
 
+                if (valor.StartsWith("ho")) {
+
+                    var coincidencias = Regex.Matches(valor, "ho(-?[0-9]+)");
+                    if (coincidencias.Count == 1) {
+
+                        DesfaceHorizontal = double.Parse(coincidencias[0].Groups[1].Value);
+                        valorIdentificado = true;
+
+                    } else {
+                        AgregarErrores(ref errores, $"The format keyword '{valor}' isn't supported.", númeroPaso);
+                    }
+
+                }
+
+                if (valor.StartsWith("vo")) {
+
+                    var coincidencias = Regex.Matches(valor, "vo(-?[0-9]+)");
+                    if (coincidencias.Count == 1) {
+
+                        DesfaceVertical = double.Parse(coincidencias[0].Groups[1].Value);
+                        valorIdentificado = true;
+
+                    } else {
+                        AgregarErrores(ref errores, $"The format keyword '{valor}' isn't supported.", númeroPaso);
+                    }
+
+                }
+
+                if (valor.StartsWith("bo")) {
+
+                    var coincidencias = Regex.Matches(valor, "bo([0-9]+)");
+                    if (coincidencias.Count == 1) {
+
+                        OpacidadFondoImagen = double.Parse(coincidencias[0].Groups[1].Value)/100;
+                        valorIdentificado = true;
+
+                    } else {
+                        AgregarErrores(ref errores, $"The format keyword '{valor}' isn't supported.", númeroPaso);
+                    }
+
+                }
+
                 if (clases != null && clases.ContainsKey(valor)) {
                     formatosDeClases.Add(clases[valor]);
                     valorIdentificado = true;
@@ -220,6 +268,9 @@ namespace RTSHelper {
             if (destino.Posición == PosiciónTexto.Indeterminado) destino.Posición = origen.Posición;
             destino.TamañoImagen ??= origen.TamañoImagen;
             destino.TamañoBaseFuente ??= origen.TamañoBaseFuente;
+            destino.DesfaceHorizontal ??= origen.DesfaceHorizontal;
+            destino.DesfaceVertical ??= origen.DesfaceVertical;
+            destino.OpacidadFondoImagen ??= origen.OpacidadFondoImagen;
 
         } // CopiarPropiedadesEnNulas>
 
@@ -241,7 +292,10 @@ namespace RTSHelper {
                 formato.Posición = formatoHijo?.Posición == PosiciónTexto.Indeterminado ? formatoPadre.Posición 
                     : (formatoHijo != null ? formatoHijo.Posición : PosiciónTexto.Normal);
                 formato.TamañoImagen = (formatoHijo?.TamañoImagen ?? formatoPadre.TamañoImagen) ?? ImageSizePredeterminado;
-
+                formato.DesfaceHorizontal = (formatoHijo?.DesfaceHorizontal ?? formatoPadre.DesfaceHorizontal) ?? 0;
+                formato.DesfaceVertical = (formatoHijo?.DesfaceVertical ?? formatoPadre.DesfaceVertical) ?? 0;
+                formato.OpacidadFondoImagen = (formatoHijo?.OpacidadFondoImagen ?? formatoPadre.OpacidadFondoImagen) ?? Preferencias.ImageBackgroundOpacity;
+                
                 if (formatoHijo?.TamañoBaseFuente != null && formatoPadre.TamañoBaseFuente != null
                     && formatoHijo.TamañoBaseFuente != formatoPadre.TamañoBaseFuente)
                     AgregarErrores(ref errores, "To Developer: TamañoBaseFuente can't be different in formatoHijo and formatoPadre.", númeroPaso);
@@ -258,6 +312,9 @@ namespace RTSHelper {
                 formato.Posición = formatoHijo?.Posición == PosiciónTexto.Indeterminado ? formatoPadre.Posición
                     : (formatoHijo != null ? formatoHijo.Posición : PosiciónTexto.Indeterminado);
                 formato.TamañoImagen = formatoHijo?.TamañoImagen ?? formatoPadre.TamañoImagen;
+                formato.DesfaceHorizontal = formatoHijo?.DesfaceHorizontal ?? formatoPadre.DesfaceHorizontal;
+                formato.DesfaceVertical = formatoHijo?.DesfaceVertical ?? formatoPadre.DesfaceVertical;
+                formato.OpacidadFondoImagen = formatoHijo?.OpacidadFondoImagen ?? formatoPadre.OpacidadFondoImagen;
 
                 if (formatoHijo?.TamañoBaseFuente != null && formatoPadre.TamañoBaseFuente != null
                     && formatoHijo.TamañoBaseFuente != formatoPadre.TamañoBaseFuente)
