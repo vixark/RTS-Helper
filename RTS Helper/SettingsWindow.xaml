@@ -811,13 +811,6 @@
                                 using assets from Age of Empires II and Age of Mythology, and it is not endorsed by or affiliated with Microsoft.
                         </TextBlock>
 
-                        <TextBlock TextWrapping="Wrap">
-                                Age of Empires IV © Microsoft Corporation.
-                                RTS Helper was created under Microsoft's "<Hyperlink Click="Lnk_Click" 
-                                NavigateUri="https://www.xbox.com/en-us/developers/rules">Game Content Usage Rules</Hyperlink>" 
-                                using assets from Age of Empires IV, and it is not endorsed by or affiliated with Microsoft.
-                        </TextBlock>
-
                         <TextBlock TextWrapping="Wrap" Margin="0 10 0 5">
                                 Sounds from Orange Free Sounds©. Find more sounds in <Hyperlink Click="Lnk_Click" 
                                 NavigateUri="https://orangefreesounds.com/">orangefreesounds.com</Hyperlink>.
