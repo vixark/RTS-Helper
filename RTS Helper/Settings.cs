@@ -362,7 +362,7 @@ namespace RTSHelper {
                 return (GameSpeed == 1.7 ? "Normal" : (GameSpeed == 1 ? "Slow" : (GameSpeed == 1.5 ? "Casual" : (GameSpeed == 2 ? "Fast" : "Other"))));
             } else if (game == AOMName) {
                 return (GameSpeed == AOMNormalSpeed ? "Normal" : 
-                    (GameSpeed == AOMNormalSpeed * 0.5 * (599 / 600) ? "Slow" : // Este valor no se pudo conseguir de manera muy consistente. Sospecho que hay causas que hacen que esto sea algo aleatoria y dependiendo de cierto 'lag'. Se usa un factor relativamente burdo de 1 segundo de extra velocidad de RTS Helper por 10 minutos de juego.
+                    (GameSpeed == AOMNormalSpeed * 0.5 * (599D / 600) ? "Slow" : // Este valor no se pudo conseguir de manera muy consistente. Sospecho que hay causas que hacen que esto sea algo aleatoria y dependiendo de cierto 'lag'. Se usa un factor relativamente burdo de 1 segundo de extra velocidad de RTS Helper por 10 minutos de juego.
                     (GameSpeed == 2 ? "Fast" : 
                     (GameSpeed == 0.3333 * 1.020408 ? "Consider the internet" 
                     : (GameSpeed == 2.5 ? "Lets go! now!" : "Other")))));
@@ -384,7 +384,7 @@ namespace RTSHelper {
                     (gameSpeedText == "Fast" ? 2 : 1.7))));
             } else if (game == AOMName) {
                 GameSpeed = (gameSpeedText == "Normal" ? AOMNormalSpeed :
-                    (gameSpeedText == "Slow" ? AOMNormalSpeed * 0.5 : 
+                    (gameSpeedText == "Slow" ? AOMNormalSpeed * 0.5 * (599D / 600) : 
                     (gameSpeedText == "Consider the internet" ? 0.3333 * 1.020408 : // 1200 segundos del juego dieron 1176 segundos dieron RTS Helper. El juego estaba más rapido por 1,020408163265306.
                     (gameSpeedText == "Fast" ? 2 : 
                     (gameSpeedText == "Lets go! now!" ? 2.5 : 1)))));

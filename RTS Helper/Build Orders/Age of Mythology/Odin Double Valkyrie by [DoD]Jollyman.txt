@@ -6,7 +6,7 @@
 || Global Format and Format Classes: http://vixark.com/rts-helper/documentation#globalformat and http://vixark.com/rts-helper/documentation#formatclasses.
 {{
 
-t=15
+t=18
 empty={fc="none" s="none"}
 
 }}
@@ -846,7 +846,7 @@ qage5=[[age5][xaq]]
 ]]
 
 
-(([2][Valkyrie] [0s] [Freyja] @ <t>4:15<> [0s] <b>for [0s] [Odin] [0s]on[0s] [land map]   By: <>[Open Square Bracket]DoD[Close Square Bracket]Jollyman [1s] https://youtu.be/Tl2_T5LMizg:See_Video [1s] https://discord.gg/G9JUrrxc:DoD_Discord   <>Converted by [Open Square Bracket]DoD[Close Square Bracket]Joeybadz/Kries/Godschalk<>   <b>Difficulty:<> Moderate))
+(([2][Valkyrie]  <b>for [0s] [Odin] [0s]on[0s] [land map]   By: <>[Open Square Bracket]DoD[Close Square Bracket]Jollyman [1s] https://youtu.be/Tl2_T5LMizg:See_Video [1s] https://discord.gg/G9JUrrxc:DoD_Discord   <>Converted by [Open Square Bracket]DoD[Close Square Bracket]Joeybadz/Kries/Godschalk<>   <b>Difficulty:<> Moderate))
 
 || 0 ||  {p=3}  [+][d] [3s] [gt][xaq]   [gt]<xt>1-3<>[>][deer] Outside [range]<x>[tcn]<>   [d]<xt>1<>[>][gm]  /f  <r>3[f]  3[p] || Make sure to queue up a dwarf immediately. Kill the hunt outside the range of the town center to maximize the favor gathered.
 
@@ -872,7 +872,7 @@ qage5=[[age5][xaq]]
 
 || 11 ||  {p=14}  [gatherer]<xt>12<>[>][chicken]   [+][d]   /f  <r>7[f]  4[w]  3[g]  14[p]
 
-|| 12 ||  {p=15}  [d]<xt>4-6<>[>][gm]   [sgtaq]   [age2] [freyja] @ <t>3:15   /f  <r>8[f]  4[w]  3[g]  15[p]
+|| 12 ||  {p=15}  [d]<xt>4-6<>[>][gm]   [sgtaq]   [age2] [freyja]   /f  <r>8[f]  4[w]  3[g]  15[p]
 
 || 13 ||  {p=16}  [gt@chk][>][atk][chk] until 18 [fv]   [8s] [>deer]   [+][hersir][>][relic]  /f  <r>8[f]  4[w]  4[g]  16[p]
 

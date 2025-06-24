@@ -6,7 +6,7 @@
 || Global Format and Format Classes: http://vixark.com/rts-helper/documentation#globalformat and http://vixark.com/rts-helper/documentation#formatclasses.
 {{
 
-t=25
+t=30
 empty={fc="none" s="none"}
 
 }}
@@ -861,7 +861,7 @@ qage5=[[age5][xaq]]
 
 || 6 ||  {p=16 sps="no"}  [w] = <t>140<> :  [ch]<x>[gaia tree]<>[>][goat]    [ch]<x>[gm]<>[>][t][>g]   [w] = <t>15<> :  [c]<x>[gaia tree]<>[>][goat] or [temple][>][gaia tree][xf] /f  <r>6[f]  1[w]  1[t]  16[p] || Use the non-hero citizen in the gaia forest to help to rush the temple or to gather more food depending on what is tighter. If you can start the temple with the hero citizen before the citizen 9th comes out of the town center, you'll make it on time, otherwise you'll need 2 citizen to finish it on time.
 
-|| 7 ||  {p=18}  [c][x10][>][gm]   [stop][c][xaq]   [classical age] @ <t>3:20<>  /f  <r>7[f]  1[w]  1[g]  18[p]
+|| 7 ||  {p=18}  [c][x10][>][gm]   [stop][c][xaq]   [classical age]  /f  <r>7[f]  1[w]  1[g]  18[p]
 
 || 8 ||  {p=20 t=60}  [c][xaq]   [+][o]  /f  <r>8[f]  1[w]  1[g]  20[p]
 

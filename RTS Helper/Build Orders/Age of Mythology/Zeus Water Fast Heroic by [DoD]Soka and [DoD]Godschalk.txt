@@ -5,7 +5,7 @@
 || Global Format and Format Classes: http://vixark.com/rts-helper/documentation#globalformat and http://vixark.com/rts-helper/documentation#formatclasses.
 {{
 
-t=15
+t=18
 empty={fc="none" s="none"}
 
 }}
@@ -844,7 +844,7 @@ qage5=[[age5][xaq]]
 ]]
 
 
-(([age3] @ <t>7:30<> [0s] for [0s] [zeus] [0s]on[0s] [midgard]   <b>By: <>[Open Square Bracket]DoD[Close Square Bracket]Soka and [Open Square Bracket]DoD[Close Square Bracket]Godschalk.   <>Converted by [Open Square Bracket]DoD[Close Square Bracket]Joybadz/Kries [1s] <>https://discord.gg/G9JUrrxc:DoD_Discord      <b>Difficulty:<> Hard [3s] <>https://www.youtube.com/watch?v=3FqX0fF8Dbs:See_Video))
+((Fast [age3] for [0s] [zeus] [0s]on[0s] [midgard]   <b>By: <>[Open Square Bracket]DoD[Close Square Bracket]Soka and [Open Square Bracket]DoD[Close Square Bracket]Godschalk.   <>Converted by [Open Square Bracket]DoD[Close Square Bracket]Joybadz/Kries [1s] <>https://discord.gg/G9JUrrxc:DoD_Discord      <b>Difficulty:<> Hard [3s] <>https://www.youtube.com/watch?v=3FqX0fF8Dbs:See_Video))
 
 || 0 ||  {p=4}  [v]<xt>1-3<>[>][sh@w]   [v]<xt>4<>[>][dk]   [v]<xt>5-7<>[>][boar]  /f  <r>1[f]  3[w]  4[p] || 3 to wood, 1 builds a dock, then goes to food.
 
@@ -878,7 +878,7 @@ qage5=[[age5][xaq]]
 
 || 15 ||  {p=19}  [v]<xt>20-21<>[>][gm]   [vdboar][>][dock][x3][>][cow][xf]  /f  <r>8[f]  7[w]  3[g]  1[t]  12[fsg]  19[p]
 
-|| 16 ||  {p=20}  [age2] [athena] @ <t>4:15<>  /f  <r>8[f]  7[w]  4[g]  1[fv]  12[fsg]  20[p]
+|| 16 ||  {p=20}  [age2] [athena]  /f  <r>8[f]  7[w]  4[g]  1[fv]  12[fsg]  20[p]
 
 || 17 ||  {p=21}  [pickaxe]  /f  <r>8[f]  7[w]  5[g]  1[fv]  12[fsg]  21[p]
 
@@ -894,7 +894,7 @@ qage5=[[age5][xaq]]
 
 || 23 ||  {p=23}  /f  <r>5[f]  8[w]  8[g]  1[fv]  1[a]  16[fsg]  23[p]
 
-|| 24 ||  {p=24}  [age3] [Dionysus] @ <t>6:15<>  /f  <r>6[f]  8[w]  8[g]  1[fv]  1[a]  16[fsg]  24[p] || Scout with the trireme
+|| 24 ||  {p=24}  [age3] [Dionysus]  /f  <r>6[f]  8[w]  8[g]  1[fv]  1[a]  16[fsg]  24[p] || Scout with the trireme
 
 || 25 ||  {p=25}  [+][trireme]   [+][3][fsg][>][fish]  /f  <r>7[f]  9[w]  8[g]  1[fv]  16[fsg]  25[p] 
 
