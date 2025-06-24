@@ -875,7 +875,7 @@ qage5=[[age5][xaq]]
 
 || 10 ||  Newly created build orders include premade   groups that help you to write build orders faster.   For example, write [open square bracket]2hd@g[close square bracket] for building 2 houses   with a dwarf on gold. See more examples next.
 
-|| 11 ||  [4][+][v][>][area][xf]   [all][gt][rp]<x>[palace]<>[>][bk][>][?]   [c][pi][lhp][>][h][>][l][xi][pf]  /f  <r>1[f]  2[w]  3[g]  6[p]
+|| 11 ||  [4][+][v][>][area][xf]   [all][gt][rp]<x>[palace]<>[>][bk][>][?]   [c][pi][lhp][>][h][>][l][xi][pf] [3s] <bo0>[v]<xsminus ho70 vo70 bo80>[boar]<><xxs ho80 bo0 vo100>[Pierce Dmg]<xxsminus ho700 vo-150>[hp]  /f  <r>1[f]  2[w]  3[g]  6[p]
 
 || 12 ||  [v@deer] [l@boar] [gt@berry] [d@chk] [c@goat]   [v@farm] [l@str] [gt@w] [d@g] [c@ww] [c@sw]   [v@pray] [l@m] [gt@h] [d@h] [c@m]  /f  <r>4[f]  5[w]  6[g]  15[p]
 

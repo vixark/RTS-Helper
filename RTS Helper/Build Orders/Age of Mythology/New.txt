@@ -5,7 +5,7 @@
 || Global Format and Format Classes: http://vixark.com/rts-helper/documentation#globalformat and http://vixark.com/rts-helper/documentation#formatclasses.
 {{
 
-t=15
+t=18
 empty={fc="none" s="none"}
 
 }}

@@ -73,7 +73,7 @@ boar2=[[boar]<xt>2<>]
 
 || 13 ||  Keep reading if you   want to see other examples.
 
-|| 14 ||  {s="AOE2 Gold.mp3"}  [v]<xt>18<>[>][gm]   [v@shp][>][drop food][>][boar2]   [v@w]<x>[g][berries]<>[>][rax][>][h][>][h]  /f  <r>12[w]  5[f]  2[g]  2[s]  22[vs]
+|| 14 ||  {s="AOE2 Gold.mp3"}  [v]<xt>18<>[>][gm] [3s] [v@shp][>][drop food][>][boar2]   [v@w]<x>[g][berries]<>[>][rax][>][h][>][h]   <xxs ho-100 vo-100>[health]<bo0>[v]<xsminus ho70 vo70 bo80>[boar]<><xxxs ho200 bo0 vo70>[bodkin arrow]<>  /f  <r>12[w]  5[f]  2[g]  2[s]  22[vs]
 
 || 15 ||  {s="AOE2 Attack an Enemy Now.mp3"}  [double-bit axe] [1s] [hrc] [1s] [wheelbarrow]     [5][militia][>][attack]   <t>20<>[geno][>][attack][kt]  /f  <r>12[w]  15[f]  7[g]  1[h]  34[vs]
 
